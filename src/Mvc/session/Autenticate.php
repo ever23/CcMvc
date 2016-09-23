@@ -12,7 +12,7 @@ use Cc\HelperArray;
  * @package CcMvc
  * @subpackage Session 
  * @example ../examples/CERQU/protected/model/AutenticaRQU.php EJEMPLO DE UNA CLASE AUTENTICADORA DE CcMvc #1
- * @example ../examples/C.T.E.G/protected/model/AutenticaTEG.php EJEMPLO DE UNA CLASE AUTENTICADORA DE CcMvc #2
+ * 
  *
  * @method array Autentica() Autentica(mixes ..$_) SERA LLAMADO AUTOMATICAMENTE CUANDO SE REQUIERA AUTENTICA Y DEVE RETORNAR UN ARRAY ASOCIATIVO CON LOS PARAMETROS A SER COMPARADOS
  * @method void OnFailed() OnFailed(mixes ...$_)  ESTE METODO SE EJECUTARA CUANDO LA AUTENTICACION FALLE
@@ -62,6 +62,7 @@ abstract class Autenticate extends SESSION
         $conf = Mvc::App()->Config();
         if (!is_dir($conf['App']['Cache']))
             mkdir($conf['App']['Cache']);
+
         session_save_path($conf['App']['Cache']);
         $this->EstableceParam($param);
         $this->exept = $exet;
@@ -257,7 +258,7 @@ abstract class Autenticate extends SESSION
             {
                 if (!$refection->hasMethod($controller['method']))
                 {
-                    if (isset($this->AccessUser['NoAth']) && in_array('routermethod', $this->AccessUser['NoAth']))
+                    if (isset($this->AccessUser['NoAth']) && in_array('__routermethod', $this->AccessUser['NoAth']))
                     {
                         unset($this->AccessUser['NoAth']);
                         return false;
@@ -269,15 +270,15 @@ abstract class Autenticate extends SESSION
                     foreach ($v as $ii => $vv)
                     {
                         if (is_array($vv))
-                            foreach (array_keys($vv, 'routermethod') as $i2 => $v2)
+                            foreach (array_keys($vv, '__routermethod') as $i2 => $v2)
                             {
-                                $this->AccessUser[$i][$ii][$v2] = $controller['method'];
+                                $this->AccessUser[$i][$ii][$v2] = strtolower($controller['method']);
                             }
                     }
                 }
             }
 
-            if (isset($this->AccessUser['NoAth']) && in_array($controller['method'], $this->AccessUser['NoAth']))
+            if (isset($this->AccessUser['NoAth']) && in_array(strtolower($controller['method']), $this->AccessUser['NoAth']))
             {
                 unset($this->AccessUser['NoAth']);
 
@@ -292,6 +293,7 @@ abstract class Autenticate extends SESSION
 
         foreach ($this->exept as $v)
         {
+
             //if($cont['class']==$v || (is_array($v) && ($cont['paquete']==(isset($v['paquete'])?$v['paquete']:NULL) && $cont['class']==$v['class'] && $cont['method']==$v['method'])) )
             if (Mvc::App()->Router->is_self($v))
             {

@@ -51,6 +51,7 @@ class ErrorHandle extends \Cc\ErrorHandle
 
     public static function Notice($error, $tr = 0)
     {
+
         if (Mvc::App()->IsDebung())
             Mvc::App()->Log(parent::Notice($error, $tr + 1));
     }

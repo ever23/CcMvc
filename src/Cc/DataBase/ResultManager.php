@@ -221,6 +221,7 @@ class ResultManager extends SqlFormat implements \Iterator, \Countable
     private function ExcecuteMySqli($sql, $select = false, $metadata = false)
     {
         /* @var $smt \mysqli_stmt */
+
         $smt = $this->db->stmt_init();
         if (!$smt->prepare($sql))
         {

@@ -49,14 +49,15 @@ namespace Cc\Mvc;
  * array(
  * 'Prefijo' => string,              //el prefijo de las clases controladoras 
  * 'DefaultControllers' => string,   // nombre de la clase controladora por defecto
- * 'MagicResponseByComent' => bool,  // este indice indica si el objeto de respuesta se 
- *                                   //instanciara segun un comentario {\@return}  de documentacion o no 
+ *
  * 'Dependencias' =>array,           //este índice es un array asociativo que contendrá las clases que
  *                                   // podrán ser inyectadas en los métodos de controladores por parámetros  
  * );
  * </code></pre>
  * @property-read array $Response CONFIGURACION DE LOS OBJETOS DE RESPUESTA <br><pre><code>
  * array(
+ * 'OptimizeImages' => bool,    // Indica a CcMvc si optimizara las imagenes o no, esto quiere decir que si la imagen es mas grande que la pantalla del cliente 
+ *                              // CcMvc redimencionara la imagen antes de enviarla 
  * 'ExtencionContenType'=>array // MIME-TYPES DE LAS EXTENCIOES DE ARCHIVOS ext=>mime-type
  * 'Accept'=>array              // clases manejadoras de respuesta segun el mime-type,  
  *                              //mime-type=>array('class'=>'clase ','param'=>array(parametros),'layaut'=>'nombre del layaut')
@@ -158,6 +159,14 @@ class Config extends \Cc\Config
                 if (!is_dir($app[$i]))
                     mkdir($app[$i]);
                 $app[$i] = realpath($app[$i]) . DIRECTORY_SEPARATOR;
+            } elseif ($i == 'procedimientos')
+            {
+                $app[$i] = str_replace("{App}", $dirApp, $v);
+
+                if (is_dir($app[$i]))
+                {
+                    $app[$i] = realpath($app[$i]) . DIRECTORY_SEPARATOR;
+                }
             } else
             {
                 $app[$i] = realpath(str_replace("{App}", $dirApp, $v)) . DIRECTORY_SEPARATOR;

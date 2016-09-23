@@ -30,10 +30,8 @@ namespace Cc\Mvc;
 class LoginFormModel extends FormModel
 {
 
-    public function Campos()
-    {
-        return ['user' => ['text', '', ['required' => true]], 'pass' => ['password', '', ['required' => true]]];
-    }
+    public $user = ['text', '', ['required' => true]];
+    public $pass = ['password', '', ['required' => true]];
 
 //put your code here
 }

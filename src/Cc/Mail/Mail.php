@@ -9,9 +9,14 @@
 namespace Cc;
 
 /**
- * Description of Mail
+ * clase encargada de enviar mails
  *
- * @author usuario
+ * @author ENYREBER FRANCO  <enyerverfranco@gmail.com> , <enyerverfranco@outlook.com> 
+ *     
+ * @package Cc
+ * @subpackage Mail
+ * @todo Se nesesita merorar el envio de mails
+ * 
  */
 class Mail
 {

@@ -56,11 +56,6 @@ return
                  */
                 'DefaultControllers' => 'index',
                 /**
-                 * este indice indica si el objeto de respuesta se instanciara segun un comentario {@return} 
-                 * de documentacion o no 
-                 */
-                'MagicResponseByComent' => false,
-                /**
                  * este índice es un array asociativo que contendrá las clases que podrán ser inyectadas en los métodos de controladores por parámetros  
                  * También se pueden pasar por parámetros referencias de objetos que el sistema ya a creado como el de bases de datos el manejador de contenido y el de autenticación esto se realiza utilizando los seudónimos
                  * 

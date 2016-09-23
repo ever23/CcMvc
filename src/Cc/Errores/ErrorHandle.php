@@ -126,6 +126,12 @@ class ErrorHandle
      */
     public static function ErrorHandle($errno = NULL, $errstr = NULL, $errfile = NULL, $errline = NULL, $errcontext = NULl)
     {
+        if (!(error_reporting() & $errno))
+        {
+            // Este código de error no está incluido en error_reporting
+
+            return;
+        }
         $e = new static($errno, $errstr, $errfile, $errline, $errcontext);
         return $e->ErrorManager();
     }
@@ -144,8 +150,6 @@ class ErrorHandle
     public function ErrorManager()
     {
 
-        //echo "<pre>";
-        //	print_r($trace);
 
         switch ($this->errno)
         {

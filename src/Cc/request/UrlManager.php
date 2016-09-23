@@ -71,10 +71,22 @@ class UrlManager
         }
     }
 
+    public static function EncodeUrl($url)
+    {
+
+        $u = explode('/', $url);
+        foreach ($u as $i => $v)
+        {
+            $u[$i] = rawurlencode($v);
+        }
+        $url2 = implode('/', $u);
+        return $url2;
+    }
+
     public static function BuildUrl($protocol, $host, $base_path, $url = '')
     {
-        $base_path = str_replace(' ', '%20', $base_path);
-        $url = str_replace(' ', '%20', $url);
+        $base_path = self::EncodeUrl($base_path);
+        $url = self::EncodeUrl($url);
 
         $protocol = mb_strtolower($protocol) . '://';
         if (strlen($url) == 0)

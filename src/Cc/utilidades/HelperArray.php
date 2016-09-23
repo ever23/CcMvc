@@ -9,9 +9,10 @@
 namespace Cc;
 
 /**
- * Description of HelperArray
- *
- * @author usuario
+ * 
+ * @autor ENYREBER FRANCO       <enyerverfranco@gmail.com> , <enyerverfranco@outlook.com>                                                    
+ * @package Cc
+ * @subpackage Helper 
  */
 class HelperArray
 {

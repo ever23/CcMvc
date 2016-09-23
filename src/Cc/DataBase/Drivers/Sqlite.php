@@ -57,6 +57,7 @@ class sqlite extends Drivers
             {
                 throw new Exception("LA TABLA " . $this->tabla . " NO EXISTE EN LA BASE DE DATOS");
             }
+
             if ($result['type'] == 'table')
             {
                 $this->Ttipe = self::table;
@@ -82,14 +83,14 @@ class sqlite extends Drivers
                         $NULL = '';
                         $KEY = '';
                         $fil[0] = preg_replace("/[\"|\'|`]/", '', $fil[0]);
-                        foreach ($fil as $i => $v)
+                        foreach ($fil as $j => $v)
                         {
-                            if ($i = 0)
+                            if ($j = 0)
                                 continue;;
-                            if (strtolower($v) == 'not' && strtolower($fil[$i + 1]) == 'null')
+                            if (strtolower($v) == 'not' && strtolower($fil[$j + 1]) == 'null')
                             {
-                                $fil[$i] = '';
-                                $fil[$i + 1] = '';
+                                $fil[$j] = '';
+                                $fil[$j + 1] = '';
                                 $NULL = 'NOT NULL';
                             }
                             if (strtolower($v) == 'primary')
@@ -99,7 +100,7 @@ class sqlite extends Drivers
                                     array_push($this->primarykey, $fil[0]);
                             }
                         }
-                        $this->OrderColum[$i] = $fil[0];
+                        $this->OrderColum[] = $fil[0];
                         $this->colum+=[$fil[0] => [
                                 'Type' => $fil[1],
                                 'KEY' => $KEY,

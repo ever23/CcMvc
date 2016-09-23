@@ -11,9 +11,10 @@ namespace Cc\Ws;
 use Cc\Security;
 
 /**
- * Description of Session
- *
- * @author usuario
+ * maneja las sessiones del servidor
+ * @autor ENYREBER FRANCO       <enyerverfranco@gmail.com> , <enyerverfranco@outlook.com>                                                    
+ * @package CcWs
+ * @subpackage Session 
  */
 class Session extends \Cc\SESSION
 {

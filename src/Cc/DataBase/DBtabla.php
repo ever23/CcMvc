@@ -14,9 +14,9 @@ namespace Cc;
  * @package Cc
  * @subpackage DataBase
  * @see iDataBase
- * @see DB_MySQLi
- * @see DB_PDO  
- * @see DB_SQLite3                                                            
+ * @see MySQLi
+ * @see PDO  
+ * @see SQLite3                                                            
  */
 class DBtabla extends ResultManager implements \JsonSerializable
 {
@@ -125,8 +125,8 @@ class DBtabla extends ResultManager implements \JsonSerializable
      * constructor
      * <code>
      * <?php
-     * $db= new DB_PDO('sqlite:sqlite.db');
-     * $mitabla=$db->Tab('mitabla');// creando un objeto DBtabla con DB_PDO
+     * $db= new PDO('sqlite:sqlite.db');
+     * $mitabla=$db->Tab('mitabla');// creando un objeto DBtabla con PDO
      * </code>
      * @param iDataBase &$db referencia a un objeto manejador de bases de datos que implemente iDatabase 
      * @param string $tabla nombre de la tabla que se asociara 
@@ -255,8 +255,8 @@ class DBtabla extends ResultManager implements \JsonSerializable
      * AGREGA UNA SENTENCIA SELECT A LA UNION 
      * <code>
      * <?php
-     * $db= new DB_PDO('mysqli:mysqli.db');
-     * $mitabla=$db->Tab('mitabla');// creando un objeto DBtabla con DB_PDO
+     * $db= new PDO('mysqli:mysqli.db');
+     * $mitabla=$db->Tab('mitabla');// creando un objeto DBtabla con PDO
      * $mitabla->SelectUnion()->Union('mitabla2')->SelectUnion()->ExcUnion();
      * foreach($mitabla as $i=>$campo)
      * {
@@ -549,58 +549,256 @@ class DBtabla extends ResultManager implements \JsonSerializable
      *  @uses SelectSql 
      *  @uses ResultManager::Query() 
      */
-    public function Busqueda($cadena, $campo_bus = NULL, $campo_mos = NULL, $where = NULL, $joins = NULL, $group = NULL, $having = NULL, $order = NULL, $limit = NULL)
+    public function Busqueda($cadena, $campo_bus, $campos = NULL, $where = NULL, $joins = NULL, $group = NULL, $having = NULL, $order = NULL, $limit = NULL)
     {
         if (is_null($campo_bus))
         {
 
             $campo_bus = $this->OrderColum;
         }
-        /* $ac = $campo_mos;
-          $aj = $joins;
-          $aw = $where;
-          $ag = $group;
-          $ao = $order;
-          $ah = $having;
-          $al = $limit;
-          if (is_string($campo_mos))
-          {
-          $where = $campo_mos;
-          $joins = $aw;
-          $group = $aj;
-          $having = $ag;
-          $order = $ah;
-          $limit = $ao;
-          $campo_mos = NULL;
-          }
-          if (is_array($where))
-          {
+        $search = $this->SqlBusqueda($cadena, $campo_bus);
+        $aj = $joins;
+        $aw = $where;
+        $ag = $group;
+        $ah = $having;
+        $ao = $order;
 
-          $joins = $aw;
-          $group = $aj;
-          $having = $ag;
-          $order = $ah;
-          $limit = $ao;
-          $campos = NULL;
-          $where = NULL;
-          }
-          if (is_string($joins))
-          {
-          $group = $aj;
-          $having = $ag;
-          $order = $ah;
-          $limit = $ao;
-          $campos = NULL;
-          $joins = NULL;
-          } */
-        $sql = $this->SelectSql($campo_mos, $where, $joins, $group, $having, $order, $limit);
+        if (is_string($campos))
+        {
 
-        $sql = $this->CreateBusqueda($sql, $cadena, $campo_bus);
+            $where = $campos;
+            $joins = $aw;
+            $group = $aj;
+            $having = $ag;
+            $order = $ah;
+            $limit = $ao;
+            $campos = NULL;
+        }
+        if (is_array($where))
+        {
+
+            $joins = $aw;
+            $group = $aj;
+            $having = $ag;
+            $order = $ah;
+            $limit = $ao;
+
+            $where = NULL;
+        }
+        if (is_string($joins))
+        {
+            $group = $aj;
+            $having = $ag;
+            $order = $ah;
+            $limit = $ao;
+
+            $joins = NULL;
+        }
+        $aj = $joins;
+        $aw = $where;
+        $ag = $group;
+        $ah = $having;
+        $ao = $order;
+        if (is_null($joins))
+        {
+            $joins = array();
+        }
+        if (!is_array($campos))
+        {
+            $campos = [ $this->Tabla() . '.*'];
+        }
+
+
+        if (preg_match('/^(\ {0,}group by )/i', $where))
+        {
+
+            $group = $where;
+            $having = $aj;
+            $order = $ag;
+            $limit = $ah;
+            $where = NULL;
+            $joins = NULL;
+        } elseif (preg_match('/^(\ {0,}Having )/i', $where))
+        {
+
+
+            $having = $where;
+            $order = $aj;
+            $limit = $ag;
+            $where = NULL;
+            $joins = NULL;
+            $group = NULL;
+        } elseif (preg_match('/^(\ {0,}Order by )/i', $where))
+        {
+
+
+
+            $order = $where;
+            $limit = $aj;
+            $where = NULL;
+            $joins = NULL;
+            $group = NULL;
+            $having = NULL;
+        } elseif (preg_match('/^(\ {0,}Limit )/i', $where))
+        {
+
+
+
+
+            $limit = $where;
+            $where = NULL;
+            $joins = NULL;
+            $group = NULL;
+            $having = NULL;
+            $order = NULL;
+        }
+
+
+        if (!is_null($group))
+            if (is_array($group))
+            {
+                $group = 'GROUP BY ' . implode(',', $group);
+            } elseif (preg_match('/^(\ {0,}having .*(=|and|or))/i', $group))
+            {
+                $having = $group;
+                $order = $ah;
+                $limit = $ao;
+                $group = NULL;
+            } elseif (preg_match('/^(\ {0,}ORDER by )/i', $group))
+            {
+                $order = $group;
+                $limit = $ao;
+                $group = NULL;
+            } else
+            {
+                if (!preg_match('/^(\ {0,}GROUP BY )/i', $group))
+                    $group = 'GROUP BY ' . $group;
+            }
+        if (!is_null($having))
+            if (preg_match('/^(\ {0,}LIMIT )/i', $having) || is_numeric($having))
+            {
+
+                $limit = $having;
+                $having = NULL;
+            } elseif (preg_match('/^(\ {0,}ORDER BY )/i', $having))
+            {
+                $order = $having;
+                $limit = $ao;
+                $having = NULL;
+            }
+        if (!is_null($order))
+            if (preg_match('/^(\ {0,}LIMIT )/i', $order))
+            {
+                $limit = $order;
+                $order = NULL;
+            } else
+            {
+                if (!preg_match('/^(\ {0,}ORDER BY )/i', $order))
+                    $order = 'ORDER BY ' . $order;
+            }elseif (preg_match('/^(\ {0,}LIMIT )/i', $order) || is_numeric($order))
+        {
+            $limit = $order;
+
+            $order = NULL;
+        }
+        if (!is_null($limit))
+        {
+            if (!preg_match('/^(\ {0,}LIMIT )/i', $limit))
+                $limit = 'LIMIT ' . $limit;
+        }
+        $Select = 'SELECT ';
+        if (isset($campos[0]))
+        {
+            switch ($campos[0])
+            {
+                case self::AllSelect:
+                    $Select.='All ';
+                    unset($campos[0]);
+                    break;
+                case self::DistinctRowSelect:
+                    $Select.='DistinctRow ';
+                    unset($campos[0]);
+                    break;
+                case self::DistinctSelect:
+                    $Select.='Distinct ';
+                    unset($campos[0]);
+                    break;
+            }
+        }
+        if (is_null($where) || $where == '')
+        {
+            $where = '(' . $search . ')>1';
+        } else
+        {
+            $where = preg_replace('/^(\ {0, }where)/i', '', $where);
+            $where = '(' . $where . ') and (' . $search . ')>1';
+        }
+        $campos[] = '(' . $search . ') as puntaje_busqueda';
+        $sql = $Select
+                . $this->Driver->Campos($campos) . "  FROM " . $this->Driver->ProtectIdentifiers($this->Tabla()) . $this->postTab . " "
+                . implode(' ', $this->Join($joins)) . " "
+                . $this->Where($where) . ' '
+                . $group . ' '
+                . $this->Having($having) . ' '
+                . $order . ' '
+                . $limit;
+
+        // $sql = $this->SelectSql($campo_mos, $where, $joins, $group, $having, $order, $limit);
+        // $sql = $this->CreateBusqueda($sql, $cadena, $campo_bus);
         if (($query = $this->Query($sql)) === false)
         {
             ErrorHandle::Notice("Error al consultar tabla " . $this->tabla . " errno:" . $this->errno . " error:" . $this->error);
         }
         return $query;
+    }
+
+    protected function SqlBusqueda($cadena, $campos)
+    {
+        if (is_array($cadena))
+        {
+            $cadena = implode(' ', $cadena);
+        }
+        $trozos = explode(' ', trim($cadena));
+        $select = '';
+
+        foreach ($campos as $campo)
+        {
+            $select.=" (" . $campo . " is NOT NULL AND " . $campo . " like '%" . $cadena . "%') + 
+			(" . $campo . " is NOT NULL AND " . $campo . " like '" . $cadena . "%')+";
+        }
+        foreach ($trozos as $palabra)
+        {
+            //if(strlen($palabra)>2 || (is_int($palabra) || is_float($palabra)))
+            foreach ($campos as $campo)
+            {
+                $campo = $this->Driver->ProtectIdentifiers($campo);
+                $select.=" (" . $campo . " is NOT NULL AND " . $campo . " like '%" . $palabra . "%') + (" . $campo . " is NOT NULL AND " . $campo . " like '" . $palabra . "%')+";
+            }
+        }
+        $solo = '';
+        if ($this->GetTypeDB() != self::SQLite)
+        {
+            if (count($campos) > 1)
+            {
+                $select.="(( CONCAT(";
+                foreach ($campos as $i => $campo)
+                {
+                    $campo = $this->Driver->ProtectIdentifiers($campo);
+                    $espace = !is_int($i) ? "''" : "' '";
+                    $select.="IF($campo IS NOT NULL,$campo,' ')," . $espace . ",";
+                }
+                $select.="'') like '%" . $cadena . "%' )+1) ";
+            } elseif (count($campos) == 1)
+            {
+                $select.="(0)";
+                $campos[0] = $this->Driver->ProtectIdentifiers($campos[0]);
+                $solo = "* (IF(" . $campos[0] . " = '" . $cadena . "',0 ,1))+(IF(" . $campos[0] . " = '" . $cadena . "',10,0))";
+            }
+        } else
+        {
+            $select.="(0)";
+        }
+        return $select;
     }
 
     /**
@@ -609,10 +807,13 @@ class DBtabla extends ResultManager implements \JsonSerializable
      */
     public function current()
     {
-        if ($current = parent::current())
+        if (($current = parent::current()) !== false)
         {
-
             return $this->ActiveRow = new DBRow($this, $current);
+        } else if ($this->sql == '')
+        {
+            $this->Select();
+            return $this->current();
         }
 
         return false;
@@ -651,8 +852,8 @@ class DBtabla extends ResultManager implements \JsonSerializable
      * retorna la siguiente fila del resultado
      * <code>
      * <?php
-     * $db= new DB_PDO('mysqli:mysqli.db');
-     * $mitabla=$db->Tab('mitabla');// creando un objeto DBtabla con DB_PDO
+     * $db= new PDO('mysqli:mysqli.db');
+     * $mitabla=$db->Tab('mitabla');// creando un objeto DBtabla con PDO
      * $mitabla->Select();
      * $campo=$mitabla->fetch()
      * echo "campos1=".$campo['campo1']." campo2=".$campo['campo2'];
@@ -670,20 +871,20 @@ class DBtabla extends ResultManager implements \JsonSerializable
      *  INSERTA UNA FILA EN LA TABLA
      * <code>
      * <?php
-     * $db= new DB_PDO('mysqli:mysqli.db');
-     * $mitabla=$db->Tab('mitabla');// creando un objeto DBtabla con DB_PDO
+     * $db= new PDO('mysqli:mysqli.db');
+     * $mitabla=$db->Tab('mitabla');// creando un objeto DBtabla con PDO
      * $mitabla->Insert("hola1","ejemplo");//insertando
      * </code>
      * <code>
      * <?php
-     * $db= new DB_PDO('mysqli:mysqli.db');
-     * $mitabla=$db->Tab('mitabla');// creando un objeto DBtabla con DB_PDO
+     * $db= new PDO('mysqli:mysqli.db');
+     * $mitabla=$db->Tab('mitabla');// creando un objeto DBtabla con PDO
      * $mitabla->Insert(["hola1","ejemplo"]);//insertando
      * </code>
      *  <code>
      * <?php
-     * $db= new DB_PDO('mysqli:mysqli.db');
-     * $mitabla=$db->Tab('mitabla');// creando un objeto DBtabla con DB_PDO
+     * $db= new PDO('mysqli:mysqli.db');
+     * $mitabla=$db->Tab('mitabla');// creando un objeto DBtabla con PDO
      * $mitabla->Insert(["campo1"=>"hola1","campo2"=>"ejemplo"]);//insertando
      * </code>
      *  @param ...$param LA FILA QUE SE INSERTARA SI ES UN ARRAY CON INDICES NUMERICOS INSERTAR POR ORDEN NUMERICO
@@ -770,14 +971,14 @@ class DBtabla extends ResultManager implements \JsonSerializable
      *  EJECUTA UNA SENTENCIA DELETE EN LA TABLA
      * <code>
      * <?php
-     * $db= new DB_PDO('mysqli:mysqli.db');
-     * $mitabla=$db->Tab('mitabla');// creando un objeto DBtabla con DB_PDO
+     * $db= new PDO('mysqli:mysqli.db');
+     * $mitabla=$db->Tab('mitabla');// creando un objeto DBtabla con PDO
      * $mitabla->Delete("campo1='hola'");//eliminado el registro que tenga hola en el campo1
      * </code>
      * <code>
      * <?php
-     * $db= new DB_PDO('mysqli:mysqli.db');
-     * $mitabla=$db->Tab('mitabla');// creando un objeto DBtabla con DB_PDO
+     * $db= new PDO('mysqli:mysqli.db');
+     * $mitabla=$db->Tab('mitabla');// creando un objeto DBtabla con PDO
      * $mitabla->Delete(["campo1"=>"hola"]);//eliminado el registro que tenga hola en el campo1
      * </code>
      *  @param string $where LA EXPRECION QUE SE UTILIZARA EN LA SENTENCIA WHERE
@@ -806,14 +1007,14 @@ class DBtabla extends ResultManager implements \JsonSerializable
      *  EJECUTA UNA SENTENCIA UPDATE EN LA TABLA
      * <code>
      * <?php
-     * $db= new DB_PDO('mysqli:mysqli.db');
-     * $mitabla=$db->Tab('mitabla');// creando un objeto DBtabla con DB_PDO
+     * $db= new PDO('mysqli:mysqli.db');
+     * $mitabla=$db->Tab('mitabla');// creando un objeto DBtabla con PDO
      * $mitabla->Update(["campo1"=>"hello"],"campo1"=>"hola");
      * </code>
      *  <code>
      * <?php
-     * $db= new DB_PDO('mysqli:mysqli.db');
-     * $mitabla=$db->Tab('mitabla');// creando un objeto DBtabla con DB_PDO
+     * $db= new PDO('mysqli:mysqli.db');
+     * $mitabla=$db->Tab('mitabla');// creando un objeto DBtabla con PDO
      * $mitabla->Update(["campo1"=>"hello"],"campo1='hola'");
      * </code>
      * @param mixes $SETS DATOS QUE SERAN CAMBIADOS array('campo'=>'value')
@@ -1077,7 +1278,7 @@ class DBtabla extends ResultManager implements \JsonSerializable
     {
         $this->Driver = $this->CreateDriver($tab);
         $this->Driver->CreateKeys();
-        /* @var $driver DB_Drivers */
+        /* @var $driver DB\Drivers */
         $this->colum = $this->Driver->Colum();
         $this->primary = $this->Driver->PrimaryKey();
         $this->autoinrement = $this->Driver->auto_incremet();

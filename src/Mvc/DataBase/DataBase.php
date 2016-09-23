@@ -36,11 +36,18 @@ class DBtabla extends \Cc\DBtabla implements \Serializable
      * @param string $tabla nombre de la tabla que se asociara 
      * @throws Exception en caso de no existir la tabla
      */
-    public function __construct(iDataBase &$db, $tabla, $useStmt = true)
+    public function __construct(iDataBase &$db, $tabla, $useStmt = NULL)
     {
 
         $this->db = &$db;
-        $this->useStmt = Mvc::App()->Config()->DB['UseStmt'] && $useStmt;
+        if (is_null($useStmt))
+        {
+            $this->useStmt = Mvc::App()->Config()->DB['UseStmt'];
+        } else
+        {
+            $this->useStmt = Mvc::App()->Config()->DB['UseStmt'] && $useStmt;
+        }
+
         $this->tabla = $tabla;
         $this->CacheName = get_class($db) . static::class . $tabla;
 
@@ -53,7 +60,7 @@ class DBtabla extends \Cc\DBtabla implements \Serializable
         } else
         {
             Mvc::App()->Log("Creando objeto para la tabla " . $tabla);
-            parent::__construct($db, $tabla);
+            parent::__construct($db, $tabla, $this->useStmt);
             Cache::Set($this->CacheName, $this->serialize());
         }
 

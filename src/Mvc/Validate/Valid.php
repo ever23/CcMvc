@@ -42,6 +42,18 @@ class ValidString extends ValidDependence
         {
             return false;
         }
+        if (isset($this->option['options']) && is_array($this->option['options']))
+        {
+            foreach ($this->option['options'] as $v)
+            {
+
+                if ($v['value'] == $value)
+                {
+                    return $value;
+                }
+            }
+            return false;
+        }
         return $value;
     }
 
@@ -94,6 +106,18 @@ class ValidNumber extends ValidDependence
                 $i++;
             } while (($i * $this->option['step']) > $value);
 
+            return false;
+        }
+        if (isset($this->option['options']) && is_array($this->option['options']))
+        {
+            foreach ($this->option['options'] as $v)
+            {
+
+                if ($v['value'] == $value)
+                {
+                    return $value;
+                }
+            }
             return false;
         }
 

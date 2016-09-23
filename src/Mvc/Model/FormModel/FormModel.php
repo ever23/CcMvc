@@ -130,6 +130,24 @@ abstract class FormModel extends Model
         }
     }
 
+    protected function campos()
+    {
+        $reflexion = new \ReflectionClass($this);
+        $prop = $reflexion->getProperties(\ReflectionProperty::IS_PUBLIC);
+        $array = [];
+        /* @var $propiedad \ReflectionProperty */
+        foreach ($prop as $i => $propiedad)
+        {
+            if ($propiedad->getDeclaringClass()->name == $reflexion->name)
+            {
+                $name = $propiedad->getName();
+                $array[$name] = $propiedad->getValue($this);
+                unset($this->{$name});
+            }
+        }
+        return $array;
+    }
+
     private function LoadMetaData()
     {
         foreach ($this->campos() as $i => $v)
@@ -439,7 +457,7 @@ abstract class FormModel extends Model
             $attrValid = [ 'pattern', 'min', 'max', 'maxlength', 'size', 'accept', 'step', 'required', 'multiple', 'title', 'placeholder'];
             if ($valid = ValidDefault::GetOptions($this->campos[$name][self::Validate]))
             {
-                //  var_dump($this->campos[$name][2]);
+
                 foreach ($valid as $i => $v)
                 {
                     if (in_array($i, $attrValid))

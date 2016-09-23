@@ -2,6 +2,12 @@
 
 namespace Cc;
 
+/**
+ * Manipulacion de imagenes
+ * @autor ENYREBER FRANCO       <enyerverfranco@gmail.com> , <enyerverfranco@outlook.com>                                                    
+ * @package Cc
+ * @subpackage GD 
+ */
 class ImageGD
 {
 

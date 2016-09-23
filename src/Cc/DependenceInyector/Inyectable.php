@@ -7,7 +7,7 @@ namespace Cc;
  * @autor ENYREBER FRANCO <enyerverfranco@gmail.com> , <enyerverfranco@outlook.com>  
  * @package Cc
  * @subpackage Dependencias
- * @example ../examples/C.T.E.G/protected/model/RespaldoDB.php EJEMPLO DE UNA CLASE INYECTABLE
+ * 
  */
 interface Inyectable
 {

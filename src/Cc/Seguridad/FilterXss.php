@@ -503,7 +503,7 @@ class FilterXss
         static $_entities;
 
         //isset($charset) OR $charset = strtoupper(config_item('charset'));
-        $flag = is_php('5.4') ? ENT_COMPAT | ENT_HTML5 : ENT_COMPAT;
+        $flag = version_compare(PHP_VERSION, '5.4', '>=') ? ENT_COMPAT | ENT_HTML5 : ENT_COMPAT;
 
         do
         {
@@ -515,7 +515,7 @@ class FilterXss
                 if (!isset($_entities))
                 {
                     $_entities = array_map(
-                            'strtolower', is_php('5.3.4') ? get_html_translation_table(HTML_ENTITIES, $flag, $charset) : get_html_translation_table(HTML_ENTITIES, $flag)
+                            'strtolower', version_compare(PHP_VERSION, '5.3.4', '>=') ? get_html_translation_table(HTML_ENTITIES, $flag, $charset) : get_html_translation_table(HTML_ENTITIES, $flag)
                     );
 
                     // If we're not on PHP 5.4+, add the possibly dangerous HTML 5

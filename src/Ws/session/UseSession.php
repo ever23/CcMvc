@@ -9,15 +9,17 @@
 namespace Cc\Ws;
 
 /**
- * Description of UseSession
- *
- * @author usuario
+ * interface para ser implementada en un clase de evento 
+ * esta interface permite usar las sessiones del usuario
+ * @autor ENYREBER FRANCO       <enyerverfranco@gmail.com> , <enyerverfranco@outlook.com>                                                    
+ * @package CcWs
+ * @subpackage Session 
  */
 interface UseSession
 {
 
     /**
-     * @return array Description
+     * @return array 
      */
     public function SessionParams();
 }

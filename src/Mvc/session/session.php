@@ -86,6 +86,7 @@ class SESSION extends \Cc\SESSION
             $TIME = $t3->getTimestamp() - $t->getTimestamp();
             // $TIME = $interval->format('%s') + ($interval->format('%i') * 60) + ($interval->format('%h') * 3600) + ($interval->format('%d') * 24 * 3600) + ( $interval->format('%m') * 30 * 24 * 3600) + ($interval->format('%y') * 12 * 30 * 24 * 3600);
         }
+        $path = \Cc\UrlManager::EncodeUrl($path);
         session_set_cookie_params($TIME, $path, $dominio, $secure, $httponly);
         session_cache_limiter($cache);
     }

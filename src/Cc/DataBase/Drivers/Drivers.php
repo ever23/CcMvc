@@ -323,7 +323,7 @@ abstract class Drivers
             $array = $result->fetch(\PDO::FETCH_ASSOC);
         } elseif ($result instanceof \SQLite3Result)
         {
-            $array = $result->fetcharray(\PDO::FETCH_ASSOC);
+            $array = $result->fetcharray(SQLITE3_ASSOC);
         }
 
         return $array;

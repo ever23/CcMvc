@@ -20,8 +20,9 @@ use Cc\Mvc;
  * @subpackage Controladores
  * @example ../examples/CERQU/protected/controllers/Cindex.php EJEMPLO DE UNA CLASE CONTROLADORA EXTENDIDA DE Controllers #1  
  * @example ../examples/CERQU/protected/controllers/CRepresentante.php EJEMPLO DE UNA CLASE CONTROLADORA EXTENDIDA DE Controllers #2
- * @example ../examples/C.T.E.G/protected/controllers/Cautor.php EJEMPLO DE UNA CLASE CONTROLADORA EXTENDIDA DE Controllers #3
- * @property ViewController $view Controlador de vistas                                               
+ *
+ * @property ViewController $view Controlador de vistas   
+ * @property LayautManager $Layaut Controlador de layauts                                                
  */
 abstract class Controllers implements InfoController
 {
@@ -44,6 +45,9 @@ abstract class Controllers implements InfoController
         if (strtolower($name) == 'view')
         {
             return static::$View;
+        } elseif (strtolower($name) == 'layaut')
+        {
+            return static::$Layaut;
         } else
         {
             ErrorHandle::Notice("EL ATRIBUTO " . static::class . '::$' . $name . " NO ESTA DEFINIDO ");

@@ -11,10 +11,15 @@ namespace Cc\Mvc;
 use Cc\Mvc;
 
 /**
- * Description of MvcEvents
+ * MvcEvents                                                       
+ * Captura los eventos importantes de CcMvc como errores                     
+ * @author ENYREBER FRANCO <enyerverfranco@gmail.com> , <enyerverfranco@outlook.com>  
+ * @package CcMvc  
+ * @subpackage Controladores
  *
- * @property ViewController $view Controlador de vistas 
- * @property LayautManager $Layaut Controlador de Layauts 
+ *
+ * @property ViewController $view Controlador de vistas   
+ * @property LayautManager $Layaut Controlador de layauts                                             
  */
 class MvcEvents
 {

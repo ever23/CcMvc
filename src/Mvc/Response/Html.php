@@ -170,14 +170,23 @@ class Html extends Response
         $this->MetaTang+=[$name => $value];
     }
 
-    public function AddKeyWords($word)
+    public function AddKeyWords(...$word)
     {
+        if (count($word) > 1)
+        {
+            foreach ($word as $w)
+                $this->AddKeyWords($w);
+        } else
+        {
+            $word = $word[0];
+        }
         if (is_array($word))
         {
             foreach ($word as $w)
                 $this->AddKeyWords($w);
         } else
         {
+
             $this->KeyWords[] = $word;
         }
     }

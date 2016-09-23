@@ -1,8 +1,6 @@
 <?php return array (
   'class' => 
   array (
-    'CcMvc' => 'CcMvc.php',
-    'CcWS' => 'CcWS.php',
     'Cc\\Autoload' => 'Cc\\Autoload\\Autoload.php',
     'Cc\\AutoloadExternLib' => 'Cc\\Autoload\\AutoloadExternLib.php',
     'Cc\\Autoload\\CoreClass' => 'Cc\\Autoload\\CoreClass.php',
@@ -93,7 +91,6 @@
     'Cc\\Mvc\\DBtablaModel\\TablaModel' => 'Mvc\\Model\\DBtablaModel\\TablaModel.php',
     'Cc\\Mvc\\FormModel' => 'Mvc\\Model\\FormModel\\FormModel.php',
     'Cc\\Mvc\\LoginFormModel' => 'Mvc\\Model\\FormModel\\LoginFormModel.php',
-    'Cc\\Mvc\\ValidFileUpload' => 'Mvc\\Model\\FormModel\\SpecialValidate.php',
     'Cc\\Mvc\\Cookie' => 'Mvc\\request\\Cookie.php',
     'Cc\\Mvc\\PostFiles' => 'Mvc\\request\\PostFiles.php',
     'Cc\\Mvc\\Request' => 'Mvc\\request\\Request.php',

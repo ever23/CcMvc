@@ -23,6 +23,7 @@ use Cc\Mvc\SelectorControllers;
 use Cc\Mvc\Router;
 use Cc\Mvc\SQLi;
 use Cc\Mvc\MvcEvents;
+use Cc\Mvc\ReRouterMethod;
 
 //use Cc\OpCache;
 
@@ -280,7 +281,7 @@ class Mvc
         {
             $this->CacheCore = Cache::Get('AutoloadCore');
         }
-        $this->LoadPorcedures();
+        $this->LoadProcedures();
         $prot = !empty($_SERVER['HTTPS']) && ('on' == $_SERVER['HTTPS']) ? 'https' : 'http';
         if ($prot != $this->conf['Router']['protocol'])
             Server::redirec($this->conf['Router']['protocol'] . '://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI']);
@@ -567,6 +568,8 @@ class Mvc
         $this->Log($msj);
         if ($this->conf->debung['UseErrorResponseCode'])
             http_response_code($num);
+        if ($this->IsDebung())
+            error_reporting(E_ALL ^ E_NOTICE ^ E_WARNING);
         MvcEvents::Tinger('Error' . $num, $this->View->error);
     }
 
@@ -797,17 +800,25 @@ class Mvc
         {
             $class = Controllers::GetReflectionClass()->name;
             $ext = $class::ExtAccept();
-            if (isset($ext['accept']) && is_array($ext['accept']) && isset($ext['accept'][$this->page['method']]))
+            $method = $this->page['method'];
+            if (Controllers::GetReflectionClass()->implementsInterface(ReRouterMethod::class))
             {
-                if (is_array($ext['accept'][$this->page['method']]))
+                if (!Controllers::GetReflectionClass()->hasMethod($this->page['method']))
                 {
-                    foreach ($ext['accept'][$this->page['method']] as $v)
+                    $method = '__routermethod';
+                }
+            }
+            if (isset($ext['accept']) && is_array($ext['accept']) && isset($ext['accept'][$method]))
+            {
+                if (is_array($ext['accept'][$method]))
+                {
+                    foreach ($ext['accept'][$method] as $v)
                     {
                         $accept[] = $v;
                     }
                 } else
                 {
-                    $accept[] = $ext['accept'][$this->page['method']];
+                    $accept[] = $ext['accept'][$method];
                 }
             }
             if (isset($ext['accept']) && is_array($ext['accept']) && isset($ext['accept']['*']))
@@ -823,12 +834,11 @@ class Mvc
                     $accept[] = $ext['accept']['*'];
                 }
             }
-            if (isset($ext['require']) && is_array($ext['require']) && isset($ext['require'][$this->page['method']]))
+            if (isset($ext['require']) && is_array($ext['require']) && isset($ext['require'][$method]))
             {
-                if ((is_array($ext['require'][$this->page['method']]) && !in_array($this->page['extencion'], $ext['require'][$this->page['method']])) || (is_string($ext['require'][$this->page['method']]) && $this->page['extencion'] != $ext['require'][$this->page['method']]))
+                if ((is_array($ext['require'][$method]) && !in_array($this->page['extencion'], $ext['require'][$method])) || (is_string($ext['require'][$method]) && $this->page['extencion'] != $ext['require'][$method]))
                 {
-
-                    $this->LoadError(404, $this->Router->RouterError('El controlador nego expresamente la extencion '));
+                    $this->LoadError(404, $this->Router->RouterError('El controlador nego expresamente la extencion que sea  .' . $ext['require'][$method]));
                     exit;
                 } else
                 {
@@ -839,7 +849,7 @@ class Mvc
             {
                 if ((is_array($ext['require']['*']) && !in_array($this->page['extencion'], $ext['require']['*'])) || (is_string($ext['require']['*']) && $this->page['extencion'] != $ext['require']['*']))
                 {
-                    $this->LoadError(404, $this->Router->RouterError('El controlador nego expresamente la extencion '));
+                    $this->LoadError(404, $this->Router->RouterError('El controlador nego expresamente la extencion requiere que sea  .' . $ext['require']['*']));
                     exit;
                 } else
                 {
@@ -873,12 +883,13 @@ class Mvc
     /**
      * CARGA LOS PROCEDIMIENTOS 
      */
-    private function LoadPorcedures()
+    private function LoadProcedures()
     {
         if (!is_dir($this->procedures))
         {
             return false;
         }
+
         $proc = dir($this->procedures);
         while ($f = $proc->read())
         {
@@ -1028,11 +1039,24 @@ class Mvc
             foreach (explode(',', $_SERVER["HTTP_ACCEPT"]) as $C)
             {
                 $C2 = explode(";", $C);
-                if (trim($C2[0]) != '*/*' && key_exists(trim($C2[0]), $this->conf['Response']['Accept']))
+                $type1 = trim($C2[0]);
+                $e = explode('/', $type1);
+                $type2 = $e[0] . '/*';
+
+
+                if ($type1 != '*/*')
                 {
-                    $Conten = trim($C2[0]);
-                    $this->ContentTypeOrig = trim($C2[0]);
-                    break;
+                    if (key_exists($type1, $this->conf['Response']['Accept']))
+                    {
+                        $Conten = $type1;
+                        $this->ContentTypeOrig = $type1;
+                        break;
+                    } elseif (key_exists($type2, $this->conf['Response']['Accept']))
+                    {
+                        $Conten = $type2;
+                        $this->ContentTypeOrig = $type1;
+                        break;
+                    }
                 }
             }
 
@@ -1063,6 +1087,7 @@ class Mvc
             }
             $class = $Response['class'];
             $this->Response = new $class(...$Response['param']);
+            $this->Content_type = $this->ContentTypeOrig;
         } else
         {
             $this->ResponseContenDefault($conten);

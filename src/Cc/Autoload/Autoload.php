@@ -28,10 +28,11 @@ include_once dirname(__FILE__) . DIRECTORY_SEPARATOR . 'CoreClass.php';
  * include_once 'Autoload/Autoload.php';
  * new Cc\Autoload(dirname(__FILE__).'/clases');
  * </code>
- * @author ENYREBER FRANCO  <enyerverfranco@gmail.com> , <enyerverfranco@outlook.com>      
+ * @author ENYREBER FRANCO  <enyerverfranco@gmail.com> , <enyerverfranco@outlook.com> 
+ * @version 1.0     
  * @package Cc
  * @subpackage Autoload
- * @version 1.0
+ * 
  */
 class Autoload
 {
