@@ -37,6 +37,12 @@ class GDResponse implements ResponseConten
         'image/x-xbitmap',
     ];
 
+    /**
+     *
+     * @var  ImageGD
+     */
+    public $BufferGD = NULL;
+
     public static function CtorParam()
     {
         return [true, '{name_param}'];
@@ -60,6 +66,91 @@ class GDResponse implements ResponseConten
         $this->tmp = Mvc::App()->Config()->App['Cache'];
     }
 
+    public function CreateImageGd($w, $h, $ContenType)
+    {
+        $this->BufferGD = new ImageGD($w, $h, $ContenType);
+    }
+
+    /**
+     * 
+     * @param string $file
+     * @throws Exception
+     */
+    public function CreateImageGdFormFile($file)
+    {
+        if (!file_exists($file))
+        {
+            throw new Exception("el fichero " . $file . " no existe ");
+        }
+        list($ancho, $alto) = getimagesize($file);
+        $spl = new \SplFileInfo($file);
+        if (Mvc::App()->Config()->Response['ExtencionContenType'][$spl->getExtension()] && in_array(Mvc::App()->Config()->Response['ExtencionContenType'][$spl->getExtension()], $this->imageSoported))
+        {
+            $this->BufferGD = new ImageGD($ancho, $alto, Mvc::App()->Config()->Response['ExtencionContenType'][$spl->getExtension()]);
+            $this->BufferGD->ImportImg(__METHOD__, $file, Mvc::App()->Config()->Response['ExtencionContenType'][$spl->getExtension()]);
+            $this->BufferGD->PrintImg(__METHOD__, 0, 0, 0, 0, $ancho, $alto);
+        } else
+        {
+            throw new Exception("el tipo  de imagen no esta soportada");
+        }
+    }
+
+    public function CreateImageGdFormString($string, $ContenType)
+    {
+
+        list($ancho, $alto) = getimagesizefromstring($string);
+
+        if (!in_array($ContenType, $this->imageSoported))
+        {
+            throw new Exception("el tipo " . $ContenType . " de imagen no esta soportada");
+        }
+
+        $this->BufferGD = new ImageGD($ancho, $alto, $ContenType);
+        $this->BufferGD->ImportImgFormString(__METHOD__, $string);
+        $this->BufferGD->PrintImg(__METHOD__, 0, 0, 0, 0, $ancho, $alto);
+    }
+
+    /**
+     * 
+     * @param string $file
+     * @return ImageGD
+     * @throws Exception
+     */
+    public function &LoadImage($file)
+    {
+        list($ancho, $alto) = getimagesize($file);
+        $spl = new \SplFileInfo($file);
+        if (Mvc::App()->Config()->Response['ExtencionContenType'][$spl->getExtension()] && in_array(Mvc::App()->Config()->Response['ExtencionContenType'][$spl->getExtension()], $this->imageSoported))
+        {
+            $IMG = new ImageGD($ancho, $alto, Mvc::App()->Config()->Response['ExtencionContenType'][$spl->getExtension()]);
+            $IMG->ImportImg(__METHOD__, $file, Mvc::App()->Config()->Response['ExtencionContenType'][$spl->getExtension()]);
+            $IMG->PrintImg(__METHOD__, 0, 0, 0, 0, $ancho, $alto);
+            return $IMG;
+        } else
+        {
+            throw new Exception("el tipo  de imagen no esta soportada");
+        }
+    }
+
+    /**
+     * 
+     * @param string|binary $string
+     * @param string $ContenType
+     * @return ImageGD
+     */
+    public function &LoadImageFormString($string, $ContenType)
+    {
+        list($ancho, $alto) = getimagesizefromstring($string);
+        if (!in_array($ContenType, $this->imageSoported))
+        {
+            throw new Exception("el tipo " . $ContenType . " de imagen no esta soportada");
+        }
+        $IMG = new ImageGD($ancho, $alto, $ContenType);
+        $IMG->ImportImgFormString(__METHOD__, $string);
+        $IMG->PrintImg(__METHOD__, 0, 0, 0, 0, $ancho, $alto);
+        return $IMG;
+    }
+
     public function GetLayaut()
     {
         return ['Layaut' => NULL, 'Dir' => NULL];
@@ -77,6 +168,13 @@ class GDResponse implements ResponseConten
     protected function ResampledImage($image, $nuevo_ancho, $nuevo_alto, $calidad = NULL)
     {
         list($ancho, $alto) = getimagesizefromstring($image);
+
+        if (( preg_match('/\N{1,}%/', $nuevo_ancho)) && isset($_COOKIE['GDmaxW']))
+        {
+            $porcent = (int) str_replace('%', '', $nuevo_ancho);
+            $nuevo_ancho = ( $_COOKIE['GDmaxW'] * ($porcent * 0.01));
+        }
+
 
         if (is_null($nuevo_ancho) && !is_null($nuevo_alto))
         {
@@ -110,7 +208,7 @@ class GDResponse implements ResponseConten
         }
 
 
-
+        //  imagecropauto($image, $mode, $threshold, $color)
         $IMG = new ImageGD($nuevo_ancho, $nuevo_alto, Mvc::App()->Content_type);
         $IMG->ImportImgFormString('img', $image);
         $IMG->PrintImg('img', 0, 0, 0, 0, $nuevo_ancho, $nuevo_alto);
@@ -134,4 +232,9 @@ class GDResponse implements ResponseConten
         
     }
 
+}
+
+class GDexception extends Exception
+{
+    
 }

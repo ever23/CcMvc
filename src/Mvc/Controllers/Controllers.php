@@ -121,6 +121,7 @@ abstract class Controllers implements InfoController
      */
     protected final static function Redirec($page, array $get = [])
     {
+
         Mvc::Redirec($page, $get);
     }
 

@@ -167,7 +167,7 @@ class Router
             $last = explode(',', $_SERVER['HTTP_IF_MODIFIED_SINCE']);
 
             $LastTime = new \DateTime(trim(array_pop($last)));
-            // var_dump($spl->getMTime() == $LastTime->getTimestamp());
+
             if ($Mtime === $LastTime->getTimestamp() && !$reenv)
             {
 

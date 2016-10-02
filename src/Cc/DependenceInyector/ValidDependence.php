@@ -145,8 +145,12 @@ abstract class ValidDependence implements \ArrayAccess, \IteratorAggregate
         if (!is_array($this->value))
         {
             return $this->valido;
+        } elseif ($this->value instanceof ValidDependence && !$this->value->IsValid())
+        {
+            return false;
         } else
         {
+
             foreach ($this->value as $i => $v)
             {
                 if ($v instanceof ValidDependence && !$v->IsValid())
@@ -164,6 +168,10 @@ abstract class ValidDependence implements \ArrayAccess, \IteratorAggregate
      */
     public function get()
     {
+        if ($this->value instanceof self)
+        {
+            return $this->value->value;
+        }
         return $this->value;
     }
 
@@ -239,7 +247,7 @@ abstract class ValidDependence implements \ArrayAccess, \IteratorAggregate
      * @return boolean|\Cc\class|\Traversable
      * @throws \Exception
      */
-    private static function ProccessValue($value, $type)
+    protected static function ProccessValue($value, $type)
     {
         $p = [];
         if (is_array($type))
@@ -295,7 +303,7 @@ abstract class ValidDependence implements \ArrayAccess, \IteratorAggregate
                     return $valid;
                 } else
                 {
-                    throw new Exception("typo de validocion " . $type . " no valido");
+                    throw new Exception("typo de validacion " . $type . " no valido");
                     return $value;
                 }
         }
@@ -305,7 +313,7 @@ abstract class ValidDependence implements \ArrayAccess, \IteratorAggregate
      * retorna los valores estrictos
      * @return mixes
      */
-    private function StrictValues()
+    protected function StrictValues()
     {
         if (is_array($this->value))
         {

@@ -1036,6 +1036,27 @@ class DBtabla extends ResultManager implements \JsonSerializable
         }
         $col = '';
 
+
+
+
+
+        if (is_null($where))
+        {
+            if (count($this->GetPrimary()) > 0)
+            {
+                $where = array();
+
+                foreach ($this->GetPrimary() as $v)
+                {
+                    $where+=[$v => $SETS[$v]];
+                    unset($SETS[$v]);
+                }
+            } else
+            {
+                ErrorHandle::Notice("No se ha encontrado claves primarias en la tabla " . $this->Tabla() . " por lo tanto el parametro \$where es obligatorio");
+                return false;
+            }
+        }
         foreach ($SETS as $i => $v)
         {
 
@@ -1043,6 +1064,7 @@ class DBtabla extends ResultManager implements \JsonSerializable
         }
         $col = substr($col, 0, -1);
         $sql = "UPDATE " . $this->Tabla() . " SET " . $col . " " . $this->Where($where);
+
         if (!$this->Excecute($sql))
         {
             ErrorHandle::Notice("Error al editar datos de la tabla " . $this->tabla . " errno:" . $this->errno . " error:" . $this->error);

@@ -95,9 +95,12 @@ class DocumentBuffer
         {
             if ($this->minifi)
             {
-                return $this->min->Min($string, $this->type_text);
+                $string = $this->min->Min($string, $this->type_text);
+                header('Content-Length: ' . strlen($string));
+                return $string;
             } else
             {
+                header('Content-Length: ' . strlen($string));
                 return $string;
             }
         }

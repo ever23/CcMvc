@@ -253,6 +253,11 @@ class PostFiles extends \SplFileInfo implements \ArrayAccess, \IteratorAggregate
         return isset($this->File['tmp_name']) && is_executable($this->File['tmp_name']);
     }
 
+    public function getSize()
+    {
+        return isset($this->File['tmp_name']) && filesize($this->File['tmp_name']);
+    }
+
     /**
      * @access private
      * @param type $offset

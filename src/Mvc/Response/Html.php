@@ -214,7 +214,9 @@ class Html extends Response
         $keywords = '';
         foreach ($this->KeyWords as $word)
         {
-            $keywords.=$word . ', ';
+            $word = trim($word);
+            if ($word != '')
+                $keywords.=$word . ', ';
         }
         if (isset($this->MetaTang['keywords']))
         {
@@ -229,6 +231,7 @@ class Html extends Response
         $head.=self::meta([ "http-equiv" => "Content-Type", "content" => "text/html; charset=UTF-8"]);
         foreach ($this->MetaTang as $i => $v)
         {
+
             $head.=self::meta(['name' => $i, 'content' => $v]);
         }
         $head.=self::meta(['name' => 'description', 'content' => $this->Description]);
@@ -533,7 +536,7 @@ class Html extends Response
      * @param array $attrs ATRIBUTOS DE LA ETIQUETA [attr=>value]
      * @return string
      */
-    public static function Tang($name, $text = '', array $attrs = NULL)
+    public static function Tang($name, $text = '', $attrs = NULL)
     {
         if (is_array($text))
         {
@@ -624,6 +627,7 @@ class Html extends Response
                 }
             } elseif ($v !== null)
             {
+
                 if ($encode)
                 {
                     $buffer .= " " . $i . "='" . self::Encode($v) . "'";
@@ -644,7 +648,7 @@ class Html extends Response
      * CREA UN ETIQUETA SELECT 
      * 
      * @param array $attrs ATRIBUTOS DE LA ETIQUETA SELECT [attr=>value]
-     * @param array $options ATRIBUTOS DE LAS ETIQUETAS OPTION  
+     * @param array|\Traversable $options ATRIBUTOS DE LAS ETIQUETAS OPTION  
      * <code>
      * [
      *      0=>[attr=>value,..],
@@ -655,28 +659,33 @@ class Html extends Response
      * ]</code>
      * @return string
      */
-    public static function select($attrs = [], array $options = [])
+    public static function select($attrs = [], $options = [])
     {
 
         $tang = self::OpenTang('select', $attrs);
+
         foreach ($options as $i => $v)
         {
             $text = '';
-            if (is_array($v))
+            if (is_array($v) || $v instanceof \Traversable)
             {
-                if (isset($v['text']))
+                $atr = [];
+                foreach ($v as $i => $v)
+                    $atr[$i] = $v;
+                if (isset($atr['text']))
                 {
-                    $text = $v['text'];
-                    unset($v['text']);
+                    $text = $atr['text'];
+                    unset($atr['text']);
                 }
-                if (!isset($v['value']))
-                    $v['value'] = $i;
-                if (isset($attrs['value']) && $attrs['value'] == $v['value'])
+                if (!isset($atr['value']))
+                    $atr['value'] = $i;
+                if (isset($attrs['value']) && $attrs['value'] == $atr['value'])
                 {
-                    $v['selected'] = true;
+                    $atr['selected'] = true;
                 }
-                $tang.=self::Tang('option', $text, $v);
-            } elseif (is_int($i))
+
+                $tang.=self::Tang('option', $text, $atr);
+            } elseif (is_numeric($i))
             {
                 $atr = ['value' => $v];
                 if (isset($attrs['value']) && $attrs['value'] == $atr['value'])

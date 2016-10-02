@@ -24,7 +24,7 @@ namespace Cc\DB\MetaData;
  * @package Cc
  * @subpackage DataBase  
  * @category MetaData
- * @todo se nesesita mejorar la decodificacion de arrays de posgresql
+ *
  */
 class pgARRAY extends \ArrayObject implements iMetaData
 {
@@ -94,69 +94,109 @@ class pgARRAY extends \ArrayObject implements iMetaData
         return self::Format($array, 'array');
     }
 
-    public static function Decode($str)
+    public static function Decode($arraystring, $reset = true)
     {
+        static $i = 0;
+        if ($reset)
+            $i = 0;
 
-        if (is_string($str) && ($str[0] == '{' && $str[strlen($str) - 1] == '}' ))
+        $matches = array();
+        $indexer = 1;   // by default sql arrays start at 1
+        // handle [0,2]= cases
+        if (preg_match('/^\[(?P<index_start>\d+):(?P<index_end>\d+)]=/', substr($arraystring, $i), $matches))
         {
-            $string = self::ConverJson($str);
+            $indexer = (int) $matches['index_start'];
+            $i = strpos($arraystring, '{');
+        }
 
-            if ($r = json_decode($string))
+        if ($arraystring[$i] != '{')
+        {
+            return NULL;
+        }
+
+        if (is_array($arraystring))
+            return $arraystring;
+
+        // handles btyea and blob binary streams
+        if (is_resource($arraystring))
+            return fread($arraystring, 4096);
+
+        $i++;
+        $work = array();
+        $curr = '';
+        $length = strlen($arraystring);
+        $count = 0;
+        $quoted = false;
+
+        while ($i < $length)
+        {
+            // echo "\n [ $i ] ..... $arraystring[$i] .... $curr";
+
+            switch ($arraystring[$i])
             {
+                case '{':
+                    $sub = self::Decode($arraystring, false);
+                    if (!empty($sub))
+                    {
+                        $work[$indexer++] = $sub;
+                    }
+                    break;
+                case '}':
+                    $i++;
+                    if (strlen($curr) > 0)
+                        $work[$indexer++] = $curr;
+                    return $work;
+                    break;
+                case '\\':
+                    $i++;
+                    $curr .= $arraystring[$i];
+                    $i++;
+                    break;
+                case '"':
+                    $quoted = true;
+                    $openq = $i;
+                    do
+                    {
+                        $closeq = strpos($arraystring, '"', $i + 1);
+                        $escaped = $closeq > $openq &&
+                                preg_match('/(\\\\+)$/', substr($arraystring, $openq + 1, $closeq - ($openq + 1)), $matches) &&
+                                (strlen($matches[1]) % 2);
+                        if ($escaped)
+                        {
+                            $i = $closeq;
+                        } else
+                        {
+                            break;
+                        }
+                    } while (true);
 
-                return self::UnserializeValues($r);
-            } else
-            {
+                    if ($closeq <= $openq)
+                    {
+                        throw new Exception('Unexpected condition');
+                    }
 
-                return false;
+                    $curr .= substr($arraystring, $openq + 1, $closeq - ($openq + 1));
+
+                    $i = $closeq + 1;
+                    break;
+                case ',':
+                    if (strlen($curr) > 0)
+                    {
+                        if (!$quoted && (strtoupper($curr) == 'NULL'))
+                            $curr = null;
+                        $work[$indexer++] = $curr;
+                    }
+                    $curr = '';
+                    $quoted = false;
+                    $i++;
+                    break;
+                default:
+                    $curr .= $arraystring[$i];
+                    $i++;
             }
-            //  $unser = $this->UnserializeArrayPostgeSql($str)
         }
 
-        return false;
-    }
-
-    private static function UnserializeValues($array)
-    {
-        foreach ($array as $i => &$v)
-        {
-            if (is_string($i))
-                return $array;
-            if (is_string($v))
-            {
-                $class_name = "\\Cc\\DB\\MetaData\\pg" . $this->key;
-                $class_name2 = "\\Cc\\DB\\MetaData\\" . $this->key;
-
-                if (class_exists($class_name, false))
-                {
-                    $v = new $class_name($v, $this->key);
-                } elseif (class_exists($class_name2, false))
-                {
-                    $v = new $class_name2($v, $this->key);
-                }
-            } elseif (is_array($v))
-            {
-                $v = self::UnserializeValues($v);
-            }
-        }
-    }
-
-    public static function ConverJson($entrada)
-    {
-        if (is_array($entrada))
-        {
-            $ex = preg_replace_callback('/(\w{1,})|(\"\w{1,}\")/', function($w)
-            {
-                if (preg_match('/\"(\w{1,})\"/', $w[0]) || is_numeric($w[0]))
-                {
-                    return $w[0];
-                }
-                return '"' . $w[0] . '"';
-            }, substr($entrada[0], 1, -1));
-
-            $entrada = '[' . $ex . ']';
-        }
-        return preg_replace_callback("/\{.*\}/", __METHOD__, $entrada);
+        throw new Exception('Unexpected line end');
     }
 
     public function jsonSerialize()

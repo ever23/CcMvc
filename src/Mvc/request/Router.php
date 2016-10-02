@@ -177,7 +177,7 @@ class Router extends \Cc\Router
             if (self::HeadersReponseFiles($splinfo, $contenttype, $this->config['CacheExpiresTime'], $conf['debung']['NoReenviarFiles']))
             {
 
-                echo file_get_contents($splinfo);
+                readfile($splinfo);
             } else
             {
                 DocumentBuffer::Clear();

@@ -86,7 +86,7 @@ class UrlManager
     public static function BuildUrl($protocol, $host, $base_path, $url = '')
     {
         $base_path = self::EncodeUrl($base_path);
-        $url = self::EncodeUrl($url);
+
 
         $protocol = mb_strtolower($protocol) . '://';
         if (strlen($url) == 0)
@@ -103,7 +103,7 @@ class UrlManager
 
         $ret = $protocol;
 
-        if (!in_array(mb_strtolower($protocol), array("http://", "https://", "ftp://", "ftps://")))
+        if (!in_array(mb_strtolower($protocol), array("http://", "https://", "ftp://", "ftps://", "ws://")))
         {
             //On Windows local file, an abs path can begin also with a '\' or a drive letter and colon
             //drive: followed by a relative path would be a drive specific default folder.

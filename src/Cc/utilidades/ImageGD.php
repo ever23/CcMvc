@@ -207,7 +207,7 @@ class ImageGD
             $tamano = getimagesize($original);
         }
 
-
+        //  imagetruecolortopalette($importada, false, 255);
         $orig_Ancho = $tamano[0];
 
         $orig_Alto = $tamano[1];
@@ -215,7 +215,7 @@ class ImageGD
         {
             imagecolortransparent($importada, $this->colores[$color_trasparen]);
         }
-
+        //imagecolortransparent($this->img, IMG_COLOR_BRUSHED);
         imagecopyresampled($this->img, $importada, $x, $y, $x_img, $y_img, $ancho_img, $alto_img, $orig_Ancho, $orig_Alto);
         imagedestroy($importada);
     }

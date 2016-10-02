@@ -4,6 +4,48 @@ namespace Cc\Mvc;
 
 use Cc\ValidDependence;
 
+class ValidArray extends ValidDependence
+{
+
+    public function __construct($value, $option = array())
+    {
+        $option['StrictValue'] = true;
+        parent::__construct($value, $option);
+    }
+
+    public function Validate(&$value)
+    {
+
+        if (!is_array($value) && !($value instanceof \Traversable && $value instanceof \ArrayAccess && $value instanceof \Countable))
+        {
+            return false;
+        }
+        if (isset($this->option['maxlength']) && count($value) > $this->option['maxlength'])
+        {
+            return false;
+        }
+        if (isset($this->option['minlength']) && count($value) < $this->option['minlength'])
+        {
+            return false;
+        }
+
+        if (isset($this->option['ValidItems']))
+        {
+            foreach ($value as $i => $v)
+            {
+                if (($value[$i] = self::Filter($v, $this->option['ValidItems'], self::ReturnedBool)) === false)
+                {
+
+
+                    return false;
+                }
+            }
+        }
+        return $value;
+    }
+
+}
+
 /**
  * VALIDA UNA CADENA DE CARACTERES 
  * @author Enyerber Franco
@@ -42,14 +84,24 @@ class ValidString extends ValidDependence
         {
             return false;
         }
-        if (isset($this->option['options']) && is_array($this->option['options']))
+
+        if (isset($this->option['options']) && (is_array($this->option['options']) || $this->option['options'] instanceof \Traversable))
         {
             foreach ($this->option['options'] as $v)
             {
 
-                if ($v['value'] == $value)
+                if ((is_array($v) || $v instanceof \ArrayAccess) && isset($v['value']))
                 {
-                    return $value;
+                    if ($v['value'] == $value)
+                    {
+                        return $value;
+                    }
+                } else
+                {
+                    if ($v == $value)
+                    {
+                        return $value;
+                    }
                 }
             }
             return false;
@@ -108,14 +160,22 @@ class ValidNumber extends ValidDependence
 
             return false;
         }
-        if (isset($this->option['options']) && is_array($this->option['options']))
+        if (isset($this->option['options']) && (is_array($this->option['options']) || $this->option['options'] instanceof \Traversable))
         {
             foreach ($this->option['options'] as $v)
             {
-
-                if ($v['value'] == $value)
+                if ((is_array($v) || $v instanceof \ArrayAccess) && isset($v['value']))
                 {
-                    return $value;
+                    if ($v['value'] == $value)
+                    {
+                        return $value;
+                    }
+                } else
+                {
+                    if ($v == $value)
+                    {
+                        return $value;
+                    }
                 }
             }
             return false;

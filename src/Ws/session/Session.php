@@ -73,7 +73,6 @@ class Session extends \Cc\SESSION
         {
             unlink($file);
         }
-
         return true;
     }
 
@@ -91,7 +90,7 @@ class Session extends \Cc\SESSION
             return false;
         }
         session_save_path($this->savePath);
-        session_start();
+        @session_start();
         $this->_SESSION = $_SESSION;
         return true;
     }

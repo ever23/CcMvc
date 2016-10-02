@@ -426,13 +426,17 @@ class Ws
      */
     private function LoadPorcedures()
     {
-        $proc = dir($this->procedures);
-        while ($f = $proc->read())
+        var_dump($this->procedures);
+        if (file_exists($this->procedures))
         {
-            $file = $this->procedures . $f;
-            if (is_file($file))
+            $proc = dir($this->procedures);
+            while ($f = $proc->read())
             {
-                include_once($file);
+                $file = $this->procedures . $f;
+                if (is_file($file))
+                {
+                    include_once($file);
+                }
             }
         }
     }

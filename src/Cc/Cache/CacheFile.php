@@ -122,7 +122,7 @@ class CacheFile extends AbstracCache
             $this->CAHCHE['VersionCache'] = $this->VersionCache;
             $save = serialize($this->CAHCHE);
             $size = strlen($save);
-            $file = fopen(realpath($this->Config['App']['Cache']) . DIRECTORY_SEPARATOR . $this->Config['Cache']['File'], 'w');
+            $file = fopen($this->FileCache, 'w');
             fwrite($file, $save, $size);
             fclose($file);
         }

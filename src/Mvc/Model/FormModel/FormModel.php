@@ -171,58 +171,77 @@ abstract class FormModel extends Model
                 {
                     $options = ['required' => false];
                 }
-                switch ($v[self::TypeHtml])
+                if (!isset($v[self::Validate]))
                 {
-                    case 'Number':
-                    case 'range':
-                        $v[self::Validate] = ValidNumber::CreateValid($options);
-                        break;
-                    case 'email':
-                        $v[self::Validate] = ValidEmail::CreateValid($options);
-                        break;
-                    case 'tel':
-                        $v[self::Validate] = ValidTelf::CreateValid($options);
-                        break;
-                    case 'color':
-                        $v[self::Validate] = ValidExadecimal::CreateValid($options);
-                        break;
-                    case 'date':
-                        $v[self::Validate] = ValidDate::CreateValid(['format' => 'Y/m/d'] + $options);
-                        break;
-                    case 'datetime':
-                        $v[self::Validate] = ValidDate::CreateValid(['format' => 'Y/m/d H:i:s'] + $options);
-                        break;
-                    case 'week':
-                        $v[self::Validate] = ValidDate::CreateValid(['format' => 'Y-W'] + $options);
-                        break;
-                    case 'month':
-                        $v[self::Validate] = ValidDate::CreateValid(['format' => 'Y-m'] + $options);
-                        break;
-                    case 'time':
-                        $v[self::Validate] = ValidDate::CreateValid(['format' => 'H:i:s'] + $options);
-                        break;
-                    case 'year':
-                        $v[self::Validate] = ValidDate::CreateValid(['format' => 'Y'] + $options);
-                        break;
-                    case 'datetime-local':
-                        $v[self::Validate] = ValidDate::CreateValid(['format' => \DateTime::W3C] + $options);
-                        break;
-                    case 'url':
-                        $v[self::Validate] = ValidUrl::CreateValid($options);
-                        break;
-                    case 'file':
-                        //case 'image':
-                        $v[self::Validate] = ValidString::CreateValid(['opt_files' => $options, 'required' => false]);
-                        break;
-                    default :
+                    $v[self::Validate] = [];
+                }
+                if (preg_match('/\w\[\]/', $v[self::TypeHtml]))
+                {
 
-                        $v[self::Validate] = ValidString::CreateValid($options);
+
+                    $item = $this->ParseValid([], str_replace('[]', '', $v[self::TypeHtml]), ['required' => true] + $options);
+                    $v[self::Validate] = ValidArray::CreateValid(['ValidItems' => $item] + $options);
+                } else
+                {
+                    $v[self::Validate] = $this->ParseValid($v[self::Validate], $v[self::TypeHtml], $options);
                 }
             }
 
             $this->campos[$i] = $v;
             $this->_ValuesModel[$i] = '';
         }
+    }
+
+    protected function ParseValid($v, $type, $options)
+    {
+        switch (strtolower($type))
+        {
+            case 'number':
+            case 'range':
+                $v = ValidNumber::CreateValid($options);
+                break;
+            case 'email':
+                $v = ValidEmail::CreateValid($options);
+                break;
+            case 'tel':
+                $v = ValidTelf::CreateValid($options);
+                break;
+            case 'color':
+                $v = ValidExadecimal::CreateValid($options);
+                break;
+            case 'date':
+                $v = ValidDate::CreateValid(['format' => 'Y/m/d'] + $options);
+                break;
+            case 'datetime':
+                $v = ValidDate::CreateValid(['format' => 'Y/m/d H:i:s'] + $options);
+                break;
+            case 'week':
+                $v = ValidDate::CreateValid(['format' => 'Y-W'] + $options);
+                break;
+            case 'month':
+                $v = ValidDate::CreateValid(['format' => 'Y-m'] + $options);
+                break;
+            case 'time':
+                $v = ValidDate::CreateValid(['format' => 'H:i:s'] + $options);
+                break;
+            case 'year':
+                $v = ValidDate::CreateValid(['format' => 'Y'] + $options);
+                break;
+            case 'datetime-local':
+                $v = ValidDate::CreateValid(['format' => \DateTime::W3C] + $options);
+                break;
+            case 'url':
+                $v = ValidUrl::CreateValid($options);
+                break;
+            case 'file':
+                //case 'image':
+                $v = ValidString::CreateValid(['opt_files' => $options, 'required' => false]);
+                break;
+            default :
+
+                $v = ValidString::CreateValid($options);
+        }
+        return $v;
     }
 
     /**
@@ -232,7 +251,7 @@ abstract class FormModel extends Model
      */
     public function DefaultValue($name, $value = NULL)
     {
-        if (is_array($name))
+        if (is_array($name) || $name instanceof \Traversable)
         {
             foreach ($name as $i => $v)
             {
@@ -240,7 +259,8 @@ abstract class FormModel extends Model
             }
             return;
         }
-        if (isset($this->campos[$name][self::DefaultConten]))
+
+        if (key_exists($name, $this->campos))
         {
             $this->campos[$name][self::DefaultConten] = $value;
         }
@@ -259,7 +279,7 @@ abstract class FormModel extends Model
         }
     }
 
-    //  abstract protected function Campos();
+//  abstract protected function Campos();
 
     public function __get($name)
     {
@@ -349,8 +369,10 @@ abstract class FormModel extends Model
 
         if ($this->existFile)
         {
-            $this->valid = $this->ValidateFile();
+            $this->ValidateFile();
         }
+
+
         if ($this->protected)
         {
 
@@ -381,6 +403,7 @@ abstract class FormModel extends Model
             {
                 if (!$this->_ValuesModel[$v]->is_Uploaded())
                 {
+                    $this->valid = false;
                     return false;
                 }
             }
@@ -388,6 +411,7 @@ abstract class FormModel extends Model
             {
                 if (!in_array($this->_ValuesModel[$v]->getExtension(), explode(',', $options['ext'])))
                 {
+                    $this->valid = false;
                     return false;
                 }
             }
@@ -430,6 +454,7 @@ abstract class FormModel extends Model
             return false;
         } else
         {
+
             $this->_ValuesModel = &$valuesModel;
             $this->valid = true;
             return true;
@@ -446,15 +471,29 @@ abstract class FormModel extends Model
 
         if (isset($this->campos[$name]))
         {
-            $attrs['type'] = $this->campos[$name][self::TypeHtml];
-            $attrs['name'] = $name;
+            if (preg_match('/\w\[\]/', $this->campos[$name][self::TypeHtml]))
+            {
+                $attrs['type'] = str_replace('[]', '', $this->campos[$name][self::TypeHtml]);
+                $attrs['name'] = $name . '[]';
+            } else
+            {
+                $attrs['type'] = $this->campos[$name][self::TypeHtml];
+                $attrs['name'] = $name;
+            }
 
-            // echo "<input type='" . $this->campos[$name][0] . "' name='" . $name . "'";
+
+// echo "<input type='" . $this->campos[$name][0] . "' name='" . $name . "'";
             if (isset($this->campos[$name][self::DefaultConten]))
             {
-                $attrs['value'] = $this->campos[$name][self::DefaultConten];
+                if (is_array($this->campos[$name][self::DefaultConten]) || $this->campos[$name][self::DefaultConten] instanceof ValidArray)
+                {
+                    $attrs['value'] = '';
+                } else
+                {
+                    $attrs['value'] = $this->campos[$name][self::DefaultConten];
+                }
             }
-            $attrValid = [ 'pattern', 'min', 'max', 'maxlength', 'size', 'accept', 'step', 'required', 'multiple', 'title', 'placeholder'];
+            $attrValid = [ 'pattern', 'min', 'max', 'maxlength', 'size', 'accept', 'step', 'required', 'multiple', 'title', 'placeholder', 'checked'];
             if ($valid = ValidDefault::GetOptions($this->campos[$name][self::Validate]))
             {
 
@@ -482,8 +521,15 @@ abstract class FormModel extends Model
     {
         if (isset($this->campos[$name]))
         {
-            $attrs['name'] = $name;
-            $attrs['type'] = $this->campos[$name][self::TypeHtml];
+            if (preg_match('/\w\[\]/', $this->campos[$name][self::TypeHtml]))
+            {
+                $attrs['type'] = str_replace('[]', '', $this->campos[$name][self::TypeHtml]);
+                $attrs['name'] = $name . '[]';
+            } else
+            {
+                $attrs['type'] = $this->campos[$name][self::TypeHtml];
+                $attrs['name'] = $name;
+            }
             $value = '';
             if (isset($this->campos[$name][self::DefaultConten]))
             {
@@ -510,10 +556,10 @@ abstract class FormModel extends Model
     /**
      * imprime un select desde el nombre de un dato en el modelo
      * @param type $name
-     * @param array $options [opcion=>sttr]
+     * @param array|\Traversable $options [opcion=>sttr]
      * @param array $attrs [attr=>valor]
      */
-    public function Select($name, array $options = [], array $attrs = [])
+    public function Select($name, $options = [], array $attrs = [])
     {
         if (isset($this->campos[$name]))
         {
@@ -523,11 +569,12 @@ abstract class FormModel extends Model
             }
             if (isset($this->campos[$name][self::Validate]) && $valid = ValidDefault::GetOptions($this->campos[$name][self::Validate]))
             {
-                if ($options === [] && isset($valid['options']) && is_array($valid['options']))
+                if ($options === [] && isset($valid['options']) && (is_array($valid['options']) || $valid['options'] instanceof \Traversable))
                 {
                     $options = $valid['options'];
                 }
             }
+
             $attrs['name'] = $name;
 
             echo Html::select($attrs, $options);
@@ -576,6 +623,7 @@ abstract class FormModel extends Model
     {
         $specialTang = ['select', 'textarea', 'hidden'];
         $this->BeginForm($attrs);
+        echo Html::OpenTang('ul', ['class' => 'FormList']);
         foreach ($this->campos as $i => $v)
         {
             $typeHtml = $v[self::TypeHtml];
@@ -586,7 +634,7 @@ abstract class FormModel extends Model
                 $this->Input($i, $attr);
                 continue;
             }
-            echo Html::OpenTang('div', ['class' => 'FormRow']) . Html::label($name, ['from' => $i]);
+            echo Html::OpenTang('li', ['class' => 'FormRow']) . Html::label($name, ['from' => $i]);
             if (!in_array($typeHtml, $specialTang))
             {
                 if (isset($campos[$i]['ListValue']))
@@ -604,25 +652,30 @@ abstract class FormModel extends Model
                 switch ($typeHtml)
                 {
                     case 'textarea':
+                    case 'textarea[]':
                         $this->TextArea($i, $attr);
                         break;
                     case 'select':
-                        if (isset($campos[$i]) && isset($campos[$i]['option']) && is_array($campos[$i]['option']))
+
+                        if (isset($campos[$i]) && isset($campos[$i]['option']) && (is_array($campos[$i]['option']) || $campos[$i]['option'] instanceof \Traversable))
                         {
+
                             $this->Select($i, $campos[$i]['option'], $attr);
                         } else
                         {
+
                             $this->Select($i, [], $attr);
                         }
                         break;
                 }
             }
-            echo Html::CloseTang('div');
+            echo Html::CloseTang('li');
         }
 
-        echo Html::OpenTang('div', ['class' => 'FormRow']);
+        echo Html::OpenTang('li', ['class' => 'FormRow']);
         $this->ButtonSubmid(isset($submit['value']) ? $submit['value'] : 'ENVIAR', $submit);
-        echo Html::CloseTang('div');
+        echo Html::CloseTang('li');
+        echo Html::CloseTang('ul');
         $this->EndForm();
     }
 

@@ -71,7 +71,25 @@ class Config implements \ArrayAccess
         $dirApp = realpath($AppC['app']) . DIRECTORY_SEPARATOR;
         foreach ($AppC as $i => $v)
         {
-            $app[$i] = realpath(str_replace("{App}", $dirApp, $v)) . DIRECTORY_SEPARATOR;
+
+            if ($i == 'Cache')
+            {
+                $app[$i] = str_replace("{App}", $dirApp, $v);
+                if (!is_dir($app[$i]))
+                    mkdir($app[$i]);
+                $app[$i] = realpath($app[$i]) . DIRECTORY_SEPARATOR;
+            } elseif ($i == 'procedimientos')
+            {
+                $app[$i] = str_replace("{App}", $dirApp, $v);
+
+                if (is_dir($app[$i]))
+                {
+                    $app[$i] = realpath($app[$i]) . DIRECTORY_SEPARATOR;
+                }
+            } else
+            {
+                $app[$i] = realpath(str_replace("{App}", $dirApp, $v)) . DIRECTORY_SEPARATOR;
+            }
         }
         return $app;
     }
