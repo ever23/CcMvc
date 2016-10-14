@@ -142,6 +142,13 @@ namespace Cc\Mvc;
  * 'class'=>string    //clase extendidad de MvcEvents
  * );
  *  </code></pre>
+ *  </code></pre>
+ * @property-read array $SEO CONFIGURACION DE SEO  <br><pre><code>
+ * array(
+ * 'MetaTang'=>array    //etiquetas meta 
+ * 'keywords'=>array    // palabras clave
+ * );
+ *  </code></pre>
  */
 class Config extends \Cc\Config
 {

@@ -217,6 +217,8 @@ class DBtabla extends ResultManager implements \JsonSerializable
         if (!$result = $this->db->query("SELECT max(" . $auto . ") from " . $this->Tabla()))
         {
             $e = new CcException("ERROR NO AUTOINCREMET");
+
+            ErrorHandle::Notice("Error no se ha podido obtener el valor autoincrement de la tabla  " . $this->Tabla());
         }
         $r = $this->fecth_result($result);
         return $r["max(" . $auto . ")"];
@@ -273,37 +275,8 @@ class DBtabla extends ResultManager implements \JsonSerializable
         return $this;
     }
 
-    /**
-     *  CREA UNA CONSULTA SELECT SQL PARA LA TABLA
-     *  @param array $campos 	CAMPOS QUE SE DE LA TABLA SELECCIONARAN SI ES UN string ENTONCES SE UTILISARA COMO LA CLAUSULA WHERE Y
-     * TODOS LOS PARAMETROS SE CORRERAN HACIA LA IZQUIERDA
-     * @param string $where   CLAUSULA WHERE SI ES UN ARRAY SE TOMARA COMO LOS JOINS Y TODOS LOS PARAMETROS SE CORRERAN HACIA LA IZQUIERDA DESDE ESTE PARAMETRO SE PUEDE INDICAR 
-     * EXPLICITAMENTE QUE CLAUSULA ES Y LOS PARAMETROS SIGUENTES SE CORRERAN HACIA LA IZQUIERDA SEGUN LA POSICION DEL PARAMETRO INDICADO <br>
-     * EJEMPLO: <em>si en el parametro $where se coloca GRUP BY micampo entonces $where sera tomado como $group y $goup como $having y asi sucesivamente   </em>
-     * <code>
-     * $tabla->SelectSQL(['micampo','micampo2'],"GRUP BY micampo","micampo2 desc",3);
-     *
-     * </code> <em>esta llamada generaria el siguente sql: SELECT tabla.micampo,tabla.micampo2 from tabla GRUP BY micampo ORDER BY micampo2 desc  LIMIT 3</em>
-     * @param  mixes $joins CLAUSULAS JOIS UTILIZANDO UN ARRAY CON LAS TABLAS QUE SE RELACIONARAN ATEPONIENDO LOS SINGNOS <,>,=
-     * < SERA PARA LEFT JOIN
-     * > SERA PARA RINGT JOIN
-     * = SERA INNERT JOIN
-     * SI NO SE ANTEPONE NADA SERA NATURAL JOIN
-     * SERA TOMADO DE LAS CLAVES PROMARIAS QUE CONTENGAN LAS TABLAS PARA LA CLAUSULA USING
-     * PARA COLOCAR LA CLAUSULA 'ON' O 'USING' EXPLICITAMENTE SE COLOCA EL NOMBRE DE LA TABLA COMO INDICE
-     * LOS CAMPOS 'USING' SI ES UNO COMO COMO VALOR STRING SI SON VARIOS EN UN ARRAY
-     * Y PARA LA EXPRECION 'ON' UN STRING CON LA EXPRECION
-     * SI $joins ES UN STRING ENTONCES SE UTILISARA COMO LA CLAUSULA GROUP Y
-     * TODOS LOS PARAMETROS SE CORRERAN HACIA LA IZQUIERDA
-     * @param string $group CLAUSULA GROUP
-     * @param string $having CLAUSULA HAVING
-     * @param string $order CLAUSULA ORDER
-     * @param string $limit CLAUSULA LIMIT
-     *  @return string LA SENTENCIA SQL GENERADA
-     */
-    protected function SelectSql($campos = NULL, $where = NULL, $joins = NULL, $group = NULL, $having = NULL, $order = NULL, $limit = NULL)
+    protected function ResolvedSelectParams($campos = NULL, $where = NULL, $joins = NULL, $group = NULL, $having = NULL, $order = NULL, $limit = NULL)
     {
-
         $aj = $joins;
         $aw = $where;
         $ag = $group;
@@ -320,7 +293,13 @@ class DBtabla extends ResultManager implements \JsonSerializable
             $order = $ah;
             $limit = $ao;
             $campos = NULL;
+            $aj = $joins;
+            $aw = $where;
+            $ag = $group;
+            $ah = $having;
+            $ao = $order;
         }
+
         if (is_array($where))
         {
 
@@ -329,7 +308,11 @@ class DBtabla extends ResultManager implements \JsonSerializable
             $having = $ag;
             $order = $ah;
             $limit = $ao;
-
+            $aj = $joins;
+            $aw = $where;
+            $ag = $group;
+            $ah = $having;
+            $ao = $order;
             $where = NULL;
         }
         if (is_string($joins))
@@ -338,14 +321,20 @@ class DBtabla extends ResultManager implements \JsonSerializable
             $having = $ag;
             $order = $ah;
             $limit = $ao;
-
+            $aj = $joins;
+            $aw = $where;
+            $ag = $group;
+            $ah = $having;
+            $ao = $order;
             $joins = NULL;
         }
+
         $aj = $joins;
         $aw = $where;
         $ag = $group;
         $ah = $having;
         $ao = $order;
+
         if (is_null($joins))
         {
             $joins = array();
@@ -375,7 +364,7 @@ class DBtabla extends ResultManager implements \JsonSerializable
             $where = NULL;
             $joins = NULL;
             $group = NULL;
-        } elseif (preg_match('/^(\ {0,}Order by )/i', $where))
+        } elseif (preg_match('/^(\ {0,}Order by)/i', $where))
         {
 
 
@@ -416,11 +405,17 @@ class DBtabla extends ResultManager implements \JsonSerializable
                 $order = $group;
                 $limit = $ao;
                 $group = NULL;
-            } else
-            {
-                if (!preg_match('/^(\ {0,}GROUP BY )/i', $group))
-                    $group = 'GROUP BY ' . $group;
-            }
+            } if (preg_match('/^(\ {0,}LIMIT )/i', $group))
+        {
+
+            $limit = $group;
+            $group = NULL;
+        } elseIF ($group != '')
+        {
+
+            if (!preg_match('/^(\ {0,}GROUP BY )/i', $group))
+                $group = 'GROUP BY ' . $group;
+        }
         if (!is_null($having))
             if (preg_match('/^(\ {0,}LIMIT )/i', $having) || is_numeric($having))
             {
@@ -472,6 +467,40 @@ class DBtabla extends ResultManager implements \JsonSerializable
                     break;
             }
         }
+        return [$Select, $campos, $where, $joins, $group, $having, $order, $limit];
+    }
+
+    /**
+     *  CREA UNA CONSULTA SELECT SQL PARA LA TABLA
+     *  @param array $campos 	CAMPOS QUE SE DE LA TABLA SELECCIONARAN SI ES UN string ENTONCES SE UTILISARA COMO LA CLAUSULA WHERE Y
+     * TODOS LOS PARAMETROS SE CORRERAN HACIA LA IZQUIERDA
+     * @param string $where   CLAUSULA WHERE SI ES UN ARRAY SE TOMARA COMO LOS JOINS Y TODOS LOS PARAMETROS SE CORRERAN HACIA LA IZQUIERDA DESDE ESTE PARAMETRO SE PUEDE INDICAR 
+     * EXPLICITAMENTE QUE CLAUSULA ES Y LOS PARAMETROS SIGUENTES SE CORRERAN HACIA LA IZQUIERDA SEGUN LA POSICION DEL PARAMETRO INDICADO <br>
+     * EJEMPLO: <em>si en el parametro $where se coloca GRUP BY micampo entonces $where sera tomado como $group y $goup como $having y asi sucesivamente   </em>
+     * <code>
+     * $tabla->SelectSQL(['micampo','micampo2'],"GRUP BY micampo","micampo2 desc",3);
+     *
+     * </code> <em>esta llamada generaria el siguente sql: SELECT tabla.micampo,tabla.micampo2 from tabla GRUP BY micampo ORDER BY micampo2 desc  LIMIT 3</em>
+     * @param  mixes $joins CLAUSULAS JOIS UTILIZANDO UN ARRAY CON LAS TABLAS QUE SE RELACIONARAN ATEPONIENDO LOS SINGNOS <,>,=
+     * < SERA PARA LEFT JOIN
+     * > SERA PARA RINGT JOIN
+     * = SERA INNERT JOIN
+     * SI NO SE ANTEPONE NADA SERA NATURAL JOIN
+     * SERA TOMADO DE LAS CLAVES PROMARIAS QUE CONTENGAN LAS TABLAS PARA LA CLAUSULA USING
+     * PARA COLOCAR LA CLAUSULA 'ON' O 'USING' EXPLICITAMENTE SE COLOCA EL NOMBRE DE LA TABLA COMO INDICE
+     * LOS CAMPOS 'USING' SI ES UNO COMO COMO VALOR STRING SI SON VARIOS EN UN ARRAY
+     * Y PARA LA EXPRECION 'ON' UN STRING CON LA EXPRECION
+     * SI $joins ES UN STRING ENTONCES SE UTILISARA COMO LA CLAUSULA GROUP Y
+     * TODOS LOS PARAMETROS SE CORRERAN HACIA LA IZQUIERDA
+     * @param string $group CLAUSULA GROUP
+     * @param string $having CLAUSULA HAVING
+     * @param string $order CLAUSULA ORDER
+     * @param string $limit CLAUSULA LIMIT
+     *  @return string LA SENTENCIA SQL GENERADA
+     */
+    protected function SelectSql($campos = NULL, $where = NULL, $joins = NULL, $group = NULL, $having = NULL, $order = NULL, $limit = NULL)
+    {
+        list($Select, $campos, $where, $joins, $group, $having, $order, $limit) = $this->ResolvedSelectParams($campos, $where, $joins, $group, $having, $order, $limit);
 
         $sql = $Select
                 . $this->Driver->Campos($campos) . "  FROM " . $this->Driver->ProtectIdentifiers($this->Tabla()) . $this->postTab . " "
@@ -557,174 +586,9 @@ class DBtabla extends ResultManager implements \JsonSerializable
             $campo_bus = $this->OrderColum;
         }
         $search = $this->SqlBusqueda($cadena, $campo_bus);
-        $aj = $joins;
-        $aw = $where;
-        $ag = $group;
-        $ah = $having;
-        $ao = $order;
 
-        if (is_string($campos))
-        {
+        list($Select, $campos, $where, $joins, $group, $having, $order, $limit) = $this->ResolvedSelectParams($campos, $where, $joins, $group, $having, $order, $limit);
 
-            $where = $campos;
-            $joins = $aw;
-            $group = $aj;
-            $having = $ag;
-            $order = $ah;
-            $limit = $ao;
-            $campos = NULL;
-        }
-        if (is_array($where))
-        {
-
-            $joins = $aw;
-            $group = $aj;
-            $having = $ag;
-            $order = $ah;
-            $limit = $ao;
-
-            $where = NULL;
-        }
-        if (is_string($joins))
-        {
-            $group = $aj;
-            $having = $ag;
-            $order = $ah;
-            $limit = $ao;
-
-            $joins = NULL;
-        }
-        $aj = $joins;
-        $aw = $where;
-        $ag = $group;
-        $ah = $having;
-        $ao = $order;
-        if (is_null($joins))
-        {
-            $joins = array();
-        }
-        if (!is_array($campos))
-        {
-            $campos = [ $this->Tabla() . '.*'];
-        }
-
-
-        if (preg_match('/^(\ {0,}group by )/i', $where))
-        {
-
-            $group = $where;
-            $having = $aj;
-            $order = $ag;
-            $limit = $ah;
-            $where = NULL;
-            $joins = NULL;
-        } elseif (preg_match('/^(\ {0,}Having )/i', $where))
-        {
-
-
-            $having = $where;
-            $order = $aj;
-            $limit = $ag;
-            $where = NULL;
-            $joins = NULL;
-            $group = NULL;
-        } elseif (preg_match('/^(\ {0,}Order by )/i', $where))
-        {
-
-
-
-            $order = $where;
-            $limit = $aj;
-            $where = NULL;
-            $joins = NULL;
-            $group = NULL;
-            $having = NULL;
-        } elseif (preg_match('/^(\ {0,}Limit )/i', $where))
-        {
-
-
-
-
-            $limit = $where;
-            $where = NULL;
-            $joins = NULL;
-            $group = NULL;
-            $having = NULL;
-            $order = NULL;
-        }
-
-
-        if (!is_null($group))
-            if (is_array($group))
-            {
-                $group = 'GROUP BY ' . implode(',', $group);
-            } elseif (preg_match('/^(\ {0,}having .*(=|and|or))/i', $group))
-            {
-                $having = $group;
-                $order = $ah;
-                $limit = $ao;
-                $group = NULL;
-            } elseif (preg_match('/^(\ {0,}ORDER by )/i', $group))
-            {
-                $order = $group;
-                $limit = $ao;
-                $group = NULL;
-            } else
-            {
-                if (!preg_match('/^(\ {0,}GROUP BY )/i', $group))
-                    $group = 'GROUP BY ' . $group;
-            }
-        if (!is_null($having))
-            if (preg_match('/^(\ {0,}LIMIT )/i', $having) || is_numeric($having))
-            {
-
-                $limit = $having;
-                $having = NULL;
-            } elseif (preg_match('/^(\ {0,}ORDER BY )/i', $having))
-            {
-                $order = $having;
-                $limit = $ao;
-                $having = NULL;
-            }
-        if (!is_null($order))
-            if (preg_match('/^(\ {0,}LIMIT )/i', $order))
-            {
-                $limit = $order;
-                $order = NULL;
-            } else
-            {
-                if (!preg_match('/^(\ {0,}ORDER BY )/i', $order))
-                    $order = 'ORDER BY ' . $order;
-            }elseif (preg_match('/^(\ {0,}LIMIT )/i', $order) || is_numeric($order))
-        {
-            $limit = $order;
-
-            $order = NULL;
-        }
-        if (!is_null($limit))
-        {
-            if (!preg_match('/^(\ {0,}LIMIT )/i', $limit))
-                $limit = 'LIMIT ' . $limit;
-        }
-        $Select = 'SELECT ';
-        if (isset($campos[0]))
-        {
-            switch ($campos[0])
-            {
-                case self::AllSelect:
-                    $Select.='All ';
-                    unset($campos[0]);
-                    break;
-                case self::DistinctRowSelect:
-                    $Select.='DistinctRow ';
-                    unset($campos[0]);
-                    break;
-                case self::DistinctSelect:
-                    $Select.='Distinct ';
-                    unset($campos[0]);
-                    break;
-            }
-        }
         if (is_null($where) || $where == '')
         {
             $where = '(' . $search . ')>1';
@@ -732,6 +596,10 @@ class DBtabla extends ResultManager implements \JsonSerializable
         {
             $where = preg_replace('/^(\ {0, }where)/i', '', $where);
             $where = '(' . $where . ') and (' . $search . ')>1';
+        }
+        if (is_null($order))
+        {
+            $order = 'order by puntaje_busqueda DESC';
         }
         $campos[] = '(' . $search . ') as puntaje_busqueda';
         $sql = $Select
@@ -766,8 +634,11 @@ class DBtabla extends ResultManager implements \JsonSerializable
             $select.=" (" . $campo . " is NOT NULL AND " . $campo . " like '%" . $cadena . "%') + 
 			(" . $campo . " is NOT NULL AND " . $campo . " like '" . $cadena . "%')+";
         }
+        $noSearch = ['de', 'la', 'el', 'en', 'con', 'and', 'or', 'the', 'a', 'from', ' '];
         foreach ($trozos as $palabra)
         {
+            if (in_array($palabra, $noSearch))
+                continue;
             //if(strlen($palabra)>2 || (is_int($palabra) || is_float($palabra)))
             foreach ($campos as $campo)
             {

@@ -273,6 +273,7 @@ class Mvc
         $this->Log("Abriendo Cache ...");
         if (!Cache::IsSave('AppPath') || Cache::Get('AppPath') != $this->conf->App['app'])
         {
+
             Cache::Clean();
             Cache::Set('AppPath', $this->conf->App['app']);
             $this->Log(" Cache Reiniciado ...");
@@ -369,6 +370,11 @@ class Mvc
     public function __debugInfo()
     {
         //return $this->Cookie;
+    }
+
+    public function GetNameCacheRouter()
+    {
+        return $this->CacheRouter['request'];
     }
 
     public function IsDebung()
@@ -551,10 +557,15 @@ class Mvc
      */
     public function LoadError($num, $msj)
     {
+        if (!($this->Buffer instanceof DocumentBuffer))
+        {
+            $this->Buffer = new DocumentBuffer([$this, 'Handle'], true);
+        }
         if (!($this->Response instanceof ResponseConten))
         {
             $this->ContentTypeOrig = $this->Content_type = 'text/html';
             $this->IntanceResponseConten();
+            $this->Buffer->SetCompres(false);
         }
         if (!($this->View instanceof ViewController))
         {
@@ -713,16 +724,43 @@ class Mvc
     private function RouterByCache()
     {
         // return false;
-        $cache = Cache::IsSave($this->CacheRouter['request']) ? Cache::Get($this->CacheRouter['request']) : [];
-        // var_dump($cache);
+        $cookie = '';
+        if (isset($_COOKIE['GDmaxW']))
+        {
+            $cookie = 'COOKIE';
+            $cookie.= $_COOKIE['GDmaxW'];
+        }
+
+        $cache = Cache::IsSave($this->CacheRouter['request']) ? Cache::Get($this->CacheRouter['request']) : ( Cache::IsSave($this->CacheRouter['request'] . $cookie) ? Cache::Get($this->CacheRouter['request'] . $cookie) : []);
+
         if (isset($cache['type']))
             switch ($cache['type'])
             {
                 case 'file':
                     $this->IntanceResponseConten();
-                    $file = new \SplFileInfo($cache['Controller']);
-                    $this->Log("Enrutado a  " . $file . " desde el cache");
-                    $this->Router->RouterFile($file);
+
+                    if (isset($cache['RealFile']))
+                    {
+
+                        $realfile = new \SplFileInfo($cache['RealFile']);
+                        $file = new \SplFileInfo($cache['Controller']);
+
+                        if (file_exists($realfile) && $file->getMTime() <= $realfile->getMTime())
+                        {
+                            $this->Log("Enrutado a  " . $realfile . " desde el cache");
+
+                            $this->Router->RouterFile($realfile);
+                            $this->ProcessConten = false;
+
+                            exit;
+                        }
+                    }
+
+                    $this->Router->InfoFile = new \SplFileInfo($cache['Controller']);
+                    $this->Log("Enrutado a  " . $this->Router->InfoFile . " desde el cache");
+                    $this->Router->RouterFile($this->Router->InfoFile);
+
+
                     exit;
                     break;
                 case 'Controllers':
@@ -781,6 +819,7 @@ class Mvc
             exit;
         } else
         {
+            $this->Router->InfoFile = NULL;
             if ($this->Content_type == '*/*')
             {
                 $this->Content_type = $this->ContentTypeOrig = 'text/html';
@@ -1208,7 +1247,8 @@ class Mvc
         if (!($this->Response instanceof ResponseConten) || $this->fin == true)
             return;
         $this->fin = true;
-        $this->LayautManager->EndConten();
+        if ($this->LayautManager)
+            $this->LayautManager->EndConten();
     }
 
     /**

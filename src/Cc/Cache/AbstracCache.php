@@ -50,7 +50,7 @@ abstract class AbstracCache implements ICache
      */
     public function Set($name, $value, $expire = NULL)
     {
-        $this->changed = true;
+
 
         if ($expire)
         {
@@ -59,6 +59,9 @@ abstract class AbstracCache implements ICache
             $expire = $time->getTimestamp();
             // echo $time->format('Y/m/d H:i:s'),' ',$time->,' ',time();
         }
+
+        $this->changed = true;
+        //echo var_dump($value);
         /* @var $expire \DateTime */
         $this->CAHCHE[$name] = [$value, $expire];
     }

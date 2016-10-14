@@ -594,9 +594,9 @@ abstract class Drivers
         }
         if ($this->db->connect_error)
             return $val;
-        if (is_string($val))
+        if (is_null($var))
         {
-            return $this->db->real_escape_string($val);
+            return NULL;
         } elseif (is_array($val))
         {
             foreach ($val as $i => $v)
@@ -604,6 +604,9 @@ abstract class Drivers
                 $val[$i] = !in_array($i, $exept) ? $this->FilterSqlI($v) : $v;
             }
             return $val;
+        } else
+        {
+            return $this->db->real_escape_string($val);
         }
         return $val;
     }

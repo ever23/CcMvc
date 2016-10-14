@@ -90,6 +90,7 @@ class Response implements ResponseConten
     {
         $this->min = $min;
         $this->typeMin = $type;
+
         Mvc::App()->Buffer->SetCompres($compres);
         $this->layaut = NULL;
         $this->DirLayaut = NULL;

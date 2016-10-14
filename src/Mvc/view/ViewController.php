@@ -130,7 +130,8 @@ class ViewController
             }
         }
         unset($_________agrs, $_i, $_v);
-        $this->ViewVars['ObjResponse'] = &Mvc::App()->Response;
+        if (!isset($this->ViewVars['ObjResponse']))
+            $this->ViewVars['ObjResponse'] = &Mvc::App()->Response;
 
         if (preg_match('/\.\.\//', $view))
         {

@@ -10,6 +10,7 @@ namespace Cc\Mvc;
 
 use Cc\Mvc;
 use Cc\ImageGD;
+use Cc\Cache;
 
 /**
  * GDResponse Procesa respuestas para imagenes gif, jpg y png 
@@ -36,6 +37,8 @@ class GDResponse implements ResponseConten
         'image/png',
         'image/x-xbitmap',
     ];
+    protected $RpImage = ['GDw', 'GDh', 'GDc', 'GDNoCookie', ''];
+    protected $fileCache;
 
     /**
      *
@@ -82,73 +85,13 @@ class GDResponse implements ResponseConten
         {
             throw new Exception("el fichero " . $file . " no existe ");
         }
-        list($ancho, $alto) = getimagesize($file);
-        $spl = new \SplFileInfo($file);
-        if (Mvc::App()->Config()->Response['ExtencionContenType'][$spl->getExtension()] && in_array(Mvc::App()->Config()->Response['ExtencionContenType'][$spl->getExtension()], $this->imageSoported))
-        {
-            $this->BufferGD = new ImageGD($ancho, $alto, Mvc::App()->Config()->Response['ExtencionContenType'][$spl->getExtension()]);
-            $this->BufferGD->ImportImg(__METHOD__, $file, Mvc::App()->Config()->Response['ExtencionContenType'][$spl->getExtension()]);
-            $this->BufferGD->PrintImg(__METHOD__, 0, 0, 0, 0, $ancho, $alto);
-        } else
-        {
-            throw new Exception("el tipo  de imagen no esta soportada");
-        }
+
+        $this->BufferGD = new ImageGD($file);
     }
 
-    public function CreateImageGdFormString($string, $ContenType)
+    public function CreateImageGdFormString($string)
     {
-
-        list($ancho, $alto) = getimagesizefromstring($string);
-
-        if (!in_array($ContenType, $this->imageSoported))
-        {
-            throw new Exception("el tipo " . $ContenType . " de imagen no esta soportada");
-        }
-
-        $this->BufferGD = new ImageGD($ancho, $alto, $ContenType);
-        $this->BufferGD->ImportImgFormString(__METHOD__, $string);
-        $this->BufferGD->PrintImg(__METHOD__, 0, 0, 0, 0, $ancho, $alto);
-    }
-
-    /**
-     * 
-     * @param string $file
-     * @return ImageGD
-     * @throws Exception
-     */
-    public function &LoadImage($file)
-    {
-        list($ancho, $alto) = getimagesize($file);
-        $spl = new \SplFileInfo($file);
-        if (Mvc::App()->Config()->Response['ExtencionContenType'][$spl->getExtension()] && in_array(Mvc::App()->Config()->Response['ExtencionContenType'][$spl->getExtension()], $this->imageSoported))
-        {
-            $IMG = new ImageGD($ancho, $alto, Mvc::App()->Config()->Response['ExtencionContenType'][$spl->getExtension()]);
-            $IMG->ImportImg(__METHOD__, $file, Mvc::App()->Config()->Response['ExtencionContenType'][$spl->getExtension()]);
-            $IMG->PrintImg(__METHOD__, 0, 0, 0, 0, $ancho, $alto);
-            return $IMG;
-        } else
-        {
-            throw new Exception("el tipo  de imagen no esta soportada");
-        }
-    }
-
-    /**
-     * 
-     * @param string|binary $string
-     * @param string $ContenType
-     * @return ImageGD
-     */
-    public function &LoadImageFormString($string, $ContenType)
-    {
-        list($ancho, $alto) = getimagesizefromstring($string);
-        if (!in_array($ContenType, $this->imageSoported))
-        {
-            throw new Exception("el tipo " . $ContenType . " de imagen no esta soportada");
-        }
-        $IMG = new ImageGD($ancho, $alto, $ContenType);
-        $IMG->ImportImgFormString(__METHOD__, $string);
-        $IMG->PrintImg(__METHOD__, 0, 0, 0, 0, $ancho, $alto);
-        return $IMG;
+        $this->BufferGD = new ImageGD($string);
     }
 
     public function GetLayaut()
@@ -158,20 +101,35 @@ class GDResponse implements ResponseConten
 
     public function ProccessConten($str)
     {
-        if (isset($_GET['GDw']) || isset($_GET['GDh']) || isset($_GET['GDc']) || isset($_COOKIE['GDmaxW']))
+        if (isset($_GET['GDw']) || isset($_GET['GDh']) || isset($_GET['GDc']) || isset($_COOKIE['GDmaxW']) || isset($_GET['GDtp']))
         {
-            return $this->ResampledImage($str, isset($_GET['GDw']) ? $_GET['GDw'] : NULL, isset($_GET['GDh']) ? $_GET['GDh'] : NULL, isset($_GET['GDc']) ? $_GET['GDc'] : NULL);
+            return $this->ResampledImage($str, isset($_GET['GDw']) ? $_GET['GDw'] : NULL, isset($_GET['GDh']) ? $_GET['GDh'] : NULL, isset($_GET['GDc']) ? $_GET['GDc'] : NULL, isset($_GET['GDtp']) ? $_GET['GDtp'] : [255, 254, 255]);
         }
         return $str;
     }
 
-    protected function ResampledImage($image, $nuevo_ancho, $nuevo_alto, $calidad = NULL)
+    protected function ResampledImage($image, $nuevo_ancho, $nuevo_alto, $calidad = NULL, $fondo = NULL)
     {
+
+        //return $image;
+        if (is_string($fondo))
+        {
+            if ($fondo[0] == '#')
+            {
+                $fondo = substr($fondo, 1);
+            }
+            $c[0] = hexdec(substr($fondo, 0, 2));
+            $c[1] = hexdec(substr($fondo, 2, 2));
+            $c[2] = hexdec(substr($fondo, 4, 2));
+            $fondo = $c;
+        }
         list($ancho, $alto) = getimagesizefromstring($image);
 
-        if (( preg_match('/\N{1,}%/', $nuevo_ancho)) && isset($_COOKIE['GDmaxW']))
+
+        if (substr($nuevo_ancho, -1, 1) == '%' && isset($_COOKIE['GDmaxW']))
         {
-            $porcent = (int) str_replace('%', '', $nuevo_ancho);
+            $porcent = (int) substr($nuevo_ancho, 0, -1);
+
             $nuevo_ancho = ( $_COOKIE['GDmaxW'] * ($porcent * 0.01));
         }
 
@@ -187,8 +145,9 @@ class GDResponse implements ResponseConten
         }
         if (isset($_GET['GDNoCookie']) || !$this->AppConfig->Response['OptimizeImages'])
         {
-            if (is_null($nuevo_alto) && is_null($nuevo_ancho) && is_null($calidad))
-                return $image;
+            unset($_GET['GDNoCookie']);
+            //if (is_null($nuevo_alto) && is_null($nuevo_ancho) && is_null($calidad))
+            // return $image;
         }
         if (is_null($nuevo_alto) && is_null($nuevo_ancho))
         {
@@ -206,25 +165,97 @@ class GDResponse implements ResponseConten
             Mvc::App()->Log("GDResponse Cookie: w=" . $nuevo_ancho . " h=" . $nuevo_alto);
             ///return $this->ResampledImage($image, $_COOKIE['GDmaxW'], $nuevo_alto)
         }
+        if ($alto == $nuevo_alto && $ancho == $nuevo_ancho)
+            return $image;
+        //  return var_export(Mvc::App()->Router->InfoFile, true);
+        if (Mvc::App()->Router->InfoFile instanceof \SplFileInfo)
+        {
+            $c = $this->CacheImg($nuevo_ancho, $nuevo_alto, $calidad, $fondo);
+
+            if ($c === true)
+            {
+                return file_get_contents($this->fileCache);
+            } elseif (is_null($c))
+            {
+                return '';
+            }
+        }
+
+// return 1;
+//  imagecropauto($image, $mode, $threshold, $color)
 
 
-        //  imagecropauto($image, $mode, $threshold, $color)
-        $IMG = new ImageGD($nuevo_ancho, $nuevo_alto, Mvc::App()->Content_type);
-        $IMG->ImportImgFormString('img', $image);
-        $IMG->PrintImg('img', 0, 0, 0, 0, $nuevo_ancho, $nuevo_alto);
-        switch (Mvc::App()->Content_type)
+
+        $IMG = new ImageGD($image);
+
+        $IMG->ColorMask($fondo);
+//return $IMG->LoadString($image);
+        $IMG->Resize($nuevo_ancho, $nuevo_alto);
+//$IMG->ImportImgFormString('img', $image);
+//   $IMG->PrintImg('img', 0, 0, 0, 0, $nuevo_ancho, $nuevo_alto);
+        switch (trim(Mvc::App()->Content_type))
         {
             case 'image/x-xbitmap':
             case 'image/gif':
-                return $IMG->Output(NULL, "S");
+                $out = $IMG->Output(NULL, "S");
+                break;
             case 'image/jpeg':
-                return $IMG->Output(NULL, "S", [is_null($calidad) ? 100 : $calidad]);
+                $out = $IMG->Output(NULL, "S", [is_null($calidad) ? 100 : $calidad]);
+                break;
             case 'image/png':
-                return $IMG->Output(NULL, "S", [is_null($calidad) ? 9 : $calidad]);
+                $out = $IMG->Output(NULL, "S", [is_null($calidad) ? 9 : $calidad]);
+                break;
             default :
                 $IMG->destroy();
-                return $image;
+                $out = $image;
+                break;
         }
+        if (!Mvc::App()->IsDebung() && Mvc::App()->Router->InfoFile instanceof \SplFileInfo)
+        {
+            $cache = [];
+            $cache['type'] = 'file';
+            $cache['Controller'] = Mvc::App()->Router->InfoFile->__toString();
+            $cache['RealFile'] = $this->fileCache->__toString();
+            $cookie = '';
+            if (isset($_COOKIE['GDmaxW']))
+            {
+                $cookie = 'COOKIE';
+                $cookie.= $cache['GDmaxW'] = $_COOKIE['GDmaxW'];
+            }
+
+            Cache::Set(Mvc::App()->GetNameCacheRouter() . $cookie, $cache);
+            Cache::Delete(Mvc::App()->GetNameCacheRouter());
+
+            $f = fopen($this->fileCache, 'w');
+            fwrite($f, $out);
+            fclose($f);
+            Router::HeadersReponseFiles($this->fileCache, Mvc::App()->Content_type, Mvc::App()->Config()->Router['CacheExpiresTime']);
+        }
+
+        return $out;
+    }
+
+    protected function CacheImg($w, $h, $c, $f)
+    {
+        $name = Mvc::App()->Router->InfoFile->getBasename(Mvc::App()->Router->InfoFile->getExtension());
+        $name .= 'w' . ((int) $w) . 'h' . ((int) $h) . 'c' . $c;
+        $cache = Mvc::App()->Config()->App['Cache'] . 'ImageGD' . DIRECTORY_SEPARATOR;
+        if (!is_dir($cache))
+            mkdir($cache);
+        $file = $cache . $name . '.' . Mvc::App()->Router->InfoFile->getExtension();
+
+        $this->fileCache = new \SplFileInfo($file);
+        if (!Mvc::App()->IsDebung() && file_exists($this->fileCache) && $this->fileCache->getMTime() >= Mvc::App()->Router->InfoFile->getMTime())
+        {
+            if (Router::HeadersReponseFiles($this->fileCache, Mvc::App()->Content_type, Mvc::App()->Config()->Router['CacheExpiresTime'], true))
+            {
+                return true;
+            } else
+            {
+                return NULL;
+            }
+        }
+        return FALSE;
     }
 
     public function SetLayaut($layaut, $dirLayaut = NULL)

@@ -85,10 +85,11 @@ class LayautManager extends Model
                         extract($layaut['params']);
                     }
 
-                    extract($LayautController->jsonSerialize());
+
                     $content = DocumentBuffer::Conten();
                     $this->conten = &$content;
                     DocumentBuffer::Clear();
+                    extract($LayautController->jsonSerialize());
 
                     require_once ($__name);
                     Mvc::App()->Log("LAYAUT " . $__name . " CARGADO  ...");

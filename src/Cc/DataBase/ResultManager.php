@@ -489,7 +489,7 @@ class ResultManager extends SqlFormat implements \Iterator, \Countable
     {
         if (!is_null($n))
         {
-            $this->DataSeek($n);
+            return $this->ResultAll[$n];
         }
         if (!is_null($limit))
         {
@@ -595,7 +595,6 @@ class ResultManager extends SqlFormat implements \Iterator, \Countable
         for ($i = 0; $i <= $n; $i++)
         {
             $this->next();
-            echo $i;
         }
     }
 

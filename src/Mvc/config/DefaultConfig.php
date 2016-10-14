@@ -304,6 +304,20 @@ return
                 'name' => 'webmaster',
                 'email' => 'webmaster@localhost.com'
             ],
+            'SEO' =>
+            [
+                'MetaTang' =>
+                [
+                    'language' => 'es',
+                    'content-language' => 'es',
+                    'author' => '',
+                    'designer' => '',
+                    'programmer' => '',
+                    'robots' => "index,follow,all",
+                    'viewport' => "width=device-width, initial-scale=1.0, maximum-scale=1.0"
+                ],
+                'keywords' => [],
+            ]
 ];
 
 

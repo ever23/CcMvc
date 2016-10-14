@@ -157,9 +157,9 @@ class Router
             $edad = $time->getTimestamp() - $Mtime;
 
             $ActTime->add(date_interval_create_from_date_string($caheExpire));
-            header("Cache-Control: public, max-age=" . $ActTime->getTimestamp());
-            header("Age:" . $edad);
-            header("Expires:" . $ActTime->format("D, d M y H:i:s"));
+            header("Cache-Control: public, max-age=" . $ActTime->getTimestamp(), true);
+            header("Age:" . $edad, true);
+            header("Expires:" . $ActTime->format("D, d M y H:i:s"), true);
         }
 
         if (isset($_SERVER['HTTP_IF_MODIFIED_SINCE']))
@@ -172,14 +172,14 @@ class Router
             {
 
                 // header("ETag: " . $_SERVER['HTTP_IF_NONE_MATCH']);
-                header("Last-Modified:" . date("D, d M y H:i:s", $Mtime));
-                header("Date:" . date("D, d M y H:i:s"));
+                header("Last-Modified:" . date("D, d M y H:i:s", $Mtime), true);
+                header("Date:" . date("D, d M y H:i:s"), true);
                 header('304 Not Modified', true, 304);
                 return false;
             }
         }
-        header("Last-Modified: " . date("D, d M y H:i:s", $Mtime));
-        header("Date: " . date("D, d M y H:i:s"));
+        header("Last-Modified: " . date("D, d M y H:i:s", $Mtime), true);
+        header("Date: " . date("D, d M y H:i:s"), true);
         return true;
     }
 

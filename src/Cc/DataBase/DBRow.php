@@ -88,9 +88,9 @@ class DBRow implements \ArrayAccess, \Countable, \Iterator, \JsonSerializable
             }
         } else
         {
-            $valor = $this->row;
+            $valores = $this->row;
         }
-        return $this->DBtabla->Delete($valor);
+        return $this->DBtabla->Delete($valores);
     }
 
     /**

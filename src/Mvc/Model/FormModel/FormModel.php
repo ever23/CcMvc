@@ -112,6 +112,11 @@ abstract class FormModel extends Model
         {
             $cache = Cache::Get('Form.' . static::class);
             $this->campos = $cache['campos'];
+            foreach ($this->campos as $name => $v)
+            {
+
+                unset($this->{$name});
+            }
             $this->_ValuesModel = $cache['_ValuesModel'];
             $this->existFile = $cache['existFile'];
         } else
@@ -535,7 +540,7 @@ abstract class FormModel extends Model
             {
                 $value = $this->campos[$name][self::DefaultConten];
             }
-            $attrValid = [ 'pattern', 'min', 'max', 'maxlength', 'size', 'accept', 'placeholder'];
+            $attrValid = [ 'pattern', 'min', 'max', 'maxlength', 'size', 'accept', 'placeholder', 'required'];
             if (isset($this->campos[$name][self::Validate]) && $valid = ValidDefault::GetOptions($this->campos[$name][self::Validate]))
             {
                 foreach ($valid as $i => $v)

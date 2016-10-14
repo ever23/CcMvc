@@ -290,7 +290,7 @@ abstract class AuteticateUserDB extends Autenticate
      * VERIFICA E INICIA LA SESSION DE UN USUARIO Y CONTRASEÑA DADO 
      * @param string $username nombre de usuario
      * @param string $password contraseña de usuario
-     * @return boolean TRUE SI LA CONTRASEÑA COINCIDE CON EL NOMBRE DE LO CONTRARIO FALSE
+     * @return boolean TRUE SI LA CONTRASEÑA COINCIDE CON EL NOMBRE DE LO CONTRARIO FALSE, SI OCURRE UN ERROR EN LA BASE DE DATOS RETORNA NULL
      */
     public function Login($username, $password)
     {
@@ -302,10 +302,13 @@ abstract class AuteticateUserDB extends Autenticate
         {
             $this->ErrnoDB = $this->DBtabla->errno;
             $this->ErrorDB = $this->DBtabla->error;
-            return false;
+            return NULL;
         }
         if ($this->DBtabla->num_rows != 1)
         {
+            /* echo '<br><br><pre>';
+              var_dump($username, $password);
+              echo $this->DBtabla->num_rows, $this->DBtabla->sql, '</pre>'; */
             return false;
         }
         $row = $this->DBtabla->fetch();

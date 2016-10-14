@@ -73,10 +73,10 @@ class CacheFile extends AbstracCache
         {
             $this->FileCache = new \SplFileInfo($conf['App']['Cache'] . $conf['Cache']['File']);
             //  $time = new \DateTime(date('Y/m/d H:i:s', $this->FileCache->getMTime()));
-
-            $this->fileRead = file_get_contents($this->FileCache);
-            // echo $this->fileRead;
             ob_start();
+            $this->fileRead = @file_get_contents($this->FileCache);
+            // echo $this->fileRead;
+
             $this->CAHCHE = @unserialize($this->fileRead);
             ob_end_clean();
             if (!$this->CAHCHE)
@@ -90,6 +90,12 @@ class CacheFile extends AbstracCache
                 $this->changed = true;
                 // unlink($this->FileCache);
             }
+        } else
+        {
+            $this->FileCache = $conf['App']['Cache'] . $conf['Cache']['File'];
+
+            $this->CAHCHE = [];
+            $this->changed = true;
         }
     }
 
@@ -119,12 +125,11 @@ class CacheFile extends AbstracCache
 
         if ($this->changed)
         {
+            //  echo "changed";
+
             $this->CAHCHE['VersionCache'] = $this->VersionCache;
             $save = serialize($this->CAHCHE);
-            $size = strlen($save);
-            $file = fopen($this->FileCache, 'w');
-            fwrite($file, $save, $size);
-            fclose($file);
+            @file_put_contents($this->FileCache, $save, LOCK_EX);
         }
     }
 
