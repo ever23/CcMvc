@@ -1,0 +1,674 @@
+<?xml version="1.0" encoding="utf8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+  <html xmlns="http://www.w3.org/1999/xhtml">
+		<head>
+			<!-- template designed by Marco Von Ballmoos  -->
+			<title>Docs for page FormModel.php</title>
+			<link rel="stylesheet" href="../../media/stylesheet.css" />
+						<script src="../../media/lib/classTree.js"></script>
+												<script language="javascript" type="text/javascript">
+				var imgPlus = new Image();
+				var imgMinus = new Image();
+				imgPlus.src = "../../media/images/plus.png";
+				imgMinus.src = "../../media/images/minus.png";
+				
+				function showNode(Node){
+							switch(navigator.family){
+								case 'nn4':
+									// Nav 4.x code fork...
+							var oTable = document.layers["span" + Node];
+							var oImg = document.layers["img" + Node];
+									break;
+								case 'ie4':
+									// IE 4/5 code fork...
+							var oTable = document.all["span" + Node];
+							var oImg = document.all["img" + Node];
+									break;
+								case 'gecko':
+									// Standards Compliant code fork...
+							var oTable = document.getElementById("span" + Node);
+							var oImg = document.getElementById("img" + Node);
+									break;
+							}
+					oImg.src = imgMinus.src;
+					oTable.style.display = "block";
+				}
+				
+				function hideNode(Node){
+							switch(navigator.family){
+								case 'nn4':
+									// Nav 4.x code fork...
+							var oTable = document.layers["span" + Node];
+							var oImg = document.layers["img" + Node];
+									break;
+								case 'ie4':
+									// IE 4/5 code fork...
+							var oTable = document.all["span" + Node];
+							var oImg = document.all["img" + Node];
+									break;
+								case 'gecko':
+									// Standards Compliant code fork...
+							var oTable = document.getElementById("span" + Node);
+							var oImg = document.getElementById("img" + Node);
+									break;
+							}
+					oImg.src = imgPlus.src;
+					oTable.style.display = "none";
+				}
+				
+				function nodeIsVisible(Node){
+							switch(navigator.family){
+								case 'nn4':
+									// Nav 4.x code fork...
+							var oTable = document.layers["span" + Node];
+									break;
+								case 'ie4':
+									// IE 4/5 code fork...
+							var oTable = document.all["span" + Node];
+									break;
+								case 'gecko':
+									// Standards Compliant code fork...
+							var oTable = document.getElementById("span" + Node);
+									break;
+							}
+					return (oTable && oTable.style.display == "block");
+				}
+				
+				function toggleNodeVisibility(Node){
+					if (nodeIsVisible(Node)){
+						hideNode(Node);
+					}else{
+						showNode(Node);
+					}
+				}
+			</script>
+					</head>
+		<body>
+			<div class="page-body">			
+<h2 class="file-name"><img src="../../media/images/Page_logo.png" alt="File" style="vertical-align: middle">/Mvc/Model/FormModel/FormModel.php</h2>
+
+<a name="sec-description"></a>
+<div class="info-box">
+	<div class="info-box-title">Description</div>
+	<div class="nav-bar">
+					<span class="disabled">Description</span> |
+							<a href="#sec-classes">Classes</a>
+			|													<a href="#sec-functions">Functions</a>
+			</div>
+	<div class="info-box-body">	
+		<!-- ========== Info from phpDoc block ========= -->
+<p class="short-description">clase base para modelos de formularios html</p>
+<p class="description"><p>EL METODO Campos DEBE REOTRNAR UN ARRAY CON LOS NOMBRES DE LOS CAMPOS COMO INDICES  Y Y UN ARRAY COMO VALOR  QUE DEBE CONTENER EN EL INDICE  0 EL TIPO DE CAMPO HTML EJEMPLO PARA TEXTO NORMAL text O UN CAMPO DE CORREO email  EN INDICE 1 ES OPCIONAL Y DEBE CONTENER EL VALOR POR DEFECTO DEL CAMPO,  EL INDIICE 3 TAMBIEN ES OPCIONAL Y DEBE CONTENER LA IFORMACION PARA LA VALIDACION GENERADA CON ALGUNA DE LAS CLASES DE VALIDACION  EXTENDIDAS DE <a href="../../Cc/Dependencias/ValidDependence.html">ValidDependence</a> Y EL METODO ValidDependence::CreateValid  EJEMPLO:  <div class="src-code"><ol><li><div class="src-line">&nbsp;<span class="src-php">&lt;?php</span></div></li>
+<li><div class="src-line">&nbsp;namespace&nbsp;<span class="src-id">Cc</span>\<span class="src-id"><a href="../../CcMvc/Mvc.html">Mvc</a></span><span class="src-sym">;</span></div></li>
+<li><div class="src-line">&nbsp;<span class="src-key">class&nbsp;</span><span class="src-id">MyFormulario&nbsp;</span><span class="src-key">extends&nbsp;</span><a href="../../CcMvc/Modelo/FormModel.html">FormModel</a><span class="src-sym">{</span></div></li>
+<li><div class="src-line">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="src-key">protected&nbsp;</span><span class="src-key">function&nbsp;</span><span class="src-id">Campos</span><span class="src-sym">(</span><span class="src-sym">)</span></div></li>
+<li><div class="src-line">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="src-sym">{</span></div></li>
+<li><div class="src-line">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="src-var">$campos</span>=<span class="src-sym">[</span></div></li>
+<li><div class="src-line">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="src-str">'campo'</span>=&gt;<span class="src-sym">[</span><span class="src-id">FormTypeHtml</span><span class="src-sym">,</span><span class="src-id">DefultValue</span><span class="src-sym">,</span><span class="src-id">typevalid</span><span class="src-sym">]</span><span class="src-sym">,</span></div></li>
+<li><div class="src-line">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="src-str">'campo1'</span>=&gt;<span class="src-sym">[</span><span class="src-id">FormTypeHtml</span><span class="src-sym">,</span><span class="src-id">DefultValue</span><span class="src-sym">,</span><span class="src-id">typevalid</span><span class="src-sym">]</span><span class="src-sym">,</span></div></li>
+<li><div class="src-line">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;.</div></li>
+<li><div class="src-line">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;.</div></li>
+<li><div class="src-line">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;.</div></li>
+<li><div class="src-line">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="src-sym">]</span><span class="src-sym">;</span></div></li>
+<li><div class="src-line">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="src-key">return&nbsp;</span><span class="src-var">$campos</span><span class="src-sym">;</span></div></li>
+<li><div class="src-line">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="src-sym">}</span></div></li>
+<li><div class="src-line">&nbsp;<span class="src-sym">}</span></div></li>
+</ol></div>  Un ejemplo mas completo:  <div class="src-code"><ol><li><div class="src-line">&nbsp;<span class="src-php">&lt;?php</span></div></li>
+<li><div class="src-line">&nbsp;namespace&nbsp;<span class="src-id">Cc</span>\<span class="src-id"><a href="../../CcMvc/Mvc.html">Mvc</a></span><span class="src-sym">;</span></div></li>
+<li><div class="src-line">&nbsp;<span class="src-key">class&nbsp;</span><span class="src-id">MyFormulario&nbsp;</span><span class="src-key">extends&nbsp;</span><a href="../../CcMvc/Modelo/FormModel.html">FormModel</a></div></li>
+<li><div class="src-line">&nbsp;<span class="src-sym">{</span></div></li>
+<li><div class="src-line">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="src-key">protected&nbsp;</span><span class="src-key">function&nbsp;</span><span class="src-id">Campos</span><span class="src-sym">(</span><span class="src-sym">)</span></div></li>
+<li><div class="src-line">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="src-sym">{</span></div></li>
+<li><div class="src-line">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="src-var">$campos</span>=<span class="src-sym">[</span></div></li>
+<li><div class="src-line">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="src-str">'nombre'&nbsp;</span>=&gt;&nbsp;<span class="src-sym">[</span><span class="src-str">'text'</span><span class="src-sym">,</span><span class="src-str">''</span><span class="src-sym">,</span><span class="src-sym">[</span><span class="src-str">'required'</span>=&gt;<span class="src-id">true</span><span class="src-sym">]]</span><span class="src-sym">,</span></div></li>
+<li><div class="src-line">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="src-str">'apellido'&nbsp;</span>=&gt;&nbsp;<span class="src-sym">[</span><span class="src-str">'text'</span><span class="src-sym">,</span><span class="src-str">''</span><span class="src-sym">,</span><span class="src-sym">]</span><span class="src-sym">,</span></div></li>
+<li><div class="src-line">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="src-str">'correo'&nbsp;</span>=&gt;&nbsp;<span class="src-sym">[</span><span class="src-str">'email'</span><span class="src-sym">]</span><span class="src-sym">,</span></div></li>
+<li><div class="src-line">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="src-str">'telefono'&nbsp;</span>=&gt;&nbsp;<span class="src-sym">[</span><span class="src-str">'tel'</span><span class="src-sym">]</span><span class="src-sym">,</span></div></li>
+<li><div class="src-line">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="src-str">'websitie'</span>=&gt;<span class="src-sym">[</span><span class="src-str">'text'</span><span class="src-sym">,</span><span class="src-str">''</span><span class="src-sym">,</span><span class="src-id"><a href="../../CcMvc/Validacion/ValidUrl.html">ValidUrl</a></span><span class="src-sym">::</span><span class="src-id">CreateValid</span><span class="src-sym">(</span><span class="src-sym">)</span><span class="src-sym">]</span><span class="src-sym">,</span></div></li>
+<li><div class="src-line">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="src-str">'unaIp'</span>=&gt;&nbsp;<span class="src-sym">[</span><span class="src-str">'text'</span><span class="src-sym">,</span><span class="src-str">'127.0.0.1'</span><span class="src-sym">,</span><span class="src-id"><a href="../../CcMvc/Validacion/ValidIp.html">ValidIp</a></span><span class="src-sym">::</span><span class="src-id">CreateValid</span><span class="src-sym">(</span><span class="src-sym">)</span><span class="src-sym">]</span><span class="src-sym">,</span></div></li>
+<li><div class="src-line">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="src-str">'pass1'&nbsp;</span>=&gt;&nbsp;<span class="src-sym">[</span><span class="src-str">'password'</span><span class="src-sym">]</span><span class="src-sym">,</span></div></li>
+<li><div class="src-line">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="src-str">'pass2'&nbsp;</span>=&gt;&nbsp;<span class="src-sym">[</span><span class="src-str">'password'</span><span class="src-sym">]</span></div></li>
+<li><div class="src-line">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="src-sym">]</span><span class="src-sym">;</span></div></li>
+<li><div class="src-line">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="src-key">return&nbsp;</span><span class="src-var">$canpos</span><span class="src-sym">;</span></div></li>
+<li><div class="src-line">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="src-sym">}</span></div></li>
+<li><div class="src-line">&nbsp;<span class="src-sym">}</span></div></li>
+</ol></div></p></p>
+	<ul class="tags">
+				<li><span class="field">author:</span> Enyerber Franco</li>
+				<li><span class="field">abstract:</span> </li>
+				<li><span class="field">filesource:</span> <a href="../../__filesource/fsource_CcMvc_Modelo_MvcModelFormModelFormModel.php.html">Source Code for this file</a></li>
+			</ul>
+		
+			</div>
+</div>
+		
+	<a name="sec-classes"></a>	
+	<div class="info-box">
+		<div class="info-box-title">Classes</div>
+		<div class="nav-bar">
+			<a href="#sec-description">Description</a> |
+			<span class="disabled">Classes</span>
+			|																<a href="#sec-functions">Functions</a>
+					</div>
+		<div class="info-box-body">	
+			<table cellpadding="2" cellspacing="0" class="class-table">
+				<tr>
+					<th class="class-table-header">Class</th>
+					<th class="class-table-header">Description</th>
+				</tr>
+								<tr>
+					<td style="padding-right: 2em; vertical-align: top; white-space: nowrap">
+						<img src="../../media/images/AbstractClass.png"
+								 alt="Abstract class"
+								 title="Abstract class"/>
+						<a href="../../CcMvc/Modelo/FormModel.html">FormModel</a>
+					</td>
+					<td>
+											Description of Model
+										</td>
+				</tr>
+							</table>
+		</div>
+	</div>
+
+	
+	
+	
+	<a name="sec-functions"></a>	
+	<div class="info-box">
+		<div class="info-box-title">Functions</div>
+		<div class="nav-bar">
+			<a href="#sec-description">Description</a> |
+							<a href="#sec-classes">Classes</a>
+				|															<span class="disabled">Functions</span>
+		</div>
+		<div class="info-box-body">	
+			<a name="functionBeginForm" id="functionBeginForm"><!-- --></a>
+<div class="evenrow">
+	
+	<div>
+		<img src="../../media/images/Function.png" />
+		<span class="method-title">BeginForm</span> (line <span class="line-number"><a href="../../__filesource/fsource_CcMvc_Modelo_MvcModelFormModelFormModel.php.html#a596">596</a></span>)
+	</div> 
+
+	<!-- ========== Info from phpDoc block ========= -->
+<p class="short-description">inicia el formulario</p>
+	<div class="method-signature">
+		<span class="method-result">void</span>
+		<span class="method-name">
+			BeginForm
+		</span>
+					([<span class="var-type">array</span>&nbsp;<span class="var-name">$attrs</span> = <span class="var-default">[]</span>])
+			</div>
+
+			<ul class="parameters">
+					<li>
+				<span class="var-type">array</span>
+				<span class="var-name">$attrs</span>			</li>
+				</ul>
+		
+	
+</div>
+<a name="functionButtonSubmid" id="functionButtonSubmid"><!-- --></a>
+<div class="oddrow">
+	
+	<div>
+		<img src="../../media/images/Function.png" />
+		<span class="method-title">ButtonSubmid</span> (line <span class="line-number"><a href="../../__filesource/fsource_CcMvc_Modelo_MvcModelFormModelFormModel.php.html#a612">612</a></span>)
+	</div> 
+
+	<!-- ========== Info from phpDoc block ========= -->
+<p class="short-description">imprime el boton de enviar el formulario</p>
+	<div class="method-signature">
+		<span class="method-result">void</span>
+		<span class="method-name">
+			ButtonSubmid
+		</span>
+					([<span class="var-type">string</span>&nbsp;<span class="var-name">$value</span> = <span class="var-default">&#039;&#039;</span>], [<span class="var-type">array</span>&nbsp;<span class="var-name">$attrs</span> = <span class="var-default">[]</span>])
+			</div>
+
+			<ul class="parameters">
+					<li>
+				<span class="var-type">string</span>
+				<span class="var-name">$value</span>			</li>
+					<li>
+				<span class="var-type">array</span>
+				<span class="var-name">$attrs</span>			</li>
+				</ul>
+		
+	
+</div>
+<a name="functioncampos" id="functioncampos"><!-- --></a>
+<div class="evenrow">
+	
+	<div>
+		<img src="../../media/images/Function.png" />
+		<span class="method-title">campos</span> (line <span class="line-number"><a href="../../__filesource/fsource_CcMvc_Modelo_MvcModelFormModelFormModel.php.html#a138">138</a></span>)
+	</div> 
+
+	<!-- ========== Info from phpDoc block ========= -->
+	<div class="method-signature">
+		<span class="method-result">void</span>
+		<span class="method-name">
+			campos
+		</span>
+				()
+			</div>
+
+		
+	
+</div>
+<a name="functionDefaultValue" id="functionDefaultValue"><!-- --></a>
+<div class="oddrow">
+	
+	<div>
+		<img src="../../media/images/Function.png" />
+		<span class="method-title">DefaultValue</span> (line <span class="line-number"><a href="../../__filesource/fsource_CcMvc_Modelo_MvcModelFormModelFormModel.php.html#a257">257</a></span>)
+	</div> 
+
+	<!-- ========== Info from phpDoc block ========= -->
+<p class="short-description">Establece el valor por defecto de campo en el formulario</p>
+	<div class="method-signature">
+		<span class="method-result">void</span>
+		<span class="method-name">
+			DefaultValue
+		</span>
+					(<span class="var-type">string</span>&nbsp;<span class="var-name">$name</span>, [<span class="var-type">string</span>&nbsp;<span class="var-name">$value</span> = <span class="var-default">NULL</span>])
+			</div>
+
+			<ul class="parameters">
+					<li>
+				<span class="var-type">string</span>
+				<span class="var-name">$name</span>			</li>
+					<li>
+				<span class="var-type">string</span>
+				<span class="var-name">$value</span>			</li>
+				</ul>
+		
+	
+</div>
+<a name="functionEndForm" id="functionEndForm"><!-- --></a>
+<div class="evenrow">
+	
+	<div>
+		<img src="../../media/images/Function.png" />
+		<span class="method-title">EndForm</span> (line <span class="line-number"><a href="../../__filesource/fsource_CcMvc_Modelo_MvcModelFormModelFormModel.php.html#a622">622</a></span>)
+	</div> 
+
+	<!-- ========== Info from phpDoc block ========= -->
+<p class="short-description">finaliza el formulario</p>
+	<div class="method-signature">
+		<span class="method-result">void</span>
+		<span class="method-name">
+			EndForm
+		</span>
+				()
+			</div>
+
+		
+	
+</div>
+<a name="functionGetDefaultValue" id="functionGetDefaultValue"><!-- --></a>
+<div class="oddrow">
+	
+	<div>
+		<img src="../../media/images/Function.png" />
+		<span class="method-title">GetDefaultValue</span> (line <span class="line-number"><a href="../../__filesource/fsource_CcMvc_Modelo_MvcModelFormModelFormModel.php.html#a279">279</a></span>)
+	</div> 
+
+	<!-- ========== Info from phpDoc block ========= -->
+<p class="short-description">obtiene el valor por defecto del campo en el formulario</p>
+	<div class="method-signature">
+		<span class="method-result">mixes</span>
+		<span class="method-name">
+			GetDefaultValue
+		</span>
+					(<span class="var-type">string</span>&nbsp;<span class="var-name">$name</span>)
+			</div>
+
+			<ul class="parameters">
+					<li>
+				<span class="var-type">string</span>
+				<span class="var-name">$name</span>			</li>
+				</ul>
+		
+	
+</div>
+<a name="functionInput" id="functionInput"><!-- --></a>
+<div class="evenrow">
+	
+	<div>
+		<img src="../../media/images/Function.png" />
+		<span class="method-title">Input</span> (line <span class="line-number"><a href="../../__filesource/fsource_CcMvc_Modelo_MvcModelFormModelFormModel.php.html#a474">474</a></span>)
+	</div> 
+
+	<!-- ========== Info from phpDoc block ========= -->
+<p class="short-description">imprime un imput desde el nombre de un dato en el modelo</p>
+	<div class="method-signature">
+		<span class="method-result">void</span>
+		<span class="method-name">
+			Input
+		</span>
+					(<span class="var-type">string</span>&nbsp;<span class="var-name">$name</span>, [<span class="var-type">array</span>&nbsp;<span class="var-name">$attrs</span> = <span class="var-default">[]</span>])
+			</div>
+
+			<ul class="parameters">
+					<li>
+				<span class="var-type">string</span>
+				<span class="var-name">$name</span>			</li>
+					<li>
+				<span class="var-type">array</span>
+				<span class="var-name">$attrs</span><span class="var-description">: [attr=&gt;valor]</span>			</li>
+				</ul>
+		
+	
+</div>
+<a name="functionIsSubmited" id="functionIsSubmited"><!-- --></a>
+<div class="oddrow">
+	
+	<div>
+		<img src="../../media/images/Function.png" />
+		<span class="method-title">IsSubmited</span> (line <span class="line-number"><a href="../../__filesource/fsource_CcMvc_Modelo_MvcModelFormModelFormModel.php.html#a328">328</a></span>)
+	</div> 
+
+	<!-- ========== Info from phpDoc block ========= -->
+<p class="short-description">indica si se recibieron los datos del modelo</p>
+	<div class="method-signature">
+		<span class="method-result">bool</span>
+		<span class="method-name">
+			IsSubmited
+		</span>
+				()
+			</div>
+
+		
+	
+</div>
+<a name="functionIsValid" id="functionIsValid"><!-- --></a>
+<div class="evenrow">
+	
+	<div>
+		<img src="../../media/images/Function.png" />
+		<span class="method-title">IsValid</span> (line <span class="line-number"><a href="../../__filesource/fsource_CcMvc_Modelo_MvcModelFormModelFormModel.php.html#a337">337</a></span>)
+	</div> 
+
+	<!-- ========== Info from phpDoc block ========= -->
+<p class="short-description">indica si los datos del modelo son validos</p>
+	<div class="method-signature">
+		<span class="method-result">bool</span>
+		<span class="method-name">
+			IsValid
+		</span>
+				()
+			</div>
+
+		
+	
+</div>
+<a name="functionLoadMetaData" id="functionLoadMetaData"><!-- --></a>
+<div class="oddrow">
+	
+	<div>
+		<img src="../../media/images/Function.png" />
+		<span class="method-title">LoadMetaData</span> (line <span class="line-number"><a href="../../__filesource/fsource_CcMvc_Modelo_MvcModelFormModelFormModel.php.html#a156">156</a></span>)
+	</div> 
+
+	<!-- ========== Info from phpDoc block ========= -->
+	<div class="method-signature">
+		<span class="method-result">void</span>
+		<span class="method-name">
+			LoadMetaData
+		</span>
+				()
+			</div>
+
+		
+	
+</div>
+<a name="functionoffsetGet" id="functionoffsetGet"><!-- --></a>
+<div class="evenrow">
+	
+	<div>
+		<img src="../../media/images/Function.png" />
+		<span class="method-title">offsetGet</span> (line <span class="line-number"><a href="../../__filesource/fsource_CcMvc_Modelo_MvcModelFormModelFormModel.php.html#a307">307</a></span>)
+	</div> 
+
+	<!-- ========== Info from phpDoc block ========= -->
+	<div class="method-signature">
+		<span class="method-result">void</span>
+		<span class="method-name">
+			offsetGet
+		</span>
+					(<span class="var-type"></span>&nbsp;<span class="var-name">$offset</span>)
+			</div>
+
+			<ul class="parameters">
+					<li>
+				<span class="var-type"></span>
+				<span class="var-name">$offset</span>			</li>
+				</ul>
+		
+	
+</div>
+<a name="functionParseValid" id="functionParseValid"><!-- --></a>
+<div class="oddrow">
+	
+	<div>
+		<img src="../../media/images/Function.png" />
+		<span class="method-title">ParseValid</span> (line <span class="line-number"><a href="../../__filesource/fsource_CcMvc_Modelo_MvcModelFormModelFormModel.php.html#a200">200</a></span>)
+	</div> 
+
+	<!-- ========== Info from phpDoc block ========= -->
+	<div class="method-signature">
+		<span class="method-result">void</span>
+		<span class="method-name">
+			ParseValid
+		</span>
+					(<span class="var-type"></span>&nbsp;<span class="var-name">$v</span>, <span class="var-type"></span>&nbsp;<span class="var-name">$type</span>, <span class="var-type"></span>&nbsp;<span class="var-name">$options</span>)
+			</div>
+
+			<ul class="parameters">
+					<li>
+				<span class="var-type"></span>
+				<span class="var-name">$v</span>			</li>
+					<li>
+				<span class="var-type"></span>
+				<span class="var-name">$type</span>			</li>
+					<li>
+				<span class="var-type"></span>
+				<span class="var-name">$options</span>			</li>
+				</ul>
+		
+	
+</div>
+<a name="functionPrintForm" id="functionPrintForm"><!-- --></a>
+<div class="evenrow">
+	
+	<div>
+		<img src="../../media/images/Function.png" />
+		<span class="method-title">PrintForm</span> (line <span class="line-number"><a href="../../__filesource/fsource_CcMvc_Modelo_MvcModelFormModelFormModel.php.html#a627">627</a></span>)
+	</div> 
+
+	<!-- ========== Info from phpDoc block ========= -->
+	<div class="method-signature">
+		<span class="method-result">void</span>
+		<span class="method-name">
+			PrintForm
+		</span>
+					(<span class="var-type"></span>&nbsp;<span class="var-name">$attrs</span>, [<span class="var-type">array</span>&nbsp;<span class="var-name">$campos</span> = <span class="var-default">[]</span>], [<span class="var-type"></span>&nbsp;<span class="var-name">$submit</span> = <span class="var-default">[]</span>])
+			</div>
+
+			<ul class="parameters">
+					<li>
+				<span class="var-type"></span>
+				<span class="var-name">$attrs</span>			</li>
+					<li>
+				<span class="var-type">array</span>
+				<span class="var-name">$campos</span>			</li>
+					<li>
+				<span class="var-type"></span>
+				<span class="var-name">$submit</span>			</li>
+				</ul>
+		
+	
+</div>
+<a name="functionProcessSubmit" id="functionProcessSubmit"><!-- --></a>
+<div class="oddrow">
+	
+	<div>
+		<img src="../../media/images/Function.png" />
+		<span class="method-title">ProcessSubmit</span> (line <span class="line-number"><a href="../../__filesource/fsource_CcMvc_Modelo_MvcModelFormModelFormModel.php.html#a346">346</a></span>)
+	</div> 
+
+	<!-- ========== Info from phpDoc block ========= -->
+	<div class="method-signature">
+		<span class="method-result">boolean</span>
+		<span class="method-name">
+			ProcessSubmit
+		</span>
+				()
+			</div>
+
+		
+	
+</div>
+<a name="functionSelect" id="functionSelect"><!-- --></a>
+<div class="evenrow">
+	
+	<div>
+		<img src="../../media/images/Function.png" />
+		<span class="method-title">Select</span> (line <span class="line-number"><a href="../../__filesource/fsource_CcMvc_Modelo_MvcModelFormModelFormModel.php.html#a567">567</a></span>)
+	</div> 
+
+	<!-- ========== Info from phpDoc block ========= -->
+<p class="short-description">imprime un select desde el nombre de un dato en el modelo</p>
+	<div class="method-signature">
+		<span class="method-result">void</span>
+		<span class="method-name">
+			Select
+		</span>
+					(<span class="var-type">type</span>&nbsp;<span class="var-name">$name</span>, [<span class="var-type">array|\Traversable</span>&nbsp;<span class="var-name">$options</span> = <span class="var-default">[]</span>], [<span class="var-type">array</span>&nbsp;<span class="var-name">$attrs</span> = <span class="var-default">[]</span>])
+			</div>
+
+			<ul class="parameters">
+					<li>
+				<span class="var-type">type</span>
+				<span class="var-name">$name</span>			</li>
+					<li>
+				<span class="var-type">array|\Traversable</span>
+				<span class="var-name">$options</span><span class="var-description">: [opcion=&gt;sttr]</span>			</li>
+					<li>
+				<span class="var-type">array</span>
+				<span class="var-name">$attrs</span><span class="var-description">: [attr=&gt;valor]</span>			</li>
+				</ul>
+		
+	
+</div>
+<a name="functionTextArea" id="functionTextArea"><!-- --></a>
+<div class="oddrow">
+	
+	<div>
+		<img src="../../media/images/Function.png" />
+		<span class="method-title">TextArea</span> (line <span class="line-number"><a href="../../__filesource/fsource_CcMvc_Modelo_MvcModelFormModelFormModel.php.html#a525">525</a></span>)
+	</div> 
+
+	<!-- ========== Info from phpDoc block ========= -->
+<p class="short-description">imprime un textarea desde el nombre de un dato en el modelo</p>
+	<div class="method-signature">
+		<span class="method-result">void</span>
+		<span class="method-name">
+			TextArea
+		</span>
+					(<span class="var-type">string</span>&nbsp;<span class="var-name">$name</span>, [<span class="var-type">array</span>&nbsp;<span class="var-name">$attrs</span> = <span class="var-default">[]</span>])
+			</div>
+
+			<ul class="parameters">
+					<li>
+				<span class="var-type">string</span>
+				<span class="var-name">$name</span>			</li>
+					<li>
+				<span class="var-type">array</span>
+				<span class="var-name">$attrs</span><span class="var-description">: [attr=&gt;valor]</span>			</li>
+				</ul>
+		
+	
+</div>
+<a name="functionValidateFile" id="functionValidateFile"><!-- --></a>
+<div class="evenrow">
+	
+	<div>
+		<img src="../../media/images/Function.png" />
+		<span class="method-title">ValidateFile</span> (line <span class="line-number"><a href="../../__filesource/fsource_CcMvc_Modelo_MvcModelFormModelFormModel.php.html#a399">399</a></span>)
+	</div> 
+
+	<!-- ========== Info from phpDoc block ========= -->
+	<div class="method-signature">
+		<span class="method-result">void</span>
+		<span class="method-name">
+			ValidateFile
+		</span>
+				()
+			</div>
+
+		
+	
+</div>
+<a name="functionValidateValues" id="functionValidateValues"><!-- --></a>
+<div class="oddrow">
+	
+	<div>
+		<img src="../../media/images/Function.png" />
+		<span class="method-title">ValidateValues</span> (line <span class="line-number"><a href="../../__filesource/fsource_CcMvc_Modelo_MvcModelFormModelFormModel.php.html#a432">432</a></span>)
+	</div> 
+
+	<!-- ========== Info from phpDoc block ========= -->
+<p class="short-description">validacion</p>
+	<div class="method-signature">
+		<span class="method-result">boolean</span>
+		<span class="method-name">
+			ValidateValues
+		</span>
+					(<span class="var-type">array</span>&nbsp;<span class="var-name">$values</span>)
+			</div>
+
+			<ul class="parameters">
+					<li>
+				<span class="var-type">array</span>
+				<span class="var-name">$values</span>			</li>
+				</ul>
+		
+	
+</div>
+<a name="function__get" id="function__get"><!-- --></a>
+<div class="evenrow">
+	
+	<div>
+		<img src="../../media/images/Function.png" />
+		<span class="method-title">__get</span> (line <span class="line-number"><a href="../../__filesource/fsource_CcMvc_Modelo_MvcModelFormModelFormModel.php.html#a289">289</a></span>)
+	</div> 
+
+	<!-- ========== Info from phpDoc block ========= -->
+	<div class="method-signature">
+		<span class="method-result">void</span>
+		<span class="method-name">
+			__get
+		</span>
+					(<span class="var-type"></span>&nbsp;<span class="var-name">$name</span>)
+			</div>
+
+			<ul class="parameters">
+					<li>
+				<span class="var-type"></span>
+				<span class="var-name">$name</span>			</li>
+				</ul>
+		
+	
+</div>
+		</div>
+	</div>
+	
+	<p class="notes" id="credit">
+		Documentation generated on Sat, 15 Oct 2016 03:03:14 +0200 by <a href="http://www.phpdoc.org" target="_blank">phpDocumentor 1.4.3</a>
+	</p>
+	</div></body>
+</html>

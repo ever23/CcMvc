@@ -1,0 +1,1988 @@
+<?xml version="1.0" encoding="utf8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+  <html xmlns="http://www.w3.org/1999/xhtml">
+		<head>
+			<!-- template designed by Marco Von Ballmoos  -->
+			<title>Docs For Class Html</title>
+			<link rel="stylesheet" href="../../media/stylesheet.css" />
+						<script src="../../media/lib/classTree.js"></script>
+												<script language="javascript" type="text/javascript">
+				var imgPlus = new Image();
+				var imgMinus = new Image();
+				imgPlus.src = "../../media/images/plus.png";
+				imgMinus.src = "../../media/images/minus.png";
+				
+				function showNode(Node){
+							switch(navigator.family){
+								case 'nn4':
+									// Nav 4.x code fork...
+							var oTable = document.layers["span" + Node];
+							var oImg = document.layers["img" + Node];
+									break;
+								case 'ie4':
+									// IE 4/5 code fork...
+							var oTable = document.all["span" + Node];
+							var oImg = document.all["img" + Node];
+									break;
+								case 'gecko':
+									// Standards Compliant code fork...
+							var oTable = document.getElementById("span" + Node);
+							var oImg = document.getElementById("img" + Node);
+									break;
+							}
+					oImg.src = imgMinus.src;
+					oTable.style.display = "block";
+				}
+				
+				function hideNode(Node){
+							switch(navigator.family){
+								case 'nn4':
+									// Nav 4.x code fork...
+							var oTable = document.layers["span" + Node];
+							var oImg = document.layers["img" + Node];
+									break;
+								case 'ie4':
+									// IE 4/5 code fork...
+							var oTable = document.all["span" + Node];
+							var oImg = document.all["img" + Node];
+									break;
+								case 'gecko':
+									// Standards Compliant code fork...
+							var oTable = document.getElementById("span" + Node);
+							var oImg = document.getElementById("img" + Node);
+									break;
+							}
+					oImg.src = imgPlus.src;
+					oTable.style.display = "none";
+				}
+				
+				function nodeIsVisible(Node){
+							switch(navigator.family){
+								case 'nn4':
+									// Nav 4.x code fork...
+							var oTable = document.layers["span" + Node];
+									break;
+								case 'ie4':
+									// IE 4/5 code fork...
+							var oTable = document.all["span" + Node];
+									break;
+								case 'gecko':
+									// Standards Compliant code fork...
+							var oTable = document.getElementById("span" + Node);
+									break;
+							}
+					return (oTable && oTable.style.display == "block");
+				}
+				
+				function toggleNodeVisibility(Node){
+					if (nodeIsVisible(Node)){
+						hideNode(Node);
+					}else{
+						showNode(Node);
+					}
+				}
+			</script>
+					</head>
+		<body>
+			<div class="page-body">			
+<h2 class="class-name"><img src="../../media/images/Class_logo.png"
+														alt=" Class"
+														title=" Class"
+														style="vertical-align: middle"> Html</h2>
+
+<a name="sec-description"></a>
+<div class="info-box">
+	<div class="info-box-title">Description</div>
+	<div class="nav-bar">
+					<span class="disabled">Description</span> |
+							<a href="#sec-descendents">Descendents</a>
+			|											<a href="#sec-var-summary">Vars</a> (<a href="#sec-vars">details</a>)
+						|											<a href="#sec-method-summary">Methods</a> (<a href="#sec-methods">details</a>)
+						
+					</div>
+	<div class="info-box-body">
+        		<!-- ========== Info from phpDoc block ========= -->
+<p class="short-description">CLASE DE RESPUESTA PROCESA EL CONTENIDO HTML ANTES DE ENVIARLO</p>
+	<ul class="tags">
+				<li><span class="field">author:</span> ENYREBER FRANCO  &lt;<a href="mailto:enyerverfranco@gmail.com">enyerverfranco@gmail.com</a>&gt; , &lt;enyerverfranco@outlook.com&gt;</li>
+				<li><span class="field">filesource:</span> <a href="../../__filesource/fsource_CcMvc_Response_MvcResponseHtmlHtml.php.html">Source Code for this file</a></li>
+				<li><span class="field">example:</span> example not found</li>
+				<li><span class="field">uses:</span> <a href="../../Cc/Utilidades/MinScript.html">MinScript</a></li>
+				<li><span class="field">uses:</span> <a href="../../CcMvc/Response/DocumentBuffer.html">DocumentBuffer</a></li>
+			</ul>
+		<p class="notes">
+			Located in <a class="field" href="_Mvc---Response---Html---Html.php.html">/Mvc/Response/Html/Html.php</a> (line <span class="field"><a href="../../__filesource/fsource_CcMvc_Response_MvcResponseHtmlHtml.php.html#a20">20</a></span>)
+		</p>
+		
+				
+		<pre><a href="../../CcMvc/Response/Response.html">Response</a>
+   |
+   --Html</pre>
+	
+			</div>
+</div>
+
+	<a name="sec-descendents"></a>
+	<div class="info-box">
+		<div class="info-box-title">Direct descendents</div>
+		<div class="nav-bar">
+			<a href="#sec-description">Description</a> |
+			<span class="disabled">Descendents</span>
+			|												<a href="#sec-var-summary">Vars</a> (<a href="#sec-vars">details</a>)
+								|															<a href="#sec-method-summary">Methods</a> (<a href="#sec-methods">details</a>)
+							
+								</div>
+		<div class="info-box-body">
+			<table cellpadding="2" cellspacing="0" class="class-table">
+				<tr>
+					<th class="class-table-header">Class</th>
+					<th class="class-table-header">Description</th>
+				</tr>
+								<tr>
+					<td style="padding-right: 2em; white-space: nowrap">
+						<img src="../../media/images/Class.png"
+								 alt=" class"
+								 title=" class"
+								 style="vertical-align: center"/>
+						<a href="../../CcMvc/Response/HtmlPDF.html">HtmlPDF</a>
+					</td>
+					<td>
+											CLASE DE RESPUESTA PROCESA EL CONTENIDO HTML Y LO ENVIA COMO PDF
+										</td>
+				</tr>
+							</table>
+		</div>
+	</div>
+
+
+	<a name="sec-var-summary"></a>
+	<div class="info-box">
+		<div class="info-box-title">Variable Summary</span></div>
+		<div class="nav-bar">
+			<a href="#sec-description">Description</a> |
+							<a href="#sec-descendents">Descendants</a> |
+						<span class="disabled">Vars</span> (<a href="#sec-vars">details</a>)
+							| 
+									<a href="#sec-method-summary">Methods</a> (<a href="#sec-methods">details</a>)
+							
+								</div>
+		<div class="info-box-body">
+			<div class="var-summary">
+																																																																																																																																								<div class="var-title">
+					<img src="../../media/images/Variable.png" alt=" " />
+					<span class="var-type"><a href="../../CcMvc/Configuracion/Config.html">Config</a></span>
+					<a href="#$AppConfig" title="details" class="var-name">$AppConfig</a>
+				</div>
+																<div class="var-title">
+					<img src="../../media/images/Variable.png" alt=" " />
+					<span class="var-type">string</span>
+					<a href="#$BasePath" title="details" class="var-name">$BasePath</a>
+				</div>
+																<div class="var-title">
+					<img src="../../media/images/Variable.png" alt=" " />
+					<span class="var-type">array</span>
+					<a href="#$css" title="details" class="var-name">$css</a>
+				</div>
+																<div class="var-title">
+					<img src="../../media/images/Variable.png" alt=" " />
+					<span class="var-type">string</span>
+					<a href="#$cssscript" title="details" class="var-name">$cssscript</a>
+				</div>
+																<div class="var-title">
+					<img src="../../media/images/Variable.png" alt=" " />
+					<span class="var-type">string</span>
+					<a href="#$Description" title="details" class="var-name">$Description</a>
+				</div>
+																<div class="var-title">
+					<img src="../../media/images/Variable.png" alt=" " />
+					<span class="var-type">string</span>
+					<a href="#$errores" title="details" class="var-name">$errores</a>
+				</div>
+																<div class="var-title">
+					<img src="../../media/images/Variable.png" alt=" " />
+					<span class="var-type">bool</span>
+					<a href="#$foother" title="details" class="var-name">$foother</a>
+				</div>
+																<div class="var-title">
+					<img src="../../media/images/Variable.png" alt=" " />
+					<span class="var-type">string</span>
+					<a href="#$ico" title="details" class="var-name">$ico</a>
+				</div>
+																<div class="var-title">
+					<img src="../../media/images/Variable.png" alt=" " />
+					<span class="var-type">array</span>
+					<a href="#$js" title="details" class="var-name">$js</a>
+				</div>
+																<div class="var-title">
+					<img src="../../media/images/Variable.png" alt=" " />
+					<span class="var-type">string</span>
+					<a href="#$jsscript" title="details" class="var-name">$jsscript</a>
+				</div>
+																<div class="var-title">
+					<img src="../../media/images/Variable.png" alt=" " />
+					<span class="var-type">array</span>
+					<a href="#$KeyWords" title="details" class="var-name">$KeyWords</a>
+				</div>
+																<div class="var-title">
+					<img src="../../media/images/Variable.png" alt=" " />
+					<span class="var-type">string</span>
+					<a href="#$ROOT_HTML" title="details" class="var-name">$ROOT_HTML</a>
+				</div>
+																<div class="var-title">
+					<img src="../../media/images/Variable.png" alt=" " />
+					<span class="var-type">string</span>
+					<a href="#$script_error" title="details" class="var-name">$script_error</a>
+				</div>
+																<div class="var-title">
+					<img src="../../media/images/Variable.png" alt=" " />
+					<span class="var-type">array</span>
+					<a href="#$src" title="details" class="var-name">$src</a>
+				</div>
+																<div class="var-title">
+					<img src="../../media/images/Variable.png" alt=" " />
+					<span class="var-type">string</span>
+					<a href="#$titulo" title="details" class="var-name">$titulo</a>
+				</div>
+											</div>
+		</div>
+	</div>
+
+	<a name="sec-method-summary"></a>
+	<div class="info-box">
+		<div class="info-box-title">Method Summary</span></div>
+		<div class="nav-bar">
+			<a href="#sec-description">Description</a> |
+							<a href="#sec-descendents">Descendants</a> |
+																		<a href="#sec-var-summary">Vars</a> (<a href="#sec-vars">details</a>)
+				 
+				|
+						<span class="disabled">Methods</span> (<a href="#sec-methods">details</a>)
+		</div>
+		<div class="info-box-body">			
+			<div class="method-summary">
+																																																																																			
+				<div class="method-definition">
+					<img src="../../media/images/StaticMethod.png" alt=" "/>
+					static 						<span class="method-result">string</span>
+										<a href="#cdata" title="details" class="method-name">cdata</a>
+											(<span class="var-type">string</span>&nbsp;<span class="var-name">$text</span>, [<span class="var-type">bool</span>&nbsp;<span class="var-name">$comment</span> = <span class="var-default">false</span>])
+									</div>
+															
+				<div class="method-definition">
+					<img src="../../media/images/StaticMethod.png" alt=" "/>
+					static 						<span class="method-result">string</span>
+										<a href="#CloseTang" title="details" class="method-name">CloseTang</a>
+											(<span class="var-type">string</span>&nbsp;<span class="var-name">$name</span>)
+									</div>
+															
+				<div class="method-definition">
+					<img src="../../media/images/StaticMethod.png" alt=" "/>
+					static 						<span class="method-result">void</span>
+										<a href="#CtorParam" title="details" class="method-name">CtorParam</a>
+										()
+									</div>
+															
+				<div class="method-definition">
+					<img src="../../media/images/StaticMethod.png" alt=" "/>
+					static 						<span class="method-result">string</span>
+										<a href="#Decode" title="details" class="method-name">Decode</a>
+											(<span class="var-type">string</span>&nbsp;<span class="var-name">$text</span>)
+									</div>
+															
+				<div class="method-definition">
+					<img src="../../media/images/StaticMethod.png" alt=" "/>
+					static 						<span class="method-result">string</span>
+										<a href="#Encode" title="details" class="method-name">Encode</a>
+											(<span class="var-type">string</span>&nbsp;<span class="var-name">$text</span>)
+									</div>
+															
+				<div class="method-definition">
+					<img src="../../media/images/StaticMethod.png" alt=" "/>
+					static 						<span class="method-result">array</span>
+										<a href="#EncodeArray" title="details" class="method-name">EncodeArray</a>
+											(<span class="var-type">array</span>&nbsp;<span class="var-name">$data</span>)
+									</div>
+																																																															
+				<div class="method-definition">
+					<img src="../../media/images/StaticMethod.png" alt=" "/>
+					static 						<span class="method-result">void</span>
+										<a href="#meta" title="details" class="method-name">meta</a>
+											(<span class="var-type"></span>&nbsp;<span class="var-name">$attrs</span>)
+									</div>
+															
+				<div class="method-definition">
+					<img src="../../media/images/StaticMethod.png" alt=" "/>
+					static 						<span class="method-result">string</span>
+										<a href="#OpenTang" title="details" class="method-name">OpenTang</a>
+											(<span class="var-type">string</span>&nbsp;<span class="var-name">$name</span>, [<span class="var-type">array</span>&nbsp;<span class="var-name">$attrs</span> = <span class="var-default">[]</span>], [<span class="var-type">bool</span>&nbsp;<span class="var-name">$close</span> = <span class="var-default">false</span>])
+									</div>
+																							
+				<div class="method-definition">
+					<img src="../../media/images/StaticMethod.png" alt=" "/>
+					static 						<span class="method-result">string</span>
+										<a href="#script" title="details" class="method-name">script</a>
+											([<span class="var-type">array</span>&nbsp;<span class="var-name">$text</span> = <span class="var-default">''</span>], [<span class="var-type">array</span>&nbsp;<span class="var-name">$attrs</span> = <span class="var-default">[]</span>])
+									</div>
+															
+				<div class="method-definition">
+					<img src="../../media/images/StaticMethod.png" alt=" "/>
+					static 						<span class="method-result">string</span>
+										<a href="#select" title="details" class="method-name">select</a>
+											([<span class="var-type">array</span>&nbsp;<span class="var-name">$attrs</span> = <span class="var-default">[]</span>], [<span class="var-type">array|\Traversable</span>&nbsp;<span class="var-name">$options</span> = <span class="var-default">[]</span>])
+									</div>
+																																															
+				<div class="method-definition">
+					<img src="../../media/images/StaticMethod.png" alt=" "/>
+					static 						<span class="method-result">string</span>
+										<a href="#style" title="details" class="method-name">style</a>
+											([<span class="var-type">array</span>&nbsp;<span class="var-name">$text</span> = <span class="var-default">''</span>], [<span class="var-type">array</span>&nbsp;<span class="var-name">$attrs</span> = <span class="var-default">[]</span>])
+									</div>
+															
+				<div class="method-definition">
+					<img src="../../media/images/StaticMethod.png" alt=" "/>
+					static 						<span class="method-result">string</span>
+										<a href="#Tang" title="details" class="method-name">Tang</a>
+											(<span class="var-type">string</span>&nbsp;<span class="var-name">$name</span>, [<span class="var-type">string|array</span>&nbsp;<span class="var-name">$text</span> = <span class="var-default">''</span>], [<span class="var-type">array</span>&nbsp;<span class="var-name">$attrs</span> = <span class="var-default">NULL</span>])
+									</div>
+															
+				<div class="method-definition">
+					<img src="../../media/images/StaticMethod.png" alt=" "/>
+					static 						<span class="method-result">string</span>
+										<a href="#__callStatic" title="details" class="method-name">__callStatic</a>
+											(<span class="var-type">string</span>&nbsp;<span class="var-name">$name</span>, <span class="var-type">array</span>&nbsp;<span class="var-name">$arguments</span>)
+									</div>
+																											
+				<div class="method-definition">
+					<img src="../../media/images/Constructor.png" alt=" "/>
+											<span class="method-result">Html</span>
+										<a href="#__construct" title="details" class="method-name">__construct</a>
+											([<span class="var-type">bool</span>&nbsp;<span class="var-name">$compress</span> = <span class="var-default">true</span>], [<span class="var-type">bool</span>&nbsp;<span class="var-name">$min</span> = <span class="var-default">false</span>])
+									</div>
+															
+				<div class="method-definition">
+					<img src="../../media/images/Method.png" alt=" "/>
+											<span class="method-result">this</span>
+										<a href="#AddCssScript" title="details" class="method-name">&amp;AddCssScript</a>
+											(<span class="var-type">string</span>&nbsp;<span class="var-name">$css</span>)
+									</div>
+															
+				<div class="method-definition">
+					<img src="../../media/images/Method.png" alt=" "/>
+											<span class="method-result">void</span>
+										<a href="#AddError" title="details" class="method-name">AddError</a>
+											(<span class="var-type">string</span>&nbsp;<span class="var-name">$error</span>)
+									</div>
+															
+				<div class="method-definition">
+					<img src="../../media/images/Method.png" alt=" "/>
+											<span class="method-result">this</span>
+										<a href="#AddJsScript" title="details" class="method-name">&amp;AddJsScript</a>
+											(<span class="var-type">string</span>&nbsp;<span class="var-name">$js</span>)
+									</div>
+															
+				<div class="method-definition">
+					<img src="../../media/images/Method.png" alt=" "/>
+											<span class="method-result">void</span>
+										<a href="#AddKeyWords" title="details" class="method-name">AddKeyWords</a>
+											(<span class="var-type"></span>&nbsp;<span class="var-name">...$word</span>)
+									</div>
+															
+				<div class="method-definition">
+					<img src="../../media/images/Method.png" alt=" "/>
+											<span class="method-result">this</span>
+										<a href="#addlink_css" title="details" class="method-name">&amp;addlink_css</a>
+											(<span class="var-type">string</span>&nbsp;<span class="var-name">$name</span>, [<span class="var-type">string</span>&nbsp;<span class="var-name">$fn</span> = <span class="var-default">'P'</span>])
+									</div>
+															
+				<div class="method-definition">
+					<img src="../../media/images/Method.png" alt=" "/>
+											<span class="method-result">this</span>
+										<a href="#addlink_js" title="details" class="method-name">&amp;addlink_js</a>
+											(<span class="var-type">string</span>&nbsp;<span class="var-name">$name</span>, [<span class="var-type">string</span>&nbsp;<span class="var-name">$fn</span> = <span class="var-default">'P'</span>])
+									</div>
+															
+				<div class="method-definition">
+					<img src="../../media/images/Method.png" alt=" "/>
+											<span class="method-result">void</span>
+										<a href="#AddMetaTang" title="details" class="method-name">AddMetaTang</a>
+											(<span class="var-type">string</span>&nbsp;<span class="var-name">$name</span>, <span class="var-type">string</span>&nbsp;<span class="var-name">$value</span>)
+									</div>
+															
+				<div class="method-definition">
+					<img src="../../media/images/Method.png" alt=" "/>
+											<span class="method-result">void</span>
+										<a href="#add_error" title="details" class="method-name">add_error</a>
+											(<span class="var-type">string</span>&nbsp;<span class="var-name">$error</span>)
+									</div>
+																																																															
+				<div class="method-definition">
+					<img src="../../media/images/Method.png" alt=" "/>
+											<span class="method-result">string</span>
+										<a href="#GetBasePath" title="details" class="method-name">GetBasePath</a>
+										()
+									</div>
+															
+				<div class="method-definition">
+					<img src="../../media/images/Method.png" alt=" "/>
+											<span class="method-result">string</span>
+										<a href="#GetContenHead" title="details" class="method-name">GetContenHead</a>
+										()
+									</div>
+															
+				<div class="method-definition">
+					<img src="../../media/images/Method.png" alt=" "/>
+											<span class="method-result">string</span>
+										<a href="#GetCssScript" title="details" class="method-name">GetCssScript</a>
+										()
+									</div>
+															
+				<div class="method-definition">
+					<img src="../../media/images/Method.png" alt=" "/>
+											<span class="method-result">string</span>
+										<a href="#GetJsScript" title="details" class="method-name">GetJsScript</a>
+										()
+									</div>
+															
+				<div class="method-definition">
+					<img src="../../media/images/Method.png" alt=" "/>
+											<span class="method-result">array</span>
+										<a href="#GetLayaut" title="details" class="method-name">GetLayaut</a>
+										()
+									</div>
+															
+				<div class="method-definition">
+					<img src="../../media/images/Method.png" alt=" "/>
+											<span class="method-result">string</span>
+										<a href="#link_cssjs" title="details" class="method-name">link_cssjs</a>
+										()
+									</div>
+																															
+				<div class="method-definition">
+					<img src="../../media/images/Method.png" alt=" "/>
+											<span class="method-result">string</span>
+										<a href="#ReplaceSrc" title="details" class="method-name">ReplaceSrc</a>
+											(<span class="var-type">string</span>&nbsp;<span class="var-name">$text</span>, [<span class="var-type">string</span>&nbsp;<span class="var-name">$type</span> = <span class="var-default">''</span>])
+									</div>
+																															
+				<div class="method-definition">
+					<img src="../../media/images/Method.png" alt=" "/>
+											<span class="method-result">void</span>
+										<a href="#SetSrc" title="details" class="method-name">SetSrc</a>
+											(<span class="var-type">string</span>&nbsp;<span class="var-name">$seudo</span>, <span class="var-type">string</span>&nbsp;<span class="var-name">$src</span>)
+									</div>
+															
+				<div class="method-definition">
+					<img src="../../media/images/Method.png" alt=" "/>
+											<span class="method-result">this</span>
+										<a href="#set_ico" title="details" class="method-name">&amp;set_ico</a>
+											(<span class="var-type">string</span>&nbsp;<span class="var-name">$ico</span>)
+									</div>
+															
+				<div class="method-definition">
+					<img src="../../media/images/Method.png" alt=" "/>
+											<span class="method-result">this</span>
+										<a href="#set_title" title="details" class="method-name">&amp;set_title</a>
+											(<span class="var-type">string</span>&nbsp;<span class="var-name">$title</span>)
+									</div>
+															
+				<div class="method-definition">
+					<img src="../../media/images/Method.png" alt=" "/>
+											<span class="method-result">void</span>
+										<a href="#ShowError" title="details" class="method-name">ShowError</a>
+										()
+									</div>
+																																							
+				<div class="method-definition">
+					<img src="../../media/images/Method.png" alt=" "/>
+											<span class="method-result">string</span>
+										<a href="#__toString" title="details" class="method-name">__toString</a>
+										()
+									</div>
+											</div>
+		</div>
+	</div>		
+
+	<a name="sec-vars"></a>
+	<div class="info-box">
+		<div class="info-box-title">Variables</div>
+		<div class="nav-bar">
+			<a href="#sec-description">Description</a> |
+							<a href="#sec-descendents">Descendents</a> |
+										<a href="#sec-var-summary">Vars</a> (<span class="disabled">details</span>)
+						
+			
+										| 
+									<a href="#sec-method-summary">Methods</a> (<a href="#sec-methods">details</a>)
+							
+					</div>
+		<div class="info-box-body">
+			
+<a name="var$AppConfig" id="$AppConfig"><!-- --></A>
+<div class="evenrow">
+
+	<div class="var-header">
+		<img src="../../media/images/Variable.png" />
+		<span class="var-title">
+			<span class="var-type"><a href="../../CcMvc/Configuracion/Config.html">Config</a></span>
+			<span class="var-name">$AppConfig</span>
+			 = <span class="var-default"> []</span>			(line <span class="line-number"><a href="../../__filesource/fsource_CcMvc_Response_MvcResponseHtmlHtml.php.html#a99">99</a></span>)
+		</span>
+	</div>
+
+	<!-- ========== Info from phpDoc block ========= -->
+<p class="short-description">configuracion de <a href="../../CcMvc/Mvc.html">Mvc</a></p>
+	<ul class="tags">
+				<li><span class="field">access:</span> protected</li>
+			</ul>
+	
+	
+		
+		
+
+</div>
+<a name="var$BasePath" id="$BasePath"><!-- --></A>
+<div class="oddrow">
+
+	<div class="var-header">
+		<img src="../../media/images/Variable.png" />
+		<span class="var-title">
+			<span class="var-type">string</span>
+			<span class="var-name">$BasePath</span>
+			 = <span class="var-default"> ''</span>			(line <span class="line-number"><a href="../../__filesource/fsource_CcMvc_Response_MvcResponseHtmlHtml.php.html#a117">117</a></span>)
+		</span>
+	</div>
+
+	<!-- ========== Info from phpDoc block ========= -->
+	<ul class="tags">
+				<li><span class="field">access:</span> protected</li>
+			</ul>
+	
+	
+		
+		
+
+</div>
+<a name="var$css" id="$css"><!-- --></A>
+<div class="evenrow">
+
+	<div class="var-header">
+		<img src="../../media/images/Variable.png" />
+		<span class="var-title">
+			<span class="var-type">array</span>
+			<span class="var-name">$css</span>
+			 = <span class="var-default">array()</span>			(line <span class="line-number"><a href="../../__filesource/fsource_CcMvc_Response_MvcResponseHtmlHtml.php.html#a33">33</a></span>)
+		</span>
+	</div>
+
+	<!-- ========== Info from phpDoc block ========= -->
+<p class="short-description">refrencias a recursos javascript</p>
+	<ul class="tags">
+				<li><span class="field">access:</span> protected</li>
+			</ul>
+	
+	
+		
+		
+
+</div>
+<a name="var$cssscript" id="$cssscript"><!-- --></A>
+<div class="oddrow">
+
+	<div class="var-header">
+		<img src="../../media/images/Variable.png" />
+		<span class="var-title">
+			<span class="var-type">string</span>
+			<span class="var-name">$cssscript</span>
+						(line <span class="line-number"><a href="../../__filesource/fsource_CcMvc_Response_MvcResponseHtmlHtml.php.html#a81">81</a></span>)
+		</span>
+	</div>
+
+	<!-- ========== Info from phpDoc block ========= -->
+<p class="short-description">estilos css</p>
+	<ul class="tags">
+				<li><span class="field">access:</span> protected</li>
+			</ul>
+	
+	
+		
+		
+
+</div>
+<a name="var$Description" id="$Description"><!-- --></A>
+<div class="evenrow">
+
+	<div class="var-header">
+		<img src="../../media/images/Variable.png" />
+		<span class="var-title">
+			<span class="var-type">string</span>
+			<span class="var-name">$Description</span>
+			 = <span class="var-default"> ''</span>			(line <span class="line-number"><a href="../../__filesource/fsource_CcMvc_Response_MvcResponseHtmlHtml.php.html#a45">45</a></span>)
+		</span>
+	</div>
+
+	<!-- ========== Info from phpDoc block ========= -->
+<p class="short-description">descripcion de la pagina para la etiqueta &lt;meta name='descrption' content=''&gt;</p>
+	<ul class="tags">
+				<li><span class="field">access:</span> public</li>
+			</ul>
+	
+	
+		
+		
+
+</div>
+<a name="var$errores" id="$errores"><!-- --></A>
+<div class="oddrow">
+
+	<div class="var-header">
+		<img src="../../media/images/Variable.png" />
+		<span class="var-title">
+			<span class="var-type">string</span>
+			<span class="var-name">$errores</span>
+						(line <span class="line-number"><a href="../../__filesource/fsource_CcMvc_Response_MvcResponseHtmlHtml.php.html#a87">87</a></span>)
+		</span>
+	</div>
+
+	<!-- ========== Info from phpDoc block ========= -->
+<p class="short-description">errores</p>
+	<ul class="tags">
+				<li><span class="field">access:</span> protected</li>
+			</ul>
+	
+	
+		
+		
+
+</div>
+<a name="var$foother" id="$foother"><!-- --></A>
+<div class="evenrow">
+
+	<div class="var-header">
+		<img src="../../media/images/Variable.png" />
+		<span class="var-title">
+			<span class="var-type">bool</span>
+			<span class="var-name">$foother</span>
+			 = <span class="var-default"> false</span>			(line <span class="line-number"><a href="../../__filesource/fsource_CcMvc_Response_MvcResponseHtmlHtml.php.html#a63">63</a></span>)
+		</span>
+	</div>
+
+	<!-- ========== Info from phpDoc block ========= -->
+<p class="short-description">indica si ya se imprimio el contenido</p>
+	<ul class="tags">
+				<li><span class="field">access:</span> protected</li>
+			</ul>
+	
+	
+		
+		
+
+</div>
+<a name="var$ico" id="$ico"><!-- --></A>
+<div class="oddrow">
+
+	<div class="var-header">
+		<img src="../../media/images/Variable.png" />
+		<span class="var-title">
+			<span class="var-type">string</span>
+			<span class="var-name">$ico</span>
+			 = <span class="var-default"> 'favicon.ico'</span>			(line <span class="line-number"><a href="../../__filesource/fsource_CcMvc_Response_MvcResponseHtmlHtml.php.html#a51">51</a></span>)
+		</span>
+	</div>
+
+	<!-- ========== Info from phpDoc block ========= -->
+<p class="short-description">icono del sitio</p>
+	<ul class="tags">
+				<li><span class="field">access:</span> protected</li>
+			</ul>
+	
+	
+		
+		
+
+</div>
+<a name="var$js" id="$js"><!-- --></A>
+<div class="evenrow">
+
+	<div class="var-header">
+		<img src="../../media/images/Variable.png" />
+		<span class="var-title">
+			<span class="var-type">array</span>
+			<span class="var-name">$js</span>
+			 = <span class="var-default">array()</span>			(line <span class="line-number"><a href="../../__filesource/fsource_CcMvc_Response_MvcResponseHtmlHtml.php.html#a27">27</a></span>)
+		</span>
+	</div>
+
+	<!-- ========== Info from phpDoc block ========= -->
+<p class="short-description">refrencias a recursos javascript</p>
+	<ul class="tags">
+				<li><span class="field">access:</span> protected</li>
+			</ul>
+	
+	
+		
+		
+
+</div>
+<a name="var$jsscript" id="$jsscript"><!-- --></A>
+<div class="oddrow">
+
+	<div class="var-header">
+		<img src="../../media/images/Variable.png" />
+		<span class="var-title">
+			<span class="var-type">string</span>
+			<span class="var-name">$jsscript</span>
+						(line <span class="line-number"><a href="../../__filesource/fsource_CcMvc_Response_MvcResponseHtmlHtml.php.html#a75">75</a></span>)
+		</span>
+	</div>
+
+	<!-- ========== Info from phpDoc block ========= -->
+<p class="short-description">codigo javascript</p>
+	<ul class="tags">
+				<li><span class="field">access:</span> protected</li>
+			</ul>
+	
+	
+		
+		
+
+</div>
+<a name="var$KeyWords" id="$KeyWords"><!-- --></A>
+<div class="evenrow">
+
+	<div class="var-header">
+		<img src="../../media/images/Variable.png" />
+		<span class="var-title">
+			<span class="var-type">array</span>
+			<span class="var-name">$KeyWords</span>
+			 = <span class="var-default"> []</span>			(line <span class="line-number"><a href="../../__filesource/fsource_CcMvc_Response_MvcResponseHtmlHtml.php.html#a123">123</a></span>)
+		</span>
+	</div>
+
+	<!-- ========== Info from phpDoc block ========= -->
+<p class="short-description">palabras clave</p>
+	<ul class="tags">
+				<li><span class="field">access:</span> protected</li>
+			</ul>
+	
+	
+		
+		
+
+</div>
+<a name="var$ROOT_HTML" id="$ROOT_HTML"><!-- --></A>
+<div class="oddrow">
+
+	<div class="var-header">
+		<img src="../../media/images/Variable.png" />
+		<span class="var-title">
+			<span class="var-type">string</span>
+			<span class="var-name">$ROOT_HTML</span>
+						(line <span class="line-number"><a href="../../__filesource/fsource_CcMvc_Response_MvcResponseHtmlHtml.php.html#a57">57</a></span>)
+		</span>
+	</div>
+
+	<!-- ========== Info from phpDoc block ========= -->
+<p class="short-description">root</p>
+	<ul class="tags">
+				<li><span class="field">access:</span> public</li>
+			</ul>
+	
+	
+		
+		
+
+</div>
+<a name="var$script_error" id="$script_error"><!-- --></A>
+<div class="evenrow">
+
+	<div class="var-header">
+		<img src="../../media/images/Variable.png" />
+		<span class="var-title">
+			<span class="var-type">string</span>
+			<span class="var-name">$script_error</span>
+						(line <span class="line-number"><a href="../../__filesource/fsource_CcMvc_Response_MvcResponseHtmlHtml.php.html#a69">69</a></span>)
+		</span>
+	</div>
+
+	<!-- ========== Info from phpDoc block ========= -->
+<p class="short-description">script que sera impreso cuando ocurran errores</p>
+	<ul class="tags">
+				<li><span class="field">access:</span> protected</li>
+			</ul>
+	
+	
+		
+		
+
+</div>
+<a name="var$src" id="$src"><!-- --></A>
+<div class="oddrow">
+
+	<div class="var-header">
+		<img src="../../media/images/Variable.png" />
+		<span class="var-title">
+			<span class="var-type">array</span>
+			<span class="var-name">$src</span>
+			 = <span class="var-default">array()</span>			(line <span class="line-number"><a href="../../__filesource/fsource_CcMvc_Response_MvcResponseHtmlHtml.php.html#a93">93</a></span>)
+		</span>
+	</div>
+
+	<!-- ========== Info from phpDoc block ========= -->
+<p class="short-description">alisa de directorios</p>
+	<ul class="tags">
+				<li><span class="field">access:</span> protected</li>
+			</ul>
+	
+	
+		
+		
+
+</div>
+<a name="var$titulo" id="$titulo"><!-- --></A>
+<div class="evenrow">
+
+	<div class="var-header">
+		<img src="../../media/images/Variable.png" />
+		<span class="var-title">
+			<span class="var-type">string</span>
+			<span class="var-name">$titulo</span>
+			 = <span class="var-default"> &quot;Default Document CcMvc&quot;</span>			(line <span class="line-number"><a href="../../__filesource/fsource_CcMvc_Response_MvcResponseHtmlHtml.php.html#a39">39</a></span>)
+		</span>
+	</div>
+
+	<!-- ========== Info from phpDoc block ========= -->
+<p class="short-description">titulo de la pagina</p>
+	<ul class="tags">
+				<li><span class="field">access:</span> public</li>
+			</ul>
+	
+	
+		
+		
+
+</div>
+							<h4>Inherited Variables</h4>
+				<A NAME='inherited_vars'><!-- --></A>
+									<p>Inherited from <span class="classname"><a href="../../CcMvc/Response/Response.html">Response</a></span></p>
+					<blockquote>
+													<img src="../../media/images/Variable.png" />
+							<span class="var-title">
+								<span class="var-name"><a href="../../CcMvc/Response/Response.html#var$DirLayaut">Response::$DirLayaut</a></span><br>
+							</span>
+													<img src="../../media/images/Variable.png" />
+							<span class="var-title">
+								<span class="var-name"><a href="../../CcMvc/Response/Response.html#var$layaut">Response::$layaut</a></span><br>
+							</span>
+													<img src="../../media/images/Variable.png" />
+							<span class="var-title">
+								<span class="var-name"><a href="../../CcMvc/Response/Response.html#var$min">Response::$min</a></span><br>
+							</span>
+													<img src="../../media/images/Variable.png" />
+							<span class="var-title">
+								<span class="var-name"><a href="../../CcMvc/Response/Response.html#var$typeMin">Response::$typeMin</a></span><br>
+							</span>
+											</blockquote> 
+										
+		</div>
+	</div>
+	
+	<a name="sec-methods"></a>
+	<div class="info-box">
+		<div class="info-box-title">Methods</div>
+		<div class="nav-bar">
+			<a href="#sec-description">Description</a> |
+							<a href="#sec-descendents">Descendents</a> |
+															<a href="#sec-var-summary">Vars</a> (<a href="#sec-vars">details</a>)
+																	<a href="#sec-method-summary">Methods</a> (<span class="disabled">details</span>)
+						
+		</div>
+		<div class="info-box-body">
+			<A NAME='method_detail'></A>
+<a name="methodcdata" id="cdata"><!-- --></a>
+<div class="oddrow">
+	
+	<div class="method-header">
+		<img src="../../media/images/StaticMethod.png" />
+		<span class="method-title">static cdata</span> (line <span class="line-number"><a href="../../__filesource/fsource_CcMvc_Response_MvcResponseHtmlHtml.php.html#a771">771</a></span>)
+	</div> 
+	
+	<!-- ========== Info from phpDoc block ========= -->
+<p class="short-description">CREA UNA SECCION CDATA</p>
+	<ul class="tags">
+				<li><span class="field">access:</span> public</li>
+			</ul>
+	
+	<div class="method-signature">
+		static <span class="method-result">string</span>
+		<span class="method-name">
+			cdata
+		</span>
+					(<span class="var-type">string</span>&nbsp;<span class="var-name">$text</span>, [<span class="var-type">bool</span>&nbsp;<span class="var-name">$comment</span> = <span class="var-default">false</span>])
+			</div>
+	
+			<ul class="parameters">
+					<li>
+				<span class="var-type">string</span>
+				<span class="var-name">$text</span>			</li>
+					<li>
+				<span class="var-type">bool</span>
+				<span class="var-name">$comment</span><span class="var-description">: INDICA SI SE COMENTARA</span>			</li>
+				</ul>
+		
+			
+	</div>
+<a name="methodCloseTang" id="CloseTang"><!-- --></a>
+<div class="evenrow">
+	
+	<div class="method-header">
+		<img src="../../media/images/StaticMethod.png" />
+		<span class="method-title">static CloseTang</span> (line <span class="line-number"><a href="../../__filesource/fsource_CcMvc_Response_MvcResponseHtmlHtml.php.html#a579">579</a></span>)
+	</div> 
+	
+	<!-- ========== Info from phpDoc block ========= -->
+<p class="short-description">CREA UNA ETIQUETA DE CIERRE</p>
+	<ul class="tags">
+				<li><span class="field">access:</span> public</li>
+			</ul>
+	
+	<div class="method-signature">
+		static <span class="method-result">string</span>
+		<span class="method-name">
+			CloseTang
+		</span>
+					(<span class="var-type">string</span>&nbsp;<span class="var-name">$name</span>)
+			</div>
+	
+			<ul class="parameters">
+					<li>
+				<span class="var-type">string</span>
+				<span class="var-name">$name</span><span class="var-description">: NOMBRE DE LA ETIQUETA</span>			</li>
+				</ul>
+		
+			
+	</div>
+<a name="methodCtorParam" id="CtorParam"><!-- --></a>
+<div class="oddrow">
+	
+	<div class="method-header">
+		<img src="../../media/images/StaticMethod.png" />
+		<span class="method-title">static CtorParam</span> (line <span class="line-number"><a href="../../__filesource/fsource_CcMvc_Response_MvcResponseHtmlHtml.php.html#a125">125</a></span>)
+	</div> 
+	
+	<!-- ========== Info from phpDoc block ========= -->
+	<ul class="tags">
+				<li><span class="field">access:</span> public</li>
+			</ul>
+	
+	<div class="method-signature">
+		static <span class="method-result">void</span>
+		<span class="method-name">
+			CtorParam
+		</span>
+				()
+			</div>
+	
+		
+			<hr class="separator" />
+		<div class="notes">Redefinition of:</div>
+		<dl>
+			<dt><a href="../../CcMvc/Response/Response.html#methodCtorParam">Response::CtorParam()</a></dt>
+					</dl>
+			
+			<hr class="separator" />
+		<div class="notes">Redefined in descendants as:</div>
+		<ul class="redefinitions">
+					<li>
+				<a href="../../CcMvc/Response/HtmlPDF.html#methodCtorParam">HtmlPDF::CtorParam()</a>
+							</li>
+				</ul>
+	</div>
+<a name="methodDecode" id="Decode"><!-- --></a>
+<div class="evenrow">
+	
+	<div class="method-header">
+		<img src="../../media/images/StaticMethod.png" />
+		<span class="method-title">static Decode</span> (line <span class="line-number"><a href="../../__filesource/fsource_CcMvc_Response_MvcResponseHtmlHtml.php.html#a494">494</a></span>)
+	</div> 
+	
+	<!-- ========== Info from phpDoc block ========= -->
+<p class="short-description">DECODIFICA UNA CADENA HTML</p>
+	<ul class="tags">
+				<li><span class="field">access:</span> public</li>
+			</ul>
+	
+	<div class="method-signature">
+		static <span class="method-result">string</span>
+		<span class="method-name">
+			Decode
+		</span>
+					(<span class="var-type">string</span>&nbsp;<span class="var-name">$text</span>)
+			</div>
+	
+			<ul class="parameters">
+					<li>
+				<span class="var-type">string</span>
+				<span class="var-name">$text</span>			</li>
+				</ul>
+		
+			
+	</div>
+<a name="methodEncode" id="Encode"><!-- --></a>
+<div class="oddrow">
+	
+	<div class="method-header">
+		<img src="../../media/images/StaticMethod.png" />
+		<span class="method-title">static Encode</span> (line <span class="line-number"><a href="../../__filesource/fsource_CcMvc_Response_MvcResponseHtmlHtml.php.html#a484">484</a></span>)
+	</div> 
+	
+	<!-- ========== Info from phpDoc block ========= -->
+<p class="short-description">CODIFICA LOS UNA CADENA HTML</p>
+	<ul class="tags">
+				<li><span class="field">access:</span> public</li>
+			</ul>
+	
+	<div class="method-signature">
+		static <span class="method-result">string</span>
+		<span class="method-name">
+			Encode
+		</span>
+					(<span class="var-type">string</span>&nbsp;<span class="var-name">$text</span>)
+			</div>
+	
+			<ul class="parameters">
+					<li>
+				<span class="var-type">string</span>
+				<span class="var-name">$text</span>			</li>
+				</ul>
+		
+			
+	</div>
+<a name="methodEncodeArray" id="EncodeArray"><!-- --></a>
+<div class="evenrow">
+	
+	<div class="method-header">
+		<img src="../../media/images/StaticMethod.png" />
+		<span class="method-title">static EncodeArray</span> (line <span class="line-number"><a href="../../__filesource/fsource_CcMvc_Response_MvcResponseHtmlHtml.php.html#a504">504</a></span>)
+	</div> 
+	
+	<!-- ========== Info from phpDoc block ========= -->
+	<ul class="tags">
+				<li><span class="field">access:</span> public</li>
+			</ul>
+	
+	<div class="method-signature">
+		static <span class="method-result">array</span>
+		<span class="method-name">
+			EncodeArray
+		</span>
+					(<span class="var-type">array</span>&nbsp;<span class="var-name">$data</span>)
+			</div>
+	
+			<ul class="parameters">
+					<li>
+				<span class="var-type">array</span>
+				<span class="var-name">$data</span>			</li>
+				</ul>
+		
+			
+	</div>
+<a name="methodmeta" id="meta"><!-- --></a>
+<div class="oddrow">
+	
+	<div class="method-header">
+		<img src="../../media/images/StaticMethod.png" />
+		<span class="method-title">static meta</span> (line <span class="line-number"><a href="../../__filesource/fsource_CcMvc_Response_MvcResponseHtmlHtml.php.html#a782">782</a></span>)
+	</div> 
+	
+	<!-- ========== Info from phpDoc block ========= -->
+	<ul class="tags">
+				<li><span class="field">access:</span> public</li>
+			</ul>
+	
+	<div class="method-signature">
+		static <span class="method-result">void</span>
+		<span class="method-name">
+			meta
+		</span>
+					(<span class="var-type"></span>&nbsp;<span class="var-name">$attrs</span>)
+			</div>
+	
+			<ul class="parameters">
+					<li>
+				<span class="var-type"></span>
+				<span class="var-name">$attrs</span>			</li>
+				</ul>
+		
+			
+	</div>
+<a name="methodOpenTang" id="OpenTang"><!-- --></a>
+<div class="evenrow">
+	
+	<div class="method-header">
+		<img src="../../media/images/StaticMethod.png" />
+		<span class="method-title">static OpenTang</span> (line <span class="line-number"><a href="../../__filesource/fsource_CcMvc_Response_MvcResponseHtmlHtml.php.html#a568">568</a></span>)
+	</div> 
+	
+	<!-- ========== Info from phpDoc block ========= -->
+<p class="short-description">CREA UNA ETIQUETA DE APERTURA HTML</p>
+	<ul class="tags">
+				<li><span class="field">access:</span> public</li>
+			</ul>
+	
+	<div class="method-signature">
+		static <span class="method-result">string</span>
+		<span class="method-name">
+			OpenTang
+		</span>
+					(<span class="var-type">string</span>&nbsp;<span class="var-name">$name</span>, [<span class="var-type">array</span>&nbsp;<span class="var-name">$attrs</span> = <span class="var-default">[]</span>], [<span class="var-type">bool</span>&nbsp;<span class="var-name">$close</span> = <span class="var-default">false</span>])
+			</div>
+	
+			<ul class="parameters">
+					<li>
+				<span class="var-type">string</span>
+				<span class="var-name">$name</span><span class="var-description">: NOMBRE DE LA ETIQUETA</span>			</li>
+					<li>
+				<span class="var-type">array</span>
+				<span class="var-name">$attrs</span><span class="var-description">: ATRIBUTOS DE LA ETIQUETA [attr=&gt;value]</span>			</li>
+					<li>
+				<span class="var-type">bool</span>
+				<span class="var-name">$close</span><span class="var-description">: INDICA SI LA ETIQUETA ES DE AUTOCERRADO EJEMPLO &lt;imput /&gt;,&lt;img /&gt;,&lt;link /&gt; true SI ES UNA ETIQUETA DE AUTOCERRADO Y false SI NO</span>			</li>
+				</ul>
+		
+			
+	</div>
+<a name="methodscript" id="script"><!-- --></a>
+<div class="oddrow">
+	
+	<div class="method-header">
+		<img src="../../media/images/StaticMethod.png" />
+		<span class="method-title">static script</span> (line <span class="line-number"><a href="../../__filesource/fsource_CcMvc_Response_MvcResponseHtmlHtml.php.html#a728">728</a></span>)
+	</div> 
+	
+	<!-- ========== Info from phpDoc block ========= -->
+<p class="short-description">CREA UNA ETIQUETA SCRIPT</p>
+	<ul class="tags">
+				<li><span class="field">access:</span> public</li>
+			</ul>
+	
+	<div class="method-signature">
+		static <span class="method-result">string</span>
+		<span class="method-name">
+			script
+		</span>
+					([<span class="var-type">array</span>&nbsp;<span class="var-name">$text</span> = <span class="var-default">''</span>], [<span class="var-type">array</span>&nbsp;<span class="var-name">$attrs</span> = <span class="var-default">[]</span>])
+			</div>
+	
+			<ul class="parameters">
+					<li>
+				<span class="var-type">array</span>
+				<span class="var-name">$text</span>			</li>
+					<li>
+				<span class="var-type">array</span>
+				<span class="var-name">$attrs</span>			</li>
+				</ul>
+		
+			
+	</div>
+<a name="methodselect" id="select"><!-- --></a>
+<div class="evenrow">
+	
+	<div class="method-header">
+		<img src="../../media/images/StaticMethod.png" />
+		<span class="method-title">static select</span> (line <span class="line-number"><a href="../../__filesource/fsource_CcMvc_Response_MvcResponseHtmlHtml.php.html#a673">673</a></span>)
+	</div> 
+	
+	<!-- ========== Info from phpDoc block ========= -->
+<p class="short-description">CREA UN ETIQUETA SELECT</p>
+	<ul class="tags">
+				<li><span class="field">access:</span> public</li>
+			</ul>
+	
+	<div class="method-signature">
+		static <span class="method-result">string</span>
+		<span class="method-name">
+			select
+		</span>
+					([<span class="var-type">array</span>&nbsp;<span class="var-name">$attrs</span> = <span class="var-default">[]</span>], [<span class="var-type">array|\Traversable</span>&nbsp;<span class="var-name">$options</span> = <span class="var-default">[]</span>])
+			</div>
+	
+			<ul class="parameters">
+					<li>
+				<span class="var-type">array</span>
+				<span class="var-name">$attrs</span><span class="var-description">: ATRIBUTOS DE LA ETIQUETA SELECT [attr=&gt;value]</span>			</li>
+					<li>
+				<span class="var-type">array|\Traversable</span>
+				<span class="var-name">$options</span><span class="var-description">: ATRIBUTOS DE LAS ETIQUETAS OPTION  <div class="src-code"><ol><li><div class="src-line">&nbsp;<span class="src-sym">[</span></div></li>
+<li><div class="src-line">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="src-num">0</span>=&gt;<span class="src-sym">[</span><span class="src-id">attr</span>=&gt;<span class="src-id">value</span><span class="src-sym">,</span>..<span class="src-sym">]</span><span class="src-sym">,</span></div></li>
+<li><div class="src-line">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="src-num">1</span>=&gt;<span class="src-sym">[</span><span class="src-id">attr</span>=&gt;<span class="src-id">value</span><span class="src-sym">,</span>..<span class="src-sym">]</span><span class="src-sym">,</span></div></li>
+<li><div class="src-line">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;.</div></li>
+<li><div class="src-line">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;.</div></li>
+<li><div class="src-line">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="src-id">N</span>=&gt;<span class="src-sym">[</span><span class="src-id">attr</span>=&gt;<span class="src-id">value</span><span class="src-sym">,</span>..<span class="src-sym">]</span></div></li>
+<li><div class="src-line">&nbsp;<span class="src-sym">]</span></div></li>
+</ol></div></span>			</li>
+				</ul>
+		
+			
+	</div>
+<a name="methodstyle" id="style"><!-- --></a>
+<div class="oddrow">
+	
+	<div class="method-header">
+		<img src="../../media/images/StaticMethod.png" />
+		<span class="method-title">static style</span> (line <span class="line-number"><a href="../../__filesource/fsource_CcMvc_Response_MvcResponseHtmlHtml.php.html#a749">749</a></span>)
+	</div> 
+	
+	<!-- ========== Info from phpDoc block ========= -->
+<p class="short-description">CREA UNA ETIQUETA STYLE</p>
+	<ul class="tags">
+				<li><span class="field">access:</span> public</li>
+			</ul>
+	
+	<div class="method-signature">
+		static <span class="method-result">string</span>
+		<span class="method-name">
+			style
+		</span>
+					([<span class="var-type">array</span>&nbsp;<span class="var-name">$text</span> = <span class="var-default">''</span>], [<span class="var-type">array</span>&nbsp;<span class="var-name">$attrs</span> = <span class="var-default">[]</span>])
+			</div>
+	
+			<ul class="parameters">
+					<li>
+				<span class="var-type">array</span>
+				<span class="var-name">$text</span>			</li>
+					<li>
+				<span class="var-type">array</span>
+				<span class="var-name">$attrs</span>			</li>
+				</ul>
+		
+			
+	</div>
+<a name="methodTang" id="Tang"><!-- --></a>
+<div class="evenrow">
+	
+	<div class="method-header">
+		<img src="../../media/images/StaticMethod.png" />
+		<span class="method-title">static Tang</span> (line <span class="line-number"><a href="../../__filesource/fsource_CcMvc_Response_MvcResponseHtmlHtml.php.html#a550">550</a></span>)
+	</div> 
+	
+	<!-- ========== Info from phpDoc block ========= -->
+<p class="short-description">CREA UNA ETIQUETA HTML</p>
+	<ul class="tags">
+				<li><span class="field">access:</span> public</li>
+			</ul>
+	
+	<div class="method-signature">
+		static <span class="method-result">string</span>
+		<span class="method-name">
+			Tang
+		</span>
+					(<span class="var-type">string</span>&nbsp;<span class="var-name">$name</span>, [<span class="var-type">string|array</span>&nbsp;<span class="var-name">$text</span> = <span class="var-default">''</span>], [<span class="var-type">array</span>&nbsp;<span class="var-name">$attrs</span> = <span class="var-default">NULL</span>])
+			</div>
+	
+			<ul class="parameters">
+					<li>
+				<span class="var-type">string</span>
+				<span class="var-name">$name</span><span class="var-description">: NOMBRE DE LA ETIQUETA</span>			</li>
+					<li>
+				<span class="var-type">string|array</span>
+				<span class="var-name">$text</span><span class="var-description">: TEXTO DE LA ETIQUETA SI ES UN ARRAY SE TOMA CON EL PARAMETRO $attrs</span>			</li>
+					<li>
+				<span class="var-type">array</span>
+				<span class="var-name">$attrs</span><span class="var-description">: ATRIBUTOS DE LA ETIQUETA [attr=&gt;value]</span>			</li>
+				</ul>
+		
+			
+	</div>
+<a name="method__callStatic" id="__callStatic"><!-- --></a>
+<div class="oddrow">
+	
+	<div class="method-header">
+		<img src="../../media/images/StaticMethod.png" />
+		<span class="method-title">static __callStatic</span> (line <span class="line-number"><a href="../../__filesource/fsource_CcMvc_Response_MvcResponseHtmlHtml.php.html#a535">535</a></span>)
+	</div> 
+	
+	<!-- ========== Info from phpDoc block ========= -->
+<p class="short-description">FUNCION MAGICA SE EJECUTA CADA VEZ QUE ES LLAMADO UN METODO ESTATICO</p>
+<p class="description"><p>QUE NO ESTE DEFINIDO  EN ESTA CLASE ESTA DEFINIDO PARA CREAR ETIQUETAS HTML  <div class="src-code"><ol><li><div class="src-line"><span class="src-php">&lt;?php</span></div></li>
+<li><div class="src-line">&nbsp;echo&nbsp;<span class="src-id"><a href="../../CcMvc/Response/Html.html">Html</a></span><span class="src-sym">::</span><span class="src-id">h1</span><span class="src-sym">(</span><span class="src-str">'hola&nbsp;mundo'</span><span class="src-sym">)</span><span class="src-sym">;</span><span class="src-comm">//&nbsp;&lt;h1&gt;hola&nbsp;mundo&lt;/h1&gt;</span></div></li>
+<li><div class="src-line">&nbsp;</div></li>
+<li><div class="src-line">&nbsp;echo&nbsp;<span class="src-id"><a href="../../CcMvc/Response/Html.html">Html</a></span><span class="src-sym">::</span><span class="src-id">div</span><span class="src-sym">(</span><span class="src-str">'un&nbsp;texto'</span><span class="src-sym">,</span><span class="src-sym">[</span><span class="src-str">'class'</span>=&gt;<span class="src-str">'texto'</span><span class="src-sym">]</span><span class="src-sym">)</span><span class="src-sym">;</span><span class="src-comm">//&nbsp;&lt;div&nbsp;class='texto'&gt;un&nbsp;texto&lt;/h1&gt;</span></div></li>
+</ol></div></p></p>
+	<ul class="tags">
+				<li><span class="field">access:</span> public</li>
+			</ul>
+	
+	<div class="method-signature">
+		static <span class="method-result">string</span>
+		<span class="method-name">
+			__callStatic
+		</span>
+					(<span class="var-type">string</span>&nbsp;<span class="var-name">$name</span>, <span class="var-type">array</span>&nbsp;<span class="var-name">$arguments</span>)
+			</div>
+	
+			<ul class="parameters">
+					<li>
+				<span class="var-type">string</span>
+				<span class="var-name">$name</span><span class="var-description">: NOMBRE DE LA ETIQUETA</span>			</li>
+					<li>
+				<span class="var-type">array</span>
+				<span class="var-name">$arguments</span><span class="var-description">: ARGUMENTOS $text y $attrs DE <a href="../../CcMvc/Response/Html.html#methodTang">Tang</a></span>			</li>
+				</ul>
+		
+			
+	</div>
+<a name="method__construct" id="__construct"><!-- --></a>
+<div class="evenrow">
+	
+	<div class="method-header">
+		<img src="../../media/images/Constructor.png" />
+		<span class="method-title">Constructor __construct</span> (line <span class="line-number"><a href="../../__filesource/fsource_CcMvc_Response_MvcResponseHtmlHtml.php.html#a137">137</a></span>)
+	</div> 
+	
+	<!-- ========== Info from phpDoc block ========= -->
+	<ul class="tags">
+				<li><span class="field">access:</span> public</li>
+			</ul>
+	
+	<div class="method-signature">
+		<span class="method-result">Html</span>
+		<span class="method-name">
+			__construct
+		</span>
+					([<span class="var-type">bool</span>&nbsp;<span class="var-name">$compress</span> = <span class="var-default">true</span>], [<span class="var-type">bool</span>&nbsp;<span class="var-name">$min</span> = <span class="var-default">false</span>])
+			</div>
+	
+			<ul class="parameters">
+					<li>
+				<span class="var-type">bool</span>
+				<span class="var-name">$compress</span><span class="var-description">: indica si se comprimira el resultado</span>			</li>
+					<li>
+				<span class="var-type">bool</span>
+				<span class="var-name">$min</span><span class="var-description">: indica si se procesara con MinScript</span>			</li>
+				</ul>
+		
+			<hr class="separator" />
+		<div class="notes">Redefinition of:</div>
+		<dl>
+			<dt><a href="../../CcMvc/Response/Response.html#method__construct">Response::__construct()</a></dt>
+					</dl>
+			
+			<hr class="separator" />
+		<div class="notes">Redefined in descendants as:</div>
+		<ul class="redefinitions">
+					<li>
+				<a href="../../CcMvc/Response/HtmlPDF.html#method__construct">HtmlPDF::__construct()</a>
+							</li>
+				</ul>
+	</div>
+<a name="methodAddCssScript" id="AddCssScript"><!-- --></a>
+<div class="oddrow">
+	
+	<div class="method-header">
+		<img src="../../media/images/Method.png" />
+		<span class="method-title">AddCssScript</span> (line <span class="line-number"><a href="../../__filesource/fsource_CcMvc_Response_MvcResponseHtmlHtml.php.html#a371">371</a></span>)
+	</div> 
+	
+	<!-- ========== Info from phpDoc block ========= -->
+<p class="short-description">INSERTA UN SCRIPT CSS EN EN EL DOCUMENTO</p>
+	<ul class="tags">
+				<li><span class="field">return:</span> AUTOREFERENCIA</li>
+				<li><span class="field">access:</span> public</li>
+			</ul>
+	
+	<div class="method-signature">
+		<span class="method-result">this</span>
+		<span class="method-name">
+			&amp;AddCssScript
+		</span>
+					(<span class="var-type">string</span>&nbsp;<span class="var-name">$css</span>)
+			</div>
+	
+			<ul class="parameters">
+					<li>
+				<span class="var-type">string</span>
+				<span class="var-name">$css</span><span class="var-description">: SCRIPT CSS</span>			</li>
+				</ul>
+		
+			
+	</div>
+<a name="methodAddError" id="AddError"><!-- --></a>
+<div class="evenrow">
+	
+	<div class="method-header">
+		<img src="../../media/images/Method.png" />
+		<span class="method-title">AddError</span> (line <span class="line-number"><a href="../../__filesource/fsource_CcMvc_Response_MvcResponseHtmlHtml.php.html#a277">277</a></span>)
+	</div> 
+	
+	<!-- ========== Info from phpDoc block ========= -->
+	<ul class="tags">
+				<li><span class="field">access:</span> public</li>
+			</ul>
+	
+	<div class="method-signature">
+		<span class="method-result">void</span>
+		<span class="method-name">
+			AddError
+		</span>
+					(<span class="var-type">string</span>&nbsp;<span class="var-name">$error</span>)
+			</div>
+	
+			<ul class="parameters">
+					<li>
+				<span class="var-type">string</span>
+				<span class="var-name">$error</span>			</li>
+				</ul>
+		
+			
+	</div>
+<a name="methodAddJsScript" id="AddJsScript"><!-- --></a>
+<div class="oddrow">
+	
+	<div class="method-header">
+		<img src="../../media/images/Method.png" />
+		<span class="method-title">AddJsScript</span> (line <span class="line-number"><a href="../../__filesource/fsource_CcMvc_Response_MvcResponseHtmlHtml.php.html#a320">320</a></span>)
+	</div> 
+	
+	<!-- ========== Info from phpDoc block ========= -->
+<p class="short-description">INSERTA UN SCRIPT JS EN EN EL DOCUMENTO</p>
+	<ul class="tags">
+				<li><span class="field">access:</span> public</li>
+			</ul>
+	
+	<div class="method-signature">
+		<span class="method-result">this</span>
+		<span class="method-name">
+			&amp;AddJsScript
+		</span>
+					(<span class="var-type">string</span>&nbsp;<span class="var-name">$js</span>)
+			</div>
+	
+			<ul class="parameters">
+					<li>
+				<span class="var-type">string</span>
+				<span class="var-name">$js</span><span class="var-description">: SCRIPT JS</span>			</li>
+				</ul>
+		
+			
+	</div>
+<a name="methodAddKeyWords" id="AddKeyWords"><!-- --></a>
+<div class="evenrow">
+	
+	<div class="method-header">
+		<img src="../../media/images/Method.png" />
+		<span class="method-title">AddKeyWords</span> (line <span class="line-number"><a href="../../__filesource/fsource_CcMvc_Response_MvcResponseHtmlHtml.php.html#a184">184</a></span>)
+	</div> 
+	
+	<!-- ========== Info from phpDoc block ========= -->
+	<ul class="tags">
+				<li><span class="field">access:</span> public</li>
+			</ul>
+	
+	<div class="method-signature">
+		<span class="method-result">void</span>
+		<span class="method-name">
+			AddKeyWords
+		</span>
+					(<span class="var-type"></span>&nbsp;<span class="var-name">...$word</span>)
+			</div>
+	
+			<ul class="parameters">
+					<li>
+				<span class="var-type"></span>
+				<span class="var-name">...$word</span>			</li>
+				</ul>
+		
+			
+	</div>
+<a name="methodaddlink_css" id="addlink_css"><!-- --></a>
+<div class="oddrow">
+	
+	<div class="method-header">
+		<img src="../../media/images/Method.png" />
+		<span class="method-title">addlink_css</span> (line <span class="line-number"><a href="../../__filesource/fsource_CcMvc_Response_MvcResponseHtmlHtml.php.html#a341">341</a></span>)
+	</div> 
+	
+	<!-- ========== Info from phpDoc block ========= -->
+<p class="short-description">INSERTA UN UNA ETIQUETA LINK EN EL HEAD DEL DOCUMENTO</p>
+	<ul class="tags">
+				<li><span class="field">access:</span> public</li>
+			</ul>
+	
+	<div class="method-signature">
+		<span class="method-result">this</span>
+		<span class="method-name">
+			&amp;addlink_css
+		</span>
+					(<span class="var-type">string</span>&nbsp;<span class="var-name">$name</span>, [<span class="var-type">string</span>&nbsp;<span class="var-name">$fn</span> = <span class="var-default">'P'</span>])
+			</div>
+	
+			<ul class="parameters">
+					<li>
+				<span class="var-type">string</span>
+				<span class="var-name">$name</span><span class="var-description">: EL NOMBRE DEL SCRIPT</span>			</li>
+					<li>
+				<span class="var-type">string</span>
+				<span class="var-name">$fn</span><span class="var-description">: P PARA QUE EL SCRITP SEA INSERTADO AL PRINCIPIO Y U AL FINAL</span>			</li>
+				</ul>
+		
+			
+	</div>
+<a name="methodaddlink_js" id="addlink_js"><!-- --></a>
+<div class="evenrow">
+	
+	<div class="method-header">
+		<img src="../../media/images/Method.png" />
+		<span class="method-title">addlink_js</span> (line <span class="line-number"><a href="../../__filesource/fsource_CcMvc_Response_MvcResponseHtmlHtml.php.html#a288">288</a></span>)
+	</div> 
+	
+	<!-- ========== Info from phpDoc block ========= -->
+<p class="short-description">INSERTA UN UNA ETIQUETA SCRIPT TIPÓ LINK EN EL HEAD DEL DOCUMENTO</p>
+	<ul class="tags">
+				<li><span class="field">access:</span> public</li>
+			</ul>
+	
+	<div class="method-signature">
+		<span class="method-result">this</span>
+		<span class="method-name">
+			&amp;addlink_js
+		</span>
+					(<span class="var-type">string</span>&nbsp;<span class="var-name">$name</span>, [<span class="var-type">string</span>&nbsp;<span class="var-name">$fn</span> = <span class="var-default">'P'</span>])
+			</div>
+	
+			<ul class="parameters">
+					<li>
+				<span class="var-type">string</span>
+				<span class="var-name">$name</span><span class="var-description">: EL NOMBRE DEL SCRIPT</span>			</li>
+					<li>
+				<span class="var-type">string</span>
+				<span class="var-name">$fn</span><span class="var-description">: P PARA QUE EL SCRITP SEA INSERTADO AL PRINCIPIO Y U AL FINAL</span>			</li>
+				</ul>
+		
+			
+	</div>
+<a name="methodAddMetaTang" id="AddMetaTang"><!-- --></a>
+<div class="oddrow">
+	
+	<div class="method-header">
+		<img src="../../media/images/Method.png" />
+		<span class="method-title">AddMetaTang</span> (line <span class="line-number"><a href="../../__filesource/fsource_CcMvc_Response_MvcResponseHtmlHtml.php.html#a178">178</a></span>)
+	</div> 
+	
+	<!-- ========== Info from phpDoc block ========= -->
+<p class="short-description">AGREGA UNA ETIQUETA &lt;META&gt; A EL &lt;HEAD&gt; DE LA PAGINA</p>
+	<ul class="tags">
+				<li><span class="field">access:</span> public</li>
+			</ul>
+	
+	<div class="method-signature">
+		<span class="method-result">void</span>
+		<span class="method-name">
+			AddMetaTang
+		</span>
+					(<span class="var-type">string</span>&nbsp;<span class="var-name">$name</span>, <span class="var-type">string</span>&nbsp;<span class="var-name">$value</span>)
+			</div>
+	
+			<ul class="parameters">
+					<li>
+				<span class="var-type">string</span>
+				<span class="var-name">$name</span><span class="var-description">: nombre</span>			</li>
+					<li>
+				<span class="var-type">string</span>
+				<span class="var-name">$value</span>			</li>
+				</ul>
+		
+			
+	</div>
+<a name="methodadd_error" id="add_error"><!-- --></a>
+<div class="evenrow">
+	
+	<div class="method-header">
+		<img src="../../media/images/Method.png" />
+		<span class="method-title">add_error</span> (line <span class="line-number"><a href="../../__filesource/fsource_CcMvc_Response_MvcResponseHtmlHtml.php.html#a268">268</a></span>)
+	</div> 
+	
+	<!-- ========== Info from phpDoc block ========= -->
+	<ul class="tags">
+				<li><span class="field">deprecated:</span> </li>
+				<li><span class="field">access:</span> public</li>
+			</ul>
+	
+	<div class="method-signature">
+		<span class="method-result">void</span>
+		<span class="method-name">
+			add_error
+		</span>
+					(<span class="var-type">string</span>&nbsp;<span class="var-name">$error</span>)
+			</div>
+	
+			<ul class="parameters">
+					<li>
+				<span class="var-type">string</span>
+				<span class="var-name">$error</span>			</li>
+				</ul>
+		
+			
+	</div>
+<a name="methodGetBasePath" id="GetBasePath"><!-- --></a>
+<div class="oddrow">
+	
+	<div class="method-header">
+		<img src="../../media/images/Method.png" />
+		<span class="method-title">GetBasePath</span> (line <span class="line-number"><a href="../../__filesource/fsource_CcMvc_Response_MvcResponseHtmlHtml.php.html#a158">158</a></span>)
+	</div> 
+	
+	<!-- ========== Info from phpDoc block ========= -->
+	<ul class="tags">
+				<li><span class="field">access:</span> public</li>
+			</ul>
+	
+	<div class="method-signature">
+		<span class="method-result">string</span>
+		<span class="method-name">
+			GetBasePath
+		</span>
+				()
+			</div>
+	
+		
+			
+	</div>
+<a name="methodGetContenHead" id="GetContenHead"><!-- --></a>
+<div class="evenrow">
+	
+	<div class="method-header">
+		<img src="../../media/images/Method.png" />
+		<span class="method-title">GetContenHead</span> (line <span class="line-number"><a href="../../__filesource/fsource_CcMvc_Response_MvcResponseHtmlHtml.php.html#a210">210</a></span>)
+	</div> 
+	
+	<!-- ========== Info from phpDoc block ========= -->
+<p class="short-description">RETORNA EL CONTENIDO PARA SER INSERTADO DETRO DE HEAD GENERALMENTE SE USA EN EL LAYAUT</p>
+<p class="description"><p>ESTO INCLUYE LAS ETIQUETAS &lt;TITLE&gt;&lt;SCRITS&gt;&lt;LINK&gt; Y EL ICONO</p></p>
+	<ul class="tags">
+				<li><span class="field">access:</span> public</li>
+			</ul>
+	
+	<div class="method-signature">
+		<span class="method-result">string</span>
+		<span class="method-name">
+			GetContenHead
+		</span>
+				()
+			</div>
+	
+		
+			
+	</div>
+<a name="methodGetCssScript" id="GetCssScript"><!-- --></a>
+<div class="oddrow">
+	
+	<div class="method-header">
+		<img src="../../media/images/Method.png" />
+		<span class="method-title">GetCssScript</span> (line <span class="line-number"><a href="../../__filesource/fsource_CcMvc_Response_MvcResponseHtmlHtml.php.html#a381">381</a></span>)
+	</div> 
+	
+	<!-- ========== Info from phpDoc block ========= -->
+<p class="short-description">RETORNA LOS SCRIPTS JS CONTENIDOS</p>
+	<ul class="tags">
+				<li><span class="field">access:</span> public</li>
+			</ul>
+	
+	<div class="method-signature">
+		<span class="method-result">string</span>
+		<span class="method-name">
+			GetCssScript
+		</span>
+				()
+			</div>
+	
+		
+			
+	</div>
+<a name="methodGetJsScript" id="GetJsScript"><!-- --></a>
+<div class="evenrow">
+	
+	<div class="method-header">
+		<img src="../../media/images/Method.png" />
+		<span class="method-title">GetJsScript</span> (line <span class="line-number"><a href="../../__filesource/fsource_CcMvc_Response_MvcResponseHtmlHtml.php.html#a330">330</a></span>)
+	</div> 
+	
+	<!-- ========== Info from phpDoc block ========= -->
+<p class="short-description">RETORNA LOS SCRIPTS JS CONTENIDOS</p>
+	<ul class="tags">
+				<li><span class="field">access:</span> public</li>
+			</ul>
+	
+	<div class="method-signature">
+		<span class="method-result">string</span>
+		<span class="method-name">
+			GetJsScript
+		</span>
+				()
+			</div>
+	
+		
+			
+	</div>
+<a name="methodGetLayaut" id="GetLayaut"><!-- --></a>
+<div class="oddrow">
+	
+	<div class="method-header">
+		<img src="../../media/images/Method.png" />
+		<span class="method-title">GetLayaut</span> (line <span class="line-number"><a href="../../__filesource/fsource_CcMvc_Response_MvcResponseHtmlHtml.php.html#a473">473</a></span>)
+	</div> 
+	
+	<!-- ========== Info from phpDoc block ========= -->
+	<ul class="tags">
+				<li><span class="field">access:</span> public</li>
+			</ul>
+	
+	<div class="method-signature">
+		<span class="method-result">array</span>
+		<span class="method-name">
+			GetLayaut
+		</span>
+				()
+			</div>
+	
+		
+			<hr class="separator" />
+		<div class="notes">Redefinition of:</div>
+		<dl>
+			<dt><a href="../../CcMvc/Response/Response.html#methodGetLayaut">Response::GetLayaut()</a></dt>
+					</dl>
+			
+			<hr class="separator" />
+		<div class="notes">Redefined in descendants as:</div>
+		<ul class="redefinitions">
+					<li>
+				<a href="../../CcMvc/Response/HtmlPDF.html#methodGetLayaut">HtmlPDF::GetLayaut()</a>
+							</li>
+				</ul>
+	</div>
+<a name="methodlink_cssjs" id="link_cssjs"><!-- --></a>
+<div class="evenrow">
+	
+	<div class="method-header">
+		<img src="../../media/images/Method.png" />
+		<span class="method-title">link_cssjs</span> (line <span class="line-number"><a href="../../__filesource/fsource_CcMvc_Response_MvcResponseHtmlHtml.php.html#a413">413</a></span>)
+	</div> 
+	
+	<!-- ========== Info from phpDoc block ========= -->
+<p class="short-description">RETORA LOS LINK CSS JS COMPLETOS EN UNA CADENA DE TEXTO¨</p>
+	<ul class="tags">
+				<li><span class="field">return:</span> LINKS HTML</li>
+				<li><span class="field">access:</span> public</li>
+			</ul>
+	
+	<div class="method-signature">
+		<span class="method-result">string</span>
+		<span class="method-name">
+			link_cssjs
+		</span>
+				()
+			</div>
+	
+		
+			
+	</div>
+<a name="methodReplaceSrc" id="ReplaceSrc"><!-- --></a>
+<div class="oddrow">
+	
+	<div class="method-header">
+		<img src="../../media/images/Method.png" />
+		<span class="method-title">ReplaceSrc</span> (line <span class="line-number"><a href="../../__filesource/fsource_CcMvc_Response_MvcResponseHtmlHtml.php.html#a443">443</a></span>)
+	</div> 
+	
+	<!-- ========== Info from phpDoc block ========= -->
+	<ul class="tags">
+				<li><span class="field">access:</span> protected</li>
+			</ul>
+	
+	<div class="method-signature">
+		<span class="method-result">string</span>
+		<span class="method-name">
+			ReplaceSrc
+		</span>
+					(<span class="var-type">string</span>&nbsp;<span class="var-name">$text</span>, [<span class="var-type">string</span>&nbsp;<span class="var-name">$type</span> = <span class="var-default">''</span>])
+			</div>
+	
+			<ul class="parameters">
+					<li>
+				<span class="var-type">string</span>
+				<span class="var-name">$text</span>			</li>
+					<li>
+				<span class="var-type">string</span>
+				<span class="var-name">$type</span>			</li>
+				</ul>
+		
+			
+	</div>
+<a name="methodSetSrc" id="SetSrc"><!-- --></a>
+<div class="evenrow">
+	
+	<div class="method-header">
+		<img src="../../media/images/Method.png" />
+		<span class="method-title">SetSrc</span> (line <span class="line-number"><a href="../../__filesource/fsource_CcMvc_Response_MvcResponseHtmlHtml.php.html#a168">168</a></span>)
+	</div> 
+	
+	<!-- ========== Info from phpDoc block ========= -->
+<p class="short-description">INGRESA ALIAS PARA LAS DIRECCIONES DE LOS LINK DE SCRIPTS</p>
+	<ul class="tags">
+				<li><span class="field">access:</span> public</li>
+			</ul>
+	
+	<div class="method-signature">
+		<span class="method-result">void</span>
+		<span class="method-name">
+			SetSrc
+		</span>
+					(<span class="var-type">string</span>&nbsp;<span class="var-name">$seudo</span>, <span class="var-type">string</span>&nbsp;<span class="var-name">$src</span>)
+			</div>
+	
+			<ul class="parameters">
+					<li>
+				<span class="var-type">string</span>
+				<span class="var-name">$seudo</span><span class="var-description">: EL TEXTO QUE SE BUSCARA EN LOS LINKS DEVE CUPLIR CON LA SIGUIENTE SINTAXIS {namedir}</span>			</li>
+					<li>
+				<span class="var-type">string</span>
+				<span class="var-name">$src</span><span class="var-description">: LA DIRECCION QUE SERA COLOCADA DONDE SE CONSIGA EL $seudo</span>			</li>
+				</ul>
+		
+			
+	</div>
+<a name="methodset_ico" id="set_ico"><!-- --></a>
+<div class="oddrow">
+	
+	<div class="method-header">
+		<img src="../../media/images/Method.png" />
+		<span class="method-title">set_ico</span> (line <span class="line-number"><a href="../../__filesource/fsource_CcMvc_Response_MvcResponseHtmlHtml.php.html#a402">402</a></span>)
+	</div> 
+	
+	<!-- ========== Info from phpDoc block ========= -->
+<p class="short-description">ESTABLECE EL ICONO DEL DOCUMENTO</p>
+	<ul class="tags">
+				<li><span class="field">return:</span> AUTOREFERENCIA</li>
+				<li><span class="field">access:</span> public</li>
+			</ul>
+	
+	<div class="method-signature">
+		<span class="method-result">this</span>
+		<span class="method-name">
+			&amp;set_ico
+		</span>
+					(<span class="var-type">string</span>&nbsp;<span class="var-name">$ico</span>)
+			</div>
+	
+			<ul class="parameters">
+					<li>
+				<span class="var-type">string</span>
+				<span class="var-name">$ico</span><span class="var-description">: DIRECCION DEL ICONO</span>			</li>
+				</ul>
+		
+			
+	</div>
+<a name="methodset_title" id="set_title"><!-- --></a>
+<div class="evenrow">
+	
+	<div class="method-header">
+		<img src="../../media/images/Method.png" />
+		<span class="method-title">set_title</span> (line <span class="line-number"><a href="../../__filesource/fsource_CcMvc_Response_MvcResponseHtmlHtml.php.html#a391">391</a></span>)
+	</div> 
+	
+	<!-- ========== Info from phpDoc block ========= -->
+<p class="short-description">ESTABLECE EL TITULO DEL DOCUMENTO</p>
+	<ul class="tags">
+				<li><span class="field">return:</span> AUTOREFERENCIA</li>
+				<li><span class="field">access:</span> public</li>
+			</ul>
+	
+	<div class="method-signature">
+		<span class="method-result">this</span>
+		<span class="method-name">
+			&amp;set_title
+		</span>
+					(<span class="var-type">string</span>&nbsp;<span class="var-name">$title</span>)
+			</div>
+	
+			<ul class="parameters">
+					<li>
+				<span class="var-type">string</span>
+				<span class="var-name">$title</span><span class="var-description">: TITULO DE LA PAGINA</span>			</li>
+				</ul>
+		
+			
+	</div>
+<a name="methodShowError" id="ShowError"><!-- --></a>
+<div class="oddrow">
+	
+	<div class="method-header">
+		<img src="../../media/images/Method.png" />
+		<span class="method-title">ShowError</span> (line <span class="line-number"><a href="../../__filesource/fsource_CcMvc_Response_MvcResponseHtmlHtml.php.html#a459">459</a></span>)
+	</div> 
+	
+	<!-- ========== Info from phpDoc block ========= -->
+	<ul class="tags">
+				<li><span class="field">access:</span> protected</li>
+			</ul>
+	
+	<div class="method-signature">
+		<span class="method-result">void</span>
+		<span class="method-name">
+			ShowError
+		</span>
+				()
+			</div>
+	
+		
+			
+	</div>
+<a name="method__toString" id="__toString"><!-- --></a>
+<div class="evenrow">
+	
+	<div class="method-header">
+		<img src="../../media/images/Method.png" />
+		<span class="method-title">__toString</span> (line <span class="line-number"><a href="../../__filesource/fsource_CcMvc_Response_MvcResponseHtmlHtml.php.html#a432">432</a></span>)
+	</div> 
+	
+	<!-- ========== Info from phpDoc block ========= -->
+	<ul class="tags">
+				<li><span class="field">access:</span> public</li>
+			</ul>
+	
+	<div class="method-signature">
+		<span class="method-result">string</span>
+		<span class="method-name">
+			__toString
+		</span>
+				()
+			</div>
+	
+		
+			
+	</div>
+							<h4>Inherited Methods</h4>
+				<a name='inherited_methods'><!-- --></a>	
+									<!-- =========== Summary =========== -->
+					<p>Inherited From <span class="classname"><a href="../../CcMvc/Response/Response.html">Response</a></span></p>
+					<blockquote>
+													<img src="../../media/images/Constructor.png" alt=" "/>
+							<span class="method-name"><a href="../../CcMvc/Response/Response.html#method__construct">Response::__construct()</a></span><br>
+													<img src="../../media/images/Method.png" alt=" "/>
+							<span class="method-name"><a href="../../CcMvc/Response/Response.html#methodCtorParam">Response::CtorParam()</a></span><br>
+													<img src="../../media/images/Method.png" alt=" "/>
+							<span class="method-name"><a href="../../CcMvc/Response/Response.html#methodGetLayaut">Response::GetLayaut()</a></span><br>
+													<img src="../../media/images/Method.png" alt=" "/>
+							<span class="method-name"><a href="../../CcMvc/Response/Response.html#methodProccessConten">Response::ProccessConten()</a></span><br>
+													<img src="../../media/images/Method.png" alt=" "/>
+							<span class="method-name"><a href="../../CcMvc/Response/Response.html#methodSetLayaut">Response::SetLayaut()</a></span><br>
+											</blockquote>
+										
+		</div>
+	</div>
+
+	
+	<p class="notes" id="credit">
+		Documentation generated on Sat, 15 Oct 2016 03:03:24 +0200 by <a href="http://www.phpdoc.org" target="_blank">phpDocumentor 1.4.3</a>
+	</p>
+	</div></body>
+</html>

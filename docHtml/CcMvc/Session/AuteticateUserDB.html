@@ -1,0 +1,1018 @@
+<?xml version="1.0" encoding="utf8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+  <html xmlns="http://www.w3.org/1999/xhtml">
+		<head>
+			<!-- template designed by Marco Von Ballmoos  -->
+			<title>Docs For Class AuteticateUserDB</title>
+			<link rel="stylesheet" href="../../media/stylesheet.css" />
+						<script src="../../media/lib/classTree.js"></script>
+												<script language="javascript" type="text/javascript">
+				var imgPlus = new Image();
+				var imgMinus = new Image();
+				imgPlus.src = "../../media/images/plus.png";
+				imgMinus.src = "../../media/images/minus.png";
+				
+				function showNode(Node){
+							switch(navigator.family){
+								case 'nn4':
+									// Nav 4.x code fork...
+							var oTable = document.layers["span" + Node];
+							var oImg = document.layers["img" + Node];
+									break;
+								case 'ie4':
+									// IE 4/5 code fork...
+							var oTable = document.all["span" + Node];
+							var oImg = document.all["img" + Node];
+									break;
+								case 'gecko':
+									// Standards Compliant code fork...
+							var oTable = document.getElementById("span" + Node);
+							var oImg = document.getElementById("img" + Node);
+									break;
+							}
+					oImg.src = imgMinus.src;
+					oTable.style.display = "block";
+				}
+				
+				function hideNode(Node){
+							switch(navigator.family){
+								case 'nn4':
+									// Nav 4.x code fork...
+							var oTable = document.layers["span" + Node];
+							var oImg = document.layers["img" + Node];
+									break;
+								case 'ie4':
+									// IE 4/5 code fork...
+							var oTable = document.all["span" + Node];
+							var oImg = document.all["img" + Node];
+									break;
+								case 'gecko':
+									// Standards Compliant code fork...
+							var oTable = document.getElementById("span" + Node);
+							var oImg = document.getElementById("img" + Node);
+									break;
+							}
+					oImg.src = imgPlus.src;
+					oTable.style.display = "none";
+				}
+				
+				function nodeIsVisible(Node){
+							switch(navigator.family){
+								case 'nn4':
+									// Nav 4.x code fork...
+							var oTable = document.layers["span" + Node];
+									break;
+								case 'ie4':
+									// IE 4/5 code fork...
+							var oTable = document.all["span" + Node];
+									break;
+								case 'gecko':
+									// Standards Compliant code fork...
+							var oTable = document.getElementById("span" + Node);
+									break;
+							}
+					return (oTable && oTable.style.display == "block");
+				}
+				
+				function toggleNodeVisibility(Node){
+					if (nodeIsVisible(Node)){
+						hideNode(Node);
+					}else{
+						showNode(Node);
+					}
+				}
+			</script>
+					</head>
+		<body>
+			<div class="page-body">			
+<h2 class="class-name"><img src="../../media/images/AbstractClass_logo.png"
+														alt="Abstract Class"
+														title="Abstract Class"
+														style="vertical-align: middle"> AuteticateUserDB</h2>
+
+<a name="sec-description"></a>
+<div class="info-box">
+	<div class="info-box-title">Description</div>
+	<div class="nav-bar">
+					<span class="disabled">Description</span> |
+													<a href="#sec-var-summary">Vars</a> (<a href="#sec-vars">details</a>)
+						|											<a href="#sec-method-summary">Methods</a> (<a href="#sec-methods">details</a>)
+						
+											<a href="#sec-const-summary">Constants</a> (<a href="#sec-consts">details</a>)
+						
+			</div>
+	<div class="info-box-body">
+        		<!-- ========== Info from phpDoc block ========= -->
+<p class="short-description">Description of AuteticateUserDB</p>
+<p class="description"><p>Provee una interface abstracta para clases Autenticadoras de usuarios usando la base de datos  incluye seguridad de contraseñas</p></p>
+	<ul class="tags">
+				<li><span class="field">method:</span> void OnFailed(): OnFailed(mixes ...$_)  ESTE METODO SE EJECUTARA CUANDO LA AUTENTICACION FALLE</li>
+				<li><span class="field">method:</span> void OnSuccess(): OnSuccess(mixes ...$_)  ESTE METODO SE EJECUTARA CUANDO LA AUTENTICACION TENGA EXITO.</li>
+				<li><span class="field">author:</span> Enyerber Franco</li>
+				<li><span class="field">abstract:</span> </li>
+				<li><span class="field">filesource:</span> <a href="../../__filesource/fsource_CcMvc_Session_MvcsessionAuteticateUserDB.php.html">Source Code for this file</a></li>
+				<li><span class="field">uses:</span> <a href="../../CcMvc/Session/Autenticate.html">Autenticate</a></li>
+				<li><span class="field">example:</span> example not found</li>
+			</ul>
+		<p class="notes">
+			Located in <a class="field" href="_Mvc---session---AuteticateUserDB.php.html">/Mvc/session/AuteticateUserDB.php</a> (line <span class="field"><a href="../../__filesource/fsource_CcMvc_Session_MvcsessionAuteticateUserDB.php.html#a39">39</a></span>)
+		</p>
+		
+				
+		<pre>\
+   |
+   --<a href="../../CcMvc/Session/SESSION.html">SESSION</a>
+      |
+      --<a href="../../CcMvc/Session/Autenticate.html">Autenticate</a>
+         |
+         --AuteticateUserDB</pre>
+	
+			</div>
+</div>
+
+
+	<a name="sec-const-summary"></a>
+	<div class="info-box">
+		<div class="info-box-title">Class Constant Summary</span></div>
+		<div class="nav-bar">
+			<a href="#sec-description">Description</a> |
+						<span class="disabled">Constants</span> (<a href="#sec-consts">details</a>)
+												<a href="#sec-var-summary">Vars</a> (<a href="#sec-vars">details</a>)
+				 
+				|
+										| 
+									<a href="#sec-method-summary">Methods</a> (<a href="#sec-methods">details</a>)
+							
+					</div>
+		<div class="info-box-body">
+			<div class="const-summary">
+								<div class="const-title">
+					<img src="../../media/images/Constant.png" alt=" " />
+					<a href="#CollPassword" title="details" class="const-name">CollPassword</a> = 					<span class="var-type"> 'CollPassword'</span>
+
+				</div>
+								<div class="const-title">
+					<img src="../../media/images/Constant.png" alt=" " />
+					<a href="#CollUser" title="details" class="const-name">CollUser</a> = 					<span class="var-type"> 'CollUser'</span>
+
+				</div>
+								<div class="const-title">
+					<img src="../../media/images/Constant.png" alt=" " />
+					<a href="#CollUserType" title="details" class="const-name">CollUserType</a> = 					<span class="var-type"> 'CollUserType'</span>
+
+				</div>
+								<div class="const-title">
+					<img src="../../media/images/Constant.png" alt=" " />
+					<a href="#DenyAccessForUser" title="details" class="const-name">DenyAccessForUser</a> = 					<span class="var-type"> 0x10</span>
+
+				</div>
+								<div class="const-title">
+					<img src="../../media/images/Constant.png" alt=" " />
+					<a href="#FailedDataBase" title="details" class="const-name">FailedDataBase</a> = 					<span class="var-type"> 0x11</span>
+
+				</div>
+								<div class="const-title">
+					<img src="../../media/images/Constant.png" alt=" " />
+					<a href="#TablaUsers" title="details" class="const-name">TablaUsers</a> = 					<span class="var-type"> 'Tabla'</span>
+
+				</div>
+							</div>
+		</div>
+	</div>
+
+	<a name="sec-var-summary"></a>
+	<div class="info-box">
+		<div class="info-box-title">Variable Summary</span></div>
+		<div class="nav-bar">
+			<a href="#sec-description">Description</a> |
+						<span class="disabled">Vars</span> (<a href="#sec-vars">details</a>)
+							| 
+									<a href="#sec-method-summary">Methods</a> (<a href="#sec-methods">details</a>)
+							
+															<a href="#sec-const-summary">Constants</a> (<a href="#sec-consts">details</a>)
+							
+					</div>
+		<div class="info-box-body">
+			<div class="var-summary">
+																																																<div class="var-title">
+					<img src="../../media/images/Variable.png" alt=" " />
+					<span class="var-type">DBtabla</span>
+					<a href="#$DBtabla" title="details" class="var-name">$DBtabla</a>
+				</div>
+																<div class="var-title">
+					<img src="../../media/images/Variable.png" alt=" " />
+					<span class="var-type">mixed</span>
+					<a href="#$ErrnoDB" title="details" class="var-name">$ErrnoDB</a>
+				</div>
+																<div class="var-title">
+					<img src="../../media/images/Variable.png" alt=" " />
+					<span class="var-type">mixed</span>
+					<a href="#$ErrorDB" title="details" class="var-name">$ErrorDB</a>
+				</div>
+																<div class="var-title">
+					<img src="../../media/images/Variable.png" alt=" " />
+					<span class="var-type">\Cc\PasswordHash</span>
+					<a href="#$PasswordHash" title="details" class="var-name">$PasswordHash</a>
+				</div>
+											</div>
+		</div>
+	</div>
+
+	<a name="sec-method-summary"></a>
+	<div class="info-box">
+		<div class="info-box-title">Method Summary</span></div>
+		<div class="nav-bar">
+			<a href="#sec-description">Description</a> |
+															<a href="#sec-const-summary">Constants</a> (<a href="#sec-consts">details</a>)
+							
+															<a href="#sec-var-summary">Vars</a> (<a href="#sec-vars">details</a>)
+				 
+				|
+						<span class="disabled">Methods</span> (<a href="#sec-methods">details</a>)
+		</div>
+		<div class="info-box-body">			
+			<div class="method-summary">
+																																																																																																							
+				<div class="method-definition">
+					<img src="../../media/images/Method.png" alt=" "/>
+											<span class="method-result">array</span>
+										<a href="#Autentica" title="details" class="method-name">Autentica</a>
+										()
+									</div>
+															
+				<div class="method-definition">
+					<img src="../../media/images/Method.png" alt=" "/>
+											<span class="method-result">bool</span>
+										<a href="#Auth" title="details" class="method-name">Auth</a>
+										()
+									</div>
+															
+				<div class="method-definition">
+					<img src="../../media/images/Method.png" alt=" "/>
+											<span class="method-result">void</span>
+										<a href="#CloseSessionUser" title="details" class="method-name">CloseSessionUser</a>
+											([<span class="var-type"></span>&nbsp;<span class="var-name">$destroy</span> = <span class="var-default">false</span>])
+									</div>
+															
+				<div class="method-definition">
+					<img src="../../media/images/Method.png" alt=" "/>
+											<span class="method-result">void</span>
+										<a href="#CreateDBTabla" title="details" class="method-name">CreateDBTabla</a>
+										()
+									</div>
+															
+				<div class="method-definition">
+					<img src="../../media/images/Method.png" alt=" "/>
+											<span class="method-result">bool</span>
+										<a href="#CreteUser" title="details" class="method-name">CreteUser</a>
+											(<span class="var-type">string|array|\ArrayAccess</span>&nbsp;<span class="var-name">$password</span>, [<span class="var-type">array|\ArrayAccess</span>&nbsp;<span class="var-name">$columsUser</span> = <span class="var-default">[]</span>])
+									</div>
+															
+				<div class="method-definition">
+					<img src="../../media/images/Constructor.png" alt=" "/>
+											<span class="method-result">AuteticateUserDB</span>
+										<a href="#__construct" title="details" class="method-name">__construct</a>
+											([<span class="var-type">array</span>&nbsp;<span class="var-name">$exeptions</span> = <span class="var-default">['*/*/*']</span>])
+									</div>
+															
+				<div class="method-definition">
+					<img src="../../media/images/AbstractMethod.png" alt=" "/>
+											<span class="method-result">array</span>
+										<a href="#InfoUserDB" title="details" class="method-name">InfoUserDB</a>
+										()
+									</div>
+															
+				<div class="method-definition">
+					<img src="../../media/images/Method.png" alt=" "/>
+											<span class="method-result">boolean</span>
+										<a href="#IsUser" title="details" class="method-name">IsUser</a>
+											([<span class="var-type">string</span>&nbsp;<span class="var-name">$type</span> = <span class="var-default">'*'</span>])
+									</div>
+															
+				<div class="method-definition">
+					<img src="../../media/images/Method.png" alt=" "/>
+											<span class="method-result">boolean</span>
+										<a href="#Login" title="details" class="method-name">Login</a>
+											(<span class="var-type">string</span>&nbsp;<span class="var-name">$username</span>, <span class="var-type">string</span>&nbsp;<span class="var-name">$password</span>)
+									</div>
+															
+				<div class="method-definition">
+					<img src="../../media/images/Method.png" alt=" "/>
+											<span class="method-result">bool|NULL</span>
+										<a href="#UpdatePassword" title="details" class="method-name">UpdatePassword</a>
+											(<span class="var-type">string</span>&nbsp;<span class="var-name">$LastPass</span>, <span class="var-type">string</span>&nbsp;<span class="var-name">$newPass</span>)
+									</div>
+															
+				<div class="method-definition">
+					<img src="../../media/images/Method.png" alt=" "/>
+											<span class="method-result">bool</span>
+										<a href="#UpdateUser" title="details" class="method-name">UpdateUser</a>
+											(<span class="var-type">string|array|\ArrayAccess</span>&nbsp;<span class="var-name">$password</span>, [<span class="var-type">array|\ArrayAccess</span>&nbsp;<span class="var-name">$columsUser</span> = <span class="var-default">[]</span>])
+									</div>
+											</div>
+		</div>
+	</div>		
+
+	<a name="sec-vars"></a>
+	<div class="info-box">
+		<div class="info-box-title">Variables</div>
+		<div class="nav-bar">
+			<a href="#sec-description">Description</a> |
+										<a href="#sec-var-summary">Vars</a> (<span class="disabled">details</span>)
+						
+			
+												<a href="#sec-const-summary">Constants</a> (<a href="#sec-consts">details</a>)
+							
+										| 
+									<a href="#sec-method-summary">Methods</a> (<a href="#sec-methods">details</a>)
+							
+					</div>
+		<div class="info-box-body">
+			
+<a name="var$DBtabla" id="$DBtabla"><!-- --></A>
+<div class="oddrow">
+
+	<div class="var-header">
+		<img src="../../media/images/Variable.png" />
+		<span class="var-title">
+			<span class="var-type">DBtabla</span>
+			<span class="var-name">$DBtabla</span>
+						(line <span class="line-number"><a href="../../__filesource/fsource_CcMvc_Session_MvcsessionAuteticateUserDB.php.html#a85">85</a></span>)
+		</span>
+	</div>
+
+	<!-- ========== Info from phpDoc block ========= -->
+	<ul class="tags">
+				<li><span class="field">access:</span> protected</li>
+			</ul>
+	
+	
+		
+		
+
+</div>
+<a name="var$ErrnoDB" id="$ErrnoDB"><!-- --></A>
+<div class="evenrow">
+
+	<div class="var-header">
+		<img src="../../media/images/Variable.png" />
+		<span class="var-title">
+			<span class="var-type">mixed</span>
+			<span class="var-name">$ErrnoDB</span>
+						(line <span class="line-number"><a href="../../__filesource/fsource_CcMvc_Session_MvcsessionAuteticateUserDB.php.html#a79">79</a></span>)
+		</span>
+	</div>
+
+	<!-- ========== Info from phpDoc block ========= -->
+	<ul class="tags">
+				<li><span class="field">access:</span> public</li>
+			</ul>
+	
+	
+		
+		
+
+</div>
+<a name="var$ErrorDB" id="$ErrorDB"><!-- --></A>
+<div class="oddrow">
+
+	<div class="var-header">
+		<img src="../../media/images/Variable.png" />
+		<span class="var-title">
+			<span class="var-type">mixed</span>
+			<span class="var-name">$ErrorDB</span>
+						(line <span class="line-number"><a href="../../__filesource/fsource_CcMvc_Session_MvcsessionAuteticateUserDB.php.html#a78">78</a></span>)
+		</span>
+	</div>
+
+	<!-- ========== Info from phpDoc block ========= -->
+	<ul class="tags">
+				<li><span class="field">access:</span> public</li>
+			</ul>
+	
+	
+		
+		
+
+</div>
+<a name="var$PasswordHash" id="$PasswordHash"><!-- --></A>
+<div class="evenrow">
+
+	<div class="var-header">
+		<img src="../../media/images/Variable.png" />
+		<span class="var-title">
+			<span class="var-type">\Cc\PasswordHash</span>
+			<span class="var-name">$PasswordHash</span>
+						(line <span class="line-number"><a href="../../__filesource/fsource_CcMvc_Session_MvcsessionAuteticateUserDB.php.html#a46">46</a></span>)
+		</span>
+	</div>
+
+	<!-- ========== Info from phpDoc block ========= -->
+	<ul class="tags">
+				<li><span class="field">access:</span> protected</li>
+			</ul>
+	
+	
+		
+		
+
+</div>
+							<h4>Inherited Variables</h4>
+				<A NAME='inherited_vars'><!-- --></A>
+									<p>Inherited from <span class="classname"><a href="../../CcMvc/Session/Autenticate.html">Autenticate</a></span></p>
+					<blockquote>
+													<img src="../../media/images/Variable.png" />
+							<span class="var-title">
+								<span class="var-name"><a href="../../CcMvc/Session/Autenticate.html#var$AccessUser">Autenticate::$AccessUser</a></span><br>
+							</span>
+													<img src="../../media/images/Variable.png" />
+							<span class="var-title">
+								<span class="var-name"><a href="../../CcMvc/Session/Autenticate.html#var$conf">Autenticate::$conf</a></span><br>
+							</span>
+													<img src="../../media/images/Variable.png" />
+							<span class="var-title">
+								<span class="var-name"><a href="../../CcMvc/Session/Autenticate.html#var$DependenceInyector">Autenticate::$DependenceInyector</a></span><br>
+							</span>
+													<img src="../../media/images/Variable.png" />
+							<span class="var-title">
+								<span class="var-name"><a href="../../CcMvc/Session/Autenticate.html#var$param">Autenticate::$param</a></span><br>
+							</span>
+													<img src="../../media/images/Variable.png" />
+							<span class="var-title">
+								<span class="var-name"><a href="../../CcMvc/Session/Autenticate.html#var$ReadAndClose">Autenticate::$ReadAndClose</a></span><br>
+							</span>
+											</blockquote> 
+										
+		</div>
+	</div>
+	
+	<a name="sec-methods"></a>
+	<div class="info-box">
+		<div class="info-box-title">Methods</div>
+		<div class="nav-bar">
+			<a href="#sec-description">Description</a> |
+															<a href="#sec-var-summary">Vars</a> (<a href="#sec-vars">details</a>)
+																			<a href="#sec-const-summary">Constants</a> (<a href="#sec-consts">details</a>)
+							
+										<a href="#sec-method-summary">Methods</a> (<span class="disabled">details</span>)
+						
+		</div>
+		<div class="info-box-body">
+			<A NAME='method_detail'></A>
+<a name="methodAutentica" id="Autentica"><!-- --></a>
+<div class="oddrow">
+	
+	<div class="method-header">
+		<img src="../../media/images/Method.png" />
+		<span class="method-title">Autentica</span> (line <span class="line-number"><a href="../../__filesource/fsource_CcMvc_Session_MvcsessionAuteticateUserDB.php.html#a363">363</a></span>)
+	</div> 
+	
+	<!-- ========== Info from phpDoc block ========= -->
+<p class="short-description">realiza las operaciones de autenticacion</p>
+<p class="description"><p>verificando si el usuario en session existen en la base de datos</p></p>
+	<ul class="tags">
+				<li><span class="field">access:</span> protected</li>
+			</ul>
+	
+	<div class="method-signature">
+		<span class="method-result">array</span>
+		<span class="method-name">
+			Autentica
+		</span>
+				()
+			</div>
+	
+		
+			
+	</div>
+<a name="methodAuth" id="Auth"><!-- --></a>
+<div class="evenrow">
+	
+	<div class="method-header">
+		<img src="../../media/images/Method.png" />
+		<span class="method-title">Auth</span> (line <span class="line-number"><a href="../../__filesource/fsource_CcMvc_Session_MvcsessionAuteticateUserDB.php.html#a494">494</a></span>)
+	</div> 
+	
+	<!-- ========== Info from phpDoc block ========= -->
+<p class="short-description">EJECUTA TODA LA AUTENTICACION NO PUEDE SER REDEFINIDO</p>
+	<ul class="tags">
+				<li><span class="field">access:</span> public</li>
+			</ul>
+	
+	<div class="method-signature">
+		<span class="method-result">bool</span>
+		<span class="method-name">
+			Auth
+		</span>
+				()
+			</div>
+	
+		
+			<hr class="separator" />
+		<div class="notes">Redefinition of:</div>
+		<dl>
+			<dt><a href="../../CcMvc/Session/Autenticate.html#methodAuth">Autenticate::Auth()</a></dt>
+						<dd>EJECUTA TODA LA AUTENTICACION NO PUEDE SER REDEFINIDO</dd>
+					</dl>
+			
+	</div>
+<a name="methodCloseSessionUser" id="CloseSessionUser"><!-- --></a>
+<div class="oddrow">
+	
+	<div class="method-header">
+		<img src="../../media/images/Method.png" />
+		<span class="method-title">CloseSessionUser</span> (line <span class="line-number"><a href="../../__filesource/fsource_CcMvc_Session_MvcsessionAuteticateUserDB.php.html#a347">347</a></span>)
+	</div> 
+	
+	<!-- ========== Info from phpDoc block ========= -->
+<p class="short-description">elimina los datos del usuario de la session</p>
+	<ul class="tags">
+				<li><span class="field">access:</span> public</li>
+			</ul>
+	
+	<div class="method-signature">
+		<span class="method-result">void</span>
+		<span class="method-name">
+			CloseSessionUser
+		</span>
+					([<span class="var-type"></span>&nbsp;<span class="var-name">$destroy</span> = <span class="var-default">false</span>])
+			</div>
+	
+			<ul class="parameters">
+					<li>
+				<span class="var-type"></span>
+				<span class="var-name">$destroy</span>			</li>
+				</ul>
+		
+			
+	</div>
+<a name="methodCreateDBTabla" id="CreateDBTabla"><!-- --></a>
+<div class="evenrow">
+	
+	<div class="method-header">
+		<img src="../../media/images/Method.png" />
+		<span class="method-title">CreateDBTabla</span> (line <span class="line-number"><a href="../../__filesource/fsource_CcMvc_Session_MvcsessionAuteticateUserDB.php.html#a148">148</a></span>)
+	</div> 
+	
+	<!-- ========== Info from phpDoc block ========= -->
+	<ul class="tags">
+				<li><span class="field">access:</span> public</li>
+			</ul>
+	
+	<div class="method-signature">
+		<span class="method-result">void</span>
+		<span class="method-name">
+			CreateDBTabla
+		</span>
+				()
+			</div>
+	
+		
+			
+	</div>
+<a name="methodCreteUser" id="CreteUser"><!-- --></a>
+<div class="oddrow">
+	
+	<div class="method-header">
+		<img src="../../media/images/Method.png" />
+		<span class="method-title">CreteUser</span> (line <span class="line-number"><a href="../../__filesource/fsource_CcMvc_Session_MvcsessionAuteticateUserDB.php.html#a181">181</a></span>)
+	</div> 
+	
+	<!-- ========== Info from phpDoc block ========= -->
+<p class="short-description">INSERTA UN USUARIO EN LA BASE DE DATOS CREANDO UN HASH SEGURO PARA LA CONTRASEÑA</p>
+	<ul class="tags">
+				<li><span class="field">return:</span> si no ocurrio ningun error retornara true de lo contrario false</li>
+				<li><span class="field">access:</span> public</li>
+			</ul>
+	
+	<div class="method-signature">
+		<span class="method-result">bool</span>
+		<span class="method-name">
+			CreteUser
+		</span>
+					(<span class="var-type">string|array|\ArrayAccess</span>&nbsp;<span class="var-name">$password</span>, [<span class="var-type">array|\ArrayAccess</span>&nbsp;<span class="var-name">$columsUser</span> = <span class="var-default">[]</span>])
+			</div>
+	
+			<ul class="parameters">
+					<li>
+				<span class="var-type">string|array|\ArrayAccess</span>
+				<span class="var-name">$password</span><span class="var-description">: si es un string sera tomada como la contraseña en la tabla de usuarios  si es un array sera tomado como el parametro $columsUser</span>			</li>
+					<li>
+				<span class="var-type">array|\ArrayAccess</span>
+				<span class="var-name">$columsUser</span><span class="var-description">: la columna a insetar en la tabla de usuarion en la base de datos debe ser un array de tipo [columna=&gt;valor]</span>			</li>
+				</ul>
+		
+			
+	</div>
+<a name="method__construct" id="__construct"><!-- --></a>
+<div class="evenrow">
+	
+	<div class="method-header">
+		<img src="../../media/images/Constructor.png" />
+		<span class="method-title">Constructor __construct</span> (line <span class="line-number"><a href="../../__filesource/fsource_CcMvc_Session_MvcsessionAuteticateUserDB.php.html#a98">98</a></span>)
+	</div> 
+	
+	<!-- ========== Info from phpDoc block ========= -->
+	<ul class="tags">
+				<li><span class="field">access:</span> public</li>
+			</ul>
+	
+	<div class="method-signature">
+		<span class="method-result">AuteticateUserDB</span>
+		<span class="method-name">
+			__construct
+		</span>
+					([<span class="var-type">array</span>&nbsp;<span class="var-name">$exeptions</span> = <span class="var-default">['*/*/*']</span>])
+			</div>
+	
+			<ul class="parameters">
+					<li>
+				<span class="var-type">array</span>
+				<span class="var-name">$exeptions</span>			</li>
+				</ul>
+		
+			<hr class="separator" />
+		<div class="notes">Redefinition of:</div>
+		<dl>
+			<dt><a href="../../CcMvc/Session/Autenticate.html#method__construct">Autenticate::__construct()</a></dt>
+						<dd>CONSTRUCTOR DE LA CLASE</dd>
+					</dl>
+			
+	</div>
+<a name="methodInfoUserDB" id="InfoUserDB"><!-- --></a>
+<div class="oddrow">
+	
+	<div class="method-header">
+		<img src="../../media/images/AbstractMethod.png" />
+		<span class="method-title">InfoUserDB</span> (line <span class="line-number"><a href="../../__filesource/fsource_CcMvc_Session_MvcsessionAuteticateUserDB.php.html#a172">172</a></span>)
+	</div> 
+	
+	<!-- ========== Info from phpDoc block ========= -->
+<p class="short-description">debe retornar un array asociativo con el nombre de la tabla en la base de datos que almacena los usuarios, el nombre de la columna de nombre se usuario , el nombre de la columna de contraseña</p>
+<p class="description"><p><div class="src-code"><ol><li><div class="src-line"><span class="src-php">&lt;?php</span></div></li>
+<li><div class="src-line">&nbsp;<span class="src-key">protected&nbsp;</span><span class="src-key">function&nbsp;</span><a href="../../CcMvc/Session/AuteticateUserDB.html#methodInfoUserDB">InfoUserDB</a><span class="src-sym">(</span><span class="src-sym">)</span></div></li>
+<li><div class="src-line">&nbsp;<span class="src-sym">{</span></div></li>
+<li><div class="src-line">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="src-key">return&nbsp;</span><span class="src-sym">[</span></div></li>
+<li><div class="src-line">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="src-id">self</span><span class="src-sym">::</span><span class="src-id">TablaUsers</span>=&gt;<span class="src-str">'TablaDeUsuarios'</span><span class="src-sym">,</span></div></li>
+<li><div class="src-line">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="src-id">self</span><span class="src-sym">::</span><span class="src-id">CollUser</span>=&gt;<span class="src-str">'ColumnaDeNombreDeUsuario'</span><span class="src-sym">,</span></div></li>
+<li><div class="src-line">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="src-id">self</span><span class="src-sym">::</span><span class="src-id">CollPassword</span>=&gt;<span class="src-str">'ColumnaDeContraseña'</span><span class="src-sym">,</span></div></li>
+<li><div class="src-line">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="src-id">self</span><span class="src-sym">::</span><span class="src-id">CollUserType</span>=&gt;<span class="src-str">''&nbsp;&nbsp;</span><span class="src-comm">//opcional</span></div></li>
+<li><div class="src-line">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="src-sym">]</span><span class="src-sym">;</span></div></li>
+<li><div class="src-line">&nbsp;<span class="src-sym">}</span></div></li>
+</ol></div></p></p>
+	<ul class="tags">
+				<li><span class="field">abstract:</span> </li>
+				<li><span class="field">access:</span> protected</li>
+				<li><span class="field">uses:</span> <a href="../../CcMvc/Session/AuteticateUserDB.html#constTablaUsers">AuteticateUserDB::TablaUsers</a> - SE USARA CON INDICE PARA EL NOMBRE DE LA TABLA DE USUARIOS EN LA BASE DE DATOS</li>
+				<li><span class="field">uses:</span> <a href="../../CcMvc/Session/AuteticateUserDB.html#constCollUserType">AuteticateUserDB::CollUserType</a> - SE USARA COMO INDICE PARA EL TIPO DE USUARIO DE LA COLUMNA DE LA TABLA DE USUARIOS EN LA BASE DE DATOS</li>
+				<li><span class="field">uses:</span> <a href="../../CcMvc/Session/AuteticateUserDB.html#constCollUser">AuteticateUserDB::CollUser</a> - SE USARA COMO INDICE PARA EL NOMBRE DE LA COLUMNA EN LA TABLA DE USUARIOS QUE ALMACENARA EL NOMBRE DE USUARIO O IDENTIFICADOR UNICO</li>
+				<li><span class="field">uses:</span> <a href="../../CcMvc/Session/AuteticateUserDB.html#constCollPassword">AuteticateUserDB::CollPassword</a> - SE USARA COMO INDICE PARA EL NOMBRE DE LA COLUMNA EN LA TABLA DE USUARIOS QUE ALMACENARA EL HASH DE CONTRASEÑA</li>
+			</ul>
+	
+	<div class="method-signature">
+		<span class="method-result">array</span>
+		<span class="method-name">
+			InfoUserDB
+		</span>
+				()
+			</div>
+	
+		
+			
+	</div>
+<a name="methodIsUser" id="IsUser"><!-- --></a>
+<div class="evenrow">
+	
+	<div class="method-header">
+		<img src="../../media/images/Method.png" />
+		<span class="method-title">IsUser</span> (line <span class="line-number"><a href="../../__filesource/fsource_CcMvc_Session_MvcsessionAuteticateUserDB.php.html#a123">123</a></span>)
+	</div> 
+	
+	<!-- ========== Info from phpDoc block ========= -->
+<p class="short-description">indica si la session actual fue iniciada por u tipo de usuario especifico</p>
+<p class="description"><p>si no se pasa el parametro $type indicara solamente si hay algun usuario registrado en la session</p></p>
+	<ul class="tags">
+				<li><span class="field">access:</span> public</li>
+			</ul>
+	
+	<div class="method-signature">
+		<span class="method-result">boolean</span>
+		<span class="method-name">
+			IsUser
+		</span>
+					([<span class="var-type">string</span>&nbsp;<span class="var-name">$type</span> = <span class="var-default">'*'</span>])
+			</div>
+	
+			<ul class="parameters">
+					<li>
+				<span class="var-type">string</span>
+				<span class="var-name">$type</span><span class="var-description">: tipo de usuario</span>			</li>
+				</ul>
+		
+			
+	</div>
+<a name="methodLogin" id="Login"><!-- --></a>
+<div class="oddrow">
+	
+	<div class="method-header">
+		<img src="../../media/images/Method.png" />
+		<span class="method-title">Login</span> (line <span class="line-number"><a href="../../__filesource/fsource_CcMvc_Session_MvcsessionAuteticateUserDB.php.html#a295">295</a></span>)
+	</div> 
+	
+	<!-- ========== Info from phpDoc block ========= -->
+<p class="short-description">VERIFICA E INICIA LA SESSION DE UN USUARIO Y CONTRASEÑA DADO</p>
+	<ul class="tags">
+				<li><span class="field">return:</span> TRUE SI LA CONTRASEÑA COINCIDE CON EL NOMBRE DE LO CONTRARIO FALSE, SI OCURRE UN ERROR EN LA BASE DE DATOS RETORNA NULL</li>
+				<li><span class="field">access:</span> public</li>
+			</ul>
+	
+	<div class="method-signature">
+		<span class="method-result">boolean</span>
+		<span class="method-name">
+			Login
+		</span>
+					(<span class="var-type">string</span>&nbsp;<span class="var-name">$username</span>, <span class="var-type">string</span>&nbsp;<span class="var-name">$password</span>)
+			</div>
+	
+			<ul class="parameters">
+					<li>
+				<span class="var-type">string</span>
+				<span class="var-name">$username</span><span class="var-description">: nombre de usuario</span>			</li>
+					<li>
+				<span class="var-type">string</span>
+				<span class="var-name">$password</span><span class="var-description">: contraseña de usuario</span>			</li>
+				</ul>
+		
+			
+	</div>
+<a name="methodUpdatePassword" id="UpdatePassword"><!-- --></a>
+<div class="evenrow">
+	
+	<div class="method-header">
+		<img src="../../media/images/Method.png" />
+		<span class="method-title">UpdatePassword</span> (line <span class="line-number"><a href="../../__filesource/fsource_CcMvc_Session_MvcsessionAuteticateUserDB.php.html#a253">253</a></span>)
+	</div> 
+	
+	<!-- ========== Info from phpDoc block ========= -->
+<p class="short-description">EDITA LA CONTRASEÑA DEL USUARIO ACTIVO EN LA SESSION</p>
+<p class="description"><p>nota: una ves cambiada la contraseña la session se destruye</p></p>
+	<ul class="tags">
+				<li><span class="field">return:</span> si ocurre un error en la base de datos retornara null, en caso que la autenticacion falle retornara false y si se cambia la contraseña con exito retorna true</li>
+				<li><span class="field">access:</span> public</li>
+			</ul>
+	
+	<div class="method-signature">
+		<span class="method-result">bool|NULL</span>
+		<span class="method-name">
+			UpdatePassword
+		</span>
+					(<span class="var-type">string</span>&nbsp;<span class="var-name">$LastPass</span>, <span class="var-type">string</span>&nbsp;<span class="var-name">$newPass</span>)
+			</div>
+	
+			<ul class="parameters">
+					<li>
+				<span class="var-type">string</span>
+				<span class="var-name">$LastPass</span><span class="var-description">: contraseña anterior</span>			</li>
+					<li>
+				<span class="var-type">string</span>
+				<span class="var-name">$newPass</span><span class="var-description">: nueva contraseña</span>			</li>
+				</ul>
+		
+			
+	</div>
+<a name="methodUpdateUser" id="UpdateUser"><!-- --></a>
+<div class="oddrow">
+	
+	<div class="method-header">
+		<img src="../../media/images/Method.png" />
+		<span class="method-title">UpdateUser</span> (line <span class="line-number"><a href="../../__filesource/fsource_CcMvc_Session_MvcsessionAuteticateUserDB.php.html#a218">218</a></span>)
+	</div> 
+	
+	<!-- ========== Info from phpDoc block ========= -->
+<p class="short-description">EDITA LA INFORMACION DE UN USUARIO EN LA BASE DE DATOS CREANDO UN HASH SEGURO PARA LA CONTRASEÑA</p>
+	<ul class="tags">
+				<li><span class="field">return:</span> si no ocurrio ningun error retornara true de lo contrario false</li>
+				<li><span class="field">access:</span> public</li>
+			</ul>
+	
+	<div class="method-signature">
+		<span class="method-result">bool</span>
+		<span class="method-name">
+			UpdateUser
+		</span>
+					(<span class="var-type">string|array|\ArrayAccess</span>&nbsp;<span class="var-name">$password</span>, [<span class="var-type">array|\ArrayAccess</span>&nbsp;<span class="var-name">$columsUser</span> = <span class="var-default">[]</span>])
+			</div>
+	
+			<ul class="parameters">
+					<li>
+				<span class="var-type">string|array|\ArrayAccess</span>
+				<span class="var-name">$password</span><span class="var-description">: si es un string sera tomada como la contraseña en la tabla de usuarios  si es un array sera tomado como el parametro $columsUser</span>			</li>
+					<li>
+				<span class="var-type">array|\ArrayAccess</span>
+				<span class="var-name">$columsUser</span><span class="var-description">: la columna a insetar en la tabla de usuarion en la base de datos deve ser un array de tipo [columna=&gt;valor]</span>			</li>
+				</ul>
+		
+			
+	</div>
+							<h4>Inherited Methods</h4>
+				<a name='inherited_methods'><!-- --></a>	
+									<!-- =========== Summary =========== -->
+					<p>Inherited From <span class="classname"><a href="../../CcMvc/Session/Autenticate.html">Autenticate</a></span></p>
+					<blockquote>
+													<img src="../../media/images/Constructor.png" alt=" "/>
+							<span class="method-name"><a href="../../CcMvc/Session/Autenticate.html#method__construct">Autenticate::__construct()</a></span><br>
+													<img src="../../media/images/Method.png" alt=" "/>
+							<span class="method-name"><a href="../../CcMvc/Session/Autenticate.html#methodAuth">Autenticate::Auth()</a></span><br>
+													<img src="../../media/images/Method.png" alt=" "/>
+							<span class="method-name"><a href="../../CcMvc/Session/Autenticate.html#methodCommit">Autenticate::Commit()</a></span><br>
+													<img src="../../media/images/Method.png" alt=" "/>
+							<span class="method-name"><a href="../../CcMvc/Session/Autenticate.html#methodEstableceParam">Autenticate::EstableceParam()</a></span><br>
+													<img src="../../media/images/Method.png" alt=" "/>
+							<span class="method-name"><a href="../../CcMvc/Session/Autenticate.html#methodExisParam">Autenticate::ExisParam()</a></span><br>
+													<img src="../../media/images/Method.png" alt=" "/>
+							<span class="method-name"><a href="../../CcMvc/Session/Autenticate.html#methodIsFailed">Autenticate::IsFailed()</a></span><br>
+													<img src="../../media/images/Method.png" alt=" "/>
+							<span class="method-name"><a href="../../CcMvc/Session/Autenticate.html#methodis_Autenticable">Autenticate::is_Autenticable()</a></span><br>
+													<img src="../../media/images/Method.png" alt=" "/>
+							<span class="method-name"><a href="../../CcMvc/Session/Autenticate.html#methodoffsetSet">Autenticate::offsetSet()</a></span><br>
+													<img src="../../media/images/Method.png" alt=" "/>
+							<span class="method-name"><a href="../../CcMvc/Session/Autenticate.html#methodoffsetUnset">Autenticate::offsetUnset()</a></span><br>
+													<img src="../../media/images/Method.png" alt=" "/>
+							<span class="method-name"><a href="../../CcMvc/Session/Autenticate.html#methodSetDependenceInyector">Autenticate::SetDependenceInyector()</a></span><br>
+													<img src="../../media/images/Method.png" alt=" "/>
+							<span class="method-name"><a href="../../CcMvc/Session/Autenticate.html#methodSetParam">Autenticate::SetParam()</a></span><br>
+													<img src="../../media/images/Method.png" alt=" "/>
+							<span class="method-name"><a href="../../CcMvc/Session/Autenticate.html#methodSetReadAndClose">Autenticate::SetReadAndClose()</a></span><br>
+													<img src="../../media/images/Method.png" alt=" "/>
+							<span class="method-name"><a href="../../CcMvc/Session/Autenticate.html#methodStart">Autenticate::Start()</a></span><br>
+													<img src="../../media/images/Method.png" alt=" "/>
+							<span class="method-name"><a href="../../CcMvc/Session/Autenticate.html#methodTingerEvent">Autenticate::TingerEvent()</a></span><br>
+													<img src="../../media/images/Method.png" alt=" "/>
+							<span class="method-name"><a href="../../CcMvc/Session/Autenticate.html#methodTingerFailed">Autenticate::TingerFailed()</a></span><br>
+													<img src="../../media/images/Method.png" alt=" "/>
+							<span class="method-name"><a href="../../CcMvc/Session/Autenticate.html#methodTypeFailed">Autenticate::TypeFailed()</a></span><br>
+													<img src="../../media/images/Method.png" alt=" "/>
+							<span class="method-name"><a href="../../CcMvc/Session/Autenticate.html#methodverifica">Autenticate::verifica()</a></span><br>
+													<img src="../../media/images/Method.png" alt=" "/>
+							<span class="method-name"><a href="../../CcMvc/Session/Autenticate.html#method__set">Autenticate::__set()</a></span><br>
+											</blockquote>
+									<!-- =========== Summary =========== -->
+					<p>Inherited From <span class="classname"><a href="../../CcMvc/Session/SESSION.html">SESSION</a></span></p>
+					<blockquote>
+													<img src="../../media/images/Constructor.png" alt=" "/>
+							<span class="method-name"><a href="../../CcMvc/Session/SESSION.html#method__construct">SESSION::__construct()</a></span><br>
+													<img src="../../media/images/Method.png" alt=" "/>
+							<span class="method-name"><a href="../../CcMvc/Session/SESSION.html#methodread">SESSION::read()</a></span><br>
+													<img src="../../media/images/Method.png" alt=" "/>
+							<span class="method-name"><a href="../../CcMvc/Session/SESSION.html#methodStart">SESSION::Start()</a></span><br>
+													<img src="../../media/images/Method.png" alt=" "/>
+							<span class="method-name"><a href="../../CcMvc/Session/SESSION.html#methodwrite">SESSION::write()</a></span><br>
+											</blockquote>
+										
+		</div>
+	</div>
+
+	<a name="sec-consts"></a>
+	<div class="info-box">
+		<div class="info-box-title">Class Constants</div>
+		<div class="nav-bar">
+			<a href="#sec-description">Description</a> |
+										<a href="#sec-var-summary">Constants</a> (<span class="disabled">details</span>)
+						
+			
+												<a href="#sec-var-summary">Vars</a> (<a href="#sec-vars">details</a>)
+														| 
+									<a href="#sec-method-summary">Methods</a> (<a href="#sec-methods">details</a>)
+							
+					</div>
+		<div class="info-box-body">
+			<a name="constCollPassword" id="CollPassword"><!-- --></A>
+<div class="evenrow">
+
+	<div class="const-header">
+		<img src="../../media/images/Variable.png" />
+		<span class="const-title">
+			<span class="const-name">CollPassword</span>
+			 = <span class="const-default"> 'CollPassword'</span>
+			(line <span class="line-number"><a href="../../__filesource/fsource_CcMvc_Session_MvcsessionAuteticateUserDB.php.html#a88">88</a></span>)
+		</span>
+	</div>
+
+	<!-- ========== Info from phpDoc block ========= -->
+	<ul class="tags">
+				<li><span class="field">usedby:</span> <a href="../../CcMvc/Session/AuteticateUserDB.html#methodInfoUserDB">AuteticateUserDB::InfoUserDB()</a> - SE USARA COMO INDICE PARA EL NOMBRE DE LA COLUMNA EN LA TABLA DE USUARIOS QUE ALMACENARA EL HASH DE CONTRASEÑA</li>
+			</ul>
+	
+	
+</div>
+<a name="constCollUser" id="CollUser"><!-- --></A>
+<div class="oddrow">
+
+	<div class="const-header">
+		<img src="../../media/images/Variable.png" />
+		<span class="const-title">
+			<span class="const-name">CollUser</span>
+			 = <span class="const-default"> 'CollUser'</span>
+			(line <span class="line-number"><a href="../../__filesource/fsource_CcMvc_Session_MvcsessionAuteticateUserDB.php.html#a87">87</a></span>)
+		</span>
+	</div>
+
+	<!-- ========== Info from phpDoc block ========= -->
+	<ul class="tags">
+				<li><span class="field">usedby:</span> <a href="../../CcMvc/Session/AuteticateUserDB.html#methodInfoUserDB">AuteticateUserDB::InfoUserDB()</a> - SE USARA COMO INDICE PARA EL NOMBRE DE LA COLUMNA EN LA TABLA DE USUARIOS QUE ALMACENARA EL NOMBRE DE USUARIO O IDENTIFICADOR UNICO</li>
+			</ul>
+	
+	
+</div>
+<a name="constCollUserType" id="CollUserType"><!-- --></A>
+<div class="evenrow">
+
+	<div class="const-header">
+		<img src="../../media/images/Variable.png" />
+		<span class="const-title">
+			<span class="const-name">CollUserType</span>
+			 = <span class="const-default"> 'CollUserType'</span>
+			(line <span class="line-number"><a href="../../__filesource/fsource_CcMvc_Session_MvcsessionAuteticateUserDB.php.html#a90">90</a></span>)
+		</span>
+	</div>
+
+	<!-- ========== Info from phpDoc block ========= -->
+	<ul class="tags">
+				<li><span class="field">usedby:</span> <a href="../../CcMvc/Session/AuteticateUserDB.html#methodInfoUserDB">AuteticateUserDB::InfoUserDB()</a> - SE USARA COMO INDICE PARA EL TIPO DE USUARIO DE LA COLUMNA DE LA TABLA DE USUARIOS EN LA BASE DE DATOS</li>
+			</ul>
+	
+	
+</div>
+<a name="constDenyAccessForUser" id="DenyAccessForUser"><!-- --></A>
+<div class="oddrow">
+
+	<div class="const-header">
+		<img src="../../media/images/Variable.png" />
+		<span class="const-title">
+			<span class="const-name">DenyAccessForUser</span>
+			 = <span class="const-default"> 0x10</span>
+			(line <span class="line-number"><a href="../../__filesource/fsource_CcMvc_Session_MvcsessionAuteticateUserDB.php.html#a91">91</a></span>)
+		</span>
+	</div>
+
+	<!-- ========== Info from phpDoc block ========= -->
+	
+	
+</div>
+<a name="constFailedDataBase" id="FailedDataBase"><!-- --></A>
+<div class="evenrow">
+
+	<div class="const-header">
+		<img src="../../media/images/Variable.png" />
+		<span class="const-title">
+			<span class="const-name">FailedDataBase</span>
+			 = <span class="const-default"> 0x11</span>
+			(line <span class="line-number"><a href="../../__filesource/fsource_CcMvc_Session_MvcsessionAuteticateUserDB.php.html#a92">92</a></span>)
+		</span>
+	</div>
+
+	<!-- ========== Info from phpDoc block ========= -->
+	
+	
+</div>
+<a name="constTablaUsers" id="TablaUsers"><!-- --></A>
+<div class="oddrow">
+
+	<div class="const-header">
+		<img src="../../media/images/Variable.png" />
+		<span class="const-title">
+			<span class="const-name">TablaUsers</span>
+			 = <span class="const-default"> 'Tabla'</span>
+			(line <span class="line-number"><a href="../../__filesource/fsource_CcMvc_Session_MvcsessionAuteticateUserDB.php.html#a89">89</a></span>)
+		</span>
+	</div>
+
+	<!-- ========== Info from phpDoc block ========= -->
+	<ul class="tags">
+				<li><span class="field">usedby:</span> <a href="../../CcMvc/Session/AuteticateUserDB.html#methodInfoUserDB">AuteticateUserDB::InfoUserDB()</a> - SE USARA CON INDICE PARA EL NOMBRE DE LA TABLA DE USUARIOS EN LA BASE DE DATOS</li>
+			</ul>
+	
+	
+</div>
+							<h4>Inherited Constants</h4>
+				<A NAME='inherited_vars'><!-- --></A>
+									<p>Inherited from <span class="classname"><a href="../../CcMvc/Session/Autenticate.html">Autenticate</a></span></p>
+					<blockquote>
+													<img src="../../media/images/Variable.png" />
+							<span class="const-title">
+								<span class="const-name"><a href="../../CcMvc/Session/Autenticate.html#constFailedAuth">Autenticate::FailedAuth</a></span><br>
+							</span>
+													<img src="../../media/images/Variable.png" />
+							<span class="const-title">
+								<span class="const-name"><a href="../../CcMvc/Session/Autenticate.html#constNoAuth">Autenticate::NoAuth</a></span><br>
+							</span>
+											</blockquote> 
+										
+		</div>
+	</div>
+	
+	<p class="notes" id="credit">
+		Documentation generated on Sat, 15 Oct 2016 03:02:14 +0200 by <a href="http://www.phpdoc.org" target="_blank">phpDocumentor 1.4.3</a>
+	</p>
+	</div></body>
+</html>

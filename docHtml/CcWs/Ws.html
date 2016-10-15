@@ -1,0 +1,744 @@
+<?xml version="1.0" encoding="utf8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+  <html xmlns="http://www.w3.org/1999/xhtml">
+		<head>
+			<!-- template designed by Marco Von Ballmoos  -->
+			<title>Docs For Class Ws</title>
+			<link rel="stylesheet" href="../media/stylesheet.css" />
+						<script src="../media/lib/classTree.js"></script>
+												<script language="javascript" type="text/javascript">
+				var imgPlus = new Image();
+				var imgMinus = new Image();
+				imgPlus.src = "../media/images/plus.png";
+				imgMinus.src = "../media/images/minus.png";
+				
+				function showNode(Node){
+							switch(navigator.family){
+								case 'nn4':
+									// Nav 4.x code fork...
+							var oTable = document.layers["span" + Node];
+							var oImg = document.layers["img" + Node];
+									break;
+								case 'ie4':
+									// IE 4/5 code fork...
+							var oTable = document.all["span" + Node];
+							var oImg = document.all["img" + Node];
+									break;
+								case 'gecko':
+									// Standards Compliant code fork...
+							var oTable = document.getElementById("span" + Node);
+							var oImg = document.getElementById("img" + Node);
+									break;
+							}
+					oImg.src = imgMinus.src;
+					oTable.style.display = "block";
+				}
+				
+				function hideNode(Node){
+							switch(navigator.family){
+								case 'nn4':
+									// Nav 4.x code fork...
+							var oTable = document.layers["span" + Node];
+							var oImg = document.layers["img" + Node];
+									break;
+								case 'ie4':
+									// IE 4/5 code fork...
+							var oTable = document.all["span" + Node];
+							var oImg = document.all["img" + Node];
+									break;
+								case 'gecko':
+									// Standards Compliant code fork...
+							var oTable = document.getElementById("span" + Node);
+							var oImg = document.getElementById("img" + Node);
+									break;
+							}
+					oImg.src = imgPlus.src;
+					oTable.style.display = "none";
+				}
+				
+				function nodeIsVisible(Node){
+							switch(navigator.family){
+								case 'nn4':
+									// Nav 4.x code fork...
+							var oTable = document.layers["span" + Node];
+									break;
+								case 'ie4':
+									// IE 4/5 code fork...
+							var oTable = document.all["span" + Node];
+									break;
+								case 'gecko':
+									// Standards Compliant code fork...
+							var oTable = document.getElementById("span" + Node);
+									break;
+							}
+					return (oTable && oTable.style.display == "block");
+				}
+				
+				function toggleNodeVisibility(Node){
+					if (nodeIsVisible(Node)){
+						hideNode(Node);
+					}else{
+						showNode(Node);
+					}
+				}
+			</script>
+					</head>
+		<body>
+			<div class="page-body">			
+<h2 class="class-name"><img src="../media/images/Class_logo.png"
+														alt=" Class"
+														title=" Class"
+														style="vertical-align: middle"> Ws</h2>
+
+<a name="sec-description"></a>
+<div class="info-box">
+	<div class="info-box-title">Description</div>
+	<div class="nav-bar">
+					<span class="disabled">Description</span> |
+													<a href="#sec-var-summary">Vars</a> (<a href="#sec-vars">details</a>)
+						|											<a href="#sec-method-summary">Methods</a> (<a href="#sec-methods">details</a>)
+						
+					</div>
+	<div class="info-box-body">
+        		<!-- ========== Info from phpDoc block ========= -->
+<p class="short-description">App  CLASE PRINCIPAL DE LA RECUBIERTA MVC  PARA LA APLICACION  DONDE SE EJECUTARA TODA LA APLICACION</p>
+	<ul class="tags">
+				<li><span class="field">copyright:</span> © 2015, Enyerber Franco, Todos Los Derechos Reservados</li>
+				<li><span class="field">todo:</span> SE NESESITA AGREGAR SOPORTE A THREADS O MULTIHILOS</li>
+				<li><span class="field">uses:</span> <a href="../CcWs/Client/WsClient.html">WsClient</a> - para administrar os clientes</li>
+				<li><span class="field">uses:</span> WsEvent - para capturar los eventos producidos por cada cliente</li>
+				<li><span class="field">uses:</span> <a href="../CcWs/Server/SocketServer.html">SocketServer</a> - para el servidor</li>
+				<li><span class="field">uses:</span> <a href="../Cc/DataBase/iDataBase.html">iDataBase</a> - para el manejo de bases de datos</li>
+				<li><span class="field">uses:</span> <a href="../CcMvc/Configuracion/Config.html">Config</a> - para cargar la configuracion</li>
+				<li><span class="field">uses:</span> <a href="../CcMvc/_Cc---Autoload---CoreClass.php.html">CoreClass.php</a> - se usa para cargar automaticamente las clases de core</li>
+				<li><span class="field">uses:</span> <a href="../CcWs/Ws.html#var$DependenceInyector">Ws::$DependenceInyector</a> - para proporcionar las dependencias para los Eventos</li>
+				<li><span class="field">uses:</span> <a href="../CcMvc/Request/Router.html">Router</a> - enruta las peticiones a los Eventos</li>
+			</ul>
+		<p class="notes">
+			Located in <a class="field" href="_Ws---Ws.php.html">/Ws/Ws.php</a> (line <span class="field"><a href="../__filesource/fsource_CcWs__WsWs.php.html#a34">34</a></span>)
+		</p>
+		
+				
+		<pre></pre>
+	
+			</div>
+</div>
+
+
+
+	<a name="sec-var-summary"></a>
+	<div class="info-box">
+		<div class="info-box-title">Variable Summary</span></div>
+		<div class="nav-bar">
+			<a href="#sec-description">Description</a> |
+						<span class="disabled">Vars</span> (<a href="#sec-vars">details</a>)
+							| 
+									<a href="#sec-method-summary">Methods</a> (<a href="#sec-methods">details</a>)
+							
+								</div>
+		<div class="info-box-body">
+			<div class="var-summary">
+																																																								<div class="var-title">
+					<img src="../media/images/Variable.png" alt=" " />
+					<span class="var-type"><a href="../CcMvc/Configuracion/Config.html">Config</a></span>
+					<a href="#$conf" title="details" class="var-name">$conf</a>
+				</div>
+																<div class="var-title">
+					<img src="../media/images/Variable.png" alt=" " />
+					<span class="var-type">DependenceInyector</span>
+					<a href="#$DependenceInyector" title="details" class="var-name">$DependenceInyector</a>
+				</div>
+																<div class="var-title">
+					<img src="../media/images/Variable.png" alt=" " />
+					<span class="var-type">mixed</span>
+					<a href="#$DirEvents" title="details" class="var-name">$DirEvents</a>
+				</div>
+																<div class="var-title">
+					<img src="../media/images/Variable.png" alt=" " />
+					<span class="var-type">mixed</span>
+					<a href="#$SocketConfig" title="details" class="var-name">$SocketConfig</a>
+				</div>
+																<div class="var-title">
+					<img src="../media/images/Variable.png" alt=" " />
+					<span class="var-type"><a href="../CcWs/Server/SocketServer.html">SocketServer</a></span>
+					<a href="#$WebSocket" title="details" class="var-name">$WebSocket</a>
+				</div>
+											</div>
+		</div>
+	</div>
+
+	<a name="sec-method-summary"></a>
+	<div class="info-box">
+		<div class="info-box-title">Method Summary</span></div>
+		<div class="nav-bar">
+			<a href="#sec-description">Description</a> |
+																		<a href="#sec-var-summary">Vars</a> (<a href="#sec-vars">details</a>)
+				 
+				|
+						<span class="disabled">Methods</span> (<a href="#sec-methods">details</a>)
+		</div>
+		<div class="info-box-body">			
+			<div class="method-summary">
+																																																																																											
+				<div class="method-definition">
+					<img src="../media/images/StaticMethod.png" alt=" "/>
+					static 						<span class="method-result"><a href="../CcWs/Ws.html">Ws</a></span>
+										<a href="#Server" title="details" class="method-name">Server</a>
+										()
+									</div>
+																			
+				<div class="method-definition">
+					<img src="../media/images/Constructor.png" alt=" "/>
+											<span class="method-result">Ws</span>
+										<a href="#__construct" title="details" class="method-name">__construct</a>
+											([<span class="var-type">string</span>&nbsp;<span class="var-name">$SocketConf</span> = <span class="var-default">NULL</span>])
+									</div>
+															
+				<div class="method-definition">
+					<img src="../media/images/Method.png" alt=" "/>
+											<span class="method-result">void</span>
+										<a href="#bind" title="details" class="method-name">bind</a>
+											(<span class="var-type">string</span>&nbsp;<span class="var-name">$type</span>, <span class="var-type">callable</span>&nbsp;<span class="var-name">$func</span>)
+									</div>
+															
+				<div class="method-definition">
+					<img src="../media/images/Method.png" alt=" "/>
+											<span class="method-result"><a href="../CcMvc/Configuracion/Config.html">Config</a></span>
+										<a href="#Conf" title="details" class="method-name">Conf</a>
+										()
+									</div>
+															
+				<div class="method-definition">
+					<img src="../media/images/Method.png" alt=" "/>
+											<span class="method-result">void</span>
+										<a href="#OnClose" title="details" class="method-name">OnClose</a>
+											(<span class="var-type"><a href="../CcWs/Client/WsClient.html">WsClient</a></span>&nbsp;<span class="var-name">&$client</span>, <span class="var-type"><a href="../CcWs/Client/WsClient.html">WsClient</a></span>&nbsp;<span class="var-name">$client</span>)
+									</div>
+															
+				<div class="method-definition">
+					<img src="../media/images/Method.png" alt=" "/>
+											<span class="method-result">void</span>
+										<a href="#OnLoopAll" title="details" class="method-name">OnLoopAll</a>
+										()
+									</div>
+															
+				<div class="method-definition">
+					<img src="../media/images/Method.png" alt=" "/>
+											<span class="method-result">void</span>
+										<a href="#OnLoopClient" title="details" class="method-name">OnLoopClient</a>
+											(<span class="var-type"><a href="../CcWs/Client/WsClient.html">WsClient</a></span>&nbsp;<span class="var-name">&$v</span>, <span class="var-type"><a href="../CcWs/Client/WsClient.html">WsClient</a></span>&nbsp;<span class="var-name">$v</span>)
+									</div>
+															
+				<div class="method-definition">
+					<img src="../media/images/Method.png" alt=" "/>
+											<span class="method-result">type</span>
+										<a href="#OnMenssaje" title="details" class="method-name">OnMenssaje</a>
+											(<span class="var-type"><a href="../CcWs/Client/WsClient.html">WsClient</a></span>&nbsp;<span class="var-name">&$client</span>, <span class="var-type">string</span>&nbsp;<span class="var-name">$message</span>, <span class="var-type">int</span>&nbsp;<span class="var-name">$messageLength</span>, <span class="var-type">bool</span>&nbsp;<span class="var-name">$binary</span>, <span class="var-type"><a href="../CcWs/Client/WsClient.html">WsClient</a></span>&nbsp;<span class="var-name">$client</span>)
+									</div>
+															
+				<div class="method-definition">
+					<img src="../media/images/Method.png" alt=" "/>
+											<span class="method-result">type</span>
+										<a href="#OnOpen" title="details" class="method-name">OnOpen</a>
+											(<span class="var-type"><a href="../CcWs/Client/WsClient.html">WsClient</a></span>&nbsp;<span class="var-name">&$client</span>, <span class="var-type"><a href="../CcWs/Client/WsClient.html">WsClient</a></span>&nbsp;<span class="var-name">$client</span>)
+									</div>
+															
+				<div class="method-definition">
+					<img src="../media/images/Method.png" alt=" "/>
+											<span class="method-result">type</span>
+										<a href="#ProcessSend" title="details" class="method-name">ProcessSend</a>
+											(<span class="var-type">type</span>&nbsp;<span class="var-name">$string</span>)
+									</div>
+															
+				<div class="method-definition">
+					<img src="../media/images/Method.png" alt=" "/>
+											<span class="method-result">void</span>
+										<a href="#Run" title="details" class="method-name">Run</a>
+										()
+									</div>
+																			</div>
+		</div>
+	</div>		
+
+	<a name="sec-vars"></a>
+	<div class="info-box">
+		<div class="info-box-title">Variables</div>
+		<div class="nav-bar">
+			<a href="#sec-description">Description</a> |
+										<a href="#sec-var-summary">Vars</a> (<span class="disabled">details</span>)
+						
+			
+										| 
+									<a href="#sec-method-summary">Methods</a> (<a href="#sec-methods">details</a>)
+							
+					</div>
+		<div class="info-box-body">
+			
+<a name="var$conf" id="$conf"><!-- --></A>
+<div class="evenrow">
+
+	<div class="var-header">
+		<img src="../media/images/Variable.png" />
+		<span class="var-title">
+			<span class="var-type"><a href="../CcMvc/Configuracion/Config.html">Config</a></span>
+			<span class="var-name">$conf</span>
+						(line <span class="line-number"><a href="../__filesource/fsource_CcWs__WsWs.php.html#a48">48</a></span>)
+		</span>
+	</div>
+
+	<!-- ========== Info from phpDoc block ========= -->
+	<ul class="tags">
+				<li><span class="field">access:</span> protected</li>
+			</ul>
+	
+	
+		
+		
+
+</div>
+<a name="var$DependenceInyector" id="$DependenceInyector"><!-- --></A>
+<div class="oddrow">
+
+	<div class="var-header">
+		<img src="../media/images/Variable.png" />
+		<span class="var-title">
+			<span class="var-type">DependenceInyector</span>
+			<span class="var-name">$DependenceInyector</span>
+						(line <span class="line-number"><a href="../__filesource/fsource_CcWs__WsWs.php.html#a64">64</a></span>)
+		</span>
+	</div>
+
+	<!-- ========== Info from phpDoc block ========= -->
+	<ul class="tags">
+				<li><span class="field">access:</span> public</li>
+				<li><span class="field">usedby:</span> <a href="../CcWs/Ws.html">Ws</a> - para proporcionar las dependencias para los Eventos</li>
+			</ul>
+	
+	
+		
+		
+
+</div>
+<a name="var$DirEvents" id="$DirEvents"><!-- --></A>
+<div class="evenrow">
+
+	<div class="var-header">
+		<img src="../media/images/Variable.png" />
+		<span class="var-title">
+			<span class="var-type">mixed</span>
+			<span class="var-name">$DirEvents</span>
+			 = <span class="var-default"> ''</span>			(line <span class="line-number"><a href="../__filesource/fsource_CcWs__WsWs.php.html#a42">42</a></span>)
+		</span>
+	</div>
+
+	<!-- ========== Info from phpDoc block ========= -->
+	<ul class="tags">
+				<li><span class="field">access:</span> protected</li>
+			</ul>
+	
+	
+		
+		
+
+</div>
+<a name="var$SocketConfig" id="$SocketConfig"><!-- --></A>
+<div class="oddrow">
+
+	<div class="var-header">
+		<img src="../media/images/Variable.png" />
+		<span class="var-title">
+			<span class="var-type">mixed</span>
+			<span class="var-name">$SocketConfig</span>
+						(line <span class="line-number"><a href="../__filesource/fsource_CcWs__WsWs.php.html#a52">52</a></span>)
+		</span>
+	</div>
+
+	<!-- ========== Info from phpDoc block ========= -->
+	<ul class="tags">
+				<li><span class="field">access:</span> public</li>
+			</ul>
+	
+	
+		
+		
+
+</div>
+<a name="var$WebSocket" id="$WebSocket"><!-- --></A>
+<div class="evenrow">
+
+	<div class="var-header">
+		<img src="../media/images/Variable.png" />
+		<span class="var-title">
+			<span class="var-type"><a href="../CcWs/Server/SocketServer.html">SocketServer</a></span>
+			<span class="var-name">$WebSocket</span>
+						(line <span class="line-number"><a href="../__filesource/fsource_CcWs__WsWs.php.html#a41">41</a></span>)
+		</span>
+	</div>
+
+	<!-- ========== Info from phpDoc block ========= -->
+	<ul class="tags">
+				<li><span class="field">access:</span> protected</li>
+			</ul>
+	
+	
+		
+		
+
+</div>
+						
+		</div>
+	</div>
+	
+	<a name="sec-methods"></a>
+	<div class="info-box">
+		<div class="info-box-title">Methods</div>
+		<div class="nav-bar">
+			<a href="#sec-description">Description</a> |
+															<a href="#sec-var-summary">Vars</a> (<a href="#sec-vars">details</a>)
+																	<a href="#sec-method-summary">Methods</a> (<span class="disabled">details</span>)
+						
+		</div>
+		<div class="info-box-body">
+			<A NAME='method_detail'></A>
+<a name="methodServer" id="Server"><!-- --></a>
+<div class="oddrow">
+	
+	<div class="method-header">
+		<img src="../media/images/StaticMethod.png" />
+		<span class="method-title">static Server</span> (line <span class="line-number"><a href="../__filesource/fsource_CcWs__WsWs.php.html#a481">481</a></span>)
+	</div> 
+	
+	<!-- ========== Info from phpDoc block ========= -->
+<p class="short-description">retorna una referencia al servidor en ejecucion</p>
+	<ul class="tags">
+				<li><span class="field">access:</span> public</li>
+			</ul>
+	
+	<div class="method-signature">
+		static <span class="method-result"><a href="../CcWs/Ws.html">Ws</a></span>
+		<span class="method-name">
+			Server
+		</span>
+				()
+			</div>
+	
+		
+			
+	</div>
+<a name="method__construct" id="__construct"><!-- --></a>
+<div class="evenrow">
+	
+	<div class="method-header">
+		<img src="../media/images/Constructor.png" />
+		<span class="method-title">Constructor __construct</span> (line <span class="line-number"><a href="../__filesource/fsource_CcWs__WsWs.php.html#a79">79</a></span>)
+	</div> 
+	
+	<!-- ========== Info from phpDoc block ========= -->
+	<ul class="tags">
+				<li><span class="field">access:</span> public</li>
+			</ul>
+	
+	<div class="method-signature">
+		<span class="method-result">Ws</span>
+		<span class="method-name">
+			__construct
+		</span>
+					([<span class="var-type">string</span>&nbsp;<span class="var-name">$SocketConf</span> = <span class="var-default">NULL</span>])
+			</div>
+	
+			<ul class="parameters">
+					<li>
+				<span class="var-type">string</span>
+				<span class="var-name">$SocketConf</span><span class="var-description">: direccion del archivo de configuracion</span>			</li>
+				</ul>
+		
+			
+	</div>
+<a name="methodbind" id="bind"><!-- --></a>
+<div class="oddrow">
+	
+	<div class="method-header">
+		<img src="../media/images/Method.png" />
+		<span class="method-title">bind</span> (line <span class="line-number"><a href="../__filesource/fsource_CcWs__WsWs.php.html#a178">178</a></span>)
+	</div> 
+	
+	<!-- ========== Info from phpDoc block ========= -->
+<p class="short-description">AGREGA UN EVENTO A LA PILA DE EVENTOS DEL SERVIDOR</p>
+	<ul class="tags">
+				<li><span class="field">access:</span> public</li>
+			</ul>
+	
+	<div class="method-signature">
+		<span class="method-result">void</span>
+		<span class="method-name">
+			bind
+		</span>
+					(<span class="var-type">string</span>&nbsp;<span class="var-name">$type</span>, <span class="var-type">callable</span>&nbsp;<span class="var-name">$func</span>)
+			</div>
+	
+			<ul class="parameters">
+					<li>
+				<span class="var-type">string</span>
+				<span class="var-name">$type</span><span class="var-description">: tipo del evento este puede ser messaje, open, close, OnLoop, OnLoopAll</span>			</li>
+					<li>
+				<span class="var-type">callable</span>
+				<span class="var-name">$func</span><span class="var-description">: una function de retrollamada</span>			</li>
+				</ul>
+		
+			
+	</div>
+<a name="methodConf" id="Conf"><!-- --></a>
+<div class="evenrow">
+	
+	<div class="method-header">
+		<img src="../media/images/Method.png" />
+		<span class="method-title">Conf</span> (line <span class="line-number"><a href="../__filesource/fsource_CcWs__WsWs.php.html#a490">490</a></span>)
+	</div> 
+	
+	<!-- ========== Info from phpDoc block ========= -->
+<p class="short-description">OBJETO DE CONFIGURACION</p>
+	<ul class="tags">
+				<li><span class="field">access:</span> public</li>
+			</ul>
+	
+	<div class="method-signature">
+		<span class="method-result"><a href="../CcMvc/Configuracion/Config.html">Config</a></span>
+		<span class="method-name">
+			Conf
+		</span>
+				()
+			</div>
+	
+		
+			
+	</div>
+<a name="methodOnClose" id="OnClose"><!-- --></a>
+<div class="oddrow">
+	
+	<div class="method-header">
+		<img src="../media/images/Method.png" />
+		<span class="method-title">OnClose</span> (line <span class="line-number"><a href="../__filesource/fsource_CcWs__WsWs.php.html#a342">342</a></span>)
+	</div> 
+	
+	<!-- ========== Info from phpDoc block ========= -->
+<p class="short-description">atiende el evento close del servidor</p>
+	<ul class="tags">
+				<li><span class="field">access:</span> public</li>
+			</ul>
+	
+	<div class="method-signature">
+		<span class="method-result">void</span>
+		<span class="method-name">
+			OnClose
+		</span>
+					(<span class="var-type"><a href="../CcWs/Client/WsClient.html">WsClient</a></span>&nbsp;<span class="var-name">&$client</span>, <span class="var-type"><a href="../CcWs/Client/WsClient.html">WsClient</a></span>&nbsp;<span class="var-name">$client</span>)
+			</div>
+	
+			<ul class="parameters">
+					<li>
+				<span class="var-type"><a href="../CcWs/Client/WsClient.html">WsClient</a></span>
+				<span class="var-name">$client</span>			</li>
+					<li>
+				<span class="var-type"><a href="../CcWs/Client/WsClient.html">WsClient</a></span>
+				<span class="var-name">&$client</span>			</li>
+				</ul>
+		
+			
+	</div>
+<a name="methodOnLoopAll" id="OnLoopAll"><!-- --></a>
+<div class="evenrow">
+	
+	<div class="method-header">
+		<img src="../media/images/Method.png" />
+		<span class="method-title">OnLoopAll</span> (line <span class="line-number"><a href="../__filesource/fsource_CcWs__WsWs.php.html#a209">209</a></span>)
+	</div> 
+	
+	<!-- ========== Info from phpDoc block ========= -->
+<p class="short-description">es el metodo que atendera el evento OnLoopAll</p>
+	<ul class="tags">
+				<li><span class="field">access:</span> public</li>
+			</ul>
+	
+	<div class="method-signature">
+		<span class="method-result">void</span>
+		<span class="method-name">
+			OnLoopAll
+		</span>
+				()
+			</div>
+	
+		
+			
+	</div>
+<a name="methodOnLoopClient" id="OnLoopClient"><!-- --></a>
+<div class="oddrow">
+	
+	<div class="method-header">
+		<img src="../media/images/Method.png" />
+		<span class="method-title">OnLoopClient</span> (line <span class="line-number"><a href="../__filesource/fsource_CcWs__WsWs.php.html#a197">197</a></span>)
+	</div> 
+	
+	<!-- ========== Info from phpDoc block ========= -->
+<p class="short-description">es el metodo que atendera el evento OnLoop por defecto</p>
+	<ul class="tags">
+				<li><span class="field">access:</span> public</li>
+			</ul>
+	
+	<div class="method-signature">
+		<span class="method-result">void</span>
+		<span class="method-name">
+			OnLoopClient
+		</span>
+					(<span class="var-type"><a href="../CcWs/Client/WsClient.html">WsClient</a></span>&nbsp;<span class="var-name">&$v</span>, <span class="var-type"><a href="../CcWs/Client/WsClient.html">WsClient</a></span>&nbsp;<span class="var-name">$v</span>)
+			</div>
+	
+			<ul class="parameters">
+					<li>
+				<span class="var-type"><a href="../CcWs/Client/WsClient.html">WsClient</a></span>
+				<span class="var-name">$v</span>			</li>
+					<li>
+				<span class="var-type"><a href="../CcWs/Client/WsClient.html">WsClient</a></span>
+				<span class="var-name">&$v</span>			</li>
+				</ul>
+		
+			
+	</div>
+<a name="methodOnMenssaje" id="OnMenssaje"><!-- --></a>
+<div class="evenrow">
+	
+	<div class="method-header">
+		<img src="../media/images/Method.png" />
+		<span class="method-title">OnMenssaje</span> (line <span class="line-number"><a href="../__filesource/fsource_CcWs__WsWs.php.html#a291">291</a></span>)
+	</div> 
+	
+	<!-- ========== Info from phpDoc block ========= -->
+<p class="short-description">Atendera el evento messaje</p>
+	<ul class="tags">
+				<li><span class="field">access:</span> public</li>
+			</ul>
+	
+	<div class="method-signature">
+		<span class="method-result">type</span>
+		<span class="method-name">
+			OnMenssaje
+		</span>
+					(<span class="var-type"><a href="../CcWs/Client/WsClient.html">WsClient</a></span>&nbsp;<span class="var-name">&$client</span>, <span class="var-type">string</span>&nbsp;<span class="var-name">$message</span>, <span class="var-type">int</span>&nbsp;<span class="var-name">$messageLength</span>, <span class="var-type">bool</span>&nbsp;<span class="var-name">$binary</span>, <span class="var-type"><a href="../CcWs/Client/WsClient.html">WsClient</a></span>&nbsp;<span class="var-name">$client</span>)
+			</div>
+	
+			<ul class="parameters">
+					<li>
+				<span class="var-type"><a href="../CcWs/Client/WsClient.html">WsClient</a></span>
+				<span class="var-name">$client</span>			</li>
+					<li>
+				<span class="var-type">string</span>
+				<span class="var-name">$message</span>			</li>
+					<li>
+				<span class="var-type">int</span>
+				<span class="var-name">$messageLength</span>			</li>
+					<li>
+				<span class="var-type">bool</span>
+				<span class="var-name">$binary</span>			</li>
+					<li>
+				<span class="var-type"><a href="../CcWs/Client/WsClient.html">WsClient</a></span>
+				<span class="var-name">&$client</span>			</li>
+				</ul>
+		
+			
+	</div>
+<a name="methodOnOpen" id="OnOpen"><!-- --></a>
+<div class="oddrow">
+	
+	<div class="method-header">
+		<img src="../media/images/Method.png" />
+		<span class="method-title">OnOpen</span> (line <span class="line-number"><a href="../__filesource/fsource_CcWs__WsWs.php.html#a230">230</a></span>)
+	</div> 
+	
+	<!-- ========== Info from phpDoc block ========= -->
+<p class="short-description">atendera el evento OnOpen</p>
+	<ul class="tags">
+				<li><span class="field">access:</span> public</li>
+			</ul>
+	
+	<div class="method-signature">
+		<span class="method-result">type</span>
+		<span class="method-name">
+			OnOpen
+		</span>
+					(<span class="var-type"><a href="../CcWs/Client/WsClient.html">WsClient</a></span>&nbsp;<span class="var-name">&$client</span>, <span class="var-type"><a href="../CcWs/Client/WsClient.html">WsClient</a></span>&nbsp;<span class="var-name">$client</span>)
+			</div>
+	
+			<ul class="parameters">
+					<li>
+				<span class="var-type"><a href="../CcWs/Client/WsClient.html">WsClient</a></span>
+				<span class="var-name">$client</span>			</li>
+					<li>
+				<span class="var-type"><a href="../CcWs/Client/WsClient.html">WsClient</a></span>
+				<span class="var-name">&$client</span>			</li>
+				</ul>
+		
+			
+	</div>
+<a name="methodProcessSend" id="ProcessSend"><!-- --></a>
+<div class="evenrow">
+	
+	<div class="method-header">
+		<img src="../media/images/Method.png" />
+		<span class="method-title">ProcessSend</span> (line <span class="line-number"><a href="../__filesource/fsource_CcWs__WsWs.php.html#a167">167</a></span>)
+	</div> 
+	
+	<!-- ========== Info from phpDoc block ========= -->
+	<ul class="tags">
+				<li><span class="field">access:</span> public</li>
+			</ul>
+	
+	<div class="method-signature">
+		<span class="method-result">type</span>
+		<span class="method-name">
+			ProcessSend
+		</span>
+					(<span class="var-type">type</span>&nbsp;<span class="var-name">$string</span>)
+			</div>
+	
+			<ul class="parameters">
+					<li>
+				<span class="var-type">type</span>
+				<span class="var-name">$string</span>			</li>
+				</ul>
+		
+			
+	</div>
+<a name="methodRun" id="Run"><!-- --></a>
+<div class="oddrow">
+	
+	<div class="method-header">
+		<img src="../media/images/Method.png" />
+		<span class="method-title">Run</span> (line <span class="line-number"><a href="../__filesource/fsource_CcWs__WsWs.php.html#a186">186</a></span>)
+	</div> 
+	
+	<!-- ========== Info from phpDoc block ========= -->
+<p class="short-description">pone en marcha el servidor</p>
+	<ul class="tags">
+				<li><span class="field">access:</span> public</li>
+			</ul>
+	
+	<div class="method-signature">
+		<span class="method-result">void</span>
+		<span class="method-name">
+			Run
+		</span>
+				()
+			</div>
+	
+		
+			
+	</div>
+						
+		</div>
+	</div>
+
+	
+	<p class="notes" id="credit">
+		Documentation generated on Sat, 15 Oct 2016 03:05:13 +0200 by <a href="http://www.phpdoc.org" target="_blank">phpDocumentor 1.4.3</a>
+	</p>
+	</div></body>
+</html>

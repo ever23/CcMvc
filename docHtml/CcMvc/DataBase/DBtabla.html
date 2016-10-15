@@ -1,0 +1,327 @@
+<?xml version="1.0" encoding="utf8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+  <html xmlns="http://www.w3.org/1999/xhtml">
+		<head>
+			<!-- template designed by Marco Von Ballmoos  -->
+			<title>Docs For Class DBtabla</title>
+			<link rel="stylesheet" href="../../media/stylesheet.css" />
+						<script src="../../media/lib/classTree.js"></script>
+												<script language="javascript" type="text/javascript">
+				var imgPlus = new Image();
+				var imgMinus = new Image();
+				imgPlus.src = "../../media/images/plus.png";
+				imgMinus.src = "../../media/images/minus.png";
+				
+				function showNode(Node){
+							switch(navigator.family){
+								case 'nn4':
+									// Nav 4.x code fork...
+							var oTable = document.layers["span" + Node];
+							var oImg = document.layers["img" + Node];
+									break;
+								case 'ie4':
+									// IE 4/5 code fork...
+							var oTable = document.all["span" + Node];
+							var oImg = document.all["img" + Node];
+									break;
+								case 'gecko':
+									// Standards Compliant code fork...
+							var oTable = document.getElementById("span" + Node);
+							var oImg = document.getElementById("img" + Node);
+									break;
+							}
+					oImg.src = imgMinus.src;
+					oTable.style.display = "block";
+				}
+				
+				function hideNode(Node){
+							switch(navigator.family){
+								case 'nn4':
+									// Nav 4.x code fork...
+							var oTable = document.layers["span" + Node];
+							var oImg = document.layers["img" + Node];
+									break;
+								case 'ie4':
+									// IE 4/5 code fork...
+							var oTable = document.all["span" + Node];
+							var oImg = document.all["img" + Node];
+									break;
+								case 'gecko':
+									// Standards Compliant code fork...
+							var oTable = document.getElementById("span" + Node);
+							var oImg = document.getElementById("img" + Node);
+									break;
+							}
+					oImg.src = imgPlus.src;
+					oTable.style.display = "none";
+				}
+				
+				function nodeIsVisible(Node){
+							switch(navigator.family){
+								case 'nn4':
+									// Nav 4.x code fork...
+							var oTable = document.layers["span" + Node];
+									break;
+								case 'ie4':
+									// IE 4/5 code fork...
+							var oTable = document.all["span" + Node];
+									break;
+								case 'gecko':
+									// Standards Compliant code fork...
+							var oTable = document.getElementById("span" + Node);
+									break;
+							}
+					return (oTable && oTable.style.display == "block");
+				}
+				
+				function toggleNodeVisibility(Node){
+					if (nodeIsVisible(Node)){
+						hideNode(Node);
+					}else{
+						showNode(Node);
+					}
+				}
+			</script>
+					</head>
+		<body>
+			<div class="page-body">			
+<h2 class="class-name"><img src="../../media/images/Class_logo.png"
+														alt=" Class"
+														title=" Class"
+														style="vertical-align: middle"> DBtabla</h2>
+
+<a name="sec-description"></a>
+<div class="info-box">
+	<div class="info-box-title">Description</div>
+	<div class="nav-bar">
+					<span class="disabled">Description</span> |
+							<a href="#sec-descendents">Descendents</a>
+			|													<a href="#sec-method-summary">Methods</a> (<a href="#sec-methods">details</a>)
+						
+					</div>
+	<div class="info-box-body">
+                <p class="implements">
+            Implements interfaces:
+            <ul>
+                <li>Serializable (internal interface)</li>            </ul>
+        </p>
+        		<!-- ========== Info from phpDoc block ========= -->
+<p class="short-description">CLASE DBtabla</p>
+<p class="description"><p>FACILITA LAS OPERACIONES BASICAS SOBRE LAS TABLAS USANDO LA CLASE DB_MySQli  U OTRA CLASE QUE IMPLEMENTE LA INTERFACE iDataBase PARA CREA UN OBJETO  DE ESTA CLASE</p></p>
+	<ul class="tags">
+				<li><span class="field">see:</span> <a href="../../Cc/DataBase/iDataBase.html">iDataBase</a></li>
+				<li><span class="field">see:</span> DB_PDO</li>
+				<li><span class="field">see:</span> DB_MySQLi</li>
+				<li><span class="field">filesource:</span> <a href="../../__filesource/fsource_CcMvc_DataBase_MvcDataBaseDataBase.php.html">Source Code for this file</a></li>
+				<li><span class="field">uses:</span> \Cc\DBtabla - ES EXTENDIDA DE ESTA CLASE</li>
+				<li><span class="field">example:</span> <a href="../../__examplesource/exsource__examples_cine_protected_controllers_Cpelicula.php_15345460f1df941e39245a47cf33d6e6.html">description</a></li>
+			</ul>
+		<p class="notes">
+			Located in <a class="field" href="_Mvc---DataBase---DataBase.php.html">/Mvc/DataBase/DataBase.php</a> (line <span class="field"><a href="../../__filesource/fsource_CcMvc_DataBase_MvcDataBaseDataBase.php.html#a25">25</a></span>)
+		</p>
+		
+				
+		<pre>\
+   |
+   --DBtabla</pre>
+	
+			</div>
+</div>
+
+	<a name="sec-descendents"></a>
+	<div class="info-box">
+		<div class="info-box-title">Direct descendents</div>
+		<div class="nav-bar">
+			<a href="#sec-description">Description</a> |
+			<span class="disabled">Descendents</span>
+			|															<a href="#sec-method-summary">Methods</a> (<a href="#sec-methods">details</a>)
+							
+								</div>
+		<div class="info-box-body">
+			<table cellpadding="2" cellspacing="0" class="class-table">
+				<tr>
+					<th class="class-table-header">Class</th>
+					<th class="class-table-header">Description</th>
+				</tr>
+								<tr>
+					<td style="padding-right: 2em; white-space: nowrap">
+						<img src="../../media/images/Class.png"
+								 alt=" class"
+								 title=" class"
+								 style="vertical-align: center"/>
+						<a href="../../CcMvc/Modelo/DBtablaModel.html">DBtablaModel</a>
+					</td>
+					<td>
+											Description of DBtablaModel
+										</td>
+				</tr>
+							</table>
+		</div>
+	</div>
+
+
+
+	<a name="sec-method-summary"></a>
+	<div class="info-box">
+		<div class="info-box-title">Method Summary</span></div>
+		<div class="nav-bar">
+			<a href="#sec-description">Description</a> |
+							<a href="#sec-descendents">Descendants</a> |
+												<span class="disabled">Methods</span> (<a href="#sec-methods">details</a>)
+		</div>
+		<div class="info-box-body">			
+			<div class="method-summary">
+																																							
+				<div class="method-definition">
+					<img src="../../media/images/Constructor.png" alt=" "/>
+											<span class="method-result">DBtabla</span>
+										<a href="#__construct" title="details" class="method-name">__construct</a>
+											(<span class="var-type">iDataBase</span>&nbsp;<span class="var-name">&$db</span>, <span class="var-type">string</span>&nbsp;<span class="var-name">$tabla</span>, [<span class="var-type"></span>&nbsp;<span class="var-name">$useStmt</span> = <span class="var-default">NULL</span>])
+									</div>
+															
+				<div class="method-definition">
+					<img src="../../media/images/Method.png" alt=" "/>
+											<span class="method-result">string</span>
+										<a href="#GetCacheName" title="details" class="method-name">GetCacheName</a>
+										()
+									</div>
+															
+				<div class="method-definition">
+					<img src="../../media/images/Method.png" alt=" "/>
+											<span class="method-result">void</span>
+										<a href="#unserialize" title="details" class="method-name">unserialize</a>
+											(<span class="var-type"></span>&nbsp;<span class="var-name">$serialized</span>)
+									</div>
+											</div>
+		</div>
+	</div>		
+
+	
+	<a name="sec-methods"></a>
+	<div class="info-box">
+		<div class="info-box-title">Methods</div>
+		<div class="nav-bar">
+			<a href="#sec-description">Description</a> |
+							<a href="#sec-descendents">Descendents</a> |
+																<a href="#sec-method-summary">Methods</a> (<span class="disabled">details</span>)
+						
+		</div>
+		<div class="info-box-body">
+			<A NAME='method_detail'></A>
+<a name="method__construct" id="__construct"><!-- --></a>
+<div class="oddrow">
+	
+	<div class="method-header">
+		<img src="../../media/images/Constructor.png" />
+		<span class="method-title">Constructor __construct</span> (line <span class="line-number"><a href="../../__filesource/fsource_CcMvc_DataBase_MvcDataBaseDataBase.php.html#a39">39</a></span>)
+	</div> 
+	
+	<!-- ========== Info from phpDoc block ========= -->
+<p class="short-description">constructor</p>
+<p class="description"><p><div class="src-code"><ol><li><div class="src-line">&nbsp;<span class="src-php">&lt;?php</span></div></li>
+<li><div class="src-line">&nbsp;<span class="src-var">$db</span>=&nbsp;<span class="src-key">new&nbsp;</span><span class="src-id">DB_PDO</span><span class="src-sym">(</span><span class="src-str">'sqlite:sqlite.db'</span><span class="src-sym">)</span><span class="src-sym">;</span></div></li>
+<li><div class="src-line">&nbsp;<span class="src-var">$mitabla</span>=<span class="src-var">$db</span><span class="src-sym">-&gt;</span><a href="../../CcMvc/_Cc---DataBase---TraitDataBase.php.html#functionTab">Tab</a><span class="src-sym">(</span><span class="src-str">'mitabla'</span><span class="src-sym">)</span><span class="src-sym">;</span><span class="src-comm">//&nbsp;creando&nbsp;un&nbsp;objeto&nbsp;DBtabla&nbsp;con&nbsp;DB_PDO</span></div></li>
+</ol></div></p></p>
+	<ul class="tags">
+				<li><span class="field">throws:</span> Exception en caso de no existir la tabla</li>
+				<li><span class="field">access:</span> public</li>
+			</ul>
+	
+	<div class="method-signature">
+		<span class="method-result">DBtabla</span>
+		<span class="method-name">
+			__construct
+		</span>
+					(<span class="var-type">iDataBase</span>&nbsp;<span class="var-name">&$db</span>, <span class="var-type">string</span>&nbsp;<span class="var-name">$tabla</span>, [<span class="var-type"></span>&nbsp;<span class="var-name">$useStmt</span> = <span class="var-default">NULL</span>])
+			</div>
+	
+			<ul class="parameters">
+					<li>
+				<span class="var-type"><a href="../../Cc/DataBase/iDataBase.html">iDataBase</a></span>
+				<span class="var-name">&$db</span><span class="var-description">: referencia a un objeto manejador de bases de datos que implemente iDatabase</span>			</li>
+					<li>
+				<span class="var-type">string</span>
+				<span class="var-name">$tabla</span><span class="var-description">: nombre de la tabla que se asociara</span>			</li>
+					<li>
+				<span class="var-type"></span>
+				<span class="var-name">$useStmt</span>			</li>
+				</ul>
+		
+			
+			<hr class="separator" />
+		<div class="notes">Redefined in descendants as:</div>
+		<ul class="redefinitions">
+					<li>
+				<a href="../../CcMvc/Modelo/DBtablaModel.html#method__construct">DBtablaModel::__construct()</a>
+							</li>
+				</ul>
+	</div>
+<a name="methodGetCacheName" id="GetCacheName"><!-- --></a>
+<div class="evenrow">
+	
+	<div class="method-header">
+		<img src="../../media/images/Method.png" />
+		<span class="method-title">GetCacheName</span> (line <span class="line-number"><a href="../../__filesource/fsource_CcMvc_DataBase_MvcDataBaseDataBase.php.html#a74">74</a></span>)
+	</div> 
+	
+	<!-- ========== Info from phpDoc block ========= -->
+<p class="short-description">retorna el nombre del indice donde se almacena el cache de la tabla</p>
+	<ul class="tags">
+				<li><span class="field">access:</span> public</li>
+			</ul>
+	
+	<div class="method-signature">
+		<span class="method-result">string</span>
+		<span class="method-name">
+			GetCacheName
+		</span>
+				()
+			</div>
+	
+		
+			
+	</div>
+<a name="methodunserialize" id="unserialize"><!-- --></a>
+<div class="oddrow">
+	
+	<div class="method-header">
+		<img src="../../media/images/Method.png" />
+		<span class="method-title">unserialize</span> (line <span class="line-number"><a href="../../__filesource/fsource_CcMvc_DataBase_MvcDataBaseDataBase.php.html#a79">79</a></span>)
+	</div> 
+	
+	<!-- ========== Info from phpDoc block ========= -->
+	<ul class="tags">
+				<li><span class="field">access:</span> public</li>
+			</ul>
+	
+	<div class="method-signature">
+		<span class="method-result">void</span>
+		<span class="method-name">
+			unserialize
+		</span>
+					(<span class="var-type"></span>&nbsp;<span class="var-name">$serialized</span>)
+			</div>
+	
+			<ul class="parameters">
+					<li>
+				<span class="var-type"></span>
+				<span class="var-name">$serialized</span>			</li>
+				</ul>
+		
+				<hr class="separator" />
+		<div class="notes">Implementation of:</div>
+			<dl>
+			<dt>Serializable::unserialize</dt>
+					</dl>
+			
+	</div>
+						
+		</div>
+	</div>
+
+	
+	<p class="notes" id="credit">
+		Documentation generated on Sat, 15 Oct 2016 03:02:37 +0200 by <a href="http://www.phpdoc.org" target="_blank">phpDocumentor 1.4.3</a>
+	</p>
+	</div></body>
+</html>

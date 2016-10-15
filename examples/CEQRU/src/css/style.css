@@ -1,0 +1,68 @@
+@charset "utf-8";
+@import url("../../webfonts/airstrike/stylesheet.css");
+
+body center h2 {
+}
+body> div {
+	background-color: rgba(109,188,244,1.00);
+	width: 960px;
+	margin-top: 0px;
+	padding-top: 28px;
+	margin-right: auto;
+	margin-left: auto;
+	padding-right: 28px;
+	padding-bottom: 28px;
+	padding-left: 28px;
+	-webkit-box-shadow: 2px 1px 7px;
+	box-shadow: 2px 1px 7px;
+	border-radius: 4px;
+    min-height: 500px;
+}
+body {
+	padding: 0px;
+	margin:0px;
+}
+tr > td
+{
+	margin:5px;
+}
+.collactive   {
+	border-radius: 4px;
+	background-color: rgba(214,208,208,0.66);
+}
+.collactive2   {
+	border-radius: 4px;
+	background-color: rgba(214,208,208,0.30);
+}
+
+a > button {
+	background-color: rgba(32,99,215,1.00);
+	border-top-right-radius: 4px;
+}
+form {
+	text-align: right;
+	margin-left: 25%;
+	margin-right: 38%;
+}
+header {
+	color: rgba(0,0,0,1.00);
+	font-size: 42px;
+	text-align: center;
+	font-family: airstrike;
+	background-color: rgba(61,59,217,0.66);
+	border-radius: 1px;
+	margin-top: -30px;
+	margin-right: -27px;
+	margin-bottom: 0px;
+	margin-left: -27px;
+	height: 106px;
+	-webkit-box-shadow: 3px 3px 4px 2px;
+	box-shadow: 3px 3px 4px 2px;
+	padding-top: 22px;
+	padding-bottom: 0px;
+}
+input {
+	border-radius: 16px;
+	width: 235px;
+	height: 28px;
+}

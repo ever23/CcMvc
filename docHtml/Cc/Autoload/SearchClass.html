@@ -1,0 +1,1405 @@
+<?xml version="1.0" encoding="utf8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+  <html xmlns="http://www.w3.org/1999/xhtml">
+		<head>
+			<!-- template designed by Marco Von Ballmoos  -->
+			<title>Docs For Class SearchClass</title>
+			<link rel="stylesheet" href="../../media/stylesheet.css" />
+						<script src="../../media/lib/classTree.js"></script>
+												<script language="javascript" type="text/javascript">
+				var imgPlus = new Image();
+				var imgMinus = new Image();
+				imgPlus.src = "../../media/images/plus.png";
+				imgMinus.src = "../../media/images/minus.png";
+				
+				function showNode(Node){
+							switch(navigator.family){
+								case 'nn4':
+									// Nav 4.x code fork...
+							var oTable = document.layers["span" + Node];
+							var oImg = document.layers["img" + Node];
+									break;
+								case 'ie4':
+									// IE 4/5 code fork...
+							var oTable = document.all["span" + Node];
+							var oImg = document.all["img" + Node];
+									break;
+								case 'gecko':
+									// Standards Compliant code fork...
+							var oTable = document.getElementById("span" + Node);
+							var oImg = document.getElementById("img" + Node);
+									break;
+							}
+					oImg.src = imgMinus.src;
+					oTable.style.display = "block";
+				}
+				
+				function hideNode(Node){
+							switch(navigator.family){
+								case 'nn4':
+									// Nav 4.x code fork...
+							var oTable = document.layers["span" + Node];
+							var oImg = document.layers["img" + Node];
+									break;
+								case 'ie4':
+									// IE 4/5 code fork...
+							var oTable = document.all["span" + Node];
+							var oImg = document.all["img" + Node];
+									break;
+								case 'gecko':
+									// Standards Compliant code fork...
+							var oTable = document.getElementById("span" + Node);
+							var oImg = document.getElementById("img" + Node);
+									break;
+							}
+					oImg.src = imgPlus.src;
+					oTable.style.display = "none";
+				}
+				
+				function nodeIsVisible(Node){
+							switch(navigator.family){
+								case 'nn4':
+									// Nav 4.x code fork...
+							var oTable = document.layers["span" + Node];
+									break;
+								case 'ie4':
+									// IE 4/5 code fork...
+							var oTable = document.all["span" + Node];
+									break;
+								case 'gecko':
+									// Standards Compliant code fork...
+							var oTable = document.getElementById("span" + Node);
+									break;
+							}
+					return (oTable && oTable.style.display == "block");
+				}
+				
+				function toggleNodeVisibility(Node){
+					if (nodeIsVisible(Node)){
+						hideNode(Node);
+					}else{
+						showNode(Node);
+					}
+				}
+			</script>
+					</head>
+		<body>
+			<div class="page-body">			
+<h2 class="class-name"><img src="../../media/images/Class_logo.png"
+														alt=" Class"
+														title=" Class"
+														style="vertical-align: middle"> SearchClass</h2>
+
+<a name="sec-description"></a>
+<div class="info-box">
+	<div class="info-box-title">Description</div>
+	<div class="nav-bar">
+					<span class="disabled">Description</span> |
+													<a href="#sec-var-summary">Vars</a> (<a href="#sec-vars">details</a>)
+						|											<a href="#sec-method-summary">Methods</a> (<a href="#sec-methods">details</a>)
+						
+											<a href="#sec-const-summary">Constants</a> (<a href="#sec-consts">details</a>)
+						
+			</div>
+	<div class="info-box-body">
+        		<!-- ========== Info from phpDoc block ========= -->
+<p class="short-description">SearchClass  BUSCA UNA CLASE, INTERFACE O TRAIT DEFINIDA EN UN DIRECTORIO, FABRICA UN OBJETO O PUEDE  ACTIVAR UNA FUNCION EN LA PILA spl_autoload</p>
+	<ul class="tags">
+				<li><span class="field">version:</span> 1.0.3.0</li>
+				<li><span class="field">copyright:</span> © 2015-2016, Enyerber Franco</li>
+				<li><span class="field">license:</span> <a href="http://opensource.org/licenses/gpl-license.php">GNU Public License</a></li>
+			</ul>
+		<p class="notes">
+			Located in <a class="field" href="_Cc---Autoload---SearchClass---SearchClass.php.html">/Cc/Autoload/SearchClass/SearchClass.php</a> (line <span class="field"><a href="../../__filesource/fsource_Cc__CcAutoloadSearchClassSearchClass.php.html#a37">37</a></span>)
+		</p>
+		
+				
+		<pre></pre>
+	
+			</div>
+</div>
+
+
+	<a name="sec-const-summary"></a>
+	<div class="info-box">
+		<div class="info-box-title">Class Constant Summary</span></div>
+		<div class="nav-bar">
+			<a href="#sec-description">Description</a> |
+						<span class="disabled">Constants</span> (<a href="#sec-consts">details</a>)
+												<a href="#sec-var-summary">Vars</a> (<a href="#sec-vars">details</a>)
+				 
+				|
+										| 
+									<a href="#sec-method-summary">Methods</a> (<a href="#sec-methods">details</a>)
+							
+					</div>
+		<div class="info-box-body">
+			<div class="const-summary">
+								<div class="const-title">
+					<img src="../../media/images/Constant.png" alt=" " />
+					<a href="#AllClass" title="details" class="const-name">AllClass</a> = 					<span class="var-type"> '.*'</span>
+
+				</div>
+								<div class="const-title">
+					<img src="../../media/images/Constant.png" alt=" " />
+					<a href="#NamespaceSeparator" title="details" class="const-name">NamespaceSeparator</a> = 					<span class="var-type"> '\\'</span>
+
+				</div>
+							</div>
+		</div>
+	</div>
+
+	<a name="sec-var-summary"></a>
+	<div class="info-box">
+		<div class="info-box-title">Variable Summary</span></div>
+		<div class="nav-bar">
+			<a href="#sec-description">Description</a> |
+						<span class="disabled">Vars</span> (<a href="#sec-vars">details</a>)
+							| 
+									<a href="#sec-method-summary">Methods</a> (<a href="#sec-methods">details</a>)
+							
+															<a href="#sec-const-summary">Constants</a> (<a href="#sec-consts">details</a>)
+							
+					</div>
+		<div class="info-box-body">
+			<div class="var-summary">
+												<div class="var-title">
+					<img src="../../media/images/StaticVariable.png" alt=" " />
+					static <span class="var-type">mixed</span>
+					<a href="#" title="details" class="var-name"></a>
+				</div>
+																<div class="var-title">
+					<img src="../../media/images/StaticVariable.png" alt=" " />
+					static <span class="var-type">mixed</span>
+					<a href="#" title="details" class="var-name"></a>
+				</div>
+																																								<div class="var-title">
+					<img src="../../media/images/StaticVariable.png" alt=" " />
+					static <span class="var-type">array</span>
+					<a href="#$classes" title="details" class="var-name">$classes</a>
+				</div>
+																								<div class="var-title">
+					<img src="../../media/images/StaticVariable.png" alt=" " />
+					static <span class="var-type">arrray</span>
+					<a href="#$DirFiles" title="details" class="var-name">$DirFiles</a>
+				</div>
+																								<div class="var-title">
+					<img src="../../media/images/StaticVariable.png" alt=" " />
+					static <span class="var-type">array</span>
+					<a href="#$LastSeacrhClass" title="details" class="var-name">$LastSeacrhClass</a>
+				</div>
+																								<div class="var-title">
+					<img src="../../media/images/StaticVariable.png" alt=" " />
+					static <span class="var-type">array</span>
+					<a href="#$SearchDefines" title="details" class="var-name">$SearchDefines</a>
+				</div>
+																																				<div class="var-title">
+					<img src="../../media/images/Variable.png" alt=" " />
+					<span class="var-type">bool</span>
+					<a href="#$avance_searh" title="details" class="var-name">$avance_searh</a>
+				</div>
+																<div class="var-title">
+					<img src="../../media/images/Variable.png" alt=" " />
+					<span class="var-type">bool</span>
+					<a href="#$CaseSensitive" title="details" class="var-name">$CaseSensitive</a>
+				</div>
+																<div class="var-title">
+					<img src="../../media/images/Variable.png" alt=" " />
+					<span class="var-type">string</span>
+					<a href="#$class" title="details" class="var-name">$class</a>
+				</div>
+																								<div class="var-title">
+					<img src="../../media/images/Variable.png" alt=" " />
+					<span class="var-type">array</span>
+					<a href="#$directorios" title="details" class="var-name">$directorios</a>
+				</div>
+																								<div class="var-title">
+					<img src="../../media/images/Variable.png" alt=" " />
+					<span class="var-type">string</span>
+					<a href="#$filename" title="details" class="var-name">$filename</a>
+				</div>
+																								<div class="var-title">
+					<img src="../../media/images/Variable.png" alt=" " />
+					<span class="var-type">array</span>
+					<a href="#$namespaces" title="details" class="var-name">$namespaces</a>
+				</div>
+																			</div>
+		</div>
+	</div>
+
+	<a name="sec-method-summary"></a>
+	<div class="info-box">
+		<div class="info-box-title">Method Summary</span></div>
+		<div class="nav-bar">
+			<a href="#sec-description">Description</a> |
+															<a href="#sec-const-summary">Constants</a> (<a href="#sec-consts">details</a>)
+							
+															<a href="#sec-var-summary">Vars</a> (<a href="#sec-vars">details</a>)
+				 
+				|
+						<span class="disabled">Methods</span> (<a href="#sec-methods">details</a>)
+		</div>
+		<div class="info-box-body">			
+			<div class="method-summary">
+																			
+				<div class="method-definition">
+					<img src="../../media/images/StaticMethod.png" alt=" "/>
+					static 						<span class="method-result">void</span>
+										<a href="#AddDirAutoload" title="details" class="method-name">AddDirAutoload</a>
+											(<span class="var-type">mixes</span>&nbsp;<span class="var-name">$dir</span>, [<span class="var-type">bool</span>&nbsp;<span class="var-name">$avance</span> = <span class="var-default">NULL</span>])
+									</div>
+															
+				<div class="method-definition">
+					<img src="../../media/images/StaticMethod.png" alt=" "/>
+					static 						<span class="method-result">void</span>
+										<a href="#ClearListClass" title="details" class="method-name">ClearListClass</a>
+										()
+									</div>
+															
+				<div class="method-definition">
+					<img src="../../media/images/StaticMethod.png" alt=" "/>
+					static 						<span class="method-result">void</span>
+										<a href="#Factory" title="details" class="method-name">&amp;Factory</a>
+											([<span class="var-type"></span>&nbsp;<span class="var-name">$class</span> = <span class="var-default">NULL</span>], [<span class="var-type"></span>&nbsp;<span class="var-name">$param</span> = <span class="var-default">[]</span>], [<span class="var-type"></span>&nbsp;<span class="var-name">$dir</span> = <span class="var-default">NULL</span>], [<span class="var-type"></span>&nbsp;<span class="var-name">$avance</span> = <span class="var-default">NULL</span>], [<span class="var-type"></span>&nbsp;<span class="var-name">$use_load</span> = <span class="var-default">true</span>])
+									</div>
+																															
+				<div class="method-definition">
+					<img src="../../media/images/StaticMethod.png" alt=" "/>
+					static 						<span class="method-result">array</span>
+										<a href="#GetDirFiles" title="details" class="method-name">GetDirFiles</a>
+										()
+									</div>
+																															
+				<div class="method-definition">
+					<img src="../../media/images/StaticMethod.png" alt=" "/>
+					static 						<span class="method-result">array</span>
+										<a href="#GetListAllClass" title="details" class="method-name">GetListAllClass</a>
+											(<span class="var-type">string</span>&nbsp;<span class="var-name">$dir</span>)
+									</div>
+																							
+				<div class="method-definition">
+					<img src="../../media/images/StaticMethod.png" alt=" "/>
+					static 						<span class="method-result">bool</span>
+										<a href="#Load" title="details" class="method-name">&amp;Load</a>
+											(<span class="var-type">string</span>&nbsp;<span class="var-name">$class</span>, [<span class="var-type">string</span>&nbsp;<span class="var-name">$dir</span> = <span class="var-default">NULL</span>], [<span class="var-type">bool</span>&nbsp;<span class="var-name">$avance</span> = <span class="var-default">false</span>], [<span class="var-type">bool</span>&nbsp;<span class="var-name">$is_autoload</span> = <span class="var-default">true</span>], [<span class="var-type">string</span>&nbsp;<span class="var-name">$fnload</span> = <span class="var-default">'require_once'</span>])
+									</div>
+																							
+				<div class="method-definition">
+					<img src="../../media/images/StaticMethod.png" alt=" "/>
+					static 						<span class="method-result">void</span>
+										<a href="#PushExt" title="details" class="method-name">PushExt</a>
+											(<span class="var-type">array|string</span>&nbsp;<span class="var-name">$ext</span>)
+									</div>
+																																															
+				<div class="method-definition">
+					<img src="../../media/images/StaticMethod.png" alt=" "/>
+					static 						<span class="method-result">void</span>
+										<a href="#StartAutoloadClass" title="details" class="method-name">StartAutoloadClass</a>
+											([<span class="var-type">mixes</span>&nbsp;<span class="var-name">$dir</span> = <span class="var-default">NULL</span>], [<span class="var-type">bool</span>&nbsp;<span class="var-name">$avance</span> = <span class="var-default">NULL</span>])
+									</div>
+															
+				<div class="method-definition">
+					<img src="../../media/images/StaticMethod.png" alt=" "/>
+					static 						<span class="method-result">void</span>
+										<a href="#StopAutoloadClass" title="details" class="method-name">StopAutoloadClass</a>
+										()
+									</div>
+																											
+				<div class="method-definition">
+					<img src="../../media/images/Constructor.png" alt=" "/>
+											<span class="method-result">SearchClass</span>
+										<a href="#__construct" title="details" class="method-name">__construct</a>
+											(<span class="var-type">string</span>&nbsp;<span class="var-name">$class</span>, [<span class="var-type">string</span>&nbsp;<span class="var-name">$dir</span> = <span class="var-default">NULL</span>], [<span class="var-type"></span>&nbsp;<span class="var-name">$avance_searh</span> = <span class="var-default">false</span>], [<span class="var-type"></span>&nbsp;<span class="var-name">$CaseSensitive</span> = <span class="var-default">false</span>])
+									</div>
+																																							
+				<div class="method-definition">
+					<img src="../../media/images/Method.png" alt=" "/>
+											<span class="method-result">mixes</span>
+										<a href="#FactoryObject" title="details" class="method-name">FactoryObject</a>
+											([<span class="var-type">array</span>&nbsp;<span class="var-name">$param</span> = <span class="var-default">array()</span>], [<span class="var-type">bool</span>&nbsp;<span class="var-name">$autoload</span> = <span class="var-default">false</span>])
+									</div>
+															
+				<div class="method-definition">
+					<img src="../../media/images/Method.png" alt=" "/>
+											<span class="method-result">bool</span>
+										<a href="#FileSearch" title="details" class="method-name">FileSearch</a>
+											(<span class="var-type">string</span>&nbsp;<span class="var-name">$file</span>)
+									</div>
+																							
+				<div class="method-definition">
+					<img src="../../media/images/Method.png" alt=" "/>
+											<span class="method-result">void</span>
+										<a href="#GetFileName" title="details" class="method-name">GetFileName</a>
+										()
+									</div>
+															
+				<div class="method-definition">
+					<img src="../../media/images/Method.png" alt=" "/>
+											<span class="method-result">void</span>
+										<a href="#getLastFiles" title="details" class="method-name">getLastFiles</a>
+										()
+									</div>
+																							
+				<div class="method-definition">
+					<img src="../../media/images/Method.png" alt=" "/>
+											<span class="method-result">void</span>
+										<a href="#Include_" title="details" class="method-name">Include_</a>
+											([<span class="var-type">string</span>&nbsp;<span class="var-name">$FN</span> = <span class="var-default">'include_once'</span>])
+									</div>
+																							
+				<div class="method-definition">
+					<img src="../../media/images/Method.png" alt=" "/>
+											<span class="method-result">boolean</span>
+										<a href="#NombClassFileExists" title="details" class="method-name">NombClassFileExists</a>
+											(<span class="var-type">string</span>&nbsp;<span class="var-name">$dir</span>)
+									</div>
+																							
+				<div class="method-definition">
+					<img src="../../media/images/Method.png" alt=" "/>
+											<span class="method-result">string</span>
+										<a href="#Search" title="details" class="method-name">Search</a>
+											([<span class="var-type">bool</span>&nbsp;<span class="var-name">$recursive</span> = <span class="var-default">true</span>])
+									</div>
+															
+				<div class="method-definition">
+					<img src="../../media/images/Method.png" alt=" "/>
+											<span class="method-result">boolean</span>
+										<a href="#SearchLastClass" title="details" class="method-name">SearchLastClass</a>
+										()
+									</div>
+															
+				<div class="method-definition">
+					<img src="../../media/images/Method.png" alt=" "/>
+											<span class="method-result">boolean</span>
+										<a href="#SearchTonkens" title="details" class="method-name">SearchTonkens</a>
+											(<span class="var-type">string</span>&nbsp;<span class="var-name">$cadena</span>, <span class="var-type">string</span>&nbsp;<span class="var-name">$file</span>)
+									</div>
+															
+				<div class="method-definition">
+					<img src="../../media/images/Method.png" alt=" "/>
+											<span class="method-result">\Cc\Autoload\SearchClass</span>
+										<a href="#SetDir" title="details" class="method-name">&amp;SetDir</a>
+											(<span class="var-type">string</span>&nbsp;<span class="var-name">$dir</span>)
+									</div>
+																															
+				<div class="method-definition">
+					<img src="../../media/images/Method.png" alt=" "/>
+											<span class="method-result">boolean</span>
+										<a href="#VerificaDirectory" title="details" class="method-name">VerificaDirectory</a>
+											(<span class="var-type">string</span>&nbsp;<span class="var-name">$file</span>)
+									</div>
+											</div>
+		</div>
+	</div>		
+
+	<a name="sec-vars"></a>
+	<div class="info-box">
+		<div class="info-box-title">Variables</div>
+		<div class="nav-bar">
+			<a href="#sec-description">Description</a> |
+										<a href="#sec-var-summary">Vars</a> (<span class="disabled">details</span>)
+						
+			
+												<a href="#sec-const-summary">Constants</a> (<a href="#sec-consts">details</a>)
+							
+										| 
+									<a href="#sec-method-summary">Methods</a> (<a href="#sec-methods">details</a>)
+							
+					</div>
+		<div class="info-box-body">
+			<a name="var" id=""><!-- --></A>
+<div class="oddrow">
+
+	<div class="var-header">
+		<img src="../../media/images/StaticVariable.png" />
+		<span class="var-title">
+			static <span class="var-type">mixed</span>
+			<span class="var-name"></span>
+						(line <span class="line-number"><a href="../../__filesource/fsource_Cc__CcAutoloadSearchClassSearchClass.php.html#a101">101</a></span>)
+		</span>
+	</div>
+
+	<!-- ========== Info from phpDoc block ========= -->
+	<ul class="tags">
+				<li><span class="field">access:</span> protected</li>
+			</ul>
+	
+	
+		
+		
+
+</div>
+<a name="var" id=""><!-- --></A>
+<div class="evenrow">
+
+	<div class="var-header">
+		<img src="../../media/images/StaticVariable.png" />
+		<span class="var-title">
+			static <span class="var-type">mixed</span>
+			<span class="var-name"></span>
+						(line <span class="line-number"><a href="../../__filesource/fsource_Cc__CcAutoloadSearchClassSearchClass.php.html#a101">101</a></span>)
+		</span>
+	</div>
+
+	<!-- ========== Info from phpDoc block ========= -->
+	<ul class="tags">
+				<li><span class="field">access:</span> protected</li>
+			</ul>
+	
+	
+		
+		
+
+</div>
+<a name="var$classes" id="$classes"><!-- --></A>
+<div class="oddrow">
+
+	<div class="var-header">
+		<img src="../../media/images/StaticVariable.png" />
+		<span class="var-title">
+			static <span class="var-type">array</span>
+			<span class="var-name">$classes</span>
+			 = <span class="var-default">array()</span>			(line <span class="line-number"><a href="../../__filesource/fsource_Cc__CcAutoloadSearchClassSearchClass.php.html#a95">95</a></span>)
+		</span>
+	</div>
+
+	<!-- ========== Info from phpDoc block ========= -->
+	<ul class="tags">
+				<li><span class="field">access:</span> public</li>
+			</ul>
+	
+	
+		
+		
+
+</div>
+<a name="var$DirFiles" id="$DirFiles"><!-- --></A>
+<div class="evenrow">
+
+	<div class="var-header">
+		<img src="../../media/images/StaticVariable.png" />
+		<span class="var-title">
+			static <span class="var-type">arrray</span>
+			<span class="var-name">$DirFiles</span>
+			 = <span class="var-default">array()</span>			(line <span class="line-number"><a href="../../__filesource/fsource_Cc__CcAutoloadSearchClassSearchClass.php.html#a83">83</a></span>)
+		</span>
+	</div>
+
+	<!-- ========== Info from phpDoc block ========= -->
+	<ul class="tags">
+				<li><span class="field">access:</span> public</li>
+			</ul>
+	
+	
+		
+		
+
+</div>
+<a name="var$LastSeacrhClass" id="$LastSeacrhClass"><!-- --></A>
+<div class="oddrow">
+
+	<div class="var-header">
+		<img src="../../media/images/StaticVariable.png" />
+		<span class="var-title">
+			static <span class="var-type">array</span>
+			<span class="var-name">$LastSeacrhClass</span>
+			 = <span class="var-default"> [T_CLASS =&gt; []</span>			(line <span class="line-number"><a href="../../__filesource/fsource_Cc__CcAutoloadSearchClassSearchClass.php.html#a124">124</a></span>)
+		</span>
+	</div>
+
+	<!-- ========== Info from phpDoc block ========= -->
+	<ul class="tags">
+				<li><span class="field">access:</span> protected</li>
+			</ul>
+	
+	
+		
+		
+
+</div>
+<a name="var$SearchDefines" id="$SearchDefines"><!-- --></A>
+<div class="evenrow">
+
+	<div class="var-header">
+		<img src="../../media/images/StaticVariable.png" />
+		<span class="var-title">
+			static <span class="var-type">array</span>
+			<span class="var-name">$SearchDefines</span>
+			 = <span class="var-default"> ['class'</span>			(line <span class="line-number"><a href="../../__filesource/fsource_Cc__CcAutoloadSearchClassSearchClass.php.html#a101">101</a></span>)
+		</span>
+	</div>
+
+	<!-- ========== Info from phpDoc block ========= -->
+	<ul class="tags">
+				<li><span class="field">access:</span> protected</li>
+			</ul>
+	
+	
+		
+		
+
+</div>
+
+<a name="var$avance_searh" id="$avance_searh"><!-- --></A>
+<div class="oddrow">
+
+	<div class="var-header">
+		<img src="../../media/images/Variable.png" />
+		<span class="var-title">
+			<span class="var-type">bool</span>
+			<span class="var-name">$avance_searh</span>
+			 = <span class="var-default"> false</span>			(line <span class="line-number"><a href="../../__filesource/fsource_Cc__CcAutoloadSearchClassSearchClass.php.html#a89">89</a></span>)
+		</span>
+	</div>
+
+	<!-- ========== Info from phpDoc block ========= -->
+	<ul class="tags">
+				<li><span class="field">access:</span> protected</li>
+			</ul>
+	
+	
+		
+		
+
+</div>
+<a name="var$CaseSensitive" id="$CaseSensitive"><!-- --></A>
+<div class="evenrow">
+
+	<div class="var-header">
+		<img src="../../media/images/Variable.png" />
+		<span class="var-title">
+			<span class="var-type">bool</span>
+			<span class="var-name">$CaseSensitive</span>
+			 = <span class="var-default"> false</span>			(line <span class="line-number"><a href="../../__filesource/fsource_Cc__CcAutoloadSearchClassSearchClass.php.html#a107">107</a></span>)
+		</span>
+	</div>
+
+	<!-- ========== Info from phpDoc block ========= -->
+	<ul class="tags">
+				<li><span class="field">access:</span> protected</li>
+			</ul>
+	
+	
+		
+		
+
+</div>
+<a name="var$class" id="$class"><!-- --></A>
+<div class="oddrow">
+
+	<div class="var-header">
+		<img src="../../media/images/Variable.png" />
+		<span class="var-title">
+			<span class="var-type">string</span>
+			<span class="var-name">$class</span>
+						(line <span class="line-number"><a href="../../__filesource/fsource_Cc__CcAutoloadSearchClassSearchClass.php.html#a61">61</a></span>)
+		</span>
+	</div>
+
+	<!-- ========== Info from phpDoc block ========= -->
+<p class="short-description">nombre de la clase a buscar</p>
+	<ul class="tags">
+				<li><span class="field">access:</span> protected</li>
+			</ul>
+	
+	
+		
+		
+
+</div>
+<a name="var$directorios" id="$directorios"><!-- --></A>
+<div class="evenrow">
+
+	<div class="var-header">
+		<img src="../../media/images/Variable.png" />
+		<span class="var-title">
+			<span class="var-type">array</span>
+			<span class="var-name">$directorios</span>
+			 = <span class="var-default">array()</span>			(line <span class="line-number"><a href="../../__filesource/fsource_Cc__CcAutoloadSearchClassSearchClass.php.html#a78">78</a></span>)
+		</span>
+	</div>
+
+	<!-- ========== Info from phpDoc block ========= -->
+<p class="short-description">directorios y archivos donde se busco la clase</p>
+	<ul class="tags">
+				<li><span class="field">access:</span> protected</li>
+			</ul>
+	
+	
+		
+		
+
+</div>
+<a name="var$filename" id="$filename"><!-- --></A>
+<div class="oddrow">
+
+	<div class="var-header">
+		<img src="../../media/images/Variable.png" />
+		<span class="var-title">
+			<span class="var-type">string</span>
+			<span class="var-name">$filename</span>
+			 = <span class="var-default"> false</span>			(line <span class="line-number"><a href="../../__filesource/fsource_Cc__CcAutoloadSearchClassSearchClass.php.html#a73">73</a></span>)
+		</span>
+	</div>
+
+	<!-- ========== Info from phpDoc block ========= -->
+<p class="short-description">nombre del archivo en el que se encontro la clase</p>
+	<ul class="tags">
+				<li><span class="field">access:</span> protected</li>
+			</ul>
+	
+	
+		
+		
+
+</div>
+<a name="var$namespaces" id="$namespaces"><!-- --></A>
+<div class="evenrow">
+
+	<div class="var-header">
+		<img src="../../media/images/Variable.png" />
+		<span class="var-title">
+			<span class="var-type">array</span>
+			<span class="var-name">$namespaces</span>
+			 = <span class="var-default"> []</span>			(line <span class="line-number"><a href="../../__filesource/fsource_Cc__CcAutoloadSearchClassSearchClass.php.html#a67">67</a></span>)
+		</span>
+	</div>
+
+	<!-- ========== Info from phpDoc block ========= -->
+<p class="short-description">espacios con nombre de la clase a buscar</p>
+	<ul class="tags">
+				<li><span class="field">access:</span> protected</li>
+			</ul>
+	
+	
+		
+		
+
+</div>
+						
+		</div>
+	</div>
+	
+	<a name="sec-methods"></a>
+	<div class="info-box">
+		<div class="info-box-title">Methods</div>
+		<div class="nav-bar">
+			<a href="#sec-description">Description</a> |
+															<a href="#sec-var-summary">Vars</a> (<a href="#sec-vars">details</a>)
+																			<a href="#sec-const-summary">Constants</a> (<a href="#sec-consts">details</a>)
+							
+										<a href="#sec-method-summary">Methods</a> (<span class="disabled">details</span>)
+						
+		</div>
+		<div class="info-box-body">
+			<A NAME='method_detail'></A>
+<a name="methodAddDirAutoload" id="AddDirAutoload"><!-- --></a>
+<div class="oddrow">
+	
+	<div class="method-header">
+		<img src="../../media/images/StaticMethod.png" />
+		<span class="method-title">static AddDirAutoload</span> (line <span class="line-number"><a href="../../__filesource/fsource_Cc__CcAutoloadSearchClassSearchClass.php.html#a236">236</a></span>)
+	</div> 
+	
+	<!-- ========== Info from phpDoc block ========= -->
+<p class="short-description">AGREGA UN DIRECTORIO DONDE SERA BUSCADA LA CLASE, INTERFACE O TRAIT</p>
+	<ul class="tags">
+				<li><span class="field">access:</span> public</li>
+			</ul>
+	
+	<div class="method-signature">
+		static <span class="method-result">void</span>
+		<span class="method-name">
+			AddDirAutoload
+		</span>
+					(<span class="var-type">mixes</span>&nbsp;<span class="var-name">$dir</span>, [<span class="var-type">bool</span>&nbsp;<span class="var-name">$avance</span> = <span class="var-default">NULL</span>])
+			</div>
+	
+			<ul class="parameters">
+					<li>
+				<span class="var-type">mixes</span>
+				<span class="var-name">$dir</span><span class="var-description">: DIRECTORIO</span>			</li>
+					<li>
+				<span class="var-type">bool</span>
+				<span class="var-name">$avance</span>			</li>
+				</ul>
+		
+			
+	</div>
+<a name="methodClearListClass" id="ClearListClass"><!-- --></a>
+<div class="evenrow">
+	
+	<div class="method-header">
+		<img src="../../media/images/StaticMethod.png" />
+		<span class="method-title">static ClearListClass</span> (line <span class="line-number"><a href="../../__filesource/fsource_Cc__CcAutoloadSearchClassSearchClass.php.html#a154">154</a></span>)
+	</div> 
+	
+	<!-- ========== Info from phpDoc block ========= -->
+<p class="short-description">limpia la lista de clases encontradas</p>
+	<ul class="tags">
+				<li><span class="field">access:</span> public</li>
+			</ul>
+	
+	<div class="method-signature">
+		static <span class="method-result">void</span>
+		<span class="method-name">
+			ClearListClass
+		</span>
+				()
+			</div>
+	
+		
+			
+	</div>
+<a name="methodFactory" id="Factory"><!-- --></a>
+<div class="oddrow">
+	
+	<div class="method-header">
+		<img src="../../media/images/StaticMethod.png" />
+		<span class="method-title">static Factory</span> (line <span class="line-number"><a href="../../__filesource/fsource_Cc__CcAutoloadSearchClassSearchClass.php.html#a220">220</a></span>)
+	</div> 
+	
+	<!-- ========== Info from phpDoc block ========= -->
+	<ul class="tags">
+				<li><span class="field">deprecated:</span> </li>
+				<li><span class="field">access:</span> public</li>
+			</ul>
+	
+	<div class="method-signature">
+		static <span class="method-result">void</span>
+		<span class="method-name">
+			&amp;Factory
+		</span>
+					([<span class="var-type"></span>&nbsp;<span class="var-name">$class</span> = <span class="var-default">NULL</span>], [<span class="var-type"></span>&nbsp;<span class="var-name">$param</span> = <span class="var-default">[]</span>], [<span class="var-type"></span>&nbsp;<span class="var-name">$dir</span> = <span class="var-default">NULL</span>], [<span class="var-type"></span>&nbsp;<span class="var-name">$avance</span> = <span class="var-default">NULL</span>], [<span class="var-type"></span>&nbsp;<span class="var-name">$use_load</span> = <span class="var-default">true</span>])
+			</div>
+	
+			<ul class="parameters">
+					<li>
+				<span class="var-type"></span>
+				<span class="var-name">$class</span>			</li>
+					<li>
+				<span class="var-type"></span>
+				<span class="var-name">$param</span>			</li>
+					<li>
+				<span class="var-type"></span>
+				<span class="var-name">$dir</span>			</li>
+					<li>
+				<span class="var-type"></span>
+				<span class="var-name">$avance</span>			</li>
+					<li>
+				<span class="var-type"></span>
+				<span class="var-name">$use_load</span>			</li>
+				</ul>
+		
+			
+	</div>
+<a name="methodGetDirFiles" id="GetDirFiles"><!-- --></a>
+<div class="evenrow">
+	
+	<div class="method-header">
+		<img src="../../media/images/StaticMethod.png" />
+		<span class="method-title">static GetDirFiles</span> (line <span class="line-number"><a href="../../__filesource/fsource_Cc__CcAutoloadSearchClassSearchClass.php.html#a182">182</a></span>)
+	</div> 
+	
+	<!-- ========== Info from phpDoc block ========= -->
+<p class="short-description">RETORNA UN ARRAY CON TODOS LOS DIRECTORIOS DONDE LA CLASE BUSCO</p>
+	<ul class="tags">
+				<li><span class="field">access:</span> public</li>
+			</ul>
+	
+	<div class="method-signature">
+		static <span class="method-result">array</span>
+		<span class="method-name">
+			GetDirFiles
+		</span>
+				()
+			</div>
+	
+		
+			
+	</div>
+<a name="methodGetListAllClass" id="GetListAllClass"><!-- --></a>
+<div class="oddrow">
+	
+	<div class="method-header">
+		<img src="../../media/images/StaticMethod.png" />
+		<span class="method-title">static GetListAllClass</span> (line <span class="line-number"><a href="../../__filesource/fsource_Cc__CcAutoloadSearchClassSearchClass.php.html#a165">165</a></span>)
+	</div> 
+	
+	<!-- ========== Info from phpDoc block ========= -->
+<p class="short-description">GENERA UN ARRAY TIPO CLAVE=&gt;VALOR CON LOS NOMBRES DE LAS CLASE, INTERFACE O TRAIT QUE SE ENCUENTRAN EN EL COMO INDICE</p>
+<p class="description"><p>Y COMO VALOR LA DIRECCION LOCAL</p></p>
+	<ul class="tags">
+				<li><span class="field">access:</span> public</li>
+			</ul>
+	
+	<div class="method-signature">
+		static <span class="method-result">array</span>
+		<span class="method-name">
+			GetListAllClass
+		</span>
+					(<span class="var-type">string</span>&nbsp;<span class="var-name">$dir</span>)
+			</div>
+	
+			<ul class="parameters">
+					<li>
+				<span class="var-type">string</span>
+				<span class="var-name">$dir</span>			</li>
+				</ul>
+		
+			
+	</div>
+<a name="methodLoad" id="Load"><!-- --></a>
+<div class="evenrow">
+	
+	<div class="method-header">
+		<img src="../../media/images/StaticMethod.png" />
+		<span class="method-title">static Load</span> (line <span class="line-number"><a href="../../__filesource/fsource_Cc__CcAutoloadSearchClassSearchClass.php.html#a301">301</a></span>)
+	</div> 
+	
+	<!-- ========== Info from phpDoc block ========= -->
+<p class="short-description">BUSCA Y CARGA UNA CLASE</p>
+	<ul class="tags">
+				<li><span class="field">return:</span> TRUE SI TUBO EXITO</li>
+				<li><span class="field">access:</span> public</li>
+			</ul>
+	
+	<div class="method-signature">
+		static <span class="method-result">bool</span>
+		<span class="method-name">
+			&amp;Load
+		</span>
+					(<span class="var-type">string</span>&nbsp;<span class="var-name">$class</span>, [<span class="var-type">string</span>&nbsp;<span class="var-name">$dir</span> = <span class="var-default">NULL</span>], [<span class="var-type">bool</span>&nbsp;<span class="var-name">$avance</span> = <span class="var-default">false</span>], [<span class="var-type">bool</span>&nbsp;<span class="var-name">$is_autoload</span> = <span class="var-default">true</span>], [<span class="var-type">string</span>&nbsp;<span class="var-name">$fnload</span> = <span class="var-default">'require_once'</span>])
+			</div>
+	
+			<ul class="parameters">
+					<li>
+				<span class="var-type">string</span>
+				<span class="var-name">$class</span><span class="var-description">: NOMBRE SE LA CLASE A BUSCAR</span>			</li>
+					<li>
+				<span class="var-type">string</span>
+				<span class="var-name">$dir</span><span class="var-description">: DIRECTORIO DONDE SE BUSCARA LA CLASE (OPCIONAL)</span>			</li>
+					<li>
+				<span class="var-type">bool</span>
+				<span class="var-name">$avance</span><span class="var-description">: INDICA SI SEREALIZARA UNA BUSQUEDA AVANZADA</span>			</li>
+					<li>
+				<span class="var-type">bool</span>
+				<span class="var-name">$is_autoload</span><span class="var-description">: IDICA SI SE USARA LA VARIABLE DIRECTORIO DE AddDirLoad</span>			</li>
+					<li>
+				<span class="var-type">string</span>
+				<span class="var-name">$fnload</span><span class="var-description">: le funcion de craga</span>			</li>
+				</ul>
+		
+			
+	</div>
+<a name="methodPushExt" id="PushExt"><!-- --></a>
+<div class="oddrow">
+	
+	<div class="method-header">
+		<img src="../../media/images/StaticMethod.png" />
+		<span class="method-title">static PushExt</span> (line <span class="line-number"><a href="../../__filesource/fsource_Cc__CcAutoloadSearchClassSearchClass.php.html#a828">828</a></span>)
+	</div> 
+	
+	<!-- ========== Info from phpDoc block ========= -->
+<p class="short-description">agrega un extencion de archivo</p>
+	<ul class="tags">
+				<li><span class="field">access:</span> public</li>
+			</ul>
+	
+	<div class="method-signature">
+		static <span class="method-result">void</span>
+		<span class="method-name">
+			PushExt
+		</span>
+					(<span class="var-type">array|string</span>&nbsp;<span class="var-name">$ext</span>)
+			</div>
+	
+			<ul class="parameters">
+					<li>
+				<span class="var-type">array|string</span>
+				<span class="var-name">$ext</span>			</li>
+				</ul>
+		
+			
+	</div>
+<a name="methodStartAutoloadClass" id="StartAutoloadClass"><!-- --></a>
+<div class="evenrow">
+	
+	<div class="method-header">
+		<img src="../../media/images/StaticMethod.png" />
+		<span class="method-title">static StartAutoloadClass</span> (line <span class="line-number"><a href="../../__filesource/fsource_Cc__CcAutoloadSearchClassSearchClass.php.html#a278">278</a></span>)
+	</div> 
+	
+	<!-- ========== Info from phpDoc block ========= -->
+<p class="short-description">FUNCION STATIC DEFINE LA FUNCION __autoload UNA VES LLAMADO ESTE METODO LAS CLASES SE CARGARAN DEL O LOS DIRECTORIOES ESPECIFICADOS</p>
+	<ul class="tags">
+				<li><span class="field">access:</span> public</li>
+			</ul>
+	
+	<div class="method-signature">
+		static <span class="method-result">void</span>
+		<span class="method-name">
+			StartAutoloadClass
+		</span>
+					([<span class="var-type">mixes</span>&nbsp;<span class="var-name">$dir</span> = <span class="var-default">NULL</span>], [<span class="var-type">bool</span>&nbsp;<span class="var-name">$avance</span> = <span class="var-default">NULL</span>])
+			</div>
+	
+			<ul class="parameters">
+					<li>
+				<span class="var-type">mixes</span>
+				<span class="var-name">$dir</span><span class="var-description">: DIRECTORIO DONDE SE BUSCARA LA CLASE</span>			</li>
+					<li>
+				<span class="var-type">bool</span>
+				<span class="var-name">$avance</span><span class="var-description">: INDICA SI SEREALIZARA UNA BUSQUEDA AVANZADA</span>			</li>
+				</ul>
+		
+			
+	</div>
+<a name="methodStopAutoloadClass" id="StopAutoloadClass"><!-- --></a>
+<div class="oddrow">
+	
+	<div class="method-header">
+		<img src="../../media/images/StaticMethod.png" />
+		<span class="method-title">static StopAutoloadClass</span> (line <span class="line-number"><a href="../../__filesource/fsource_Cc__CcAutoloadSearchClassSearchClass.php.html#a287">287</a></span>)
+	</div> 
+	
+	<!-- ========== Info from phpDoc block ========= -->
+	<ul class="tags">
+				<li><span class="field">access:</span> public</li>
+			</ul>
+	
+	<div class="method-signature">
+		static <span class="method-result">void</span>
+		<span class="method-name">
+			StopAutoloadClass
+		</span>
+				()
+			</div>
+	
+		
+			
+	</div>
+<a name="method__construct" id="__construct"><!-- --></a>
+<div class="evenrow">
+	
+	<div class="method-header">
+		<img src="../../media/images/Constructor.png" />
+		<span class="method-title">Constructor __construct</span> (line <span class="line-number"><a href="../../__filesource/fsource_Cc__CcAutoloadSearchClassSearchClass.php.html#a135">135</a></span>)
+	</div> 
+	
+	<!-- ========== Info from phpDoc block ========= -->
+<p class="short-description">BUSCA UNA CLASE, INTERFACE O TRAIT DEFINIDAD EN UN DIRECTORIO</p>
+	<ul class="tags">
+				<li><span class="field">access:</span> public</li>
+			</ul>
+	
+	<div class="method-signature">
+		<span class="method-result">SearchClass</span>
+		<span class="method-name">
+			__construct
+		</span>
+					(<span class="var-type">string</span>&nbsp;<span class="var-name">$class</span>, [<span class="var-type">string</span>&nbsp;<span class="var-name">$dir</span> = <span class="var-default">NULL</span>], [<span class="var-type"></span>&nbsp;<span class="var-name">$avance_searh</span> = <span class="var-default">false</span>], [<span class="var-type"></span>&nbsp;<span class="var-name">$CaseSensitive</span> = <span class="var-default">false</span>])
+			</div>
+	
+			<ul class="parameters">
+					<li>
+				<span class="var-type">string</span>
+				<span class="var-name">$class</span><span class="var-description">: nombre de la clase a buscar</span>			</li>
+					<li>
+				<span class="var-type">string</span>
+				<span class="var-name">$dir</span><span class="var-description">: directorio donde se buscara la clase</span>			</li>
+					<li>
+				<span class="var-type"></span>
+				<span class="var-name">$avance_searh</span>			</li>
+					<li>
+				<span class="var-type"></span>
+				<span class="var-name">$CaseSensitive</span>			</li>
+				</ul>
+		
+			
+	</div>
+<a name="methodFactoryObject" id="FactoryObject"><!-- --></a>
+<div class="oddrow">
+	
+	<div class="method-header">
+		<img src="../../media/images/Method.png" />
+		<span class="method-title">FactoryObject</span> (line <span class="line-number"><a href="../../__filesource/fsource_Cc__CcAutoloadSearchClassSearchClass.php.html#a195">195</a></span>)
+	</div> 
+	
+	<!-- ========== Info from phpDoc block ========= -->
+<p class="short-description">FABRICA UN OBJETO DE LA CLASE PASADA EN EL CONSTRUCTOR</p>
+	<ul class="tags">
+				<li><span class="field">throws:</span> SearchClassException</li>
+				<li><span class="field">access:</span> public</li>
+			</ul>
+	
+	<div class="method-signature">
+		<span class="method-result">mixes</span>
+		<span class="method-name">
+			FactoryObject
+		</span>
+					([<span class="var-type">array</span>&nbsp;<span class="var-name">$param</span> = <span class="var-default">array()</span>], [<span class="var-type">bool</span>&nbsp;<span class="var-name">$autoload</span> = <span class="var-default">false</span>])
+			</div>
+	
+			<ul class="parameters">
+					<li>
+				<span class="var-type">array</span>
+				<span class="var-name">$param</span><span class="var-description">: PARAMETROS QUE SE LE PASARAN AL CONSTRUCTOR DE LA CLASE</span>			</li>
+					<li>
+				<span class="var-type">bool</span>
+				<span class="var-name">$autoload</span><span class="var-description">: indica se se incluira de el directorio resultante de la llamada a Search() <ul><li>no</li></ul></span>			</li>
+				</ul>
+		
+			
+	</div>
+<a name="methodFileSearch" id="FileSearch"><!-- --></a>
+<div class="evenrow">
+	
+	<div class="method-header">
+		<img src="../../media/images/Method.png" />
+		<span class="method-title">FileSearch</span> (line <span class="line-number"><a href="../../__filesource/fsource_Cc__CcAutoloadSearchClassSearchClass.php.html#a610">610</a></span>)
+	</div> 
+	
+	<!-- ========== Info from phpDoc block ========= -->
+<p class="short-description">BUCA LA DEFINICION DE LA  CLASE EN UN ARCHIVO</p>
+	<ul class="tags">
+				<li><span class="field">return:</span> true si se encontro</li>
+				<li><span class="field">access:</span> protected</li>
+			</ul>
+	
+	<div class="method-signature">
+		<span class="method-result">bool</span>
+		<span class="method-name">
+			FileSearch
+		</span>
+					(<span class="var-type">string</span>&nbsp;<span class="var-name">$file</span>)
+			</div>
+	
+			<ul class="parameters">
+					<li>
+				<span class="var-type">string</span>
+				<span class="var-name">$file</span><span class="var-description">: NOMBRE DEL ARCHIVO</span>			</li>
+				</ul>
+		
+			
+	</div>
+<a name="methodGetFileName" id="GetFileName"><!-- --></a>
+<div class="oddrow">
+	
+	<div class="method-header">
+		<img src="../../media/images/Method.png" />
+		<span class="method-title">GetFileName</span> (line <span class="line-number"><a href="../../__filesource/fsource_Cc__CcAutoloadSearchClassSearchClass.php.html#a566">566</a></span>)
+	</div> 
+	
+	<!-- ========== Info from phpDoc block ========= -->
+<p class="short-description">retorna el nombre del archivo</p>
+	<ul class="tags">
+				<li><span class="field">access:</span> public</li>
+			</ul>
+	
+	<div class="method-signature">
+		<span class="method-result">void</span>
+		<span class="method-name">
+			GetFileName
+		</span>
+				()
+			</div>
+	
+		
+			
+	</div>
+<a name="methodgetLastFiles" id="getLastFiles"><!-- --></a>
+<div class="evenrow">
+	
+	<div class="method-header">
+		<img src="../../media/images/Method.png" />
+		<span class="method-title">getLastFiles</span> (line <span class="line-number"><a href="../../__filesource/fsource_Cc__CcAutoloadSearchClassSearchClass.php.html#a146">146</a></span>)
+	</div> 
+	
+	<!-- ========== Info from phpDoc block ========= -->
+	<ul class="tags">
+				<li><span class="field">access:</span> public</li>
+			</ul>
+	
+	<div class="method-signature">
+		<span class="method-result">void</span>
+		<span class="method-name">
+			getLastFiles
+		</span>
+				()
+			</div>
+	
+		
+			
+	</div>
+<a name="methodInclude_" id="Include_"><!-- --></a>
+<div class="oddrow">
+	
+	<div class="method-header">
+		<img src="../../media/images/Method.png" />
+		<span class="method-title">Include_</span> (line <span class="line-number"><a href="../../__filesource/fsource_Cc__CcAutoloadSearchClassSearchClass.php.html#a359">359</a></span>)
+	</div> 
+	
+	<!-- ========== Info from phpDoc block ========= -->
+<p class="short-description">CARGA LA CLASE, INTERFACE O TRAIT CON LA FUNCION DE CRAGA PASADA EN $FN</p>
+<p class="description"><p>QUE DEVE SER  include,include_once,require o require_once</p></p>
+	<ul class="tags">
+				<li><span class="field">throws:</span> SearchClassException</li>
+				<li><span class="field">access:</span> public</li>
+			</ul>
+	
+	<div class="method-signature">
+		<span class="method-result">void</span>
+		<span class="method-name">
+			Include_
+		</span>
+					([<span class="var-type">string</span>&nbsp;<span class="var-name">$FN</span> = <span class="var-default">'include_once'</span>])
+			</div>
+	
+			<ul class="parameters">
+					<li>
+				<span class="var-type">string</span>
+				<span class="var-name">$FN</span>			</li>
+				</ul>
+		
+			
+	</div>
+<a name="methodNombClassFileExists" id="NombClassFileExists"><!-- --></a>
+<div class="evenrow">
+	
+	<div class="method-header">
+		<img src="../../media/images/Method.png" />
+		<span class="method-title">NombClassFileExists</span> (line <span class="line-number"><a href="../../__filesource/fsource_Cc__CcAutoloadSearchClassSearchClass.php.html#a576">576</a></span>)
+	</div> 
+	
+	<!-- ========== Info from phpDoc block ========= -->
+<p class="short-description">verifica si existe un archivo con el mismo nombre de la clase buscada</p>
+	<ul class="tags">
+				<li><span class="field">access:</span> protected</li>
+			</ul>
+	
+	<div class="method-signature">
+		<span class="method-result">boolean</span>
+		<span class="method-name">
+			NombClassFileExists
+		</span>
+					(<span class="var-type">string</span>&nbsp;<span class="var-name">$dir</span>)
+			</div>
+	
+			<ul class="parameters">
+					<li>
+				<span class="var-type">string</span>
+				<span class="var-name">$dir</span>			</li>
+				</ul>
+		
+			
+	</div>
+<a name="methodSearch" id="Search"><!-- --></a>
+<div class="oddrow">
+	
+	<div class="method-header">
+		<img src="../../media/images/Method.png" />
+		<span class="method-title">Search</span> (line <span class="line-number"><a href="../../__filesource/fsource_Cc__CcAutoloadSearchClassSearchClass.php.html#a421">421</a></span>)
+	</div> 
+	
+	<!-- ========== Info from phpDoc block ========= -->
+<p class="short-description">BUSCA Y RETORNA EL NOMBRE DEL ARCHIVO DONDE SE ENCUENTRA LA CLASE PASADA AL CONSTRUCTOR</p>
+	<ul class="tags">
+				<li><span class="field">return:</span> NOMBRE DEL ARCHIVO DONDE SE ENCUENTA DEFINIDA LA CLASE</li>
+				<li><span class="field">access:</span> public</li>
+			</ul>
+	
+	<div class="method-signature">
+		<span class="method-result">string</span>
+		<span class="method-name">
+			Search
+		</span>
+					([<span class="var-type">bool</span>&nbsp;<span class="var-name">$recursive</span> = <span class="var-default">true</span>])
+			</div>
+	
+			<ul class="parameters">
+					<li>
+				<span class="var-type">bool</span>
+				<span class="var-name">$recursive</span><span class="var-description">: indica si se realizara una busqueda recursiva en los directorios</span>			</li>
+				</ul>
+		
+			
+	</div>
+<a name="methodSearchLastClass" id="SearchLastClass"><!-- --></a>
+<div class="evenrow">
+	
+	<div class="method-header">
+		<img src="../../media/images/Method.png" />
+		<span class="method-title">SearchLastClass</span> (line <span class="line-number"><a href="../../__filesource/fsource_Cc__CcAutoloadSearchClassSearchClass.php.html#a513">513</a></span>)
+	</div> 
+	
+	<!-- ========== Info from phpDoc block ========= -->
+<p class="short-description">realiza una busqueda el los archivos antes abiertos</p>
+	<ul class="tags">
+				<li><span class="field">access:</span> protected</li>
+			</ul>
+	
+	<div class="method-signature">
+		<span class="method-result">boolean</span>
+		<span class="method-name">
+			SearchLastClass
+		</span>
+				()
+			</div>
+	
+		
+			
+	</div>
+<a name="methodSearchTonkens" id="SearchTonkens"><!-- --></a>
+<div class="oddrow">
+	
+	<div class="method-header">
+		<img src="../../media/images/Method.png" />
+		<span class="method-title">SearchTonkens</span> (line <span class="line-number"><a href="../../__filesource/fsource_Cc__CcAutoloadSearchClassSearchClass.php.html#a635">635</a></span>)
+	</div> 
+	
+	<!-- ========== Info from phpDoc block ========= -->
+<p class="short-description">realiza una busqeuda de clase ,interfaces, traits y namespaces</p>
+	<ul class="tags">
+				<li><span class="field">access:</span> protected</li>
+			</ul>
+	
+	<div class="method-signature">
+		<span class="method-result">boolean</span>
+		<span class="method-name">
+			SearchTonkens
+		</span>
+					(<span class="var-type">string</span>&nbsp;<span class="var-name">$cadena</span>, <span class="var-type">string</span>&nbsp;<span class="var-name">$file</span>)
+			</div>
+	
+			<ul class="parameters">
+					<li>
+				<span class="var-type">string</span>
+				<span class="var-name">$cadena</span>			</li>
+					<li>
+				<span class="var-type">string</span>
+				<span class="var-name">$file</span>			</li>
+				</ul>
+		
+			
+	</div>
+<a name="methodSetDir" id="SetDir"><!-- --></a>
+<div class="evenrow">
+	
+	<div class="method-header">
+		<img src="../../media/images/Method.png" />
+		<span class="method-title">SetDir</span> (line <span class="line-number"><a href="../../__filesource/fsource_Cc__CcAutoloadSearchClassSearchClass.php.html#a392">392</a></span>)
+	</div> 
+	
+	<!-- ========== Info from phpDoc block ========= -->
+<p class="short-description">establece el directorio donde se buscaran las clases</p>
+	<ul class="tags">
+				<li><span class="field">throws:</span> SearchClassException</li>
+				<li><span class="field">access:</span> public</li>
+			</ul>
+	
+	<div class="method-signature">
+		<span class="method-result">\Cc\Autoload\SearchClass</span>
+		<span class="method-name">
+			&amp;SetDir
+		</span>
+					(<span class="var-type">string</span>&nbsp;<span class="var-name">$dir</span>)
+			</div>
+	
+			<ul class="parameters">
+					<li>
+				<span class="var-type">string</span>
+				<span class="var-name">$dir</span>			</li>
+				</ul>
+		
+			
+	</div>
+<a name="methodVerificaDirectory" id="VerificaDirectory"><!-- --></a>
+<div class="oddrow">
+	
+	<div class="method-header">
+		<img src="../../media/images/Method.png" />
+		<span class="method-title">VerificaDirectory</span> (line <span class="line-number"><a href="../../__filesource/fsource_Cc__CcAutoloadSearchClassSearchClass.php.html#a541">541</a></span>)
+	</div> 
+	
+	<!-- ========== Info from phpDoc block ========= -->
+<p class="short-description">verifica que la clase se encuentre en el directorio de busqueda</p>
+	<ul class="tags">
+				<li><span class="field">access:</span> protected</li>
+			</ul>
+	
+	<div class="method-signature">
+		<span class="method-result">boolean</span>
+		<span class="method-name">
+			VerificaDirectory
+		</span>
+					(<span class="var-type">string</span>&nbsp;<span class="var-name">$file</span>)
+			</div>
+	
+			<ul class="parameters">
+					<li>
+				<span class="var-type">string</span>
+				<span class="var-name">$file</span>			</li>
+				</ul>
+		
+			
+	</div>
+						
+		</div>
+	</div>
+
+	<a name="sec-consts"></a>
+	<div class="info-box">
+		<div class="info-box-title">Class Constants</div>
+		<div class="nav-bar">
+			<a href="#sec-description">Description</a> |
+										<a href="#sec-var-summary">Constants</a> (<span class="disabled">details</span>)
+						
+			
+												<a href="#sec-var-summary">Vars</a> (<a href="#sec-vars">details</a>)
+														| 
+									<a href="#sec-method-summary">Methods</a> (<a href="#sec-methods">details</a>)
+							
+					</div>
+		<div class="info-box-body">
+			<a name="constAllClass" id="AllClass"><!-- --></A>
+<div class="evenrow">
+
+	<div class="const-header">
+		<img src="../../media/images/Variable.png" />
+		<span class="const-title">
+			<span class="const-name">AllClass</span>
+			 = <span class="const-default"> '.*'</span>
+			(line <span class="line-number"><a href="../../__filesource/fsource_Cc__CcAutoloadSearchClassSearchClass.php.html#a112">112</a></span>)
+		</span>
+	</div>
+
+	<!-- ========== Info from phpDoc block ========= -->
+	
+	
+</div>
+<a name="constNamespaceSeparator" id="NamespaceSeparator"><!-- --></A>
+<div class="oddrow">
+
+	<div class="const-header">
+		<img src="../../media/images/Variable.png" />
+		<span class="const-title">
+			<span class="const-name">NamespaceSeparator</span>
+			 = <span class="const-default"> '\\'</span>
+			(line <span class="line-number"><a href="../../__filesource/fsource_Cc__CcAutoloadSearchClassSearchClass.php.html#a118">118</a></span>)
+		</span>
+	</div>
+
+	<!-- ========== Info from phpDoc block ========= -->
+	
+	
+</div>
+						
+		</div>
+	</div>
+	
+	<p class="notes" id="credit">
+		Documentation generated on Sat, 15 Oct 2016 03:04:41 +0200 by <a href="http://www.phpdoc.org" target="_blank">phpDocumentor 1.4.3</a>
+	</p>
+	</div></body>
+</html>
