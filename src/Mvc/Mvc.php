@@ -592,6 +592,7 @@ class Mvc
      */
     public static function Redirec($page, array $get = array())
     {
+
         $conf = self::Config();
         if ($conf['Router']['GetControllerFormat'] == Router::Get && !empty($_SERVER['REQUEST_URI']) && $_SERVER['SCRIPT_NAME'] == substr($_SERVER['REQUEST_URI'], 0, strlen($_SERVER['SCRIPT_NAME'])))
         {
@@ -602,7 +603,14 @@ class Mvc
         }
         if (self::App()->Response instanceof ResponseConten)
             self::App()->ProcessConten = false;
-        $redirec = Router::Href($page, $get, $doc);
+        if (filter_var($page, FILTER_VALIDATE_URL))
+        {
+            $redirec = $page;
+        } else
+        {
+            $redirec = Router::Href($page, $get, $doc);
+        }
+
         self::App()->Log("Redireccionando a " . $redirec);
 
         Server::Redirec($redirec);

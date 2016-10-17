@@ -87,7 +87,6 @@ class Mail extends \Cc\Mail
                         return $content;
                     if (is_file($__name))
                     {
-
                         try
                         {
                             ob_start();
@@ -97,8 +96,6 @@ class Mail extends \Cc\Mail
                             }
                             extract($LayautController->jsonSerialize());
                             $this->conten = &$content;
-
-
                             include($__name);
                             $buffer = ob_get_contents();
 

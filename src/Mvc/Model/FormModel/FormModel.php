@@ -470,8 +470,9 @@ abstract class FormModel extends Model
      * imprime un imput desde el nombre de un dato en el modelo
      * @param string $name
      * @param array $attrs [attr=>valor]
+     * @param bool $return indica si en contenido sera impreso en el buffer o retornado
      */
-    public function Input($name, array $attrs = [])
+    public function Input($name, array $attrs = [], $return = false)
     {
 
         if (isset($this->campos[$name]))
@@ -510,7 +511,14 @@ abstract class FormModel extends Model
                     }
                 }
             }
-            echo Html::input($attrs);
+            $buff = Html::input($attrs);
+            if ($buff)
+            {
+                return $buff;
+            } else
+            {
+                echo $buff;
+            }
         } else
         {
             ErrorHandle::Notice('EL CAMPO ' . $name . ' NO EXISTE');
@@ -521,8 +529,9 @@ abstract class FormModel extends Model
      * imprime un textarea desde el nombre de un dato en el modelo
      * @param string $name
      * @param array $attrs [attr=>valor]
+     *  @param bool $return indica si en contenido sera impreso en el buffer o retornado
      */
-    public function TextArea($name, array $attrs = [])
+    public function TextArea($name, array $attrs = [], $return = false)
     {
         if (isset($this->campos[$name]))
         {
@@ -551,7 +560,13 @@ abstract class FormModel extends Model
                     }
                 }
             }
-            echo Html::textarea($value, $attrs);
+            if ($return)
+            {
+                return Html::textarea($value, $attrs);
+            } else
+            {
+                echo Html::textarea($value, $attrs);
+            }
         } else
         {
             ErrorHandle::Notice('EL CAMPO ' . $name . ' NO EXISTE');
@@ -563,8 +578,9 @@ abstract class FormModel extends Model
      * @param type $name
      * @param array|\Traversable $options [opcion=>sttr]
      * @param array $attrs [attr=>valor]
+     *  @param bool $return indica si en contenido sera impreso en el buffer o retornado
      */
-    public function Select($name, $options = [], array $attrs = [])
+    public function Select($name, $options = [], array $attrs = [], $return = false)
     {
         if (isset($this->campos[$name]))
         {
@@ -581,8 +597,13 @@ abstract class FormModel extends Model
             }
 
             $attrs['name'] = $name;
-
-            echo Html::select($attrs, $options);
+            if ($return)
+            {
+                return Html::select($attrs, $options);
+            } else
+            {
+                echo Html::select($attrs, $options);
+            }
         } else
         {
             ErrorHandle::Notice('EL CAMPO ' . $name . ' NO EXISTE');
@@ -592,8 +613,9 @@ abstract class FormModel extends Model
     /**
      * inicia el formulario
      * @param array $attrs
+     *  @param bool $return indica si en contenido sera impreso en el buffer o retornado
      */
-    public function BeginForm($attrs = [])
+    public function BeginForm($attrs = [], $return = false)
     {
         if ($this->existFile)
         {
@@ -601,34 +623,66 @@ abstract class FormModel extends Model
         }
         $attrs['action'] = $this->action;
         $attrs['method'] = $this->Method;
-        echo Html::OpenTang('form', $attrs);
+        if ($return)
+        {
+            return Html::OpenTang('form', $attrs);
+        } else
+        {
+            echo Html::OpenTang('form', $attrs);
+        }
     }
 
     /**
      * imprime el boton de enviar el formulario
      * @param string $value
      * @param array $attrs
+     *  @param bool $return indica si en contenido sera impreso en el buffer o retornado
      */
-    public function ButtonSubmid($value = '', array $attrs = [])
+    public function ButtonSubmid($value = '', array $attrs = [], $return = false)
     {
         $attrs['value'] = 1;
         $attrs['name'] = $this->NameSubmited;
-        echo Html::button($value, $attrs);
+        if ($return)
+        {
+            $r = Html::input(['type' => 'hidden', 'name' => $attrs['name'], 'value' => 1]);
+            $r.= Html::button($value, $attrs);
+            return $r;
+        } else
+        {
+            echo Html::input(['type' => 'hidden', 'name' => $attrs['name'], 'value' => 1]);
+            echo Html::button($value, $attrs);
+        }
     }
 
     /**
      * finaliza el formulario
+     *  @param bool $return indica si en contenido sera impreso en el buffer o retornado
      */
-    public function EndForm()
+    public function EndForm($return = false)
     {
-        echo Html::CloseTang('form');
+        if ($return)
+        {
+            return Html::CloseTang('form');
+        } else
+        {
+            echo Html::CloseTang('form');
+        }
     }
 
-    public function PrintForm($attrs, array $campos = [], $submit = [])
+    /**
+     * 
+     * @param type $attrs
+     * @param array $campos
+     * @param type $submit
+     *  @param bool $return indica si en contenido sera impreso en el buffer o retornado
+     */
+    public function PrintForm($attrs, array $campos = [], $submit = [], $return = false)
     {
         $specialTang = ['select', 'textarea', 'hidden'];
-        $this->BeginForm($attrs);
-        echo Html::OpenTang('ul', ['class' => 'FormList']);
+        $buff = '';
+        $buff.=$this->BeginForm($attrs, true);
+
+        $buff.= Html::OpenTang('ul', ['class' => 'FormList']);
         foreach ($this->campos as $i => $v)
         {
             $typeHtml = $v[self::TypeHtml];
@@ -636,21 +690,21 @@ abstract class FormModel extends Model
             $attr = isset($campos[$i]['attr']) ? $campos[$i]['attr'] : [];
             if ($typeHtml == 'hidden')
             {
-                $this->Input($i, $attr);
+                $buff.=$this->Input($i, $attr, true);
                 continue;
             }
-            echo Html::OpenTang('li', ['class' => 'FormRow']) . Html::label($name, ['from' => $i]);
+            $buff.= Html::OpenTang('li', ['class' => 'FormRow']) . Html::label($name, ['from' => $i]);
             if (!in_array($typeHtml, $specialTang))
             {
                 if (isset($campos[$i]['ListValue']))
                 {
                     foreach ($campos[$i]['ListValue'] as $val)
                     {
-                        $this->Input($i, $attr + ['value' => $val]);
+                        $buff.= $this->Input($i, $attr + ['value' => $val], true);
                     }
                 } else
                 {
-                    $this->Input($i, $attr);
+                    $buff.=$this->Input($i, $attr, true);
                 }
             } else
             {
@@ -658,30 +712,37 @@ abstract class FormModel extends Model
                 {
                     case 'textarea':
                     case 'textarea[]':
-                        $this->TextArea($i, $attr);
+                        $buff.=$this->TextArea($i, $attr, true);
                         break;
                     case 'select':
 
                         if (isset($campos[$i]) && isset($campos[$i]['option']) && (is_array($campos[$i]['option']) || $campos[$i]['option'] instanceof \Traversable))
                         {
 
-                            $this->Select($i, $campos[$i]['option'], $attr);
+                            $buff.=$this->Select($i, $campos[$i]['option'], $attr, true);
                         } else
                         {
 
-                            $this->Select($i, [], $attr);
+                            $buff.=$this->Select($i, [], $attr, true);
                         }
                         break;
                 }
             }
-            echo Html::CloseTang('li');
+            $buff.= Html::CloseTang('li');
         }
 
-        echo Html::OpenTang('li', ['class' => 'FormRow']);
-        $this->ButtonSubmid(isset($submit['value']) ? $submit['value'] : 'ENVIAR', $submit);
-        echo Html::CloseTang('li');
-        echo Html::CloseTang('ul');
-        $this->EndForm();
+        $buff.= Html::OpenTang('li', ['class' => 'FormRow']);
+        $buff.=$this->ButtonSubmid(isset($submit['value']) ? $submit['value'] : 'ENVIAR', $submit, true);
+        $buff.= Html::CloseTang('li');
+        $buff.= Html::CloseTang('ul');
+        $buff.=$this->EndForm(true);
+        if ($return)
+        {
+            return $buff;
+        } else
+        {
+            echo $buff;
+        }
     }
 
 }
