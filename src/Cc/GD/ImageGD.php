@@ -7,6 +7,7 @@ namespace Cc;
  * @autor ENYREBER FRANCO       <enyerverfranco@gmail.com> , <enyerverfranco@outlook.com>                                                    
  * @package Cc
  * @subpackage GD 
+ * @todo falta mejorar, implementar todos las funciones GD
  */
 class ImageGD
 {

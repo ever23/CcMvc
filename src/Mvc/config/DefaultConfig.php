@@ -309,7 +309,6 @@ return
                 'MetaTang' =>
                 [
                     'language' => 'es',
-                    'content-language' => 'es',
                     'author' => '',
                     'designer' => '',
                     'programmer' => '',
@@ -317,6 +316,7 @@ return
                     'viewport' => "width=device-width, initial-scale=1.0, maximum-scale=1.0"
                 ],
                 'keywords' => [],
+                'HttpEquiv' => ['content-language' => 'es']
             ]
 ];
 

@@ -17,6 +17,11 @@ namespace Cc;
 class HelperArray
 {
 
+    /**
+     * convierte todo el texto del array en minusculas recursivamente
+     * @param array $array
+     * @return array
+     */
     public static function TolowerRecursive(array $array)
     {
         $f = function ($v) use (&$f)
@@ -30,6 +35,11 @@ class HelperArray
         return array_map($f, $array);
     }
 
+    /**
+     * convierte todo el texto del array en mayusculas recursivamente
+     * @param array $array
+     * @return array
+     */
     public static function ToupperrRecursive(array $array)
     {
         $f = function ($v) use (&$f)
@@ -43,6 +53,12 @@ class HelperArray
         return array_map($f, $array);
     }
 
+    /**
+     * une dos array recursivamente
+     * @param array $default
+     * @param array $conf
+     * @return array
+     */
     public static function MergeRecursive(&$default, &$conf)
     {
 

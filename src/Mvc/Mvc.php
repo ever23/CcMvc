@@ -1,6 +1,6 @@
 <?php
 
-declare(TICKS = 1);
+//declare(TICKS = 1);
 
 /* define('namespace_Cc', '\\Cc\\');
   define('namespace_CcMvc', '\\Cc\\Mvc\\'); */
@@ -847,6 +847,7 @@ class Mvc
         {
             $class = Controllers::GetReflectionClass()->name;
             $ext = $class::ExtAccept();
+
             $method = $this->page['method'];
             if (Controllers::GetReflectionClass()->implementsInterface(ReRouterMethod::class))
             {
@@ -1022,14 +1023,24 @@ class Mvc
 
     private function LoadLibsExtern()
     {
+
         if ($this->SelectorController->GetReflectionController()->implementsInterface(Mvc\AutoloaderLibs::class))
         {
 
             $class = $this->SelectorController->GetReflectionController()->name;
             $this->Log("Cargando librerias externas con " . $class . "::LoadExternLib() ...");
+            $method = $this->page['method'];
+            if ($this->SelectorController->GetReflectionController()->implementsInterface(ReRouterMethod::class))
+            {
+                if ($this->SelectorController->GetReflectionController()->hasMethod($this->page['method']))
+                {
+                    $method = '__routermethod';
+                }
+            }
+
             foreach ($class::LoadExternLib() as $i => $v)
             {
-                if (is_string($i) && strtolower($i) == $this->page['method'])
+                if (is_string($i) && strtolower($i) == $method)
                 {
                     if (is_array($v))
                     {

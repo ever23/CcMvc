@@ -25,7 +25,6 @@ abstract class SESSION extends \SessionHandler implements \ArrayAccess
 
     public function __debugInfo()
     {
-
         return $this->_SESSION;
     }
 

@@ -408,11 +408,7 @@ class Router extends \Cc\Router
         list($Paquete, $Controller, $Method, $ext, $count) = $this->Page($page, $alcance);
 
 
-        if ($this->is_aceptable($Controller, $Method, $Paquete, $ext))
-        {
-            Mvc::App()->LoadError('404', $this->RouterError('Ruta invalida'));
-            exit;
-        }
+
         if (empty($Method) || $Method == '')
         {
             $Method = 'index';

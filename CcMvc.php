@@ -69,24 +69,22 @@ require_once ("src/Mvc/Mvc.php");
  * CcMvc::Start($config, "CcMvc")->Run();
  * ?>
  * </code>                                                                             
- * @version: 0.8.3.3                                                   
- * @fecha: 2016-06-26                                                         
- * @autor ENYREBER FRANCO   <enyerverfranco@gmail.com> , <enyerverfranco@outlook.com>                                                     
+ * @version: 0.8.3.4                                                  
+ * @fecha: 2016-10-21                                                         
+ * @autor ENYREBER FRANCO   <enyerberfranco.com.ve>                                                    
  * @copyright (C) 2015-2016, Enyerber Franco 
  * @license http://opensource.org/licenses/gpl-license.php GNU  GENERAL PUBLIC LICENSE 
  * @package CcMvc
  * 
- * @example ../examples/C.T.E.G/protected/config/tegconf.php EJEMPLO DEL ARCHIVO DE CONFIGURACION DE UNA APLICACION CcMvc #1
  * @example ../examples/cine/protected/config/configuracion.php EJEMPLO DEL ARCHIVO DE CONFIGURACION DE UNA APLICACION CcMvc #2
  * @example ../examples/CERQU/protected/config/configuracion.php EJEMPLO DEL ARCHIVO DE CONFIGURACION DE UNA APLICACION CcMvc #2
- * @LastGit 7548b91362
  * @link http://ccmvc.com.ve SITIO WEB
  * 
  */
 class CcMvc extends \Cc\Mvc
 {
 
-    const Version = '0.8.3.3';
+    const Version = '0.8.3.4';
     const CopyRight = '&copy; 2015-2016, Enyerber Franco';
     const License = '<a href=" http://opensource.org/licenses/gpl-license.php ">GNU  GPL</a>';
     const WebPage = 'http://ccmvc.com.ve';

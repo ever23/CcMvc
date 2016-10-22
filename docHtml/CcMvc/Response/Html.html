@@ -168,7 +168,7 @@
 								</div>
 		<div class="info-box-body">
 			<div class="var-summary">
-																																																																																																																																								<div class="var-title">
+																																																																																																																																																								<div class="var-title">
 					<img src="../../media/images/Variable.png" alt=" " />
 					<span class="var-type"><a href="../../CcMvc/Configuracion/Config.html">Config</a></span>
 					<a href="#$AppConfig" title="details" class="var-name">$AppConfig</a>
@@ -202,6 +202,16 @@
 					<img src="../../media/images/Variable.png" alt=" " />
 					<span class="var-type">bool</span>
 					<a href="#$foother" title="details" class="var-name">$foother</a>
+				</div>
+																<div class="var-title">
+					<img src="../../media/images/Variable.png" alt=" " />
+					<span class="var-type">string</span>
+					<a href="#$Head" title="details" class="var-name">$Head</a>
+				</div>
+																<div class="var-title">
+					<img src="../../media/images/Variable.png" alt=" " />
+					<span class="var-type">mixed</span>
+					<a href="#$http_equiv" title="details" class="var-name">$http_equiv</a>
 				</div>
 																<div class="var-title">
 					<img src="../../media/images/Variable.png" alt=" " />
@@ -260,7 +270,7 @@
 		</div>
 		<div class="info-box-body">			
 			<div class="method-summary">
-																																																																																			
+																																																																																											
 				<div class="method-definition">
 					<img src="../../media/images/StaticMethod.png" alt=" "/>
 					static 						<span class="method-result">string</span>
@@ -375,6 +385,13 @@
 															
 				<div class="method-definition">
 					<img src="../../media/images/Method.png" alt=" "/>
+											<span class="method-result">void</span>
+										<a href="#AddHttpEquiv" title="details" class="method-name">AddHttpEquiv</a>
+											(<span class="var-type">string</span>&nbsp;<span class="var-name">$name</span>, <span class="var-type">string</span>&nbsp;<span class="var-name">$value</span>)
+									</div>
+															
+				<div class="method-definition">
+					<img src="../../media/images/Method.png" alt=" "/>
 											<span class="method-result">this</span>
 										<a href="#AddJsScript" title="details" class="method-name">&amp;AddJsScript</a>
 											(<span class="var-type">string</span>&nbsp;<span class="var-name">$js</span>)
@@ -384,7 +401,7 @@
 					<img src="../../media/images/Method.png" alt=" "/>
 											<span class="method-result">void</span>
 										<a href="#AddKeyWords" title="details" class="method-name">AddKeyWords</a>
-											(<span class="var-type"></span>&nbsp;<span class="var-name">...$word</span>)
+											(<span class="var-type">...$word</span>&nbsp;<span class="var-name">...$word</span>)
 									</div>
 															
 				<div class="method-definition">
@@ -525,7 +542,7 @@
 		<span class="var-title">
 			<span class="var-type"><a href="../../CcMvc/Configuracion/Config.html">Config</a></span>
 			<span class="var-name">$AppConfig</span>
-			 = <span class="var-default"> []</span>			(line <span class="line-number"><a href="../../__filesource/fsource_CcMvc_Response_MvcResponseHtmlHtml.php.html#a99">99</a></span>)
+			 = <span class="var-default"> []</span>			(line <span class="line-number"><a href="../../__filesource/fsource_CcMvc_Response_MvcResponseHtmlHtml.php.html#a105">105</a></span>)
 		</span>
 	</div>
 
@@ -548,7 +565,7 @@
 		<span class="var-title">
 			<span class="var-type">string</span>
 			<span class="var-name">$BasePath</span>
-			 = <span class="var-default"> ''</span>			(line <span class="line-number"><a href="../../__filesource/fsource_CcMvc_Response_MvcResponseHtmlHtml.php.html#a117">117</a></span>)
+			 = <span class="var-default"> ''</span>			(line <span class="line-number"><a href="../../__filesource/fsource_CcMvc_Response_MvcResponseHtmlHtml.php.html#a124">124</a></span>)
 		</span>
 	</div>
 
@@ -593,7 +610,7 @@
 		<span class="var-title">
 			<span class="var-type">string</span>
 			<span class="var-name">$cssscript</span>
-						(line <span class="line-number"><a href="../../__filesource/fsource_CcMvc_Response_MvcResponseHtmlHtml.php.html#a81">81</a></span>)
+						(line <span class="line-number"><a href="../../__filesource/fsource_CcMvc_Response_MvcResponseHtmlHtml.php.html#a87">87</a></span>)
 		</span>
 	</div>
 
@@ -639,7 +656,7 @@
 		<span class="var-title">
 			<span class="var-type">string</span>
 			<span class="var-name">$errores</span>
-						(line <span class="line-number"><a href="../../__filesource/fsource_CcMvc_Response_MvcResponseHtmlHtml.php.html#a87">87</a></span>)
+						(line <span class="line-number"><a href="../../__filesource/fsource_CcMvc_Response_MvcResponseHtmlHtml.php.html#a93">93</a></span>)
 		</span>
 	</div>
 
@@ -662,12 +679,57 @@
 		<span class="var-title">
 			<span class="var-type">bool</span>
 			<span class="var-name">$foother</span>
-			 = <span class="var-default"> false</span>			(line <span class="line-number"><a href="../../__filesource/fsource_CcMvc_Response_MvcResponseHtmlHtml.php.html#a63">63</a></span>)
+			 = <span class="var-default"> false</span>			(line <span class="line-number"><a href="../../__filesource/fsource_CcMvc_Response_MvcResponseHtmlHtml.php.html#a69">69</a></span>)
 		</span>
 	</div>
 
 	<!-- ========== Info from phpDoc block ========= -->
 <p class="short-description">indica si ya se imprimio el contenido</p>
+	<ul class="tags">
+				<li><span class="field">access:</span> protected</li>
+			</ul>
+	
+	
+		
+		
+
+</div>
+<a name="var$Head" id="$Head"><!-- --></A>
+<div class="oddrow">
+
+	<div class="var-header">
+		<img src="../../media/images/Variable.png" />
+		<span class="var-title">
+			<span class="var-type">string</span>
+			<span class="var-name">$Head</span>
+			 = <span class="var-default"> ''</span>			(line <span class="line-number"><a href="../../__filesource/fsource_CcMvc_Response_MvcResponseHtmlHtml.php.html#a63">63</a></span>)
+		</span>
+	</div>
+
+	<!-- ========== Info from phpDoc block ========= -->
+<p class="short-description">contenido adicional de la etiqueta head</p>
+	<ul class="tags">
+				<li><span class="field">access:</span> public</li>
+			</ul>
+	
+	
+		
+		
+
+</div>
+<a name="var$http_equiv" id="$http_equiv"><!-- --></A>
+<div class="evenrow">
+
+	<div class="var-header">
+		<img src="../../media/images/Variable.png" />
+		<span class="var-title">
+			<span class="var-type">mixed</span>
+			<span class="var-name">$http_equiv</span>
+			 = <span class="var-default"> []</span>			(line <span class="line-number"><a href="../../__filesource/fsource_CcMvc_Response_MvcResponseHtmlHtml.php.html#a112">112</a></span>)
+		</span>
+	</div>
+
+	<!-- ========== Info from phpDoc block ========= -->
 	<ul class="tags">
 				<li><span class="field">access:</span> protected</li>
 			</ul>
@@ -731,7 +793,7 @@
 		<span class="var-title">
 			<span class="var-type">string</span>
 			<span class="var-name">$jsscript</span>
-						(line <span class="line-number"><a href="../../__filesource/fsource_CcMvc_Response_MvcResponseHtmlHtml.php.html#a75">75</a></span>)
+						(line <span class="line-number"><a href="../../__filesource/fsource_CcMvc_Response_MvcResponseHtmlHtml.php.html#a81">81</a></span>)
 		</span>
 	</div>
 
@@ -754,7 +816,7 @@
 		<span class="var-title">
 			<span class="var-type">array</span>
 			<span class="var-name">$KeyWords</span>
-			 = <span class="var-default"> []</span>			(line <span class="line-number"><a href="../../__filesource/fsource_CcMvc_Response_MvcResponseHtmlHtml.php.html#a123">123</a></span>)
+			 = <span class="var-default"> []</span>			(line <span class="line-number"><a href="../../__filesource/fsource_CcMvc_Response_MvcResponseHtmlHtml.php.html#a130">130</a></span>)
 		</span>
 	</div>
 
@@ -800,7 +862,7 @@
 		<span class="var-title">
 			<span class="var-type">string</span>
 			<span class="var-name">$script_error</span>
-						(line <span class="line-number"><a href="../../__filesource/fsource_CcMvc_Response_MvcResponseHtmlHtml.php.html#a69">69</a></span>)
+						(line <span class="line-number"><a href="../../__filesource/fsource_CcMvc_Response_MvcResponseHtmlHtml.php.html#a75">75</a></span>)
 		</span>
 	</div>
 
@@ -823,7 +885,7 @@
 		<span class="var-title">
 			<span class="var-type">array</span>
 			<span class="var-name">$src</span>
-			 = <span class="var-default">array()</span>			(line <span class="line-number"><a href="../../__filesource/fsource_CcMvc_Response_MvcResponseHtmlHtml.php.html#a93">93</a></span>)
+			 = <span class="var-default">array()</span>			(line <span class="line-number"><a href="../../__filesource/fsource_CcMvc_Response_MvcResponseHtmlHtml.php.html#a99">99</a></span>)
 		</span>
 	</div>
 
@@ -903,7 +965,7 @@
 	
 	<div class="method-header">
 		<img src="../../media/images/StaticMethod.png" />
-		<span class="method-title">static cdata</span> (line <span class="line-number"><a href="../../__filesource/fsource_CcMvc_Response_MvcResponseHtmlHtml.php.html#a771">771</a></span>)
+		<span class="method-title">static cdata</span> (line <span class="line-number"><a href="../../__filesource/fsource_CcMvc_Response_MvcResponseHtmlHtml.php.html#a799">799</a></span>)
 	</div> 
 	
 	<!-- ========== Info from phpDoc block ========= -->
@@ -936,7 +998,7 @@
 	
 	<div class="method-header">
 		<img src="../../media/images/StaticMethod.png" />
-		<span class="method-title">static CloseTang</span> (line <span class="line-number"><a href="../../__filesource/fsource_CcMvc_Response_MvcResponseHtmlHtml.php.html#a579">579</a></span>)
+		<span class="method-title">static CloseTang</span> (line <span class="line-number"><a href="../../__filesource/fsource_CcMvc_Response_MvcResponseHtmlHtml.php.html#a607">607</a></span>)
 	</div> 
 	
 	<!-- ========== Info from phpDoc block ========= -->
@@ -966,7 +1028,7 @@
 	
 	<div class="method-header">
 		<img src="../../media/images/StaticMethod.png" />
-		<span class="method-title">static CtorParam</span> (line <span class="line-number"><a href="../../__filesource/fsource_CcMvc_Response_MvcResponseHtmlHtml.php.html#a125">125</a></span>)
+		<span class="method-title">static CtorParam</span> (line <span class="line-number"><a href="../../__filesource/fsource_CcMvc_Response_MvcResponseHtmlHtml.php.html#a132">132</a></span>)
 	</div> 
 	
 	<!-- ========== Info from phpDoc block ========= -->
@@ -1002,7 +1064,7 @@
 	
 	<div class="method-header">
 		<img src="../../media/images/StaticMethod.png" />
-		<span class="method-title">static Decode</span> (line <span class="line-number"><a href="../../__filesource/fsource_CcMvc_Response_MvcResponseHtmlHtml.php.html#a494">494</a></span>)
+		<span class="method-title">static Decode</span> (line <span class="line-number"><a href="../../__filesource/fsource_CcMvc_Response_MvcResponseHtmlHtml.php.html#a522">522</a></span>)
 	</div> 
 	
 	<!-- ========== Info from phpDoc block ========= -->
@@ -1032,7 +1094,7 @@
 	
 	<div class="method-header">
 		<img src="../../media/images/StaticMethod.png" />
-		<span class="method-title">static Encode</span> (line <span class="line-number"><a href="../../__filesource/fsource_CcMvc_Response_MvcResponseHtmlHtml.php.html#a484">484</a></span>)
+		<span class="method-title">static Encode</span> (line <span class="line-number"><a href="../../__filesource/fsource_CcMvc_Response_MvcResponseHtmlHtml.php.html#a512">512</a></span>)
 	</div> 
 	
 	<!-- ========== Info from phpDoc block ========= -->
@@ -1062,7 +1124,7 @@
 	
 	<div class="method-header">
 		<img src="../../media/images/StaticMethod.png" />
-		<span class="method-title">static EncodeArray</span> (line <span class="line-number"><a href="../../__filesource/fsource_CcMvc_Response_MvcResponseHtmlHtml.php.html#a504">504</a></span>)
+		<span class="method-title">static EncodeArray</span> (line <span class="line-number"><a href="../../__filesource/fsource_CcMvc_Response_MvcResponseHtmlHtml.php.html#a532">532</a></span>)
 	</div> 
 	
 	<!-- ========== Info from phpDoc block ========= -->
@@ -1091,7 +1153,7 @@
 	
 	<div class="method-header">
 		<img src="../../media/images/StaticMethod.png" />
-		<span class="method-title">static meta</span> (line <span class="line-number"><a href="../../__filesource/fsource_CcMvc_Response_MvcResponseHtmlHtml.php.html#a782">782</a></span>)
+		<span class="method-title">static meta</span> (line <span class="line-number"><a href="../../__filesource/fsource_CcMvc_Response_MvcResponseHtmlHtml.php.html#a810">810</a></span>)
 	</div> 
 	
 	<!-- ========== Info from phpDoc block ========= -->
@@ -1120,7 +1182,7 @@
 	
 	<div class="method-header">
 		<img src="../../media/images/StaticMethod.png" />
-		<span class="method-title">static OpenTang</span> (line <span class="line-number"><a href="../../__filesource/fsource_CcMvc_Response_MvcResponseHtmlHtml.php.html#a568">568</a></span>)
+		<span class="method-title">static OpenTang</span> (line <span class="line-number"><a href="../../__filesource/fsource_CcMvc_Response_MvcResponseHtmlHtml.php.html#a596">596</a></span>)
 	</div> 
 	
 	<!-- ========== Info from phpDoc block ========= -->
@@ -1156,7 +1218,7 @@
 	
 	<div class="method-header">
 		<img src="../../media/images/StaticMethod.png" />
-		<span class="method-title">static script</span> (line <span class="line-number"><a href="../../__filesource/fsource_CcMvc_Response_MvcResponseHtmlHtml.php.html#a728">728</a></span>)
+		<span class="method-title">static script</span> (line <span class="line-number"><a href="../../__filesource/fsource_CcMvc_Response_MvcResponseHtmlHtml.php.html#a756">756</a></span>)
 	</div> 
 	
 	<!-- ========== Info from phpDoc block ========= -->
@@ -1189,7 +1251,7 @@
 	
 	<div class="method-header">
 		<img src="../../media/images/StaticMethod.png" />
-		<span class="method-title">static select</span> (line <span class="line-number"><a href="../../__filesource/fsource_CcMvc_Response_MvcResponseHtmlHtml.php.html#a673">673</a></span>)
+		<span class="method-title">static select</span> (line <span class="line-number"><a href="../../__filesource/fsource_CcMvc_Response_MvcResponseHtmlHtml.php.html#a701">701</a></span>)
 	</div> 
 	
 	<!-- ========== Info from phpDoc block ========= -->
@@ -1229,7 +1291,7 @@
 	
 	<div class="method-header">
 		<img src="../../media/images/StaticMethod.png" />
-		<span class="method-title">static style</span> (line <span class="line-number"><a href="../../__filesource/fsource_CcMvc_Response_MvcResponseHtmlHtml.php.html#a749">749</a></span>)
+		<span class="method-title">static style</span> (line <span class="line-number"><a href="../../__filesource/fsource_CcMvc_Response_MvcResponseHtmlHtml.php.html#a777">777</a></span>)
 	</div> 
 	
 	<!-- ========== Info from phpDoc block ========= -->
@@ -1262,7 +1324,7 @@
 	
 	<div class="method-header">
 		<img src="../../media/images/StaticMethod.png" />
-		<span class="method-title">static Tang</span> (line <span class="line-number"><a href="../../__filesource/fsource_CcMvc_Response_MvcResponseHtmlHtml.php.html#a550">550</a></span>)
+		<span class="method-title">static Tang</span> (line <span class="line-number"><a href="../../__filesource/fsource_CcMvc_Response_MvcResponseHtmlHtml.php.html#a578">578</a></span>)
 	</div> 
 	
 	<!-- ========== Info from phpDoc block ========= -->
@@ -1298,7 +1360,7 @@
 	
 	<div class="method-header">
 		<img src="../../media/images/StaticMethod.png" />
-		<span class="method-title">static __callStatic</span> (line <span class="line-number"><a href="../../__filesource/fsource_CcMvc_Response_MvcResponseHtmlHtml.php.html#a535">535</a></span>)
+		<span class="method-title">static __callStatic</span> (line <span class="line-number"><a href="../../__filesource/fsource_CcMvc_Response_MvcResponseHtmlHtml.php.html#a563">563</a></span>)
 	</div> 
 	
 	<!-- ========== Info from phpDoc block ========= -->
@@ -1336,7 +1398,7 @@
 	
 	<div class="method-header">
 		<img src="../../media/images/Constructor.png" />
-		<span class="method-title">Constructor __construct</span> (line <span class="line-number"><a href="../../__filesource/fsource_CcMvc_Response_MvcResponseHtmlHtml.php.html#a137">137</a></span>)
+		<span class="method-title">Constructor __construct</span> (line <span class="line-number"><a href="../../__filesource/fsource_CcMvc_Response_MvcResponseHtmlHtml.php.html#a144">144</a></span>)
 	</div> 
 	
 	<!-- ========== Info from phpDoc block ========= -->
@@ -1380,7 +1442,7 @@
 	
 	<div class="method-header">
 		<img src="../../media/images/Method.png" />
-		<span class="method-title">AddCssScript</span> (line <span class="line-number"><a href="../../__filesource/fsource_CcMvc_Response_MvcResponseHtmlHtml.php.html#a371">371</a></span>)
+		<span class="method-title">AddCssScript</span> (line <span class="line-number"><a href="../../__filesource/fsource_CcMvc_Response_MvcResponseHtmlHtml.php.html#a399">399</a></span>)
 	</div> 
 	
 	<!-- ========== Info from phpDoc block ========= -->
@@ -1411,7 +1473,7 @@
 	
 	<div class="method-header">
 		<img src="../../media/images/Method.png" />
-		<span class="method-title">AddError</span> (line <span class="line-number"><a href="../../__filesource/fsource_CcMvc_Response_MvcResponseHtmlHtml.php.html#a277">277</a></span>)
+		<span class="method-title">AddError</span> (line <span class="line-number"><a href="../../__filesource/fsource_CcMvc_Response_MvcResponseHtmlHtml.php.html#a305">305</a></span>)
 	</div> 
 	
 	<!-- ========== Info from phpDoc block ========= -->
@@ -1435,12 +1497,45 @@
 		
 			
 	</div>
-<a name="methodAddJsScript" id="AddJsScript"><!-- --></a>
+<a name="methodAddHttpEquiv" id="AddHttpEquiv"><!-- --></a>
 <div class="oddrow">
 	
 	<div class="method-header">
 		<img src="../../media/images/Method.png" />
-		<span class="method-title">AddJsScript</span> (line <span class="line-number"><a href="../../__filesource/fsource_CcMvc_Response_MvcResponseHtmlHtml.php.html#a320">320</a></span>)
+		<span class="method-title">AddHttpEquiv</span> (line <span class="line-number"><a href="../../__filesource/fsource_CcMvc_Response_MvcResponseHtmlHtml.php.html#a222">222</a></span>)
+	</div> 
+	
+	<!-- ========== Info from phpDoc block ========= -->
+<p class="short-description">agrega una etiqueta meta[http-quiv] a head</p>
+	<ul class="tags">
+				<li><span class="field">access:</span> public</li>
+			</ul>
+	
+	<div class="method-signature">
+		<span class="method-result">void</span>
+		<span class="method-name">
+			AddHttpEquiv
+		</span>
+					(<span class="var-type">string</span>&nbsp;<span class="var-name">$name</span>, <span class="var-type">string</span>&nbsp;<span class="var-name">$value</span>)
+			</div>
+	
+			<ul class="parameters">
+					<li>
+				<span class="var-type">string</span>
+				<span class="var-name">$name</span><span class="var-description">: valor del atributo http-quiv</span>			</li>
+					<li>
+				<span class="var-type">string</span>
+				<span class="var-name">$value</span><span class="var-description">: valor del atributo content</span>			</li>
+				</ul>
+		
+			
+	</div>
+<a name="methodAddJsScript" id="AddJsScript"><!-- --></a>
+<div class="evenrow">
+	
+	<div class="method-header">
+		<img src="../../media/images/Method.png" />
+		<span class="method-title">AddJsScript</span> (line <span class="line-number"><a href="../../__filesource/fsource_CcMvc_Response_MvcResponseHtmlHtml.php.html#a348">348</a></span>)
 	</div> 
 	
 	<!-- ========== Info from phpDoc block ========= -->
@@ -1466,14 +1561,15 @@
 			
 	</div>
 <a name="methodAddKeyWords" id="AddKeyWords"><!-- --></a>
-<div class="evenrow">
+<div class="oddrow">
 	
 	<div class="method-header">
 		<img src="../../media/images/Method.png" />
-		<span class="method-title">AddKeyWords</span> (line <span class="line-number"><a href="../../__filesource/fsource_CcMvc_Response_MvcResponseHtmlHtml.php.html#a184">184</a></span>)
+		<span class="method-title">AddKeyWords</span> (line <span class="line-number"><a href="../../__filesource/fsource_CcMvc_Response_MvcResponseHtmlHtml.php.html#a196">196</a></span>)
 	</div> 
 	
 	<!-- ========== Info from phpDoc block ========= -->
+<p class="short-description">Agrega una palabra clave a la etiqueta meta[keyword]</p>
 	<ul class="tags">
 				<li><span class="field">access:</span> public</li>
 			</ul>
@@ -1483,23 +1579,23 @@
 		<span class="method-name">
 			AddKeyWords
 		</span>
-					(<span class="var-type"></span>&nbsp;<span class="var-name">...$word</span>)
+					(<span class="var-type">...$word</span>&nbsp;<span class="var-name">...$word</span>)
 			</div>
 	
 			<ul class="parameters">
 					<li>
-				<span class="var-type"></span>
+				<span class="var-type">...$word</span>
 				<span class="var-name">...$word</span>			</li>
 				</ul>
 		
 			
 	</div>
 <a name="methodaddlink_css" id="addlink_css"><!-- --></a>
-<div class="oddrow">
+<div class="evenrow">
 	
 	<div class="method-header">
 		<img src="../../media/images/Method.png" />
-		<span class="method-title">addlink_css</span> (line <span class="line-number"><a href="../../__filesource/fsource_CcMvc_Response_MvcResponseHtmlHtml.php.html#a341">341</a></span>)
+		<span class="method-title">addlink_css</span> (line <span class="line-number"><a href="../../__filesource/fsource_CcMvc_Response_MvcResponseHtmlHtml.php.html#a369">369</a></span>)
 	</div> 
 	
 	<!-- ========== Info from phpDoc block ========= -->
@@ -1528,11 +1624,11 @@
 			
 	</div>
 <a name="methodaddlink_js" id="addlink_js"><!-- --></a>
-<div class="evenrow">
+<div class="oddrow">
 	
 	<div class="method-header">
 		<img src="../../media/images/Method.png" />
-		<span class="method-title">addlink_js</span> (line <span class="line-number"><a href="../../__filesource/fsource_CcMvc_Response_MvcResponseHtmlHtml.php.html#a288">288</a></span>)
+		<span class="method-title">addlink_js</span> (line <span class="line-number"><a href="../../__filesource/fsource_CcMvc_Response_MvcResponseHtmlHtml.php.html#a316">316</a></span>)
 	</div> 
 	
 	<!-- ========== Info from phpDoc block ========= -->
@@ -1561,11 +1657,11 @@
 			
 	</div>
 <a name="methodAddMetaTang" id="AddMetaTang"><!-- --></a>
-<div class="oddrow">
+<div class="evenrow">
 	
 	<div class="method-header">
 		<img src="../../media/images/Method.png" />
-		<span class="method-title">AddMetaTang</span> (line <span class="line-number"><a href="../../__filesource/fsource_CcMvc_Response_MvcResponseHtmlHtml.php.html#a178">178</a></span>)
+		<span class="method-title">AddMetaTang</span> (line <span class="line-number"><a href="../../__filesource/fsource_CcMvc_Response_MvcResponseHtmlHtml.php.html#a186">186</a></span>)
 	</div> 
 	
 	<!-- ========== Info from phpDoc block ========= -->
@@ -1594,11 +1690,11 @@
 			
 	</div>
 <a name="methodadd_error" id="add_error"><!-- --></a>
-<div class="evenrow">
+<div class="oddrow">
 	
 	<div class="method-header">
 		<img src="../../media/images/Method.png" />
-		<span class="method-title">add_error</span> (line <span class="line-number"><a href="../../__filesource/fsource_CcMvc_Response_MvcResponseHtmlHtml.php.html#a268">268</a></span>)
+		<span class="method-title">add_error</span> (line <span class="line-number"><a href="../../__filesource/fsource_CcMvc_Response_MvcResponseHtmlHtml.php.html#a296">296</a></span>)
 	</div> 
 	
 	<!-- ========== Info from phpDoc block ========= -->
@@ -1624,11 +1720,11 @@
 			
 	</div>
 <a name="methodGetBasePath" id="GetBasePath"><!-- --></a>
-<div class="oddrow">
+<div class="evenrow">
 	
 	<div class="method-header">
 		<img src="../../media/images/Method.png" />
-		<span class="method-title">GetBasePath</span> (line <span class="line-number"><a href="../../__filesource/fsource_CcMvc_Response_MvcResponseHtmlHtml.php.html#a158">158</a></span>)
+		<span class="method-title">GetBasePath</span> (line <span class="line-number"><a href="../../__filesource/fsource_CcMvc_Response_MvcResponseHtmlHtml.php.html#a166">166</a></span>)
 	</div> 
 	
 	<!-- ========== Info from phpDoc block ========= -->
@@ -1648,11 +1744,11 @@
 			
 	</div>
 <a name="methodGetContenHead" id="GetContenHead"><!-- --></a>
-<div class="evenrow">
+<div class="oddrow">
 	
 	<div class="method-header">
 		<img src="../../media/images/Method.png" />
-		<span class="method-title">GetContenHead</span> (line <span class="line-number"><a href="../../__filesource/fsource_CcMvc_Response_MvcResponseHtmlHtml.php.html#a210">210</a></span>)
+		<span class="method-title">GetContenHead</span> (line <span class="line-number"><a href="../../__filesource/fsource_CcMvc_Response_MvcResponseHtmlHtml.php.html#a232">232</a></span>)
 	</div> 
 	
 	<!-- ========== Info from phpDoc block ========= -->
@@ -1674,11 +1770,11 @@
 			
 	</div>
 <a name="methodGetCssScript" id="GetCssScript"><!-- --></a>
-<div class="oddrow">
+<div class="evenrow">
 	
 	<div class="method-header">
 		<img src="../../media/images/Method.png" />
-		<span class="method-title">GetCssScript</span> (line <span class="line-number"><a href="../../__filesource/fsource_CcMvc_Response_MvcResponseHtmlHtml.php.html#a381">381</a></span>)
+		<span class="method-title">GetCssScript</span> (line <span class="line-number"><a href="../../__filesource/fsource_CcMvc_Response_MvcResponseHtmlHtml.php.html#a409">409</a></span>)
 	</div> 
 	
 	<!-- ========== Info from phpDoc block ========= -->
@@ -1699,11 +1795,11 @@
 			
 	</div>
 <a name="methodGetJsScript" id="GetJsScript"><!-- --></a>
-<div class="evenrow">
+<div class="oddrow">
 	
 	<div class="method-header">
 		<img src="../../media/images/Method.png" />
-		<span class="method-title">GetJsScript</span> (line <span class="line-number"><a href="../../__filesource/fsource_CcMvc_Response_MvcResponseHtmlHtml.php.html#a330">330</a></span>)
+		<span class="method-title">GetJsScript</span> (line <span class="line-number"><a href="../../__filesource/fsource_CcMvc_Response_MvcResponseHtmlHtml.php.html#a358">358</a></span>)
 	</div> 
 	
 	<!-- ========== Info from phpDoc block ========= -->
@@ -1724,11 +1820,11 @@
 			
 	</div>
 <a name="methodGetLayaut" id="GetLayaut"><!-- --></a>
-<div class="oddrow">
+<div class="evenrow">
 	
 	<div class="method-header">
 		<img src="../../media/images/Method.png" />
-		<span class="method-title">GetLayaut</span> (line <span class="line-number"><a href="../../__filesource/fsource_CcMvc_Response_MvcResponseHtmlHtml.php.html#a473">473</a></span>)
+		<span class="method-title">GetLayaut</span> (line <span class="line-number"><a href="../../__filesource/fsource_CcMvc_Response_MvcResponseHtmlHtml.php.html#a501">501</a></span>)
 	</div> 
 	
 	<!-- ========== Info from phpDoc block ========= -->
@@ -1760,11 +1856,11 @@
 				</ul>
 	</div>
 <a name="methodlink_cssjs" id="link_cssjs"><!-- --></a>
-<div class="evenrow">
+<div class="oddrow">
 	
 	<div class="method-header">
 		<img src="../../media/images/Method.png" />
-		<span class="method-title">link_cssjs</span> (line <span class="line-number"><a href="../../__filesource/fsource_CcMvc_Response_MvcResponseHtmlHtml.php.html#a413">413</a></span>)
+		<span class="method-title">link_cssjs</span> (line <span class="line-number"><a href="../../__filesource/fsource_CcMvc_Response_MvcResponseHtmlHtml.php.html#a441">441</a></span>)
 	</div> 
 	
 	<!-- ========== Info from phpDoc block ========= -->
@@ -1786,11 +1882,11 @@
 			
 	</div>
 <a name="methodReplaceSrc" id="ReplaceSrc"><!-- --></a>
-<div class="oddrow">
+<div class="evenrow">
 	
 	<div class="method-header">
 		<img src="../../media/images/Method.png" />
-		<span class="method-title">ReplaceSrc</span> (line <span class="line-number"><a href="../../__filesource/fsource_CcMvc_Response_MvcResponseHtmlHtml.php.html#a443">443</a></span>)
+		<span class="method-title">ReplaceSrc</span> (line <span class="line-number"><a href="../../__filesource/fsource_CcMvc_Response_MvcResponseHtmlHtml.php.html#a471">471</a></span>)
 	</div> 
 	
 	<!-- ========== Info from phpDoc block ========= -->
@@ -1818,11 +1914,11 @@
 			
 	</div>
 <a name="methodSetSrc" id="SetSrc"><!-- --></a>
-<div class="evenrow">
+<div class="oddrow">
 	
 	<div class="method-header">
 		<img src="../../media/images/Method.png" />
-		<span class="method-title">SetSrc</span> (line <span class="line-number"><a href="../../__filesource/fsource_CcMvc_Response_MvcResponseHtmlHtml.php.html#a168">168</a></span>)
+		<span class="method-title">SetSrc</span> (line <span class="line-number"><a href="../../__filesource/fsource_CcMvc_Response_MvcResponseHtmlHtml.php.html#a176">176</a></span>)
 	</div> 
 	
 	<!-- ========== Info from phpDoc block ========= -->
@@ -1851,11 +1947,11 @@
 			
 	</div>
 <a name="methodset_ico" id="set_ico"><!-- --></a>
-<div class="oddrow">
+<div class="evenrow">
 	
 	<div class="method-header">
 		<img src="../../media/images/Method.png" />
-		<span class="method-title">set_ico</span> (line <span class="line-number"><a href="../../__filesource/fsource_CcMvc_Response_MvcResponseHtmlHtml.php.html#a402">402</a></span>)
+		<span class="method-title">set_ico</span> (line <span class="line-number"><a href="../../__filesource/fsource_CcMvc_Response_MvcResponseHtmlHtml.php.html#a430">430</a></span>)
 	</div> 
 	
 	<!-- ========== Info from phpDoc block ========= -->
@@ -1882,11 +1978,11 @@
 			
 	</div>
 <a name="methodset_title" id="set_title"><!-- --></a>
-<div class="evenrow">
+<div class="oddrow">
 	
 	<div class="method-header">
 		<img src="../../media/images/Method.png" />
-		<span class="method-title">set_title</span> (line <span class="line-number"><a href="../../__filesource/fsource_CcMvc_Response_MvcResponseHtmlHtml.php.html#a391">391</a></span>)
+		<span class="method-title">set_title</span> (line <span class="line-number"><a href="../../__filesource/fsource_CcMvc_Response_MvcResponseHtmlHtml.php.html#a419">419</a></span>)
 	</div> 
 	
 	<!-- ========== Info from phpDoc block ========= -->
@@ -1913,11 +2009,11 @@
 			
 	</div>
 <a name="methodShowError" id="ShowError"><!-- --></a>
-<div class="oddrow">
+<div class="evenrow">
 	
 	<div class="method-header">
 		<img src="../../media/images/Method.png" />
-		<span class="method-title">ShowError</span> (line <span class="line-number"><a href="../../__filesource/fsource_CcMvc_Response_MvcResponseHtmlHtml.php.html#a459">459</a></span>)
+		<span class="method-title">ShowError</span> (line <span class="line-number"><a href="../../__filesource/fsource_CcMvc_Response_MvcResponseHtmlHtml.php.html#a487">487</a></span>)
 	</div> 
 	
 	<!-- ========== Info from phpDoc block ========= -->
@@ -1937,11 +2033,11 @@
 			
 	</div>
 <a name="method__toString" id="__toString"><!-- --></a>
-<div class="evenrow">
+<div class="oddrow">
 	
 	<div class="method-header">
 		<img src="../../media/images/Method.png" />
-		<span class="method-title">__toString</span> (line <span class="line-number"><a href="../../__filesource/fsource_CcMvc_Response_MvcResponseHtmlHtml.php.html#a432">432</a></span>)
+		<span class="method-title">__toString</span> (line <span class="line-number"><a href="../../__filesource/fsource_CcMvc_Response_MvcResponseHtmlHtml.php.html#a460">460</a></span>)
 	</div> 
 	
 	<!-- ========== Info from phpDoc block ========= -->
@@ -1982,7 +2078,7 @@
 
 	
 	<p class="notes" id="credit">
-		Documentation generated on Sat, 15 Oct 2016 03:03:24 +0200 by <a href="http://www.phpdoc.org" target="_blank">phpDocumentor 1.4.3</a>
+		Documentation generated on Sat, 22 Oct 2016 03:11:42 +0200 by <a href="http://www.phpdoc.org" target="_blank">phpDocumentor 1.4.3</a>
 	</p>
 	</div></body>
 </html>

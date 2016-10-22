@@ -51,6 +51,12 @@ class GDResponse implements ResponseConten
         return [true, '{name_param}'];
     }
 
+    /**
+     * 
+     * @param bool $compress
+     * @param bool $param
+     * @throws Exception
+     */
     public function __construct($compress = true, $param = NULL)
     {
         if (!is_null($param))

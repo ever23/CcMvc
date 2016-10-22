@@ -220,6 +220,7 @@ class HtmlPDF extends Html
             if (is_file($name))
             {
                 $content = DocumentBuffer::Conten();
+                extract(Mvc::App()->LayautManager->jsonSerialize());
                 $this->conten = &$content;
                 DocumentBuffer::Clear();
 

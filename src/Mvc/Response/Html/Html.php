@@ -57,6 +57,12 @@ class Html extends Response
     public $ROOT_HTML;
 
     /**
+     * contenido adicional de la etiqueta head
+     * @var string 
+     */
+    public $Head = '';
+
+    /**
      * indica si ya se imprimio el contenido 
      * @var bool 
      */
@@ -103,6 +109,7 @@ class Html extends Response
      * @var array 
      */
     private $MetaTang = [];
+    protected $http_equiv = [];
 
     /**
      *
@@ -148,6 +155,7 @@ class Html extends Response
         $this->BasePath = UrlManager::BuildUrl($this->AppConfig['Router']['protocol'], $_SERVER['HTTP_HOST'], $this->ROOT_HTML);
         $this->MetaTang = $this->AppConfig->SEO['MetaTang'];
         $this->KeyWords = $this->AppConfig->SEO['keywords'];
+        $this->http_equiv = $this->AppConfig->SEO['HttpEquiv'] + ['Content-Type' => 'text/html; charset=UTF-8'];
         parent::__construct($compress, $min, 'html');
     }
 
@@ -181,6 +189,10 @@ class Html extends Response
         $this->MetaTang[$name] = $value;
     }
 
+    /**
+     * Agrega una palabra clave a la etiqueta meta[keyword]
+     * @param ...$word 
+     */
     public function AddKeyWords(...$word)
     {
         if (count($word) > 1)
@@ -203,6 +215,16 @@ class Html extends Response
     }
 
     /**
+     * agrega una etiqueta meta[http-quiv] a head
+     * @param string $name valor del atributo http-quiv
+     * @param string $value valor del atributo content
+     */
+    public function AddHttpEquiv($name, $value)
+    {
+        $this->http_equiv[$name] = $value;
+    }
+
+    /**
      * RETORNA EL CONTENIDO PARA SER INSERTADO DETRO DE HEAD GENERALMENTE SE USA EN EL LAYAUT
      * ESTO INCLUYE LAS ETIQUETAS <TITLE><SCRITS><LINK> Y EL ICONO
      * @return string  
@@ -221,7 +243,7 @@ class Html extends Response
         $js = $this->GetJsScript();
         $css = $this->GetCssScript();
 
-        $head = "\n";
+        $head = "\n" . $this->Head . "\n";
         $keywords = '';
         foreach ($this->KeyWords as $word)
         {
@@ -234,12 +256,18 @@ class Html extends Response
             $keywords.=$this->MetaTang['keywords'];
         }
         $this->MetaTang['keywords'] = $keywords;
+
         if (isset($this->MetaTang['description']))
         {
             $this->Description = $this->MetaTang['description'] . $this->Description;
             unset($this->MetaTang['description']);
         }
-        $head.=self::meta([ "http-equiv" => "Content-Type", "content" => "text/html; charset=UTF-8"]) . "\n";
+
+        foreach ($this->http_equiv as $i => $v)
+        {
+            //Content-Language
+            $head.=self::meta([ "http-equiv" => $i, "content" => $v]) . "\n";
+        }
         foreach ($this->MetaTang as $i => $v)
         {
 
