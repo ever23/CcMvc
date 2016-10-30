@@ -122,7 +122,10 @@ abstract class AuteticateUserDB extends Autenticate
      */
     public function IsUser($type = '*')
     {
-
+        if (is_null($this->ColUserType))
+        {
+            return (bool) $this->verifica();
+        }
         if ($this->offsetExists($this->ColUserType))
         {
             if ($type == '*')
@@ -389,9 +392,12 @@ abstract class AuteticateUserDB extends Autenticate
 
                     //var_dump($ath);
                     return $ath;
-                } else
+                } elseif ($this->DBtabla->num_rows !== 0)
                 {
                     $this->TingerFailed(self::FailedDataBase, "SE HA OBTENIDO MAS DE UN RESULTADO DESDE LA BASE DE DATOS");
+                } else
+                {
+                    $this->TingerFailed(self::FailedAuth, "No se encontro el usuario");
                 }
             } else
             {

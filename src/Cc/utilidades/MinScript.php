@@ -340,14 +340,14 @@ class MinScript
             {
                 if ($this->HTML['style'] > 0)
                 {
-                    $css.=$e;
-                    //  $new_html.=$this->CssMin($e);
+
+                    $new_html.=$this->CssMin($e);
                 }
                 if ($this->HTML['script'] > 0)
                 {
 
-                    $js.=$e;
-                    // $new_html.=$this->JsMin($e);
+
+                    $new_html.=$this->JsMin($e);
                 }
                 if ($this->HTML['pre'] > 0)
                 {
@@ -362,24 +362,24 @@ class MinScript
                 }
             } else
             {
-                if ($this->HTML['script'] > 0)
-                {
-                    if (strtolower(substr($e, 0, 7)) == '/script')
-                    {
-                        $this->CloseTag(strtolower(substr($e, 1)));
-                    } else
-                    {
-                        $js.=$this->DetectTag($e);
-                    }
-                    // $new_html.=$this->JsMin($e);
-                } elseif ($this->HTML['style'] > 0)
-                {
-                    if (strtolower(substr($e, 0, 6)) == '/style')
-                    {
-                        $this->CloseTag(strtolower(substr($e, 1)));
-                    }
-                } else
-                    $new_html.=$this->DetectTag($e);
+                /* if ($this->HTML['script'] > 0)
+                  {
+                  if (strtolower(substr($e, 0, 7)) == '/script')
+                  {
+                  $this->CloseTag(strtolower(substr($e, 1)));
+                  } else
+                  {
+                  $js.=$this->DetectTag($e);
+                  }
+                  $new_html.=$this->JsMin($e);
+                  } elseif ($this->HTML['style'] > 0)
+                  {
+                  if (strtolower(substr($e, 0, 6)) == '/style')
+                  {
+                  $this->CloseTag(strtolower(substr($e, 1)));
+                  }
+                  } else */
+                $new_html.=$this->DetectTag($e);
             }
         }
 
@@ -442,17 +442,14 @@ class MinScript
             case 'script':
                 $this->HTML[$tag] ++;
                 $src = explode('src', strtolower($attr));
-                if (count($src) == 1)
-                {
-                    return '';
-                } else
+                if (count($src) != 1)
                 {
                     return '<' . $tag . " " . $this->Attr($attr) . "></" . $tag . ">";
                 }
                 break;
             case 'style':
                 $this->HTML[$tag] ++;
-                return '';
+
                 break;
             case 'pre':
                 $this->HTML[$tag] ++;
@@ -467,6 +464,7 @@ class MinScript
 
     private function Attr($attributos)
     {
+        return $attributos;
         return $this->CssMin($attributos);
     }
 
@@ -490,7 +488,7 @@ class MinScript
 
     protected function GetInfo()
     {
-        return "! MinScript " . $this->version . " CopyRight 2015-2016, Enyerber Franco ,Email:enyerverfranco@gmail.com ,enyerverfranco@outlook.com";
+        return "! MinScript " . $this->version . " CopyRight 2015-2016, Enyerber Franco <http://enyerberfranco.com.ve>";
     }
 
     private function CssMin($css_script)
@@ -499,7 +497,7 @@ class MinScript
         //preg_match("/\/\*(.*)\*\//", $css_script,$preg);
         //$css_script=implode(preg_split("/\/\*.*\*\//",$css_script,-1));
 
-        $css = preg_replace("/\/\*(.*)\*\//U", "", $css_script);
+        $css = preg_replace("/(\/\*.*\*\/)/U", "", $css_script);
         $cadena = '';
         foreach ($chars as $char)
         {
@@ -526,7 +524,7 @@ class MinScript
 
         foreach (explode("\\n", $js_script) as $scr)
         {
-            $scr = preg_replace("/(\/\/.*\n)/", "", trim($scr));
+            $scr = preg_replace("/(\/\/.*\n{1,})/U", "", trim($scr));
             $js.=(substr(trim($scr), 0, 2) == 'if' ? ' ' : NULL) . trim($scr);
         }
         foreach ($chars as $char)

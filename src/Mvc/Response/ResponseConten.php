@@ -103,7 +103,7 @@ class Response implements ResponseConten
      */
     public function ProccessConten($conten)
     {
-        if ($this->min)
+        if ($this->min && !Mvc::App()->IsDebung())
         {
             Mvc::App()->Buffer->SetAutoMin(true);
             Mvc::App()->Buffer->SetTypeMin($this->typeMin);

@@ -129,6 +129,12 @@ class Html extends Response
      */
     protected $KeyWords = [];
 
+    /**
+     *
+     * @var JsonLD 
+     */
+    public $JsonLD = NULL;
+
     public static function CtorParam()
     {
         Mvc::App()->ChangeResponseConten('text/html');
@@ -156,7 +162,21 @@ class Html extends Response
         $this->MetaTang = $this->AppConfig->SEO['MetaTang'];
         $this->KeyWords = $this->AppConfig->SEO['keywords'];
         $this->http_equiv = $this->AppConfig->SEO['HttpEquiv'] + ['Content-Type' => 'text/html; charset=UTF-8'];
+
         parent::__construct($compress, $min, 'html');
+    }
+
+    /**
+     * 
+     * @param type $type
+     * @return \Cc\Mvc\JsonLD
+     */
+    public function &CreateEstructureData($type = NULL)
+    {
+        $j = new JsonLD($type);
+        $j["@context"] = "http://schema.org";
+        $this->JsonLD[] = $j;
+        return $j;
     }
 
     /**
@@ -285,6 +305,16 @@ class Html extends Response
             $head.=self::script($js, ['type' => 'text/javascript']);
         if ($css != "")
             $head.=self::style($css, ['type' => 'text/css']);
+        if (count($this->JsonLD) > 0)
+        {
+            if (count($this->JsonLD) == 1)
+            {
+                $head.=self::script($this->JsonLD[0]->Encode(), ['type' => 'application/ld+json'], false);
+            } else
+            {
+                $head.=self::script(json_encode($this->JsonLD), ['type' => 'application/ld+json'], false);
+            }
+        }
         return $head;
     }
 
@@ -444,11 +474,24 @@ class Html extends Response
 
         foreach ($this->js as $js)
         {
-            $link.=self::script("", ['src' => $js, 'type' => 'text/javascript']);
+            if (!Mvc::App()->IsDebung() && isset($this->AppConfig->SEO['CDNs'][$js]))
+            {
+                $link.=self::script("", ['src' => $this->AppConfig->SEO['CDNs'][$js], 'type' => 'text/javascript']);
+            } else
+            {
+                $link.=self::script("", ['src' => $js, 'type' => 'text/javascript']);
+            }
         }
         foreach ($this->css as $css)
         {
-            $link.=self::link(['rel' => 'stylesheet', 'href' => $css, 'media' => 'screen']);
+            if (!Mvc::App()->IsDebung() && isset($this->AppConfig->SEO['CDNs'][$css]))
+            {
+
+                $link.=self::link(['rel' => 'stylesheet', 'href' => $this->AppConfig->SEO['CDNs'][$css], 'media' => 'all']);
+            } else
+            {
+                $link.=self::link(['rel' => 'stylesheet', 'href' => $css, 'media' => 'screen']);
+            }
         }
         return $link;
     }
@@ -753,12 +796,18 @@ class Html extends Response
      * @return string
      *
      */
-    public static function script($text = '', $attrs = [])
+    public static function script($text = '', $attrs = [], $noCDATA = true)
     {
         $attrs = $attrs + ['type' => 'text/javascript'];
         if (is_string($text) && $text != '')
         {
-            return self::Tang('script', self::cdata($text, true), $attrs);
+            if ($noCDATA)
+            {
+                return self::Tang('script', self::cdata($text, true), $attrs);
+            } else
+            {
+                return self::Tang('script', $text, $attrs);
+            }
         } elseif (is_array($text))
         {
             return self::Tang('script', "", $text + ['type' => 'text/javascript']);

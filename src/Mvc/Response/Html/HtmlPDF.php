@@ -117,6 +117,35 @@ class HtmlPDF extends Html
     }
 
     /**
+     * RETORNA EL CONTENIDO PARA SER INSERTADO DETRO DE HEAD GENERALMENTE SE USA EN EL LAYAUT
+     * ESTO INCLUYE LAS ETIQUETAS <TITLE><SCRITS><LINK> Y EL ICONO
+     * @return string  
+     */
+    public function GetContenHead()
+    {
+
+        $js = $this->GetJsScript();
+        $css = $this->GetCssScript();
+
+        $head = "\n" . $this->Head . "\n";
+
+
+
+        $head .= self::base(['href' => $this->BasePath]) . "\n";
+        if ($this->ico)
+            $head .= self::link(['rel' => 'shortcut icon', 'href' => $this->ico, 'media' => 'monochrome']) . "\n";
+        if ($this->titulo)
+            $head.=self::title($this->titulo) . "\n";
+
+        $head.=$this->link_cssjs();
+        if ($js != "")
+            $head.=self::script($js, ['type' => 'text/javascript']);
+        if ($css != "")
+            $head.=self::style($css, ['type' => 'text/css']);
+        return $head;
+    }
+
+    /**
      * AGREGA UN EVENTO 
      * @param \Cc\Mvc\EventsHtmlPDF|string $event
      * @param callable $callback

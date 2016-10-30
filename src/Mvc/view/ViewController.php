@@ -121,7 +121,12 @@ class ViewController
     private function LoadView($dir, $view, array ...$agrs)
     {
         $view = ValidFilename::ValidName($view, true);
-
+        if (substr($view, -4, 4) == '.tpl' && file_exists($dir . $view))
+        {
+            $tpl = new ViewSmartyTpl();
+            $tpl->LoadTpl($dir, $view, ...$agrs);
+            return;
+        }
         foreach ($agrs as &$_________agrs)
         {
             foreach ($_________agrs as $_i => &$_v)

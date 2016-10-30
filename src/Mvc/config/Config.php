@@ -152,5 +152,54 @@ namespace Cc\Mvc;
  */
 class Config extends \Cc\Config
 {
-    
+
+    public function Load($config_name)
+    {
+        if (is_string($config_name))
+        {
+            $File = new \SplFileInfo(realpath($config_name));
+            $this->config = $this->default;
+            if (!$File->isFile())
+            {
+                throw new Exception("el archivo de configuracion " . realpath($config_name) . " no existe");
+            }
+            if ($File->getExtension() == 'ini')
+            {
+                $conf = $this->LoadIni($config_name, true);
+            } else
+            {
+
+                $this->orig = include($config_name);
+            }
+        } elseif (is_array($config_name))
+        {
+            $this->orig = $config_name;
+        }
+        if (isset($this->config['Response']) && isset($this->config['Response']['Accept']))
+            foreach ($this->config['Response']['Accept'] as $accept => $conf)
+            {
+                unset($this->config['Response']['Accept'][$accept]);
+                foreach (explode(',', $accept) as $v)
+                {
+
+                    $this->config['Response']['Accept'][trim($v)] = $conf;
+                }
+            }
+        if (isset($this->orig['Response']) && isset($this->orig['Response']['Accept']))
+            foreach ($this->orig['Response']['Accept'] as $accept => $conf)
+            {
+                unset($this->orig['Response']['Accept'][$accept]);
+                foreach (explode(',', $accept) as $v)
+                {
+
+                    $this->orig['Response']['Accept'][trim($v)] = $conf;
+                }
+            }
+        $this->LoadConf($this->config, $this->orig);
+
+
+
+        $this->config['App'] = $this->RemplaceApp($this->config['App']);
+    }
+
 }

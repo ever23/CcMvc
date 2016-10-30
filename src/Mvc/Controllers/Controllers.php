@@ -42,16 +42,15 @@ abstract class Controllers implements InfoController
     public final function &__get($name)
     {
         $NULL = NULL;
-        if (strtolower($name) == 'view')
+        switch (strtolower($name))
         {
-            return static::$View;
-        } elseif (strtolower($name) == 'layaut')
-        {
-            return static::$Layaut;
-        } else
-        {
-            ErrorHandle::Notice("EL ATRIBUTO " . static::class . '::$' . $name . " NO ESTA DEFINIDO ");
-            return $NULL;
+            case 'view':
+                return static::$View;
+            case 'layaut':
+                return static::$Layaut;
+            default :
+                ErrorHandle::Notice("EL ATRIBUTO " . static::class . '::$' . $name . " NO ESTA DEFINIDO ");
+                return $NULL;
         }
     }
 
@@ -89,6 +88,11 @@ abstract class Controllers implements InfoController
         return Mvc::App()->Response;
     }
 
+    /**
+     * 
+     * @param string $ext
+     * @return bool
+     */
     protected final static function ChangeExt($ext)
     {
         if (isset(Mvc::App()->Config()->Response['ExtencionContenType'][$ext]))
@@ -109,6 +113,18 @@ abstract class Controllers implements InfoController
     protected static function LoadView($page, array ...$agrs)
     {
         self::$View->Load($page, ...$agrs);
+    }
+
+    /**
+     * carga un view de error establecido y cierra la ejecucion 
+     * @param int $errno numero de error Http
+     * @param string $msj mesaje para tiempos de depuracion
+
+     */
+    protected static function HttpError($errno, $msj)
+    {
+        Mvc::App()->LoadError($errno, $msj);
+        exit;
     }
 
     /**

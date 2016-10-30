@@ -112,27 +112,16 @@ return
                     ],
                     'text/css' =>
                     [
-                        'class' => '\\Cc\\Mvc\\Response',
+                        'class' => '\\Cc\\Mvc\\ResponseCSS',
                         'param' => [true, true, 'css'],
+                        'staticFile' => true
                     ],
-                    'text/html' =>
+                    'text/html, application/xhtml+xml, application/xaml+xml, application/xaml+xml' =>
                     [
                         'class' => '\\Cc\\Mvc\\Html',
-                        'param' => [true, false],
+                        'param' => [true, true],
                         'layaut' => 'main',
                         'staticFile' => false
-                    ],
-                    'application/xhtml+xml' =>
-                    [
-                        'class' => '\\Cc\\Mvc\\Html',
-                        'param' => [true, false],
-                        'layaut' => 'main', 'staticFile' => false
-                    ],
-                    'application/xaml+xml' =>
-                    [
-                        'class' => '\\Cc\\Mvc\\Html',
-                        'param' => [true, false],
-                        'layaut' => 'main', 'staticFile' => false
                     ],
                     'application/pdf' =>
                     [
@@ -140,31 +129,13 @@ return
                         'param' => [],
                         'layaut' => 'main', 'staticFile' => false
                     ],
-                    'text/plain' =>
-                    [
-                        'class' => '\\Cc\\Mvc\\Response',
-                        'param' => [true, false],
-                        'staticFile' => true
-                    ],
-                    'image/gif' =>
+                    'image/gif, image/jpeg, image/png' =>
                     [
                         'class' => '\\Cc\\Mvc\\GDResponse',
                         'param' => [],
                         'staticFile' => true
                     ],
-                    'image/jpeg' =>
-                    [
-                        'class' => '\\Cc\\Mvc\\GDResponse',
-                        'param' => [],
-                        'staticFile' => true
-                    ],
-                    'image/png' =>
-                    [
-                        'class' => '\\Cc\\Mvc\\GDResponse',
-                        'param' => [],
-                        'staticFile' => true
-                    ],
-                    '*/*' =>
+                    '*/*, text/plain' =>
                     [
                         'class' => '\\Cc\\Mvc\\Response',
                         'param' => [true, false],
@@ -309,14 +280,15 @@ return
                 'MetaTang' =>
                 [
                     'language' => 'es',
-                    'author' => '',
-                    'designer' => '',
-                    'programmer' => '',
+                    'author' => ' ',
+                    'designer' => ' ',
+                    'programmer' => ' ',
                     'robots' => "index,follow,all",
                     'viewport' => "width=device-width, initial-scale=1.0, maximum-scale=1.0"
                 ],
                 'keywords' => [],
-                'HttpEquiv' => ['content-language' => 'es']
+                'HttpEquiv' => ['content-language' => 'es'],
+                'CDNs' => []
             ]
 ];
 

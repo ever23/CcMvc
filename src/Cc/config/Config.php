@@ -14,6 +14,7 @@ class Config implements \ArrayAccess
 
     protected $config = array();
     public $default = array();
+    protected $orig = [];
 
     /**
      * 
@@ -50,15 +51,15 @@ class Config implements \ArrayAccess
             } else
             {
 
-                $conf = include($config_name);
+                $this->orig = include($config_name);
             }
         } elseif (is_array($config_name))
         {
-            $conf = $config_name;
+            $this->orig = $config_name;
         }
 
 
-        $this->LoadConf($this->config, $conf);
+        $this->LoadConf($this->config, $this->orig);
 
 
 

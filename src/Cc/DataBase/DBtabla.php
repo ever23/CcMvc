@@ -394,7 +394,7 @@ class DBtabla extends ResultManager implements \JsonSerializable
             if (is_array($group))
             {
                 $group = 'GROUP BY ' . implode(',', $group);
-            } elseif (preg_match('/^(\ {0,}having .*(=|and|or))/i', $group))
+            } elseif (preg_match('/^(\ {0,}having )/i', $group))
             {
                 $having = $group;
                 $order = $ah;
@@ -1150,7 +1150,12 @@ class DBtabla extends ResultManager implements \JsonSerializable
             return '';
         }
         if (!preg_match('/^(\ {0,}HAVING )/i', $having))
+        {
             return "HAVING " . $having;
+        } else
+        {
+            return $having;
+        }
     }
 
     /**

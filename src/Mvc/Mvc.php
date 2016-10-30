@@ -244,16 +244,6 @@ class Mvc
         $this->Debung();
         $this->Log(" Archivo de configuracion :" . $conf . " cargado...");
 
-
-
-
-
-        //var_dump (Cache::GetObjectCache());
-
-
-
-
-
         $this->procedures = $this->conf['App']['procedimientos'];
 
         $this->Controllers = $this->conf['App']['controllers'];
@@ -273,7 +263,6 @@ class Mvc
         $this->Log("Abriendo Cache ...");
         if (!Cache::IsSave('AppPath') || Cache::Get('AppPath') != $this->conf->App['app'])
         {
-
             Cache::Clean();
             Cache::Set('AppPath', $this->conf->App['app']);
             $this->Log(" Cache Reiniciado ...");
@@ -287,23 +276,17 @@ class Mvc
         if ($prot != $this->conf['Router']['protocol'])
             Server::redirec($this->conf['Router']['protocol'] . '://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI']);
 
-
-
         if (is_null(self::$ExecuteFile))
         {
-
             $bak = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS);
             $t = array_pop($bak);
             self::$ExecuteFile = $t['file'];
-
             $this->isRouter = true;
         }
         if (is_null($this->conf['Router']['DocumentRoot']))
         {
-
             $ExecuteFile = str_replace(DIRECTORY_SEPARATOR, "/", dirname(self::$ExecuteFile));
             $match = '/' . preg_quote(str_replace(DIRECTORY_SEPARATOR, "/", $_SERVER["DOCUMENT_ROOT"]), '/') . '/';
-
             $conf = $this->conf['Router'];
             $conf['DocumentRoot'] = preg_replace($match, '', $ExecuteFile);
 
@@ -311,10 +294,8 @@ class Mvc
             {
                 $conf['DocumentRoot'].='/';
             }
-            // Cache::Set('DocumentRoot', $conf['DocumentRoot']);
-            $this->conf['Router'] = $conf;
 
-            //echo  $conf['DocumentRoot'],'<pre>',print_r($_SERVER);exit;
+            $this->conf['Router'] = $conf;
         }
         if (!file_exists(realpath('.') . '/.htaccess'))
         {
@@ -349,9 +330,12 @@ class Mvc
         $this->DependenceInyector->AddDependence("{SelectorControllers}", $this->SelectorController);
         $this->DependenceInyector->SetDependenceForParamArray($this->Request);
         $confAutoload = $this->conf->AutoloadLibs;
+        $libs = dirname(__FILE__) . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'libs' . DIRECTORY_SEPARATOR;
+
         if (is_bool($confAutoload['UseStandarAutoloader']))
         {
             $confAutoload['UseStandarAutoloader'] = [];
+            $confAutoload['UseStandarAutoloader'][] = [$libs, true];
             if ($this->conf->AutoloadLibs['UseStandarAutoloader'])
             {
                 $confAutoload['UseStandarAutoloader'][] = $this->conf->App['extern'];
@@ -360,6 +344,7 @@ class Mvc
             $confAutoload['UseStandarAutoloader'][] = [$this->conf->App['model'], true];
         } else
         {
+            $confAutoload['UseStandarAutoloader'][] = [$libs, true];
             $confAutoload['UseStandarAutoloader'][] = [$this->conf->App['model'], true];
         }
 
@@ -505,8 +490,6 @@ class Mvc
                 if (strtoupper($ex[0]) != strtoupper(self::App()->ContentTypeOrig) && strtoupper($ex[0]) != strtoupper(self::App()->Content_type))
                 {
                     self::App()->ProcessConten = false;
-
-
                     self::App()->Log("Cancelando el procesamineto de respuesta ...");
                 }
             }

@@ -115,7 +115,7 @@
 <li><div class="src-line"><a name="a103"></a><span class="src-doc">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*/</span></div></li>
 <li><div class="src-line"><a name="a104"></a>&nbsp;&nbsp;&nbsp;&nbsp;<span class="src-key">public&nbsp;</span><span class="src-key">function&nbsp;</span><a href="../CcMvc/Response/Response.html#methodProccessConten">ProccessConten</a><span class="src-sym">(</span><span class="src-var">$conten</span><span class="src-sym">)</span></div></li>
 <li><div class="src-line"><a name="a105"></a>&nbsp;&nbsp;&nbsp;&nbsp;<span class="src-sym">{</span></div></li>
-<li><div class="src-line"><a name="a106"></a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="src-key">if&nbsp;</span><span class="src-sym">(</span><span class="src-var">$this</span><span class="src-sym">-&gt;</span><a href="../CcMvc/Response/Response.html#var$min">min</a><span class="src-sym">)</span></div></li>
+<li><div class="src-line"><a name="a106"></a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="src-key">if&nbsp;</span><span class="src-sym">(</span><span class="src-var">$this</span><span class="src-sym">-&gt;</span><a href="../CcMvc/Response/Response.html#var$min">min</a>&nbsp;&amp;&amp;&nbsp;<span class="src-sym">!</span><span class="src-id"><a href="../CcMvc/Mvc.html">Mvc</a></span><span class="src-sym">::</span><span class="src-id">App</span><span class="src-sym">(</span><span class="src-sym">)</span><span class="src-sym">-&gt;</span><span class="src-id">IsDebung</span><span class="src-sym">(</span><span class="src-sym">))</span></div></li>
 <li><div class="src-line"><a name="a107"></a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="src-sym">{</span></div></li>
 <li><div class="src-line"><a name="a108"></a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="src-id"><a href="../CcMvc/Mvc.html">Mvc</a></span><span class="src-sym">::</span><span class="src-id">App</span><span class="src-sym">(</span><span class="src-sym">)</span><span class="src-sym">-&gt;</span><span class="src-id">Buffer</span><span class="src-sym">-&gt;</span><span class="src-id">SetAutoMin</span><span class="src-sym">(</span><span class="src-id">true</span><span class="src-sym">)</span><span class="src-sym">;</span></div></li>
 <li><div class="src-line"><a name="a109"></a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="src-id"><a href="../CcMvc/Mvc.html">Mvc</a></span><span class="src-sym">::</span><span class="src-id">App</span><span class="src-sym">(</span><span class="src-sym">)</span><span class="src-sym">-&gt;</span><span class="src-id">Buffer</span><span class="src-sym">-&gt;</span><span class="src-id">SetTypeMin</span><span class="src-sym">(</span><span class="src-var">$this</span><span class="src-sym">-&gt;</span><a href="../CcMvc/Response/Response.html#var$typeMin">typeMin</a><span class="src-sym">)</span><span class="src-sym">;</span></div></li>
@@ -155,7 +155,7 @@
 </ol></div>
 </div>
 	<p class="notes" id="credit">
-		Documentation generated on Sat, 22 Oct 2016 03:12:32 +0200 by <a href="http://www.phpdoc.org" target="_blank">phpDocumentor 1.4.3</a>
+		Documentation generated on Sun, 30 Oct 2016 20:32:38 +0100 by <a href="http://www.phpdoc.org" target="_blank">phpDocumentor 1.4.3</a>
 	</p>
 	</body>
 </html>
