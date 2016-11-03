@@ -194,6 +194,10 @@ class PaginadoModel extends Model implements \JsonSerializable
 
     public function ListLinkPages($attrs = [], $type = 'li')
     {
+        if (is_object($type) && $type instanceof \Smarty_Internal_Template)
+        {
+            $type = $attrs['type'];
+        }
         $links = [];
 
         foreach ($this->Pages as $i => $v)
@@ -212,6 +216,7 @@ class PaginadoModel extends Model implements \JsonSerializable
                 {
                     $ret.=Html::$type($v);
                 }
+                echo $ret;
         }
     }
 
@@ -263,6 +268,12 @@ class PaginadoModel extends Model implements \JsonSerializable
      */
     public function NextLink($text = 'Siguiente', $attrs = [])
     {
+        if (is_object($attrs) && $attrs instanceof \Smarty_Internal_Template)
+        {
+
+            $attrs = $text;
+            $text = $attrs['text'];
+        }
         $get = $this->GetNext();
         if ($get === false)
         {
@@ -309,6 +320,12 @@ class PaginadoModel extends Model implements \JsonSerializable
     public function LastLink($text = 'Anterior', $attrs = [])
     {
         $get = $this->GetLast();
+        if (is_object($attrs) && $attrs instanceof \Smarty_Internal_Template)
+        {
+
+            $attrs = $text;
+            $text = $attrs['text'];
+        }
         if ($get === false)
         {
 
@@ -317,6 +334,13 @@ class PaginadoModel extends Model implements \JsonSerializable
 
         $attrs['href'] = isset($attrs['href']) ? $attrs['href'] : $this->href;
         return Html::a($text, ['href' => UrlManager::Href($attrs['href'], $get)] + $attrs);
+    }
+
+    public function ParseSmaryTpl()
+    {
+        $smary = parent::ParseSmaryTpl();
+        $smary['allowed'] = $smary['allowed'] + ['ActualPage', 'ListLinkPages', 'NextLink', 'LastLink'];
+        return $smary;
     }
 
     /**

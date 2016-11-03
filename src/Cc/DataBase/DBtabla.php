@@ -680,6 +680,7 @@ class DBtabla extends ResultManager implements \JsonSerializable
     {
         if (($current = parent::current()) !== false)
         {
+
             return $this->ActiveRow = new DBRow($this, $current);
         } else if ($this->sql == '')
         {

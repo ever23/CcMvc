@@ -196,9 +196,6 @@ class Config extends \Cc\Config
                 }
             }
         $this->LoadConf($this->config, $this->orig);
-
-
-
         $this->config['App'] = $this->RemplaceApp($this->config['App']);
     }
 

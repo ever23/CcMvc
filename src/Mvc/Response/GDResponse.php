@@ -228,9 +228,9 @@ class GDResponse implements ResponseConten
                 $cookie = 'COOKIE';
                 $cookie.= $cache['GDmaxW'] = $_COOKIE['GDmaxW'];
             }
+            Cache::Delete(Mvc::App()->GetNameStaticCacheRouter());
+            Cache::Set(Mvc::App()->GetNameStaticCacheRouter() . $cookie, $cache);
 
-            Cache::Set(Mvc::App()->GetNameCacheRouter() . $cookie, $cache);
-            Cache::Delete(Mvc::App()->GetNameCacheRouter());
 
             $f = fopen($this->fileCache, 'w');
             fwrite($f, $out);
@@ -243,12 +243,17 @@ class GDResponse implements ResponseConten
 
     protected function CacheImg($w, $h, $c, $f)
     {
-        $name = Mvc::App()->Router->InfoFile->getBasename(Mvc::App()->Router->InfoFile->getExtension());
-        $name .= 'w' . ((int) $w) . 'h' . ((int) $h) . 'c' . $c;
+        $name = 'w' . ((int) $w) . 'h' . ((int) $h) . 'c' . $c;
+        $name .= str_replace(dirname(Mvc::App()->GetExecutedFile()) . DIRECTORY_SEPARATOR, "", Mvc::App()->Router->InfoFile->__toString());
+
+        $name = str_replace(DIRECTORY_SEPARATOR, '.', $name);
+
+        //$name = Mvc::App()->Router->InfoFile->getBasename(Mvc::App()->Router->InfoFile->getExtension());
+
         $cache = Mvc::App()->Config()->App['Cache'] . 'ImageGD' . DIRECTORY_SEPARATOR;
         if (!is_dir($cache))
             mkdir($cache);
-        $file = $cache . $name . '.' . Mvc::App()->Router->InfoFile->getExtension();
+        $file = $cache . $name;
 
         $this->fileCache = new \SplFileInfo($file);
         if (!Mvc::App()->IsDebung() && file_exists($this->fileCache) && $this->fileCache->getMTime() >= Mvc::App()->Router->InfoFile->getMTime())

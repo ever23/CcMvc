@@ -72,34 +72,38 @@ class LayautManager extends Model
             if (is_null($layaut['Layaut']) || $layaut['Layaut'] == '')
                 return;
 
-            $__name = ($layaut['Dir'] . $layaut['Layaut'] . '.php');
-            Mvc::App()->Log("CARGANDO EL LAYAUT " . $__name . " ...");
-            if (is_file($__name))
+            $__name = ($layaut['Dir'] . $layaut['Layaut']);
+            if (!file_exists($__name))
             {
+                $__name.='.php';
+            }
+            if ((strpos($layaut['Layaut'], ':') !== false))
+            {
+                $__name.=$layaut['Layaut'];
+            }
 
-
-                try
+            try
+            {
+                $param = ['content' => DocumentBuffer::Conten()] + $LayautController->jsonSerialize();
+                if (isset($layaut['params']))
                 {
-                    if (isset($layaut['params']))
-                    {
-                        extract($layaut['params']);
-                    }
-
-
-                    $content = DocumentBuffer::Conten();
-                    $this->conten = &$content;
-                    DocumentBuffer::Clear();
-                    extract($LayautController->jsonSerialize());
-
-                    require_once ($__name);
-                    Mvc::App()->Log("LAYAUT " . $__name . " CARGADO  ...");
-                } catch (LayautException $ex)
-                {
-                    throw $ex;
+                    $param+=$layaut['params'];
                 }
-            } else
+
+
+                DocumentBuffer::Clear();
+                $loader = new ViewLoader(Mvc::App()->Config());
+                $loader->Load($this, $__name, $param);
+                Mvc::App()->Log("LAYAUT " . $__name . " CARGADO  ...");
+            } catch (LayautException $ex)
+            {
+                throw $ex;
+            } catch (ViewException $ex)
             {
                 throw new LayautException("EL LAYAUT " . $__name . " NO EXISTE ");
+            } catch (Exception $ex)
+            {
+                throw $ex;
             }
         };
     }

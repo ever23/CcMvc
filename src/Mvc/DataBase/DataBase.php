@@ -22,7 +22,7 @@ use Cc\Mvc;
  * @uses \Cc\DBtabla ES EXTENDIDA DE ESTA CLASE 
  * @example ../examples/cine/protected/controllers/Cpelicula.php description                                                         
  */
-class DBtabla extends \Cc\DBtabla implements \Serializable
+class DBtabla extends \Cc\DBtabla implements \Serializable, ParseObjectSmartyTpl
 {
 
     /**
@@ -81,6 +81,56 @@ class DBtabla extends \Cc\DBtabla implements \Serializable
         if (!($this->db instanceof iDataBase))
             $this->db = Mvc::App()->DataBase();
         parent::unserialize($serialized);
+    }
+
+    private $each = true;
+    private $eachend = true;
+
+    public function each($params, $content = NULL, &$smarty, &$repeat)
+    {
+
+        $repeat = true;
+        if ($this->each)
+        {
+            if (!$this->eachend)
+            {
+                $this->rewind();
+            }
+            $fech = $this->current();
+            $key = $this->key();
+            $this->eachend = $this->next();
+
+            $this->each = false;
+            if (isset($params['row']))
+            {
+                $smarty->assign($params['row'], $fech);
+            } else
+            {
+                $smarty->assign('row', $fech);
+            }
+            if (isset($params['key']))
+            {
+                $smarty->assign($params['key'], $key);
+            } else
+            {
+                $smarty->assign('key', $key);
+            }
+        } else
+        {
+            $this->each = true;
+            $repeat = $this->eachend;
+            return $content;
+            // $repeat = $this->next();
+        }
+    }
+
+    public function ParseSmaryTpl()
+    {
+        return [
+            'allowed' => ['__debugInfo', 'fetch', 'GetPrimary', 'Tabla', 'GetValuesEnum', '__call'],
+            'format' => true,
+            'block_methods' => ['each']
+        ];
     }
 
 }

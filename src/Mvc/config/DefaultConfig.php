@@ -37,8 +37,8 @@ return
              */
             'Cache' =>
             [
-                'debung' => false,
-                'class' => '\\Cc\\CacheFile',
+                'debung' => true,
+                'class' => '\\Cc\\CacheFilePHP',
                 'File' => 'CcMvcCache' . \CcMvc::Version,
                 'ExpireTime' => '+1 month'
             ],
@@ -119,7 +119,7 @@ return
                     'text/html, application/xhtml+xml, application/xaml+xml, application/xaml+xml' =>
                     [
                         'class' => '\\Cc\\Mvc\\Html',
-                        'param' => [true, true],
+                        'param' => [false, true],
                         'layaut' => 'main',
                         'staticFile' => false
                     ],
@@ -268,6 +268,21 @@ return
                 ],
                 'NamespacesForDir' => [
 //'namespace'=>'path' o 'namespace'=>['path1','path2']
+                ],
+            ],
+            'ViewLoaders' => [
+                'tpl' => [
+                    'class' => '\\Cc\\Mvc\\ViewSmartyTpl',
+                    'param' => [],
+                ],
+            ],
+            'SmartyConfig' => [
+                'LeftDelimiter' => '{',
+                'RightDelimiter' => '}',
+                'PluginsDir' => 'SmartyPlugins/',
+                'ConfigDir' => 'SmartyConfig/',
+                'DebungConsole' => false,
+                'Plugins' => [
                 ],
             ],
             'WebMaster' =>

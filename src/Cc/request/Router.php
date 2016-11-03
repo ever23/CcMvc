@@ -167,6 +167,10 @@ class Router
             $last = explode(',', $_SERVER['HTTP_IF_MODIFIED_SINCE']);
 
             $LastTime = new \DateTime(trim(array_pop($last)));
+            if (error_get_last())
+            {
+                $reenv = true;
+            }
 
             if ($Mtime === $LastTime->getTimestamp() && !$reenv)
             {

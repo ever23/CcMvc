@@ -27,7 +27,7 @@ namespace Cc\Mvc;
  * @package CcMvc
  * @subpackage Modelo
  */
-abstract class Model implements \ArrayAccess, \JsonSerializable, \IteratorAggregate
+abstract class Model implements \ArrayAccess, \JsonSerializable, \IteratorAggregate, ParseObjectSmartyTpl
 {
 
     protected $_ValuesModel = [];
@@ -122,6 +122,56 @@ abstract class Model implements \ArrayAccess, \JsonSerializable, \IteratorAggreg
             return $this->_ValuesModel;
         }
         return new \ArrayIterator($this->_ValuesModel);
+    }
+
+    private $each = true;
+    private $eachend = true;
+
+    public function each($params, $content = NULL, &$smarty, &$repeat)
+    {
+
+        $repeat = true;
+        if ($this->each)
+        {
+            if (!$this->eachend)
+            {
+                $this->rewind();
+            }
+            $fech = $this->current();
+            $key = $this->key();
+            $this->eachend = $this->next();
+
+            $this->each = false;
+            if (isset($params['row']))
+            {
+                $smarty->assign($params['row'], $fech);
+            } else
+            {
+                $smarty->assign('row', $fech);
+            }
+            if (isset($params['key']))
+            {
+                $smarty->assign($params['key'], $key);
+            } else
+            {
+                $smarty->assign('key', $key);
+            }
+        } else
+        {
+            $this->each = true;
+            $repeat = $this->eachend;
+            return $content;
+            // $repeat = $this->next();
+        }
+    }
+
+    public function ParseSmaryTpl()
+    {
+        return [
+            'allowed' => [],
+            'format' => true,
+            'block_methods' => ['each']
+        ];
     }
 
 //put your code here

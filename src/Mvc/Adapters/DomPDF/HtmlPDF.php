@@ -242,30 +242,50 @@ class HtmlPDF extends Html
     public function GetLayaut()
     {
         $layaut = parent::GetLayaut();
+        $content = '';
         if (!is_null($layaut['Layaut']) && $layaut['Layaut'] != '')
         {
-            $name = ($layaut['Dir'] . $layaut['Layaut'] . '.php');
+            $name = ($layaut['Dir'] . $layaut['Layaut']);
+            if (!file_exists($name))
+            {
+                $name.='.php';
+            }
+            if ((strpos($layaut['Layaut'], ':') !== false))
+            {
+                $name.=$layaut['Layaut'];
+            }
             Mvc::App()->Log("CARGANDO EL LAYAUT " . $name . " ...");
-            if (is_file($name))
+            try
             {
-                $content = DocumentBuffer::Conten();
-                extract(Mvc::App()->LayautManager->jsonSerialize());
-                $this->conten = &$content;
-                DocumentBuffer::Clear();
+                $param = ['content' => DocumentBuffer::Conten()] + Mvc::App()->LayautManager->jsonSerialize();
+                if (isset($layaut['params']))
+                {
+                    $param+=$layaut['params'];
+                }
 
-                require_once ($name);
-            } else
+
+                DocumentBuffer::Clear();
+                $loader = new ViewLoader(Mvc::App()->Config());
+                $content = $loader->Fetch($this, $name, $param);
+                Mvc::App()->Log("LAYAUT " . $name . " CARGADO  ...");
+            } catch (LayautException $ex)
             {
-                throw new Exception("EL LAYAUT " . $name . " NO EXISTE ");
+                throw $ex;
+            } catch (ViewException $ex)
+            {
+                throw new LayautException("EL LAYAUT " . $name . " NO EXISTE ");
+            } catch (Exception $ex)
+            {
+                throw $ex;
             }
         }
         $layaut['Layaut'] = NULL;
         if (http_response_code() !== 200)
         {
+            echo $content;
             return $layaut;
         }
-        $content = DocumentBuffer::Conten();
-        DocumentBuffer::Clear();
+
         try
         {
 

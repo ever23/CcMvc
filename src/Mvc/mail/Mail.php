@@ -82,34 +82,37 @@ class Mail extends \Cc\Mail
                 {
                     $layaut = $this->GetLayaut();
 
-                    $__name = ($layaut['Dir'] . $layaut['Layaut'] . '.php');
+                    //$__name = ($layaut['Dir'] . $layaut['Layaut'] . '.php');
+                    $__name = ($layaut['Dir'] . $layaut['Layaut']);
+                    if (!file_exists($__name))
+                    {
+                        $__name.='.php';
+                    }
+                    if ((strpos($layaut['Layaut'], ':') !== false))
+                    {
+                        $__name.=$layaut['Layaut'];
+                    }
                     if (is_null($layaut['Layaut']) || $layaut['Layaut'] == '')
                         return $content;
-                    if (is_file($__name))
+
+                    try
                     {
-                        try
+                        $param = ['content' => $content] + $LayautController->jsonSerialize();
+                        if (isset($layaut['params']))
                         {
-                            ob_start();
-                            if (isset($layaut['params']))
-                            {
-                                extract($layaut['params']);
-                            }
-                            extract($LayautController->jsonSerialize());
-                            $this->conten = &$content;
-                            include($__name);
-                            $buffer = ob_get_contents();
-
-                            ob_end_clean();
-
-
-                            return $buffer;
-                        } catch (LayautException $ex)
-                        {
-                            throw $ex;
+                            $param+=$layaut['params'];
                         }
-                    } else
+                        $loader = new ViewLoader(Mvc::App()->Config());
+                        return $loader->Fetch($this, $__name, $param);
+                    } catch (LayautException $ex)
+                    {
+                        throw $ex;
+                    } catch (ViewException $ex)
                     {
                         throw new LayautException("EL LAYAUT " . $__name . " NO EXISTE ");
+                    } catch (Exception $ex)
+                    {
+                        throw $ex;
                     }
                 }, $this->html, get_class($this->html));
 

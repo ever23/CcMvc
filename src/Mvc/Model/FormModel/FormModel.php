@@ -472,9 +472,16 @@ abstract class FormModel extends Model
      * @param array $attrs [attr=>valor]
      * @param bool $return indica si en contenido sera impreso en el buffer o retornado
      */
-    public function Input($name, array $attrs = [], $return = false)
+    public function Input($name, $attrs = [], $return = false)
     {
 
+        if (is_object($attrs) && $attrs instanceof \Smarty_Internal_Template)
+        {
+
+            $attrs = $name;
+            $name = $attrs['name'];
+            $return = false;
+        }
         if (isset($this->campos[$name]))
         {
             if (preg_match('/\w\[\]/', $this->campos[$name][self::TypeHtml]))
@@ -531,8 +538,15 @@ abstract class FormModel extends Model
      * @param array $attrs [attr=>valor]
      *  @param bool $return indica si en contenido sera impreso en el buffer o retornado
      */
-    public function TextArea($name, array $attrs = [], $return = false)
+    public function TextArea($name, $attrs = [], $return = false)
     {
+        if (is_object($attrs) && $attrs instanceof \Smarty_Internal_Template)
+        {
+
+            $attrs = $name;
+            $name = $attrs['name'];
+            $return = false;
+        }
         if (isset($this->campos[$name]))
         {
             if (preg_match('/\w\[\]/', $this->campos[$name][self::TypeHtml]))
@@ -582,6 +596,22 @@ abstract class FormModel extends Model
      */
     public function Select($name, $options = [], array $attrs = [], $return = false)
     {
+        if (is_object($options) && $options instanceof \Smarty_Internal_Template)
+        {
+
+            $attrs = $name;
+            $name = $attrs['name'];
+            $options = [];
+            if (!isset($attrs['option']) && isset($this->campos[$name]) && isset($this->campos[$name]['option']) && (is_array($this->campos[$name]['option']) || $this->campos[$name]['option'] instanceof \Traversable))
+            {
+                $options = $this->campos[$name];
+            } else
+            {
+                $options = $attrs['option'];
+            }
+
+            $return = false;
+        }
         if (isset($this->campos[$name]))
         {
             if (isset($this->campos[$name][self::DefaultConten]))
@@ -638,8 +668,15 @@ abstract class FormModel extends Model
      * @param array $attrs
      *  @param bool $return indica si en contenido sera impreso en el buffer o retornado
      */
-    public function ButtonSubmid($value = '', array $attrs = [], $return = false)
+    public function ButtonSubmit($value = '', $attrs = [], $return = false)
     {
+        if (is_object($attrs) && $attrs instanceof \Smarty_Internal_Template)
+        {
+
+            $attrs = $value;
+            $value = $attrs['value'];
+            $return = false;
+        }
         $attrs['value'] = 1;
         $attrs['name'] = $this->NameSubmited;
         if ($return)
@@ -732,7 +769,7 @@ abstract class FormModel extends Model
         }
 
         $buff.= Html::OpenTang('li', ['class' => 'FormRow']);
-        $buff.=$this->ButtonSubmid(isset($submit['value']) ? $submit['value'] : 'ENVIAR', $submit, true);
+        $buff.=$this->ButtonSubmit(isset($submit['value']) ? $submit['value'] : 'ENVIAR', $submit, true);
         $buff.= Html::CloseTang('li');
         $buff.= Html::CloseTang('ul');
         $buff.=$this->EndForm(true);
@@ -743,6 +780,26 @@ abstract class FormModel extends Model
         {
             echo $buff;
         }
+    }
+
+    public function Form($params, $content, &$smarty, &$repeat)
+    {
+        if (!isset($content))
+        {
+            $content = $this->BeginForm($params, true);
+        } else
+        {
+            $content = $content . $this->EndForm(true);
+        }
+        return $content;
+    }
+
+    public function ParseSmaryTpl()
+    {
+        $smarty = parent::ParseSmaryTpl();
+        $smarty['allowed'] = [];
+        $smarty['block_methods'][] = 'Form';
+        return $smarty;
     }
 
 }

@@ -90,7 +90,7 @@ class Html extends Response
      * errores 
      * @var string 
      */
-    protected $errores;
+    public $errores;
 
     /**
      * alisa de directorios  
@@ -134,11 +134,13 @@ class Html extends Response
      * @var JsonLD 
      */
     public $JsonLD = NULL;
+    protected $saveCache = false;
+    protected $CacheLifeTime = 60;
+    protected $cacheDir = '';
 
     public static function CtorParam()
     {
         Mvc::App()->ChangeResponseConten('text/html');
-
         return Mvc::App()->Response;
     }
 
@@ -162,8 +164,84 @@ class Html extends Response
         $this->MetaTang = $this->AppConfig->SEO['MetaTang'];
         $this->KeyWords = $this->AppConfig->SEO['keywords'];
         $this->http_equiv = $this->AppConfig->SEO['HttpEquiv'] + ['Content-Type' => 'text/html; charset=UTF-8'];
-
+        $this->cacheDir = Mvc::App()->Config()->App['Cache'] . 'Html' . DIRECTORY_SEPARATOR;
         parent::__construct($compress, $min, 'html');
+    }
+
+    public function ClearCache()
+    {
+        if (is_dir($this->cacheDir))
+        {
+            $dir = dir($this->cacheDir);
+            while ($file = $dir->read())
+            {
+                unlink($dir . $file);
+            }
+        }
+    }
+
+    public function SetCache($isCache, $lifeTime = 60)
+    {
+        $this->saveCache = (bool) $isCache;
+        $this->CacheLifeTime = $lifeTime;
+    }
+
+    /**
+     * 
+     * @param string $conten
+     * @return string
+     */
+    public function ProccessConten($conten)
+    {
+        if ($this->saveCache && !Mvc::App()->IsDebung() && !$_POST)
+        {
+            return $this->CacheMin($conten, $this->min);
+        }
+        return parent::ProccessConten($conten);
+    }
+
+    public function CacheMin($conten, $minify = false)
+    {
+        $cache = $this->cacheDir;
+        $f = dirname(Mvc::App()->GetExecutedFile()) . DIRECTORY_SEPARATOR;
+        if (!is_dir($cache))
+            mkdir($cache);
+        $controller = Mvc::App()->GetController();
+        $name = "paquete" . $controller['paquete'] . '.controller' . $controller['controller'] . '.controller' . $controller['method'];
+        if ($_GET)
+        {
+            $name .='.GET-';
+            foreach ($_GET as $i => $v)
+            {
+                $name .=$i . '_' . $v;
+            }
+        }
+        $name.='.html';
+
+        $this->fileCache = new \SplFileInfo($cache . $name);
+        $cache = [];
+        $cache['type'] = 'Controllers';
+        $cache['Controller'] = Mvc::App()->GetController();
+        $cache['RealFile'] = $this->fileCache->__toString();
+        $cache['LifeTime'] = $this->CacheLifeTime;
+
+        if ($minify)
+        {
+            $min = new \Cc\MinScript($conten, 'html');
+            $conten2 = $min->Min();
+        } else
+        {
+            $conten2 = "<!--Response by cache " . date("Y-m-d H:m:i") . " -->\n" . $conten;
+        }
+
+        $f = fopen($this->fileCache, 'w');
+        fwrite($f, $conten2);
+        fclose($f);
+
+        \Cc\Cache::Set(Mvc::App()->GetNameStaticCacheRouter(), $cache);
+        //   Router::HeadersReponseFiles($this->fileCache, Mvc::App()->Content_type, Mvc::App()->Config()->Router['CacheExpiresTime']);
+
+        return "<!--create cache " . $name . " -->\n" . $conten2;
     }
 
     /**

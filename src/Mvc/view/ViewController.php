@@ -120,13 +120,8 @@ class ViewController
      */
     private function LoadView($dir, $view, array ...$agrs)
     {
-        $view = ValidFilename::ValidName($view, true);
-        if (substr($view, -4, 4) == '.tpl' && file_exists($dir . $view))
-        {
-            $tpl = new ViewSmartyTpl();
-            $tpl->LoadTpl($dir, $view, ...$agrs);
-            return;
-        }
+        // $view = ValidFilename::ValidName($view, true);
+
         foreach ($agrs as &$_________agrs)
         {
             foreach ($_________agrs as $_i => &$_v)
@@ -142,28 +137,37 @@ class ViewController
         {
             throw new ViewException("EL NOMBRE DEL VIEW " . $view . " NO ES VALIDO");
         }
-        if (file_exists($dir . $view . '.php'))
+        if ((strpos($view, ':') !== false))
+        {
+            $this->_include($view);
+        } elseif (file_exists($dir . $view . '.php'))
         {
             $this->ViewVars['ViewName'] = $view;
-            $this->_include($dir . $view);
+            $this->_include($dir . $view . '.php');
         } elseif (is_dir($dir . $view) && file_exists($dir . $view . 'index.php'))
         {
             $this->ViewVars['ViewName'] = $view . 'index';
-            $this->_include($dir . $view . 'index');
+            $this->_include($dir . $view . 'index.php');
         } else
         {
-            throw new ViewException("EL VIEW $view NO SE ENCOTRO");
+            $this->_include($dir . $view);
         }
     }
 
     /**
      * 
-     * @param string $___________
+     * @param string $file
      */
-    private function _include($___________)
+    private function _include($file)
     {
-        extract($this->ViewVars);
-        include($___________ . '.php');
+        try
+        {
+            $loader = new ViewLoader(Mvc::App()->Config());
+            $loader->Load($this, $file, $this->ViewVars);
+        } catch (ViewLoaderException $ex)
+        {
+            throw new ViewException("El View " . $file . " no existe");
+        }
     }
 
     public function __set($name, $value)
