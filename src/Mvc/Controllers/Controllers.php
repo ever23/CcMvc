@@ -116,6 +116,20 @@ abstract class Controllers implements InfoController
     }
 
     /**
+     * CARGA E INTERPRETA Y RETORNA EL CONTENIDO DE UN DOCUMENTO VISTA DEL DIRECTORIO SITIO ESTABLECIDA 
+     * @param string $page nombre del documento sin extencion
+     * @param array $agrs ARRAY ASOCIATIVO CON LAS VARIABLES QUE TENDRA DISPONIBLE EL DOCUMENTO VISTA EL OBJETO DE CONTROL DE CONTENIDO SE PARASA EN LA VARIABLE $OBjconten COMO REFERENCIA
+     * POR LO QUE NO SERA NESEARIO PARASALO EN EL ARRAY
+     * @example ../examples/CERQU/protected/view/estudiantes/index.php ejemplo de un archivo view o vista 
+     * @uses ViewController::Load()
+     * 
+     */
+    protected static function FetchView($page, array ...$agrs)
+    {
+        return self::$View->Fetch($page, ...$agrs);
+    }
+
+    /**
      * carga un view de error establecido y cierra la ejecucion 
      * @param int $errno numero de error Http
      * @param string $msj mesaje para tiempos de depuracion

@@ -71,6 +71,7 @@ class sqlite extends Drivers
 
             $rows = preg_split("/(\(.*[,]+.*\))?[,]/", trim($sql));
             $i = 0;
+            $order = 1;
             foreach ($rows as $v)
             {
 
@@ -100,7 +101,7 @@ class sqlite extends Drivers
                                     array_push($this->primarykey, $fil[0]);
                             }
                         }
-                        $this->OrderColum[] = $fil[0];
+                        $this->OrderColum[$order++] = $fil[0];
                         $this->colum+=[$fil[0] => [
                                 'Type' => $fil[1],
                                 'KEY' => $KEY,

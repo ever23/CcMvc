@@ -174,6 +174,17 @@ class GDResponse implements ResponseConten
         if ($alto == $nuevo_alto && $ancho == $nuevo_ancho)
             return $image;
         //  return var_export(Mvc::App()->Router->InfoFile, true);
+        $nuevo_ancho = (int) $nuevo_ancho;
+        $nuevo_alto = (int) $nuevo_alto;
+        if (!is_numeric($calidad))
+        {
+            $calidad = NULL;
+        } else
+        {
+            $calidad = (int) $calidad;
+        }
+
+        // $fondo = (int) $fondo;
         if (Mvc::App()->Router->InfoFile instanceof \SplFileInfo)
         {
             $c = $this->CacheImg($nuevo_ancho, $nuevo_alto, $calidad, $fondo);

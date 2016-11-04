@@ -25,8 +25,64 @@
 <h2>Root interface iProtected</h2>
 <ul>
 <li><a href="CcMvc/Controladores/iProtected.html">iProtected</a><ul>
-<li><a href="CcMvc/Controladores/AccessUserController.html">AccessUserController</a></li><li><a href="CcMvc/Controladores/AutoloaderLibs.html">AutoloaderLibs</a></li><li><a href="CcMvc/Controladores/ExtByController.html">ExtByController</a></li><li><a href="CcMvc/Controladores/InfoController.html">InfoController</a></li><li><a href="CcMvc/Controladores/ProtectedMetodHttp.html">ProtectedMetodHttp</a></li><li><a href="CcMvc/Controladores/ReRouterMethod.html">ReRouterMethod</a></li><li><a href="CcMvc/Controladores/SecurityRequest.html">SecurityRequest</a></li></ul></li>
+<li><a href="CcMvc/Controladores/AccessUserController.html">AccessUserController</a></li><li><a href="CcMvc/Controladores/AutoloaderLibs.html">AutoloaderLibs</a></li><li><a href="CcMvc/Controladores/ExtByController.html">ExtByController</a></li><li><a href="CcMvc/Controladores/InfoController.html">InfoController</a></li><li><a href="CcMvc/Controladores/ParseObjectSmartyTpl.html">ParseObjectSmartyTpl</a></li><li><a href="CcMvc/Controladores/ProtectedMetodHttp.html">ProtectedMetodHttp</a></li><li><a href="CcMvc/Controladores/ReRouterMethod.html">ReRouterMethod</a></li><li><a href="CcMvc/Controladores/SecurityRequest.html">SecurityRequest</a></li></ul></li>
 </ul>
+
+<h2>Root interface Pluginblock</h2>
+<ul>
+<li><a href="CcMvc/Pluginblock.html">Pluginblock</a></li></ul>
+
+<h2>Root interface PluginblockStaticAll</h2>
+<ul>
+<li><a href="CcMvc/PluginblockStaticAll.html">PluginblockStaticAll</a></li></ul>
+
+<h2>Root interface PluginCompiler</h2>
+<ul>
+<li><a href="CcMvc/PluginCompiler.html">PluginCompiler</a></li></ul>
+
+<h2>Root interface PluginFunction</h2>
+<ul>
+<li><a href="CcMvc/PluginFunction.html">PluginFunction</a></li></ul>
+
+<h2>Root interface PluginFunctionStaticAll</h2>
+<ul>
+<li><a href="CcMvc/PluginFunctionStaticAll.html">PluginFunctionStaticAll</a></li></ul>
+
+<h2>Root interface PluginInsert</h2>
+<ul>
+<li><a href="CcMvc/PluginInsert.html">PluginInsert</a></li></ul>
+
+<h2>Root interface PluginInsertStaticAll</h2>
+<ul>
+<li><a href="CcMvc/PluginInsertStaticAll.html">PluginInsertStaticAll</a></li></ul>
+
+<h2>Root interface PluginModifier</h2>
+<ul>
+<li><a href="CcMvc/PluginModifier.html">PluginModifier</a></li></ul>
+
+<h2>Root interface PluginModifierStaticAll</h2>
+<ul>
+<li><a href="CcMvc/PluginModifierStaticAll.html">PluginModifierStaticAll</a></li></ul>
+
+<h2>Root interface PluginOutputfilter</h2>
+<ul>
+<li><a href="CcMvc/PluginOutputfilter.html">PluginOutputfilter</a></li></ul>
+
+<h2>Root interface PluginPostfilter</h2>
+<ul>
+<li><a href="CcMvc/PluginPostfilter.html">PluginPostfilter</a></li></ul>
+
+<h2>Root interface PluginPretfilter</h2>
+<ul>
+<li><a href="CcMvc/PluginPretfilter.html">PluginPretfilter</a></li></ul>
+
+<h2>Root interface PluginSource</h2>
+<ul>
+<li><a href="CcMvc/PluginSource.html">PluginSource</a></li></ul>
+
+<h2>Root interface ViewLoaderExt</h2>
+<ul>
+<li><a href="CcMvc/ViewLoaderExt.html">ViewLoaderExt</a></li></ul>
 
 <h2>Root class Autoload</h2>
 <ul>
@@ -52,7 +108,7 @@
 
 <h2>Root class Model</h2>
 <ul>
-<li><a href="CcMvc/Modelo/Model.html">Model</a> (implements ArrayAccess, JsonSerializable, IteratorAggregate)<ul>
+<li><a href="CcMvc/Modelo/Model.html">Model</a> (implements ArrayAccess, JsonSerializable, IteratorAggregate, <a href="CcMvc/Controladores/ParseObjectSmartyTpl.html">ParseObjectSmartyTpl</a>)<ul>
 <li><a href="CcMvc/Modelo/FormModel.html">FormModel</a><ul>
 <li><a href="CcMvc/Modelo/LoginFormModel.html">LoginFormModel</a></li></ul></li>
 <li><a href="CcMvc/Modelo/Layaut.html">Layaut</a></li><li><a href="CcMvc/Controladores/LayautManager.html">LayautManager</a></li><li><a href="CcMvc/Modelo/PaginadoModel.html">PaginadoModel</a> (implements JsonSerializable)</li></ul></li>
@@ -94,13 +150,17 @@
 <ul>
 <li><a href="CcMvc/view/ViewController.html">ViewController</a></li></ul>
 
+<h2>Root class ViewLoader</h2>
+<ul>
+<li><a href="CcMvc/ViewLoader.html">ViewLoader</a></li></ul>
+
 <h2>Root class ViewSmartyTpl</h2>
 <ul>
-<li><a href="CcMvc/ViewSmartyTpl.html">ViewSmartyTpl</a></li></ul>
+<li><a href="CcMvc/ViewSmartyTpl.html">ViewSmartyTpl</a> (implements <a href="CcMvc/ViewLoaderExt.html">ViewLoaderExt</a>)</li></ul>
 
 <h2>Root class \</h2>
 <ul>
-<li><a href="CcMvc/Configuracion/Config.html">Config</a></li><li><a href="CcMvc/Configuracion/Config.html">Config</a></li><li><a href="CcMvc/Request/Cookie.html">Cookie</a></li><li><a href="CcMvc/DataBase/DBRow.html">DBRow</a></li><li><a href="CcMvc/DataBase/DBtabla.html">DBtabla</a> (implements Serializable)<ul>
+<li><a href="CcMvc/Configuracion/Config.html">Config</a></li><li><a href="CcMvc/Configuracion/Config.html">Config</a></li><li><a href="CcMvc/Request/Cookie.html">Cookie</a></li><li><a href="CcMvc/DataBase/DBRow.html">DBRow</a></li><li><a href="CcMvc/DataBase/DBtabla.html">DBtabla</a> (implements Serializable, <a href="CcMvc/Controladores/ParseObjectSmartyTpl.html">ParseObjectSmartyTpl</a>)<ul>
 <li><a href="CcMvc/Modelo/DBtablaModel.html">DBtablaModel</a></li></ul></li>
 <li><a href="CcMvc/Excepciones/ErrorHandle.html">ErrorHandle</a></li><li><a href="CcMvc/Excepciones/Exception.html">Exception</a><ul>
 <li><a href="CcMvc/Response/GDexception.html">GDexception</a></li><li><a href="CcMvc/view/ViewException.html">ViewException</a></li></ul></li>
@@ -111,7 +171,7 @@
 <li><a href="CcMvc/DataBase/SQLite3.html">SQLite3</a></li><li><a href="CcMvc/Modelo/TablaModel.html">TablaModel</a></li><li><a href="CcMvc/Validacion/ValidFilename.html">ValidFilename</a></li></ul>
 
 	<p class="notes" id="credit">
-		Documentation generated on Sun, 30 Oct 2016 20:31:05 +0100 by <a href="http://www.phpdoc.org" target="_blank">phpDocumentor 1.4.3</a>
+		Documentation generated on Fri, 04 Nov 2016 04:03:59 +0100 by <a href="http://www.phpdoc.org" target="_blank">phpDocumentor 1.4.3</a>
 	</p>
 	</body>
 </html>

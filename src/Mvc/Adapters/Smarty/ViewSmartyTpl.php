@@ -10,11 +10,8 @@ namespace Cc\Mvc;
 
 use Cc\Mvc;
 use Cc\Autoload;
+use Cc\Cache;
 
-if (!class_exists("\\Smarty"))
-{
-    throw new Exception("Se requieren de la libreria Smarty para cargar archivos .tpl");
-}
 
 /**
  * Adaptador para smarty 
@@ -26,7 +23,7 @@ class ViewSmartyTpl implements ViewLoaderExt
 
     /**
      *
-     * @var \SmartyBC 
+     * @var \Smarty
      */
     protected $smarty;
     protected $config;
@@ -36,10 +33,15 @@ class ViewSmartyTpl implements ViewLoaderExt
 
     public function __construct()
     {
+        if (!class_exists("\\Smarty"))
+{
+    throw new Exception("Se requieren de la libreria Smarty para cargar archivos .tpl");
+}
+
         $this->config = isset(Mvc::App()->Config()->SmartyConfig) ? Mvc::App()->Config()->SmartyConfig : [];
         if (!(self::$SmartyRef instanceof \Smarty))
         {
-            self::$SmartyRef = new \SmartyBC();
+            self::$SmartyRef = new \Smarty();
             $this->smarty = &self::$SmartyRef;
             $this->ConfigSmarty();
         } else
@@ -52,15 +54,19 @@ class ViewSmartyTpl implements ViewLoaderExt
     {
         $this->smarty->clearAllAssign();
         $this->asingVars($agrs, $context);
+        if (($t = strpos($file, ':')) === false)
+        {
+            $file = 'file:' . $file;
+        }
         try
         {
-            return $this->smarty->fetch('file:' . $file, $this->smarty->cache_id, $this->smarty->compile_id);
+            return $this->smarty->fetch($file, $this->smarty->cache_id, $this->smarty->compile_id);
         } catch (\SmartyCompilerException $ex)
         {
             throw $ex;
         } catch (\SmartyException $ex)
         {
-            throw new Exception("Ocurrio un error al evaluar el archivo " . $file . " " . $ex->getMessage(), $ex);
+            throw new Exception("Ocurrio un error al evaluar el archivo " . $file . " " . $ex->getMessage(), $ex->getCode(), $ex);
         }
     }
 
@@ -68,16 +74,20 @@ class ViewSmartyTpl implements ViewLoaderExt
     {
         $this->smarty->clearAllAssign();
         $this->asingVars($agrs, $context);
+        if (($t = strpos($file, ':')) === false)
+        {
+            $file = 'file:' . $file;
+        }
         try
         {
-            return $this->smarty->display('file:' . $file, $this->smarty->cache_id, $this->smarty->compile_id, $this->smarty);
+            return $this->smarty->display($file, $this->smarty->cache_id, $this->smarty->compile_id, $this->smarty);
         } catch (\SmartyCompilerException $ex)
         {
             throw $ex;
-        } catch (\SmartyException $ex)
-        {
-            throw new Exception("Ocurrio un error al evaluar el archivo " . $file . " " . $ex->getMessage(), $ex);
-        }
+        }/* catch (\SmartyException $ex)
+          {
+          throw new Exception("Ocurrio un error al evaluar el archivo " . $file . " " . $ex->getMessage(), $ex->getCode(), $ex);
+          } */
     }
 
     private function asingVars(array &$agrs, &$context)
@@ -91,7 +101,7 @@ class ViewSmartyTpl implements ViewLoaderExt
                 $ag['format'] = isset($ag['format']) ? $ag['format'] : true;
                 $ag['block_methods'] = isset($ag['block_methods']) ? $ag['block_methods'] : [];
                 $ag['object'] = (isset($ag['object']) ? $ag['object'] : $var);
-                $this->smarty->register_object($i, $ag['object'], $ag['allowed'], $ag['format'], $ag['block_methods']);
+                $this->smarty->registerObject($i, $ag['object'], $ag['allowed'], $ag['format'], $ag['block_methods']);
             }
 
             $this->smarty->assign($i, $var);
@@ -103,7 +113,7 @@ class ViewSmartyTpl implements ViewLoaderExt
             $ag['format'] = isset($ag['format']) ? $ag['format'] : true;
             $ag['block_methods'] = isset($ag['block_methods']) ? $ag['block_methods'] : [];
             $ag['object'] = (isset($ag['object']) ? $ag['object'] : $context);
-            $this->smarty->register_object("this", $ag['object'], $ag['allowed'], $ag['format'], $ag['block_methods']);
+            $this->smarty->registerObject("this", $ag['object'], $ag['allowed'], $ag['format'], $ag['block_methods']);
         }
 
 
@@ -143,7 +153,7 @@ class ViewSmartyTpl implements ViewLoaderExt
             $ag['format'] = isset($ag['format']) ? $ag['format'] : true;
             $ag['block_methods'] = isset($ag['block_methods']) ? $ag['block_methods'] : [];
             $ag['object'] = (isset($ag['object']) ? $ag['object'] : Mvc::App());
-            $this->smarty->register_object("CcMvc", $ag['object'], $ag['allowed'], $ag['format'], $ag['block_methods']);
+            $this->smarty->registerObject("CcMvc", $ag['object'], $ag['allowed'], $ag['format'], $ag['block_methods']);
         }
         $this->smarty->assignGlobal('CcMvc', Mvc::App());
         if (is_object(Mvc::App()->SelectorController->GetController()) && Mvc::App()->SelectorController->GetController() instanceof ParseObjectSmartyTpl)
@@ -153,7 +163,7 @@ class ViewSmartyTpl implements ViewLoaderExt
             $ag['format'] = isset($ag['format']) ? $ag['format'] : true;
             $ag['block_methods'] = isset($ag['block_methods']) ? $ag['block_methods'] : [];
             $ag['object'] = (isset($ag['object']) ? $ag['object'] : Mvc::App()->SelectorController->GetController());
-            $this->smarty->register_object("Controller", $ag['object'], $ag['allowed'], $ag['format'], $ag['block_methods']);
+            $this->smarty->registerObject("Controller", $ag['object'], $ag['allowed'], $ag['format'], $ag['block_methods']);
         }
         $this->smarty->assignGlobal('Controller', Mvc::App()->SelectorController->GetController());
     }
@@ -245,7 +255,8 @@ class ViewSmartyTpl implements ViewLoaderExt
                 [$obj, 'secure'],
                 [$obj, 'trusted']
             ];
-            $this->smarty->registerPlugin('source', $name, $call);
+
+            $this->smarty->registerResource($name, $call);
         } elseif ($ref->implementsInterface(Smarty\PluginFunction::class))
         {
             $obj = new $clas ();

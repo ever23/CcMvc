@@ -68,7 +68,7 @@ class ViewLoader
             $class = $this->evaluadores[$ext]['class'];
             $param = isset($this->evaluadores[$ext]['param']) && is_array($this->evaluadores[$ext]['param']) ? $this->evaluadores[$ext]['param'] : [];
             $eval = new $class(...$param);
-            return $eval->Fetch($context, $file, $agrs);
+            return $eval->Fetch($context, $file->__toString(), $agrs);
         } else
         {
             ob_start();
@@ -88,7 +88,7 @@ class ViewLoader
             $class = $this->evaluadores[$ext]['class'];
             $param = isset($this->evaluadores[$ext]['param']) && is_array($this->evaluadores[$ext]['param']) ? $this->evaluadores[$ext]['param'] : [];
             $eval = new $class(...$param);
-            return $eval->Load($context, $file, $agrs);
+            return $eval->Load($context, $file->__toString(), $agrs);
         } else
         {
             return $this->LoadPHP($context, $file, $agrs);

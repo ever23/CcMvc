@@ -48,7 +48,7 @@ class MinScript
     /* <b>1.0.1.0</b> */
 
     public $version = '1.0.1.0'; //version 
-    protected $HTML = array('script' => 0, 'style' => 0, 'head' => 0, 'pre' => 0); //etiquetas html 
+    protected $HTML = array('script' => 0, 'style' => 0, 'head' => 0, 'pre' => 0, 'textarea' => 0); //etiquetas html 
     protected $HTML_HEAD = '';
     protected $is_info = true;
     protected $script_acet = array('html', 'css', 'js', 'json');
@@ -349,7 +349,7 @@ class MinScript
 
                     $new_html.=$this->JsMin($e);
                 }
-                if ($this->HTML['pre'] > 0)
+                if ($this->HTML['pre'] > 0 || $this->HTML['textarea'] > 0)
                 {
 
                     $new_html.=$e;
@@ -454,6 +454,9 @@ class MinScript
             case 'pre':
                 $this->HTML[$tag] ++;
                 break;
+            case 'textarea':
+                $this->HTML[$tag] ++;
+                break;
         }
         if ($attr != '')
         {
@@ -482,6 +485,9 @@ class MinScript
             case 'pre':
                 $this->HTML[$tag] = 0;
                 break;
+            case 'textarea':
+                $this->HTML[$tag] = 0;
+                break;
         }
         return '</' . $tag . ">";
     }
@@ -493,17 +499,24 @@ class MinScript
 
     private function CssMin($css_script)
     {
-        $chars = array('{', '}', ';', ':', '[', ']', '=', '"', "'", '>', '/*', '*/', ',');
+        $chars = array('{', '}', ';', ':', '[', '] ', '=', '"', "'", ',', '<', '>', ' ');
         //preg_match("/\/\*(.*)\*\//", $css_script,$preg);
         //$css_script=implode(preg_split("/\/\*.*\*\//",$css_script,-1));
-
-        $css = preg_replace("/(\/\*.*\*\/)/U", "", $css_script);
+        $match = '/(\/\*(.*)\*\/)/Us';
+        $css = preg_replace($match, "", $css_script);
+        //$css = $match . $css;
         $cadena = '';
+        $css = preg_replace('/(\n{1,} {1,})|(\r{1,}\n{1,})|\n{1,}|\t{1,}| {1,}|\r{1,}/', ' ', $css);
         foreach ($chars as $char)
         {
             $lineas = explode($char, $css);
             for ($i = 0; $i < count($lineas); $i++)
-                $lineas[$i] = trim($lineas[$i]);
+            {
+                $p = trim($lineas[$i]);
+                if ($p != '')
+                    $lineas[$i] = $p;
+            }
+
             $css = implode($char, $lineas);
         }
         $css = str_replace('﻿', '', (string) $css);
@@ -519,7 +532,7 @@ class MinScript
         $cadena = '';
 
 
-        $js_script = preg_replace("/\/\*(.*)\*\//U", "", $js_script);
+        $js_script = preg_replace("/\/\*(.*)\*\//Us", "", $js_script);
         //$js_script = str_replace("\n", "", $js_script);
 
         foreach (explode("\\n", $js_script) as $scr)

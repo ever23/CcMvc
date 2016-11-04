@@ -192,11 +192,12 @@ class PaginadoModel extends Model implements \JsonSerializable
         return ['ValueModel' => $this->_ValuesModel, 'next' => $next[$this->GetVar], 'last' => $last[$this->GetVar], 'var' => $this->GetVar];
     }
 
-    public function ListLinkPages($attrs = [], $type = 'li')
+    public function ListLinkPages($attrs = [], $tang = 'li')
     {
-        if (is_object($type) && $type instanceof \Smarty_Internal_Template)
+        if (is_object($tang) && $tang instanceof \Smarty_Internal_Template)
         {
-            $type = $attrs['type'];
+            $type = isset($attrs['tang']) ? $attrs['tang'] : 'li';
+            unset($attrs['tang']);
         }
         $links = [];
 
@@ -210,6 +211,10 @@ class PaginadoModel extends Model implements \JsonSerializable
         {
             case 'return':
                 return $links;
+            case 'json':
+                $j = new Json();
+                $j->CreateJson($links);
+                return $j;
             default :
                 $ret = '';
                 foreach ($links as $i => $v)

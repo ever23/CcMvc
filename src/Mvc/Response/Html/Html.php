@@ -788,7 +788,7 @@ class Html extends Response
             } elseif ($v !== null)
             {
 
-                if ($encode)
+                if ($encode && $i != 'src' && $i != 'href')
                 {
                     $buffer .= " " . $i . "='" . self::Encode($v) . "'";
                 } else

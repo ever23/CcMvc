@@ -4,7 +4,7 @@
 ![CcMvc](http://ccmvc.com.ve/src/images/CcMvc2.png "CcMvc")
 El resultado
 
-### Covertura de Codigo Modelo Vistar Controlador 
+### Cobertura de Codigo Modelo Vistar Controlador 
 
 
 ## REQUERIMIENTOS

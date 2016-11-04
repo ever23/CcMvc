@@ -87,6 +87,9 @@ return
              */
             'Response' =>
             [
+                /**
+                 * indica si se optimizaran las imagenes
+                 */
                 'OptimizeImages' => true,
                 /**
                  * INDICA SI EL CONTENIDO DEL RESULTADO SERA COMPRIMIDO CON ZLIB O NO 
@@ -119,7 +122,7 @@ return
                     'text/html, application/xhtml+xml, application/xaml+xml, application/xaml+xml' =>
                     [
                         'class' => '\\Cc\\Mvc\\Html',
-                        'param' => [false, true],
+                        'param' => [true, true],
                         'layaut' => 'main',
                         'staticFile' => false
                     ],
@@ -270,12 +273,20 @@ return
 //'namespace'=>'path' o 'namespace'=>['path1','path2']
                 ],
             ],
+            /**
+             * Configuraciones para los views y layauts en general 
+             * estableciendo la clase que se encargara de evalualos segun la extencion de archivo
+             */
             'ViewLoaders' => [
                 'tpl' => [
                     'class' => '\\Cc\\Mvc\\ViewSmartyTpl',
                     'param' => [],
                 ],
             ],
+            /**
+             * Configuraciones specificas de la libreria smarty 
+             * solo son usada cuando se esta usando la libreria 
+             */
             'SmartyConfig' => [
                 'LeftDelimiter' => '{',
                 'RightDelimiter' => '}',
@@ -290,6 +301,9 @@ return
                 'name' => 'webmaster',
                 'email' => 'webmaster@localhost.com'
             ],
+            /**
+             * Configuracion para seo
+             */
             'SEO' =>
             [
                 'MetaTang' =>

@@ -820,7 +820,7 @@ class DBtabla extends ResultManager implements \JsonSerializable
 
             for ($i = 1; $i <= $count; $i++)
             {
-
+                //  if (isset($array[$i - 1]))
                 $col.=$this->Driver->FormatVarInsert($array[$i - 1], $attrs[$i]) . ',';
             }
         }

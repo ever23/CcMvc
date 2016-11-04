@@ -131,11 +131,11 @@ class HtmlPDF extends Html
 
 
 
-        $head .= self::base(['href' => $this->BasePath]) . "\n";
+        $head .= self::base(['href' => $this->BasePath]);
         if ($this->ico)
-            $head .= self::link(['rel' => 'shortcut icon', 'href' => $this->ico, 'media' => 'monochrome']) . "\n";
+            $head .= self::link(['rel' => 'shortcut icon', 'href' => $this->ico, 'media' => 'monochrome']);
         if ($this->titulo)
-            $head.=self::title($this->titulo) . "\n";
+            $head.=self::title($this->titulo);
 
         $head.=$this->link_cssjs();
         if ($js != "")
@@ -311,6 +311,7 @@ class HtmlPDF extends Html
     {
         if (!class_exists("\\Dompdf\\Dompdf"))
         {
+
             throw new Exception("HtmlPDF REQUIERE LA LIBRERIA EXTERNA Dompdf");
         }
         $this->domPdf = new Dompdf(['isHtml5ParserEnabled' => true, 'enable_remote' => true, 'isJavascriptEnabled' => true, 'isFontSubsettingEnabled' => true]);

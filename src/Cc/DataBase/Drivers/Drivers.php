@@ -594,7 +594,7 @@ abstract class Drivers
         }
         if ($this->db->connect_error)
             return $val;
-        if (is_null($var))
+        if (is_null($val))
         {
             return NULL;
         } elseif (is_array($val))

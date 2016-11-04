@@ -104,6 +104,19 @@ class ViewController
     }
 
     /**
+     *  CARGAR DOCUMENTO VISTA (view) Y RETORNA SU CONTENIDO
+     *  @param string $view nombre del documento sin extencion
+     *  @param array $agrs ARRAY ASOCIATIVO CON LAS VARIABLES QUE TENDRA DISPONIBLE EL DOCUMENTO VISTA EL OBJETO DE CONTROL DE CONTENIDO SE PARASA EN LA VARIABLE $OBjconten COMO REFERENCIA
+     *  POR LO QUE NO SERA NESEARIO PARASALO EN EL ARRAY
+     * @return string 
+     *  @example ../examples/CERQU/protected/view/estudiantes/index.php ejemplo de un archivo view o vista 
+     */
+    public function Fetch($view, array ...$agrs)
+    {
+        return $this->FetchView($this->_View_Directory, $view, ...$agrs);
+    }
+
+    /**
      *  CARGAR DOCUMENTO VISTA (view) INTERNO
      *  @param string $view nombre del documento sin extencion
      *  @param array $agrs ARRAY ASOCIATIVO CON LAS VARIABLES QUE TENDRA DISPONIBLE EL DOCUMENTO VISTA EL OBJETO DE CONTROL DE CONTENIDO SE PARASA EN LA VARIABLE $OBjconten COMO REFERENCIA
@@ -156,14 +169,59 @@ class ViewController
 
     /**
      * 
+     */
+    private function FetchView($dir, $view, array ...$agrs)
+    {
+        // $view = ValidFilename::ValidName($view, true);
+
+        foreach ($agrs as &$_________agrs)
+        {
+            foreach ($_________agrs as $_i => &$_v)
+            {
+                $this->ViewVars[$_i] = &$_v;
+            }
+        }
+        unset($_________agrs, $_i, $_v);
+        if (!isset($this->ViewVars['ObjResponse']))
+            $this->ViewVars['ObjResponse'] = &Mvc::App()->Response;
+
+        if (preg_match('/\.\.\//', $view))
+        {
+            throw new ViewException("EL NOMBRE DEL VIEW " . $view . " NO ES VALIDO");
+        }
+        if ((strpos($view, ':') !== false))
+        {
+            return $this->_include($view, true);
+        } elseif (file_exists($dir . $view . '.php'))
+        {
+            $this->ViewVars['ViewName'] = $view;
+            return $this->_include($dir . $view . '.php', true);
+        } elseif (is_dir($dir . $view) && file_exists($dir . $view . 'index.php'))
+        {
+            $this->ViewVars['ViewName'] = $view . 'index';
+            return $this->_include($dir . $view . 'index.php', true);
+        } else
+        {
+            return $this->_include($dir . $view, true);
+        }
+    }
+
+    /**
+     * 
      * @param string $file
      */
-    private function _include($file)
+    private function _include($file, $fetch = false)
     {
         try
         {
             $loader = new ViewLoader(Mvc::App()->Config());
-            $loader->Load($this, $file, $this->ViewVars);
+            if ($fetch)
+            {
+                return $loader->Fetch($this, $file, $this->ViewVars);
+            } else
+            {
+                $loader->Load($this, $file, $this->ViewVars);
+            }
         } catch (ViewLoaderException $ex)
         {
             throw new ViewException("El View " . $file . " no existe");
