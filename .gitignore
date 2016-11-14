@@ -3,4 +3,4 @@ docHtml.bat
 CcMvc.zip
 
 /docHtml/
-/examples/
+./examples
