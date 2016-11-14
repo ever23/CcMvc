@@ -192,7 +192,6 @@ class ViewController
         if ((strpos($view, ':') !== false))
         {
             return $this->_include($view, true);
-<<<<<<< HEAD
         } elseif (file_exists($dir . $view . '.' . Mvc::App()->Config()->ViewLoaders['Default']['ext']))
         {
             $this->ViewVars['ViewName'] = $view;
@@ -201,16 +200,6 @@ class ViewController
         {
             $this->ViewVars['ViewName'] = $view . 'index';
             return $this->_include($dir . $view . 'index.' . Mvc::App()->Config()->ViewLoaders['Default']['ext'], true);
-=======
-        } elseif (file_exists($dir . $view . '.php'))
-        {
-            $this->ViewVars['ViewName'] = $view;
-            return $this->_include($dir . $view . '.php', true);
-        } elseif (is_dir($dir . $view) && file_exists($dir . $view . 'index.php'))
-        {
-            $this->ViewVars['ViewName'] = $view . 'index';
-            return $this->_include($dir . $view . 'index.php', true);
->>>>>>> a25cbe10de309bd195787fdb116667fa46358078
         } else
         {
             return $this->_include($dir . $view, true);

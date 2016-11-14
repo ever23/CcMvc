@@ -69,13 +69,7 @@ class ViewLoader
         if (isset($this->evaluadores[$ext]))
         {
 
-<<<<<<< HEAD
             $eval = $this->FactoryLoaders($ext);
-=======
-            $class = $this->evaluadores[$ext]['class'];
-            $param = isset($this->evaluadores[$ext]['param']) && is_array($this->evaluadores[$ext]['param']) ? $this->evaluadores[$ext]['param'] : [];
-            $eval = new $class(...$param);
->>>>>>> a25cbe10de309bd195787fdb116667fa46358078
             return $eval->Fetch($context, $file->__toString(), $agrs);
         } else
         {
@@ -90,13 +84,7 @@ class ViewLoader
 
         if (isset($this->evaluadores[$ext]))
         {
-<<<<<<< HEAD
             $eval = $this->FactoryLoaders($ext);
-=======
-            $class = $this->evaluadores[$ext]['class'];
-            $param = isset($this->evaluadores[$ext]['param']) && is_array($this->evaluadores[$ext]['param']) ? $this->evaluadores[$ext]['param'] : [];
-            $eval = new $class(...$param);
->>>>>>> a25cbe10de309bd195787fdb116667fa46358078
             return $eval->Load($context, $file->__toString(), $agrs);
         } else
         {

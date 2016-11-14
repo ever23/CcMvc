@@ -47,13 +47,8 @@ class MinScript
 {
     /* <b>1.0.1.0</b> */
 
-<<<<<<< HEAD
     public $version = '7.0.1.0'; //version 
     protected $HTML = array('script' => 0, 'style' => 0, 'head' => 0, 'pre' => 0, 'textarea' => 0, 'coment' => 0); //etiquetas html 
-=======
-    public $version = '1.0.1.0'; //version 
-    protected $HTML = array('script' => 0, 'style' => 0, 'head' => 0, 'pre' => 0, 'textarea' => 0); //etiquetas html 
->>>>>>> a25cbe10de309bd195787fdb116667fa46358078
     protected $HTML_HEAD = '';
     protected $is_info = true;
     protected $script_acet = array('html', 'css', 'js', 'json');
@@ -353,14 +348,8 @@ class MinScript
                 {
 
 
-<<<<<<< HEAD
                     $this->scriptjs.=$e;
                 } else
-=======
-                    $new_html.=$this->JsMin($e);
-                }
-                if ($this->HTML['pre'] > 0 || $this->HTML['textarea'] > 0)
->>>>>>> a25cbe10de309bd195787fdb116667fa46358078
                 {
                     if ($this->HTML['pre'] > 0 || $this->HTML['textarea'] > 0)
                     {

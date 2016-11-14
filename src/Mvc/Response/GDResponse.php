@@ -222,19 +222,6 @@ class GDResponse implements ResponseConten
         }
 
         //  return var_export(Mvc::App()->Router->InfoFile, true);
-<<<<<<< HEAD
-=======
-        $nuevo_ancho = (int) $nuevo_ancho;
-        $nuevo_alto = (int) $nuevo_alto;
-        if (!is_numeric($calidad))
-        {
-            $calidad = NULL;
-        } else
-        {
-            $calidad = (int) $calidad;
-        }
-
->>>>>>> a25cbe10de309bd195787fdb116667fa46358078
         // $fondo = (int) $fondo;
         if (Mvc::App()->Router->InfoFile instanceof \SplFileInfo)
         {

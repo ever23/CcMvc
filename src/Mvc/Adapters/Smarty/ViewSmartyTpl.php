@@ -11,10 +11,6 @@ namespace Cc\Mvc;
 use Cc\Mvc;
 use Cc\Autoload;
 use Cc\Cache;
-<<<<<<< HEAD
-=======
-
->>>>>>> a25cbe10de309bd195787fdb116667fa46358078
 
 /**
  * Adaptador para smarty 
@@ -37,16 +33,9 @@ class ViewSmartyTpl implements ViewLoaderExt
     public function __construct()
     {
         if (!class_exists("\\Smarty"))
-<<<<<<< HEAD
         {
             throw new Exception("Se requieren de la libreria Smarty para cargar archivos .tpl");
         }
-=======
-{
-    throw new Exception("Se requieren de la libreria Smarty para cargar archivos .tpl");
-}
-
->>>>>>> a25cbe10de309bd195787fdb116667fa46358078
         $this->config = isset(Mvc::App()->Config()->SmartyConfig) ? Mvc::App()->Config()->SmartyConfig : [];
         if (!(self::$SmartyRef instanceof \Smarty))
         {
