@@ -767,7 +767,7 @@ class Mvc
                     if (file_exists($realfile) && $file->getMTime() <= $realfile->getMTime())
                     {
                         $this->Log("Enrutado a  " . $realfile . " desde el cache");
-                        //$this->Router->InfoFile = $realfile;
+                        $this->Router->InfoFile = $realfile;
                         $this->ProcessConten = false;
                         $this->Buffer->SetAutoMin(false);
                         if ($this->Response instanceof Mvc\Response)
