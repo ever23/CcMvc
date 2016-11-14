@@ -37,7 +37,7 @@ return
              */
             'Cache' =>
             [
-                'debung' => true,
+                'debung' => false,
                 'class' => '\\Cc\\CacheFilePHP',
                 'File' => 'CcMvcCache' . \CcMvc::Version,
                 'ExpireTime' => '+1 month'
@@ -113,10 +113,10 @@ return
                         'layaut' => 'error', // LAYAUT POR DEFECTO
                         'staticFile' => false // INDICA SI SE EJECUTARA EN PETICIONES QUE SE DIRIJAN A ARCHIVOS ESTATICOS 
                     ],
-                    'text/css' =>
+                    'application/javascript, text/javascript, text/css' =>
                     [
-                        'class' => '\\Cc\\Mvc\\ResponseCSS',
-                        'param' => [true, true, 'css'],
+                        'class' => '\\Cc\\Mvc\\ResponseJsCss',
+                        'param' => [true, true],
                         'staticFile' => true
                     ],
                     'text/html, application/xhtml+xml, application/xaml+xml, application/xaml+xml' =>
@@ -151,6 +151,7 @@ return
              */
             'Router' =>
             [
+                'AutomaticRoute' => true,
                 /**
                  * PROTOCOLO EN EL QUE TRABAJARA LA APLICACION
                  */
@@ -278,10 +279,23 @@ return
              * estableciendo la clase que se encargara de evalualos segun la extencion de archivo
              */
             'ViewLoaders' => [
-                'tpl' => [
-                    'class' => '\\Cc\\Mvc\\ViewSmartyTpl',
+                'Default' =>
+                [
+                    'class' => '\\Cc\\Mvc\\ViewPHP',
                     'param' => [],
+                    'ext' => 'php'
                 ],
+                "Loaders" =>
+                [
+                    'tpl' => [
+                        'class' => '\\Cc\\Mvc\\ViewSmartyTpl',
+                        'param' => [],
+                    ],
+                    'php' => [
+                        'class' => '\\Cc\\Mvc\\ViewPHP',
+                        'param' => [],
+                    ]
+                ]
             ],
             /**
              * Configuraciones specificas de la libreria smarty 

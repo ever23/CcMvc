@@ -18,12 +18,16 @@ class ViewLoader
 
     protected $Config;
     protected $evaluadores = [];
+    protected $DefaultLoader = [];
 
     public function __construct(Config $c)
     {
         $this->Config = $c;
         if (isset($c['ViewLoaders']))
-            $this->evaluadores = $c['ViewLoaders'];
+        {
+            $this->evaluadores = $c['ViewLoaders']['Loaders'];
+            $this->DefaultLoader = $c['ViewLoaders']['Default'];
+        }
     }
 
     public function Load(&$context, $file, array $agrs)
@@ -35,7 +39,7 @@ class ViewLoader
         }
         if (!$splfile->isFile())
         {
-            $splfile = new \SplFileInfo($file . '.php');
+            $splfile = new \SplFileInfo($file . '.' . $this->DefaultLoader['ext']);
             if (!$splfile->isFile())
                 throw new Exception("El archivo " . $file . " no existe");
         }
@@ -51,7 +55,7 @@ class ViewLoader
         }
         if (!$splfile->isFile())
         {
-            $splfile = new \SplFileInfo($file . '.php');
+            $splfile = new \SplFileInfo($file . '.' . $this->DefaultLoader['ext']);
             if (!$splfile->isFile())
                 throw new ViewLoaderException("El archivo " . $file . " no existe");
         }
@@ -62,20 +66,21 @@ class ViewLoader
     {
         $ext = $file->getExtension();
 
-        if ($ext != 'php' && isset($this->evaluadores[$ext]))
+        if (isset($this->evaluadores[$ext]))
         {
 
+<<<<<<< HEAD
+            $eval = $this->FactoryLoaders($ext);
+=======
             $class = $this->evaluadores[$ext]['class'];
             $param = isset($this->evaluadores[$ext]['param']) && is_array($this->evaluadores[$ext]['param']) ? $this->evaluadores[$ext]['param'] : [];
             $eval = new $class(...$param);
+>>>>>>> a25cbe10de309bd195787fdb116667fa46358078
             return $eval->Fetch($context, $file->__toString(), $agrs);
         } else
         {
-            ob_start();
-            $this->LoadPHP($context, $file, $agrs);
-            $conten = ob_get_contents();
-            ob_end_clean();
-            return $conten;
+            $eval = $this->FactoryLoaders();
+            return $this->Fetch($context, $file, $agrs);
         }
     }
 
@@ -83,33 +88,36 @@ class ViewLoader
     {
         $ext = $file->getExtension();
 
-        if ($ext != 'php' && isset($this->evaluadores[$ext]))
+        if (isset($this->evaluadores[$ext]))
         {
+<<<<<<< HEAD
+            $eval = $this->FactoryLoaders($ext);
+=======
             $class = $this->evaluadores[$ext]['class'];
             $param = isset($this->evaluadores[$ext]['param']) && is_array($this->evaluadores[$ext]['param']) ? $this->evaluadores[$ext]['param'] : [];
             $eval = new $class(...$param);
+>>>>>>> a25cbe10de309bd195787fdb116667fa46358078
             return $eval->Load($context, $file->__toString(), $agrs);
         } else
         {
-            return $this->LoadPHP($context, $file, $agrs);
+            $eval = $this->FactoryLoaders();
+            return $eval->Load($context, $file->__toString(), $agrs);
         }
     }
 
-    protected function LoadPHP(&$context, \SplFileInfo $file, array $agrs)
+    private function FactoryLoaders($ext = NULL)
     {
-        if (($t = strpos($file, ':')) !== false)
+        if (!is_null($ext))
         {
-            $file = new \SplFileInfo(substr($file, $t + 1));
-            if (!$file->isFile())
-                throw new ViewLoaderException("El archivo " . $file . " no existe");
-        }
 
-        $function = \Closure::bind(function($__agrs, $__file)
-                {
-                    extract($__agrs);
-                    include ($__file);
-                }, $context, get_class($context));
-        $function($agrs, $file);
+            $class = $this->evaluadores[$ext]['class'];
+            $param = isset($this->evaluadores[$ext]['param']) && is_array($this->evaluadores[$ext]['param']) ? $this->evaluadores[$ext]['param'] : [];
+        } else
+        {
+            $class = $this->DefaultLoader['class'];
+            $param = isset($this->DefaultLoader['param']) && is_array($this->DefaultLoader['param']) ? $this->DefaultLoader['param'] : [];
+        }
+        return new $class(...$param);
     }
 
 }

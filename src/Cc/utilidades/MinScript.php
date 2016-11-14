@@ -47,8 +47,13 @@ class MinScript
 {
     /* <b>1.0.1.0</b> */
 
+<<<<<<< HEAD
+    public $version = '7.0.1.0'; //version 
+    protected $HTML = array('script' => 0, 'style' => 0, 'head' => 0, 'pre' => 0, 'textarea' => 0, 'coment' => 0); //etiquetas html 
+=======
     public $version = '1.0.1.0'; //version 
     protected $HTML = array('script' => 0, 'style' => 0, 'head' => 0, 'pre' => 0, 'textarea' => 0); //etiquetas html 
+>>>>>>> a25cbe10de309bd195787fdb116667fa46358078
     protected $HTML_HEAD = '';
     protected $is_info = true;
     protected $script_acet = array('html', 'css', 'js', 'json');
@@ -56,6 +61,7 @@ class MinScript
     protected $scriptjs = "";
     protected $scriptcss = "";
     protected $conten = '';
+    protected $type = '';
 
     /*     * METODOS PUBLICOS */
 
@@ -111,6 +117,7 @@ class MinScript
      */
     public function Min($cadena = NULL, $type = 'html')
     {
+        $this->type = $type;
         if (is_null($cadena))
         {
             return $this->conten;
@@ -326,14 +333,14 @@ class MinScript
         return $ext === $sifij;
     }
 
-    /*     * METODOS PRIVADOS * */
-
-    private function HtmlMin($html_script)
+    /** METODOS PRIVADOS * */
+    protected function HtmlMin($html_script)
     {
         $new_html = '';
         $js = $css = $this->HTML_HEAD = "";
         // Intérprete de HTML
         $a = preg_split('/<(.*)>/U', $html_script, -1, PREG_SPLIT_DELIM_CAPTURE);
+
         foreach ($a as $i => $e)
         {
             if ($i % 2 == 0)
@@ -341,64 +348,58 @@ class MinScript
                 if ($this->HTML['style'] > 0)
                 {
 
-                    $new_html.=$this->CssMin($e);
-                }
-                if ($this->HTML['script'] > 0)
+                    $this->scriptcss.=$e;
+                } elseif ($this->HTML['script'] > 0)
                 {
 
 
+<<<<<<< HEAD
+                    $this->scriptjs.=$e;
+                } else
+=======
                     $new_html.=$this->JsMin($e);
                 }
                 if ($this->HTML['pre'] > 0 || $this->HTML['textarea'] > 0)
+>>>>>>> a25cbe10de309bd195787fdb116667fa46358078
                 {
+                    if ($this->HTML['pre'] > 0 || $this->HTML['textarea'] > 0)
+                    {
 
-                    $new_html.=$e;
-                    // $new_html.=$this->JsMin($e);
-                }
-                if (max($this->HTML) == 0)
-                {
-                    $e = preg_replace('/(\n{1,} {1,})|(\r{1,}\n{1,})|\n{1,}|\t{1,}| {1,}|\r{1,}/', ' ', $e);
-                    $new_html.=$e;
+                        $new_html.=$e;
+                        // $new_html.=$this->JsMin($e);
+                    }
+                    if (max($this->HTML) == 0)
+                    {
+                        $e = preg_replace('/(\n{1,} {1,})|(\r{1,}\n{1,})|\n{1,}|\t{1,}| {1,}|\r{1,}/', ' ', $e);
+                        $new_html.=$e;
+                    }
                 }
             } else
             {
-                /* if ($this->HTML['script'] > 0)
-                  {
-                  if (strtolower(substr($e, 0, 7)) == '/script')
-                  {
-                  $this->CloseTag(strtolower(substr($e, 1)));
-                  } else
-                  {
-                  $js.=$this->DetectTag($e);
-                  }
-                  $new_html.=$this->JsMin($e);
-                  } elseif ($this->HTML['style'] > 0)
-                  {
-                  if (strtolower(substr($e, 0, 6)) == '/style')
-                  {
-                  $this->CloseTag(strtolower(substr($e, 1)));
-                  }
-                  } else */
+
                 $new_html.=$this->DetectTag($e);
             }
         }
 
         $this->HTML_HEAD = '';
-        $this->scriptjs = $this->JsMin($js);
-        $this->scriptcss = $this->CssMin($css);
+        //$this->scriptjs = $this->JsMin($js);
+        // $this->scriptcss = $this->CssMin($css);
 
-        //	exit;
-        if (trim($css) != '')
+        $a = preg_split('/' . preg_quote('<!--', '/') . '(.*)' . preg_quote('-->', '/') . '/U', $new_html, -1, PREG_SPLIT_DELIM_CAPTURE);
+        $new_html = '';
+        foreach ($a as $i => $e)
         {
-            $this->HTML_HEAD.="<style>/*<![CDATA[*/" . $this->scriptcss . "/*]]>*/</style>";
-        }
-        if (trim($js) != '')
-        {
-            $this->HTML_HEAD.="<script>/*<![CDATA[*/" . $this->scriptjs . "/*]]>*/</script>";
+            if ($i % 2 == 0)
+            {
+                $new_html .= $e;
+            } elseif ($e[0] == '[')
+            {
+                $new_html .= '<!--' . $e . '-->';
+            }
         }
         $this->scripthtml = $new_html;
         $this->IniTag();
-        return $this->AddHead($new_html);
+        return $new_html;
     }
 
     private function AddHead($html)
@@ -437,10 +438,18 @@ class MinScript
     private function OpenTag($tag, $attr)
     {
         // Etiqueta de apertura
+        if ($this->HTML['script'] > 0)
+        {
+            $this->scriptjs .= '<' . $tag . " " . $attr . ">";
+
+            return '';
+        }
+
         switch ($tag)
         {
             case 'script':
                 $this->HTML[$tag] ++;
+                $this->scriptjs = '';
                 $src = explode('src', strtolower($attr));
                 if (count($src) != 1)
                 {
@@ -449,7 +458,7 @@ class MinScript
                 break;
             case 'style':
                 $this->HTML[$tag] ++;
-
+                $this->scriptcss = '';
                 break;
             case 'pre':
                 $this->HTML[$tag] ++;
@@ -473,14 +482,27 @@ class MinScript
 
     private function CloseTag($tag)
     {
-
+        if ($this->HTML['script'] > 0 && $tag != 'script')
+        {
+            $this->scriptjs .= '</' . $tag . ">";
+            return '';
+        }
         switch ($tag)
         {
             case 'script':
                 $this->HTML[$tag]-=($this->HTML[$tag] > 0 ? 1 : 0);
+                $js = $this->JsMin($this->scriptjs);
+
+                $this->scriptjs = '';
+                return $js . '</' . $tag . ">";
+
                 break;
             case 'style':
                 $this->HTML[$tag]-=($this->HTML[$tag] > 0 ? 1 : 0);
+                $css = $this->CssMin($this->scriptcss);
+
+                $this->scriptcss = '';
+                return $css . '</' . $tag . ">";
                 break;
             case 'pre':
                 $this->HTML[$tag] = 0;
@@ -494,10 +516,10 @@ class MinScript
 
     protected function GetInfo()
     {
-        return "! MinScript " . $this->version . " CopyRight 2015-2016, Enyerber Franco <http://enyerberfranco.com.ve>";
+        return "! MinScript " . $this->version . " CopyRight 2015-2016, Enyerber Franco <http://enyerberfranco.com.ve>|Copyright (c) 2012, Matthias Mullie";
     }
 
-    private function CssMin($css_script)
+    protected function CssMin($css_script)
     {
         $chars = array('{', '}', ';', ':', '[', '] ', '=', '"', "'", ',', '<', '>', ' ');
         //preg_match("/\/\*(.*)\*\//", $css_script,$preg);
@@ -524,8 +546,9 @@ class MinScript
         return (string) $css;
     }
 
-    private function JsMin($js_script)
+    protected function JsMin($js_script)
     {
+
         return $js_script;
         $chars = array(';', ':', ',', '[', ']', '(', ')', '=', '/', '{', '}', '|', '&', '+', '-', '*', '!', '?', '.', '>', '<', '%', 'else');
         $js = '';

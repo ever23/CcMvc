@@ -62,8 +62,10 @@ abstract class Autenticate extends SESSION
         $conf = Mvc::App()->Config();
         if (!is_dir($conf['App']['Cache']))
             mkdir($conf['App']['Cache']);
-
-        session_save_path($conf['App']['Cache']);
+        $path = $conf['App']['Cache'] . 'session' . DIRECTORY_SEPARATOR;
+        if (!is_dir($path))
+            mkdir($path);
+        session_save_path($path);
         $this->EstableceParam($param);
         $this->exept = $exet;
         self::$ReadAndClose = (isset($conf['Autenticate']['SessionCookie']['ReadAndClose']) ? $conf['Autenticate']['SessionCookie']['ReadAndClose'] : false) && $this->is_Autenticable();
@@ -278,6 +280,29 @@ abstract class Autenticate extends SESSION
                 }
             }
 
+            if (isset($controller['orig']) && !Controllers::GetReflectionClass()->hasMethod($controller['method']))
+            {
+                if (!$refection->hasMethod($controller['method']))
+                {
+                    if (isset($this->AccessUser['NoAth']) && in_array($controller['orig'], $this->AccessUser['NoAth']))
+                    {
+                        unset($this->AccessUser['NoAth']);
+                        return false;
+                    }
+                }
+
+                foreach ($this->AccessUser as $i => $v)
+                {
+                    foreach ($v as $ii => $vv)
+                    {
+                        if (is_array($vv))
+                            foreach (array_keys($vv, $controller['orig']) as $i2 => $v2)
+                            {
+                                $this->AccessUser[$i][$ii][$v2] = strtolower($controller['method']);
+                            }
+                    }
+                }
+            }
             if (isset($this->AccessUser['NoAth']) && in_array(strtolower($controller['method']), $this->AccessUser['NoAth']))
             {
                 unset($this->AccessUser['NoAth']);

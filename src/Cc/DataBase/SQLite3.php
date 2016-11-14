@@ -29,18 +29,23 @@ namespace Cc;
 class SQLite3 extends \SQLite3 implements iDataBase
 {
 
-    public $connect_error = false;
+    public function __construct($filename, $flags = SQLITE3_OPEN_READWRITE, $encryption_key = null)
+    {
+        if (file_exists($filename))
+        {
+            if (is_string($flags))
+            {
+                $flags = SQLITE3_OPEN_READWRITE;
+            }
+            parent::__construct($filename, $flags, $encryption_key);
+        } elseif (file_exists($flags))
+        {
 
-    /* public function __construct($filename, $flags = null, $encryption_key = null)
-      {
-      try
-      {
-      parent::__construct($filename, $flags, $encryption_key);
-      } catch(\Exception $ex)
-      {
-      $this->connect_error = $ex;
-      }
-      } */
+            parent::__construct($filename, SQLITE3_OPEN_READWRITE | SQLITE3_OPEN_CREATE, $encryption_key);
+            $sql = file_get_contents($flags);
+            $this->exec($sql);
+        }
+    }
 
     /**
      * 

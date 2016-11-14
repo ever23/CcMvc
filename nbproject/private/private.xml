@@ -2,6 +2,12 @@
 <project-private xmlns="http://www.netbeans.org/ns/project-private/1">
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
+<<<<<<< HEAD
+        <group name="Enyerber-proyects">
+            <file>file:/E:/www/CcMvc/src/Mvc/config/Config.php</file>
+        </group>
+=======
         <group name="Enyerber-proyects"/>
+>>>>>>> a25cbe10de309bd195787fdb116667fa46358078
     </open-files>
 </project-private>

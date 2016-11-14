@@ -10,6 +10,9 @@ namespace Cc\Mvc;
 
 use Cc\UrlManager;
 
+/**
+ * 
+ */
 class JsonLD extends \Cc\Json
 {
 
@@ -26,11 +29,11 @@ class JsonLD extends \Cc\Json
         return count($this->__debugInfo()) != 0;
     }
 
-    public function SitieSearch($url, $urlSearch, $StrSerach = '{search_term_string}')
+    public function SitieSearch($url, $urlSearch, $StrSerach = 'search_term_string')
     {
         $this["@type"] = 'WebSite';
         $this["url"] = $url;
-        $this["url"] = [
+        $this["potentialAction"] = [
             "@type" => "SearchAction",
             "target" => $url . $urlSearch,
             "query-input" => "required name=$StrSerach"

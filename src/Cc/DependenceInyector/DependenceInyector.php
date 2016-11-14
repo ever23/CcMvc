@@ -15,7 +15,7 @@ class DependenceInyector
     protected $function;
     protected $InyectDependence = [];
     protected $DependenceDefault = [];
-    protected $DependenceForParam = [];
+    protected $DependenceForParam = [0 => []];
 
     /**
      * 
@@ -96,7 +96,11 @@ class DependenceInyector
      */
     public function AddDependenceForParam($param, &$dependenc)
     {
-        $this->DependenceForParam[$param] = &$dependenc;
+        if (!isset($this->DependenceForParam[0]))
+        {
+            $this->DependenceForParam[0] = [];
+        }
+        $this->DependenceForParam[0][$param] = &$dependenc;
     }
 
     /**
@@ -104,16 +108,16 @@ class DependenceInyector
      */
     public function LimpiarDependenceForParam()
     {
-        $this->DependenceForParam = [];
+        $this->DependenceForParam = [0 => []];
     }
 
     /**
-     * grega una serie de depencias que seran inyectadas segun el nombre del parametro
+     * agrega una serie de depencias que seran inyectadas segun el nombre del parametro
      * @param array|Traversable $array
      */
     public function SetDependenceForParamArray(&$array)
     {
-        $this->DependenceForParam = &$array;
+        $this->DependenceForParam[] = &$array;
     }
 
     /**
@@ -267,12 +271,13 @@ class DependenceInyector
             $clase = $class->name;
             try
             {
-                $param = $clase::CtorParam();
-                if ($param instanceof $class->name)
+                $p = $clase::CtorParam();
+                if ($p instanceof $class->name)
                 {
-                    return $param;
+                    return $p;
                 }
-                return new $clase(...$this->RemplaceParam($param, $param->name));
+
+                return new $clase(...$this->RemplaceParam($p, $param->name));
             } catch (\Exception $ex)
             {
                 throw new InyectorException($ex->getMessage(), $ex->getCode(), $ex);
@@ -341,24 +346,27 @@ class DependenceInyector
                 default:
                     $filter = FILTER_DEFAULT;
             }
-
-        if (isset($this->DependenceForParam[$param->name]))
+        foreach ($this->DependenceForParam as &$p)
         {
+            if (isset($p[$param->name]))
+            {
 
-            if (is_array($this->DependenceForParam[$param->name]) && ($filter === FILTER_DEFAULT || $filter === FILTER_FORCE_ARRAY))
-            {
-                return $this->DependenceForParam[$param->name];
-            } elseif ($filter === FILTER_DEFAULT)
-            {
-                return $this->DependenceForParam[$param->name];
-            } else
-            {
-                $ret = filter_var($this->DependenceForParam[$param->name], $filter);
+                if (is_array($p[$param->name]) && ($filter === FILTER_DEFAULT || $filter === FILTER_FORCE_ARRAY))
+                {
+                    return $p[$param->name];
+                } elseif ($filter === FILTER_DEFAULT)
+                {
+                    return $p[$param->name];
+                } else
+                {
+                    $ret = filter_var($p[$param->name], $filter);
+                }
+                break;
             }
-            if (is_bool($ret) && !$ret && $filter != FILTER_VALIDATE_BOOLEAN)
-            {
-                $ret = NULL;
-            }
+        }
+        if (is_bool($ret) && !$ret && $filter != FILTER_VALIDATE_BOOLEAN)
+        {
+            $ret = NULL;
         }
         if ($op && empty($ret))
         {

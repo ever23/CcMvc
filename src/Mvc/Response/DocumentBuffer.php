@@ -2,8 +2,6 @@
 
 namespace Cc\Mvc;
 
-use Cc\MinScript;
-
 /**
  * DocumentBuffer                                                     
  * FACILITA LA BUFERIZACION Y COMPRIMIDO EN GZIP DE LA SALIDA HTML E INCORPORA  

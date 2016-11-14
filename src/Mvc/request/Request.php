@@ -3,6 +3,8 @@
 namespace Cc\Mvc;
 
 use Cc\FilterXss;
+use Cc\Mvc;
+use Cc\UrlManager;
 
 /**
  * procesa las variables _GET y _POST ademas recibe contenido post en formato json y lo procesa 
@@ -15,12 +17,16 @@ class Request implements \ArrayAccess, \Countable, \IteratorAggregate
 
     public $Get = [];
     public $Post = [];
+    protected $uri = '';
+    protected $OrigGET = [];
 
     public function __construct()
     {
+        $this->OrigGET = $_GET;
         $this->Get = &$_GET;
         $this->Post = & $_POST;
-        //$_POST=  $this->Post;
+        $this->uri = !empty($_SERVER['REQUEST_URI']) ? $_SERVER['REQUEST_URI'] : '';
+//$_POST=  $this->Post;
         if (isset($_SERVER['REQUEST_METHOD']) && strtoupper($_SERVER['REQUEST_METHOD']) == 'POST' && !$_POST && !is_array($_POST))
         {
             $this->ReadPost();
@@ -71,6 +77,82 @@ class Request implements \ArrayAccess, \Countable, \IteratorAggregate
         {
             $this->Post = FilterXss::FilterXssArray($_POST, FilterXss::FilterXssPost);
         }
+    }
+
+    public function ContenType()
+    {
+        return isset($_SERVER['CONTENT_TYPE']) ? $_SERVER['CONTENT_TYPE'] : NULL;
+    }
+
+    public function method()
+    {
+        return $_SERVER['REQUEST_METHOD'];
+    }
+
+    public function Path()
+    {
+        return Mvc::APP()->Config()->Router['DocumentRoot'] . Mvc::App()->Router->GetPath();
+    }
+
+    public function BasePath()
+    {
+        return Mvc::App()->Router->GetPath();
+    }
+
+    public function Query()
+    {
+        return parse_url($this->uri, PHP_URL_QUERY);
+    }
+
+    public function Protocolo()
+    {
+        return Mvc::APP()->Config()->Router['protocol'];
+    }
+
+    public function AcceptEncoding($encoding = NULL)
+    {
+        if (is_null($encoding))
+        {
+            return isset($_SERVER['HTTP_ACCEPT_ENCODING']) ? $_SERVER['HTTP_ACCEPT_ENCODING'] : NULL;
+        }
+        $cod = explode(',', sset($_SERVER['HTTP_ACCEPT_ENCODING']) ? $_SERVER['HTTP_ACCEPT_ENCODING'] : '');
+        return in_array($encoding, $cod);
+    }
+
+    public function HttpAccept($accept = NULL)
+    {
+        if (is_null($accept))
+        {
+            return isset($_SERVER['HTTP_ACCEPT']) ? $_SERVER['HTTP_ACCEPT'] : NULL;
+        }
+        $h = explode(',', isset($_SERVER['HTTP_ACCEPT']) ? $_SERVER['HTTP_ACCEPT'] : '');
+        return in_array($accept, $h);
+    }
+
+    public function url()
+    {
+        $url = UrlManager::BuildUrl($this->Protocolo(), $this->Host(), Mvc::APP()->Config()->Router['DocumentRoot'], Mvc::App()->Router->GetPath());
+        return UrlManager::Href($url, $this->OrigGET);
+    }
+
+    public function Host()
+    {
+        return $_SERVER['HTTP_HOST'];
+    }
+
+    public function Fragment()
+    {
+        return parse_url($this->uri, PHP_URL_FRAGMENT);
+    }
+
+    public function Get($ind, $filter = FILTER_DEFAULT, $option = NULL)
+    {
+        return filter_input(INPUT_GET, $ind, $filter, $option);
+    }
+
+    public function Post($ind, $filter = FILTER_DEFAULT, $option = NULL)
+    {
+        return filter_input(INPUT_POST, $ind, $filter, $option);
     }
 
     /**

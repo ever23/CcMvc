@@ -70,6 +70,35 @@ class Cache
         }
     }
 
+    public static function AutoClearCacheFile($directory)
+    {
+        $ActTime = new \DateTime();
+        $ActTime->add(date_interval_create_from_date_string(self::$Conf['Cache']['ExpireTime']));
+        $expire = $ActTime->getTimestamp();
+        if (!is_dir($directory))
+            return;
+        if (rand(0, 1000) == 500)
+        {
+            $dir = dir($directory);
+            while ($file = $dir->read())
+            {
+                if ($file != '.' && $file != '..')
+                {
+                    if (is_file($directory . $file))
+                    {
+                        $Mtime = filemtime($directory . $file);
+                        $age = time() - $Mtime;
+                        if ($age > $expire)
+                            @unlink($directory . $file);
+                    }else
+                    {
+                        static::AutoClearCacheFile($directory . $file);
+                    }
+                }
+            }
+        }
+    }
+
     public static function GetObjectCache()
     {
         return self::$CACHE;

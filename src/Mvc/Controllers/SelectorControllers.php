@@ -149,6 +149,17 @@ class SelectorControllers
                 'args' => $this->ParamStringArray($method->getParameters())
             ];
         }
+        if ($method instanceof \ReflectionFunction)
+        {
+            $plustrace = [
+                'file' => $method->getDeclaringClass()->getFileName(),
+                'function' => $method->name,
+                'type' => '',
+                'line' => $method->getStartLine(),
+                'class' => '',
+                'args' => $this->ParamStringArray($method->getParameters())
+            ];
+        }
         ErrorHandle::ExceptionManager($ex, 0, $end, $plustrace);
     }
 
@@ -190,6 +201,14 @@ class SelectorControllers
             }
         }
         return $a;
+    }
+
+    public function CreateClousure($ContexApp = false)
+    {
+        $this->controllers = ClouserController::class;
+        $this->ReflectionClass = new \ReflectionClass(ClouserController::class);
+        $this->ContextApp = $ContexApp;
+        $this->ObjControllers = new ClouserController();
     }
 
     /**
@@ -525,6 +544,64 @@ class SelectorControllers
             }
         }
         $this->ContextApp = false;
+    }
+
+    public function CallFunction($fun)
+    {
+
+        if (is_array($fun) && $fun[1] instanceof Controllers)
+        {
+            $call = \Closure::bind($fun);
+        } else
+        {
+            $call = \Closure::bind($fun, $this->ObjControllers, get_class($this->ObjControllers));
+        }
+        try
+        {
+            $param = $this->Inyector->SetFunction($fun)->Param();
+        } catch (\Exception $ex)
+        {
+            if ($ContexApp)
+            {
+                $this->ExceptionManager($ex, $fun, -5);
+            } else
+            {
+                throw $ex;
+            }
+        } catch (\Error $ex)
+        {
+            if ($ContexApp)
+            {
+                $this->ExceptionManager($ex, $fun, -5);
+            } else
+            {
+                throw $ex;
+            }
+        }
+        try
+        {
+            $call(...$param);
+
+            // call_user_func_array([$this->ObjControllers, $this->method], $param);
+        } catch (\Exception $ex)
+        {
+            if ($ContexApp)
+            {
+                $this->ExceptionManager($ex, $this->Reflexion, -5);
+            } else
+            {
+                throw $ex;
+            }
+        } catch (\Error $ex)
+        {
+            if ($ContexApp)
+            {
+                $this->ExceptionManager($ex, $this->Reflexion, -5);
+            } else
+            {
+                throw $ex;
+            }
+        }
     }
 
     /**

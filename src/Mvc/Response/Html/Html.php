@@ -5,6 +5,7 @@ namespace Cc\Mvc;
 use Cc\Mvc;
 use Cc\CcException;
 use Cc\UrlManager;
+use Cc\Cache;
 
 /**
  * CLASE DE RESPUESTA PROCESA EL CONTENIDO HTML ANTES DE ENVIARLO 
@@ -156,7 +157,7 @@ class Html extends Response
         $this->errores = '';
         $this->AppConfig = Mvc::App()->Config();
         $this->ROOT_HTML = $this->AppConfig['Router']['DocumentRoot'];
-        $this->titulo = Mvc::App()->Name;
+        $this->titulo = &Mvc::App()->Name;
         $this->SetSrc("{root}", $this->ROOT_HTML);
         $this->SetSrc("{src}", 'src/');
         $this->script_error = "";
@@ -165,6 +166,7 @@ class Html extends Response
         $this->KeyWords = $this->AppConfig->SEO['keywords'];
         $this->http_equiv = $this->AppConfig->SEO['HttpEquiv'] + ['Content-Type' => 'text/html; charset=UTF-8'];
         $this->cacheDir = Mvc::App()->Config()->App['Cache'] . 'Html' . DIRECTORY_SEPARATOR;
+        Cache::AutoClearCacheFile($this->cacheDir);
         parent::__construct($compress, $min, 'html');
     }
 
@@ -206,6 +208,7 @@ class Html extends Response
         $f = dirname(Mvc::App()->GetExecutedFile()) . DIRECTORY_SEPARATOR;
         if (!is_dir($cache))
             mkdir($cache);
+
         $controller = Mvc::App()->GetController();
         $name = "paquete" . $controller['paquete'] . '.controller' . $controller['controller'] . '.controller' . $controller['method'];
         if ($_GET)
@@ -227,7 +230,7 @@ class Html extends Response
 
         if ($minify)
         {
-            $min = new \Cc\MinScript($conten, 'html');
+            $min = new MinScript($conten, 'html');
             $conten2 = $min->Min();
         } else
         {

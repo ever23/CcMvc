@@ -18,7 +18,6 @@ use Cc\Mvc\Controllers;
 use Cc\Mvc\ViewController;
 use Cc\Mvc\Request;
 use Cc\Mvc\ResponseConten;
-use Cc\Mvc\Server;
 use Cc\Mvc\SelectorControllers;
 use Cc\Mvc\Router;
 use Cc\Mvc\SQLi;
@@ -274,7 +273,10 @@ class Mvc
         $this->LoadProcedures();
         $prot = !empty($_SERVER['HTTPS']) && ('on' == $_SERVER['HTTPS']) ? 'https' : 'http';
         if ($prot != $this->conf['Router']['protocol'])
-            Server::redirec($this->conf['Router']['protocol'] . '://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI']);
+        {
+            header("Location: " . $this->conf['Router']['protocol'] . '://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI']);
+        }
+
 
         if (is_null(self::$ExecuteFile))
         {
@@ -334,10 +336,10 @@ class Mvc
         $this->DependenceInyector->AddDependence("{Router}", $this->Router);
         $this->DependenceInyector->AddDependence("{Request}", $this->Request);
         $this->DependenceInyector->AddDependence("{SelectorControllers}", $this->SelectorController);
-        $this->DependenceInyector->SetDependenceForParamArray($this->Request);
+
         $confAutoload = $this->conf->AutoloadLibs;
         $libs = dirname(__FILE__) . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'libs' . DIRECTORY_SEPARATOR;
-
+        $vendor = dirname(__FILE__) . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'vendor' . DIRECTORY_SEPARATOR . 'autoload.php';
         if (is_bool($confAutoload['UseStandarAutoloader']))
         {
             $confAutoload['UseStandarAutoloader'] = [];
@@ -356,12 +358,16 @@ class Mvc
 
         $this->AutoloaderLib = new AutoloadExternLib($confAutoload, $this->conf->App['extern'], $this->IsDebung());
         $this->AutoloaderLib->StartAutoloader();
+        if (file_exists($vendor))
+        {
+            $this->AutoloaderLib->AddAutoloader($vendor);
+        }
     }
 
-    public function __debugInfo()
-    {
-        //return $this->Cookie;
-    }
+    /* public function __debugInfo()
+      {
+      return $this;
+      } */
 
     public function GetNameCacheRouter()
     {
@@ -606,8 +612,7 @@ class Mvc
         }
 
         self::App()->Log("Redireccionando a " . $redirec);
-
-        Server::Redirec($redirec);
+        header("Location: " . $redirec);
     }
 
     /**
@@ -708,6 +713,7 @@ class Mvc
         $this->LayautManager->Obj = &$this->Response;
         if (!$this->RouterByCache())
         {
+
             $this->Router();
         }
 
@@ -733,97 +739,140 @@ class Mvc
             $cookie.= $_COOKIE['GDmaxW'];
         }
 
-        $cache = Cache::IsSave($this->CacheRouter['request']) ? Cache::Get($this->CacheRouter['request']) : [];
+        $cache = Cache::IsSave($this->CacheRouter['request']) ? Cache::Get($this->CacheRouter['request']) : (Cache::IsSave($this->CacheRouter['requestStatic']) ? Cache::Get($this->CacheRouter['requestStatic']) : []);
         $nameCache = $this->CacheRouter['request'];
-        if (isset($cache['type']))
-            switch ($cache['type'])
-            {
-                case 'file':
 
-                    $this->IntanceResponseConten();
-                    if (Cache::IsSave($this->CacheRouter['requestStatic']))
+        if (!isset($cache['type']))
+        {
+
+            return false;
+        }
+        switch ($cache['type'])
+        {
+            case 'file':
+
+                $this->IntanceResponseConten();
+                if (Cache::IsSave($this->CacheRouter['requestStatic']))
+                {
+                    $cache2 = Cache::Get($this->CacheRouter['requestStatic']);
+                    $nameCache = $this->CacheRouter['requestStatic'];
+                    $cache = Cache::IsSave($this->CacheRouter['requestStatic'] . $cookie) ? Cache::Get($this->CacheRouter['requestStatic'] . $cookie) : $cache;
+                }
+                if (isset($cache['RealFile']))
+                {
+
+                    $realfile = new \SplFileInfo($cache['RealFile']);
+                    $file = new \SplFileInfo($cache['Controller']);
+
+                    if (file_exists($realfile) && $file->getMTime() <= $realfile->getMTime())
                     {
-                        $cache2 = Cache::Get($this->CacheRouter['requestStatic']);
-                        $nameCache = $this->CacheRouter['requestStatic'];
-                        $cache = Cache::IsSave($this->CacheRouter['requestStatic'] . $cookie) ? Cache::Get($this->CacheRouter['requestStatic'] . $cookie) : $cache;
-                    }
-                    if (isset($cache['RealFile']))
+                        $this->Log("Enrutado a  " . $realfile . " desde el cache");
+                        //$this->Router->InfoFile = $realfile;
+                        $this->ProcessConten = false;
+                        $this->Buffer->SetAutoMin(false);
+                        if ($this->Response instanceof Mvc\Response)
+                            $this->Response->SetMin(false);
+                        $this->Router->RouterFile($realfile);
+                        exit;
+                    } else
                     {
-
-                        $realfile = new \SplFileInfo($cache['RealFile']);
-                        $file = new \SplFileInfo($cache['Controller']);
-
-                        if (file_exists($realfile) && $file->getMTime() <= $realfile->getMTime())
-                        {
-                            $this->Log("Enrutado a  " . $realfile . " desde el cache");
-
-                            $this->Router->RouterFile($realfile);
-                            $this->ProcessConten = false;
-
-                            exit;
-                        } else
-                        {
-                            Cache::Delete($nameCache);
-                        }
+                        Cache::Delete($nameCache);
                     }
+                }
 
-                    $this->Router->InfoFile = new \SplFileInfo($cache['Controller']);
-                    $this->Log("Enrutado a  " . $this->Router->InfoFile . " desde el cache");
-                    $this->Router->RouterFile($this->Router->InfoFile);
-
-
-                    exit;
-                    break;
-                case 'Controllers':
-                    $this->page = $cache['Controller'];
+                $this->Router->InfoFile = new \SplFileInfo($cache['Controller']);
+                $this->Log("Enrutado a  " . $this->Router->InfoFile . " desde el cache");
+                $this->Router->RouterFile($this->Router->InfoFile);
 
 
-                    if ($this->Content_type == '*/*')
-                    {
-                        $this->Content_type = 'text/html';
-                        $this->ContentTypeOrig = "text/html";
-                    }
-                    if (isset($this->page['extencion']) && !is_null($this->page['extencion']))
-                    {
-                        $this->Content_type = $this->conf['Response']['ExtencionContenType'][$this->page['extencion']];
-                    }
-
-                    $this->IntanceResponseConten();
-                    if (Cache::IsSave($this->CacheRouter['requestStatic']))
-                    {
-                        $nameCache = $this->CacheRouter['requestStatic'];
-                        $cache2 = Cache::Get($this->CacheRouter['requestStatic']);
-                        if (isset($cache2['RealFile']))
-                        {
-                            $realfile = new \SplFileInfo($cache2['RealFile']);
-                            $time = new \DateTime();
-                            // $age = $realfile->getMTime() - $time->getTimestamp();
-                            if (file_exists($realfile))
-                            {
-                                if (!$_POST && ( $time->getTimestamp() - $realfile->getMTime() ) < $cache2['LifeTime'])
-                                {
-                                    $this->Log("Enrutado a  " . $realfile . " desde el cache");
-                                    //echo ( $time->getTimestamp() - $realfile->getMTime()), ':', $cache2['LifeTime'];
-                                    echo "<!--Response by cache MaxAge:" . $cache2['LifeTime'] . " Age:" . ( $time->getTimestamp() - $realfile->getMTime() ) . " s -->\n";
-                                    $this->ProcessConten = false;
-                                    readfile($realfile);
-                                    exit;
-                                } else
-                                {
-                                    Cache::Delete($this->CacheRouter['requestStatic']);
-                                    unlink($realfile);
-                                }
-                            } else
-                            {
-                                Cache::Delete($this->CacheRouter['requestStatic']);
-                            }
-                        }
-                    }
-                    $this->Log("Enrutado a " . (is_null($this->page['paquete']) ? '' : 'paquete: ' . $this->page['paquete'] . ',') . ' '
-                            . 'Controlador: ' . $this->page['controller'] . ', Metodo: ' . $this->page['method'] . " desde el cache");
-                    return true;
-            }
+                exit;
+                break;
+            case 'Controllers':
+                return $this->RouteControllerCache($cache);
+            default:
+                return false;
+        }
         return false;
+    }
+
+    private function RouteControllerCache($cache)
+    {
+        $this->page = $cache['Controller'];
+
+
+        if ($this->Content_type == '*/*')
+        {
+            $this->Content_type = 'text/html';
+            $this->ContentTypeOrig = "text/html";
+        }
+        if (isset($this->page['extencion']) && !is_null($this->page['extencion']))
+        {
+            $this->Content_type = $this->conf['Response']['ExtencionContenType'][$this->page['extencion']];
+        }
+
+
+
+        if (Cache::IsSave($this->CacheRouter['requestStatic']))
+        {
+            $nameCache = $this->CacheRouter['requestStatic'];
+            $cache2 = Cache::Get($this->CacheRouter['requestStatic']);
+        } else
+        {
+            $cache2 = $cache;
+        }
+
+        if (isset($cache2['RealFile']))
+        {
+
+            $realfile = new \SplFileInfo($cache2['RealFile']);
+            $time = new \DateTime();
+            // $age = $realfile->getMTime() - $time->getTimestamp();
+            if (file_exists($realfile))
+            {
+                if (!$_POST && ( $time->getTimestamp() - $realfile->getMTime() ) < $cache2['LifeTime'])
+                {
+                    $this->Log("Enrutado a  " . $realfile . " desde el cache");
+
+                    if (isset($cache2['Content-Type']))
+                    {
+                        $this->ContentTypeOrig = $cache2['Content-Type'];
+                        $this->Content_type = $cache2['Content-Type'];
+                        header("Content-type: " . $cache2['Content-Type']);
+                    }
+                    $this->IntanceResponseConten();
+                    $this->ProcessConten = false;
+                    if (isset($cache2['CacheClient']))
+                    {
+                        if (!Router::HeadersReponseFiles($cache2['MTime'] ? $cache2['MTime'] : new \SplFileInfo($realfile), Mvc::App()->Content_type, $cache2['CacheClient']))
+                        {
+                            exit;
+                        }
+                    }
+//echo ( $time->getTimestamp() - $realfile->getMTime()), ':', $cache2['LifeTime'];
+                    // echo "<!--Response by cache MaxAge:" . $cache2['LifeTime'] . " Age:" . ( $time->getTimestamp() - $realfile->getMTime() ) . " s -->\n";
+
+                    readfile($realfile);
+                    exit;
+                } else
+                {
+                    Cache::Delete($this->CacheRouter['requestStatic']);
+                    unlink($realfile);
+                }
+            } else
+            {
+                Cache::Delete($this->CacheRouter['requestStatic']);
+            }
+        }
+        $this->IntanceResponseConten();
+
+
+        if (isset($this->page['routeVars']))
+        {
+            $this->DependenceInyector->SetDependenceForParamArray($this->page['routeVars']);
+        }
+        $this->Log("Enrutado a " . (is_null($this->page['paquete']) ? '' : 'paquete: ' . $this->page['paquete'] . ',') . ' '
+                . 'Controlador: ' . $this->page['controller'] . ', Metodo: ' . $this->page['method'] . " desde el cache");
+        return true;
     }
 
     /**
@@ -832,10 +881,14 @@ class Mvc
     private function Router()
     {
 
-        $cache = Cache::IsSave($this->CacheRouter['request']) ? Cache::Get($this->CacheRouter['request']) : [];
+        Cache::Delete($this->CacheRouter['request']);
+        Cache::Delete($this->CacheRouter['requestStatic']);
+        $cache = [];
+
         $this->Log("Enrutando ....");
         if ($this->isRouter && $this->Router->IsEnrutableFile() && $this->Router->InfoFile->getPathname() != $this->GetExecutedFile())
         {
+
             $UserAppDir = $this->conf['App']['app'];
             $this->Log("Enrutado a  " . $this->Router->InfoFile->getPathname());
             // if ($this->AppDir == substr($this->Router->InfoFile->getPathname(), 0, strlen($this->AppDir)) || $UserAppDir == substr($this->Router->InfoFile->getPathname(), 0, strlen($UserAppDir)))
@@ -862,6 +915,7 @@ class Mvc
             exit;
         } else
         {
+
             $this->Router->InfoFile = NULL;
             if ($this->Content_type == '*/*')
             {
@@ -869,6 +923,7 @@ class Mvc
             }
             $this->IntanceResponseConten();
             $this->page = $this->Router->GetController();
+
             $this->Log("Enrutado a " . (is_null($this->page['paquete']) ? '' : 'paquete: ' . $this->page['paquete'] . ',') . ' '
                     . 'Controlador: ' . $this->page['controller'] . ', Metodo: ' . $this->page['method']);
         }
@@ -884,6 +939,13 @@ class Mvc
             $ext = $class::ExtAccept();
 
             $method = $this->page['method'];
+            if (isset($this->page['orig']) && !Controllers::GetReflectionClass()->hasMethod($this->page['method']))
+            {
+                if (!Controllers::GetReflectionClass()->hasMethod($this->page['method']))
+                {
+                    $method = $this->page['orig'];
+                }
+            }
             if (Controllers::GetReflectionClass()->implementsInterface(ReRouterMethod::class))
             {
                 if (!Controllers::GetReflectionClass()->hasMethod($this->page['method']))
@@ -891,6 +953,8 @@ class Mvc
                     $method = '__routermethod';
                 }
             }
+
+
             if (isset($ext['accept']) && is_array($ext['accept']) && isset($ext['accept'][$method]))
             {
                 if (is_array($ext['accept'][$method]))
@@ -992,17 +1056,23 @@ class Mvc
         $this->Log("Cargando y Resolviendo controlador ...");
 
         $this->SelectorController = new SelectorControllers($this->Controllers, $this->conf, $this->DependenceInyector);
-        if (($controller = $this->SelectorController->CreateController($this->page['controller'], $this->page['paquete'], $this->page['method'], true)) !== false)
+        if (($controller = $this->Router->GetRoute($this->page)) == false)
         {
-            list($paquete, $class, $method) = $controller;
-
-            if ($this->page['paquete'] != $paquete || $this->page['controller'] != $class || $this->page['method'] != $method)
+            if (($controller = $this->SelectorController->CreateController($this->page['controller'], $this->page['paquete'], $this->page['method'], true)) !== false)
             {
-                list($this->page['paquete'], $this->page['controller'], $this->page['method']) = $controller;
-                Cache::Set($this->CacheRouter['request'], ['type' => 'Controllers', 'Controller' => $this->page], $this->CacheRouter['expire']);
-            }
+                list($paquete, $class, $method) = $controller;
 
-            $this->Log("Controlador  Elegido " . $this->SelectorController->GetReflectionController()->name . "::" . $this->page['method'] . "...");
+                if ($this->page['paquete'] != $paquete || $this->page['controller'] != $class || $this->page['method'] != $method)
+                {
+                    list($this->page['paquete'], $this->page['controller'], $this->page['method']) = $controller;
+                    Cache::Set($this->CacheRouter['request'], ['type' => 'Controllers', 'Controller' => $this->page], $this->CacheRouter['expire']);
+                }
+
+                $this->Log("Controlador  Elegido " . $this->SelectorController->GetReflectionController()->name . "::" . $this->page['method'] . "...");
+            }
+        } else
+        {
+            $this->SelectorController->CreateClousure(true);
         }
     }
 
@@ -1058,6 +1128,11 @@ class Mvc
         $this->Log("Filtrando Xss...");
         $this->FilterXss();
         $this->Request = new Request();
+        if ($this->Request->method() == 'POST')
+        {
+            $this->DependenceInyector->SetDependenceForParamArray($this->Request->Post);
+        }
+        $this->DependenceInyector->SetDependenceForParamArray($this->Request->Get);
     }
 
     private function LoadLibsExtern()
@@ -1069,6 +1144,13 @@ class Mvc
             $class = $this->SelectorController->GetReflectionController()->name;
             $this->Log("Cargando librerias externas con " . $class . "::LoadExternLib() ...");
             $method = $this->page['method'];
+            if (isset($this->page['orig']) && !Controllers::GetReflectionClass()->hasMethod($this->page['method']))
+            {
+                if (!Controllers::GetReflectionClass()->hasMethod($this->page['method']))
+                {
+                    $method = $this->page['orig'];
+                }
+            }
             if ($this->SelectorController->GetReflectionController()->implementsInterface(ReRouterMethod::class))
             {
                 if ($this->SelectorController->GetReflectionController()->hasMethod($this->page['method']))
@@ -1113,14 +1195,22 @@ class Mvc
         $this->LoadLibsExtern();
 
         $this->Log("Ejecutando el constuctor del  Controlador " . $c . $this->page['controller'] . " ...");
-        if ($this->SelectorController->InstanceController($this->page['method'], true))
+        if (($clousure = $this->Router->GetRoute($this->page)) == false)
+        {
+            if ($this->SelectorController->InstanceController($this->page['method'], true))
+            {
+                $this->ObjController = &$this->SelectorController->GetController();
+
+                $this->Log("Ejecutando el metodo " . $c . $this->page['controller'] . "->" . $this->page['method'] . " ...");
+                $this->SelectorController->Call(NULL, TRUE);
+                $this->Log("Controlador ejecutado con exito ...");
+            }
+        } else
         {
             $this->ObjController = &$this->SelectorController->GetController();
-
-            $this->Log("Ejecutando el metodo " . $c . $this->page['controller'] . "->" . $this->page['method'] . " ...");
-            $this->SelectorController->Call(NULL, TRUE);
-            $this->Log("Controlador ejecutado con exito ...");
+            $this->SelectorController->CallFunction($clousure);
         }
+
         ErrorHandle::RecoverHandle();
         ErrorHandle::SetHandle();
     }
@@ -1183,7 +1273,11 @@ class Mvc
                 throw new Exception("LA CLASE CLASE MEJADORA DE RESPUESTA " . $Response['class'] . " NO SE ENCOTRO");
             }
             $class = $Response['class'];
+
+
+
             $this->Response = new $class(...$Response['param']);
+
             $this->Content_type = $this->ContentTypeOrig;
         } else
         {
@@ -1204,10 +1298,12 @@ class Mvc
     {
         if (isset($this->conf['Response']['Accept'][$conten_type]))
         {
+
             $this->Response->SetLayaut(NULL);
             $this->Response = NULL;
             $this->ContentTypeOrig = $conten_type;
             $this->Content_type = $conten_type;
+
             $this->IntanceResponseConten();
             return true;
         }

@@ -36,7 +36,7 @@ interface AccessUserController extends iProtected
      * public static function AccessUser();
      * {
      *      return array(
-     *      'NoAuth'=>array(lista de metodos que no seran afectador por la autentificacion),
+     *      'NoAth'=>array(lista de metodos que no seran afectador por la autentificacion),
      *      'tipo de usuario'=>array( 'Access'=>array(metodos accesibles),'NoAccess'=>array(metodos inaccsibles));
      *       .  
      *       .

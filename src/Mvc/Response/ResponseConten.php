@@ -96,6 +96,11 @@ class Response implements ResponseConten
         $this->DirLayaut = NULL;
     }
 
+    public function SetMin($min)
+    {
+        $this->min = $min;
+    }
+
     /**
      * 
      * @param string $conten
@@ -118,6 +123,7 @@ class Response implements ResponseConten
      */
     public function GetLayaut()
     {
+
         return ['Layaut' => $this->layaut, 'Dir' => $this->DirLayaut];
     }
 
@@ -128,6 +134,7 @@ class Response implements ResponseConten
      */
     public function SetLayaut($file, $dirLayaut = NULL)
     {
+
         if (is_null($file))
         {
             $this->layaut = NULL;

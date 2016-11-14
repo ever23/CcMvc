@@ -69,12 +69,12 @@ class CacheFile extends AbstracCache
             mkdir($conf['App']['Cache']);
         }
         $this->changed = false;
-        if (file_exists($conf['App']['Cache'] . $conf['Cache']['File']))
+        if (file_exists($conf['App']['Cache'] . $conf['Cache']['File'] . '.php'))
         {
-            $this->FileCache = new \SplFileInfo($conf['App']['Cache'] . $conf['Cache']['File']);
+            $this->FileCache = new \SplFileInfo($conf['App']['Cache'] . $conf['Cache']['File'] . '.php');
             //  $time = new \DateTime(date('Y/m/d H:i:s', $this->FileCache->getMTime()));
             ob_start();
-            $this->fileRead = @file_get_contents($this->FileCache);
+            $this->fileRead = include($this->FileCache);
             // echo $this->fileRead;
 
             $this->CAHCHE = @unserialize($this->fileRead);
@@ -92,7 +92,7 @@ class CacheFile extends AbstracCache
             }
         } else
         {
-            $this->FileCache = $conf['App']['Cache'] . $conf['Cache']['File'];
+            $this->FileCache = $conf['App']['Cache'] . $conf['Cache']['File'] . '.php';
 
             $this->CAHCHE = [];
             $this->changed = true;
@@ -128,7 +128,8 @@ class CacheFile extends AbstracCache
             //  echo "changed";
 
             $this->CAHCHE['VersionCache'] = $this->VersionCache;
-            $save = serialize($this->CAHCHE);
+            $save = '<?php return ' . var_export(serialize($this->CAHCHE), true) . ';';
+
             @file_put_contents($this->FileCache, $save, LOCK_EX);
         }
     }

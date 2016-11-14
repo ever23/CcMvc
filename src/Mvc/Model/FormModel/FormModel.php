@@ -5,7 +5,7 @@ namespace Cc\Mvc;
 use Cc\Mvc;
 use Cc\ValidDependence;
 use Cc\ValidDefault;
-use Cc\Cache;
+use Cc\Inyectable;
 
 /**
  * clase base para modelos de formularios html 
@@ -62,7 +62,7 @@ use Cc\Cache;
  * @subpackage Modelo
  * @category FormModel
  */
-abstract class FormModel extends Model
+abstract class FormModel extends Model implements Inyectable
 {
 
     /**
@@ -91,39 +91,77 @@ abstract class FormModel extends Model
     const DefaultConten = 1;
     const Validate = 2;
 
+    private $inyected = false;
+
+    public static function CtorParam()
+    {
+        return [NULL, 'POST', true, true];
+    }
+
     /**
      * methodo que se utilizara para trasmitir los datos puede ser _POST o _GET
      * @param string $method
      */
-    public function __construct($action = NULL, $method = 'POST', $protected = true)
+    public function __construct($action = NULL, $method = 'POST', $protected = true, $inyected = false)
     {
         $this->Method = $method;
-
         $this->NameSubmited = 'Submited' . static::class . self::$count;
         self::$count++;
-
         $this->protected = $protected;
+        $this->inyected = $inyected;
         if (!is_null($action))
         {
-
             $this->action = $action;
         }
-        if ($this->UseCache && Cache::IsSave('Form.' . static::class))
+        if (!$inyected)
         {
-            $cache = Cache::Get('Form.' . static::class);
-            $this->campos = $cache['campos'];
-            foreach ($this->campos as $name => $v)
-            {
-
-                unset($this->{$name});
-            }
-            $this->_ValuesModel = $cache['_ValuesModel'];
-            $this->existFile = $cache['existFile'];
-        } else
-        {
-            $this->LoadMetaData();
-            Cache::Set('Form.' . static::class, ['campos' => $this->campos, '_ValuesModel' => $this->_ValuesModel, 'existFile' => $this->existFile]);
+            $this->Request($action, $method, $protected);
         }
+    }
+
+    public function &Method($method = NULL)
+    {
+        if (is_null($method))
+        {
+            $this->Method = $method;
+        }
+        return $this;
+    }
+
+    public function &Action($action)
+    {
+        $this->action = $action;
+        return $this;
+    }
+
+    public function &ProtectedUrl($protected)
+    {
+        if (is_null($protected))
+        {
+            $this->protected = $protected;
+        }
+        return $this;
+    }
+
+    private function Request()
+    {
+        $this->inyected = false;
+        /* if ($this->UseCache && Cache::IsSave('Form.' . static::class))
+          {
+          $cache = Cache::Get('Form.' . static::class);
+          $this->campos = $cache['campos'];
+          foreach ($this->campos as $name => $v)
+          {
+
+          unset($this->{$name});
+          }
+          $this->_ValuesModel = $cache['_ValuesModel'];
+          $this->existFile = $cache['existFile'];
+          } else
+          { */
+        $this->LoadMetaData();
+        /*  Cache::Set('Form.' . static::class, ['campos' => $this->campos, '_ValuesModel' => $this->_ValuesModel, 'existFile' => $this->existFile]);
+          } */
         $this->ProcessSubmit();
         if ($this->IsSubmited() && !$this->IsValid())
         {
@@ -166,6 +204,8 @@ abstract class FormModel extends Model
 
                 array_push($this->existFile, $i);
             }
+
+
             if (!isset($v[self::Validate]) || (is_array($v[self::Validate]) && !isset($v[self::Validate][ValidDependence::class])))
             {
 
@@ -327,6 +367,10 @@ abstract class FormModel extends Model
      */
     public function IsSubmited()
     {
+        if ($this->inyected)
+        {
+            $this->Request();
+        }
         return $this->Sumited;
     }
 
@@ -518,6 +562,7 @@ abstract class FormModel extends Model
                     }
                 }
             }
+
             $buff = Html::input($attrs);
             if ($buff)
             {
@@ -602,13 +647,8 @@ abstract class FormModel extends Model
             $attrs = $name;
             $name = $attrs['name'];
             $options = [];
-            if (!isset($attrs['option']) && isset($this->campos[$name]) && isset($this->campos[$name]['option']) && (is_array($this->campos[$name]['option']) || $this->campos[$name]['option'] instanceof \Traversable))
-            {
-                $options = $this->campos[$name];
-            } else
-            {
-                $options = $attrs['option'];
-            }
+
+
 
             $return = false;
         }
@@ -624,7 +664,9 @@ abstract class FormModel extends Model
                 {
                     $options = $valid['options'];
                 }
+                // var_dump($valid['options']);
             }
+
 
             $attrs['name'] = $name;
             if ($return)

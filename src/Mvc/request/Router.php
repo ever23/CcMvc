@@ -23,6 +23,7 @@ class Router extends \Cc\Router
 
     protected $RequestFilename;
     public static $query = NULL;
+    protected $routes = [];
 
     public function __construct($Conf, $query = NULL)
     {
@@ -39,12 +40,18 @@ class Router extends \Cc\Router
                 $a2 = [];
                 if (isset($_SERVER['QUERY_STRING']))
                     parse_str($_SERVER['QUERY_STRING'], $a2);
-                self::$query = isset($a2[$this->config['GetControllers']]) ? $a2[$this->config['GetControllers']] : 'index';
+                self::$query = isset($a2[$this->config['GetControllers']]) ? $a2[$this->config['GetControllers']] : '';
             } else
             {
+
                 self::$query = $query;
             }
         }
+    }
+
+    public function Route($path, $controller, $match = [], $replace = true)
+    {
+        $this->routes[$path] = [$controller, true, $match];
     }
 
     public function GetRequestFile()
@@ -89,12 +96,12 @@ class Router extends \Cc\Router
         {
             case self::Get:
                 $req = $r->CreateHref($page, $r->config['OperadorAlcance']);
-                return UrlManager::BuildUrl($conf->Router['protocol'], $_SERVER['HTTP_HOST'], '', $ScriptName . '?' . Server::SerializeGet(array_merge([$r->config['GetControllers'] => $req], $get)));
+                return UrlManager::BuildUrl($conf->Router['protocol'], $_SERVER['HTTP_HOST'], '', $ScriptName . '?' . http_build_query(array_merge([$r->config['GetControllers'] => $req], $get)));
 
             case self::Path:
                 $req = $r->CreateHref($page, '/');
 
-                $getserialise = Server::SerializeGet($get);
+                $getserialise = http_build_query($get);
                 return UrlManager::BuildUrl($conf->Router['protocol'], $_SERVER['HTTP_HOST'], (is_null($ScriptName) ? $r->config['DocumentRoot'] : $ScriptName) . $req, (($getserialise == '') ? '' : '?' ) . $getserialise);
             // return (is_null($ScriptName) ? $r->config['DocumentRoot'] : $ScriptName) . $req . (($getserialise == '') ? '' : '?' ) . $getserialise;
         }
@@ -188,11 +195,13 @@ class Router extends \Cc\Router
 
     public static function HeadersReponseFiles($spl, $ContentType, $caheExpire = NULL, $reenv = false)
     {
+
         if (!Mvc::App()->ChangeResponseConten($ContentType))
         {
-            // $contenttype = Mvc::App()->Content_type;
+
             Mvc::App()->ResponseContenDefault($ContentType);
         }
+
         return parent::HeadersReponseFiles($spl, $ContentType, $caheExpire, $reenv);
     }
 
@@ -293,6 +302,7 @@ class Router extends \Cc\Router
                 $path = '';
             }
         }
+
         return $this->SelectPage($path, '/');
     }
 
@@ -300,7 +310,7 @@ class Router extends \Cc\Router
     {
         $page = self::$query;
         if (!$page)
-            $page = Mvc::App()->Config()->Controllers['DefaultControllers'];
+            $page = '';
         return $this->SelectPage($page, $this->config['OperadorAlcance']);
     }
 
@@ -399,26 +409,208 @@ class Router extends \Cc\Router
         return [$Paquete, $Controller, $Method, $ext, $n];
     }
 
+    public function ValidateController(array $controller)
+    {
+        $cont = $this->CreateHref($controller, Mvc::Config()->Router['OperadorAlcance']);
+        if (in_array($cont, $this->routes))
+        {
+            return false;
+        } else
+        {
+            return true;
+        }
+    }
+
+    public function GetRoute(array $page)
+    {
+        if (isset($page['orig']) && isset($page['Callable']) && $page['Callable'])
+        {
+            return $this->routes[$page['orig']][0];
+        }
+        return false;
+    }
+
+    private function EvalueRouteVars($PathT, $pathP, $c, $mathvar, &$param, &$replace)
+    {
+        $split = preg_split('/(\{.*\})/U', $PathT, PREG_SPLIT_DELIM_CAPTURE, -1);
+        $explo = '';
+        foreach ($split as $j => $sp)
+        {
+            if ($j % 2 != 0)
+            {
+                $explo = preg_quote($sp[0]) . '|';
+            }
+        }
+        if ($explo == '')
+        {
+            $Pexplo = [$pathP];
+        } else
+        {
+            $Pexplo = preg_split('/' . substr($explo, 0, -1) . '/', $pathP);
+            $PExpAth = preg_split('/' . substr($explo, 0, -1) . '/', $PathT);
+            if (count($Pexplo) != count($PExpAth))
+            {
+                return false;
+            }
+        }
+        $z = 0;
+        foreach ($split as $j => $sp)
+        {
+            if ($j % 2 == 0)
+            {
+
+                $name = substr($sp[0], 1, -1);
+                //  var_dump('/' . $mathvar[$sp[0]] . '/i', $Pexplo[$z]);
+                if (isset($mathvar[$name]) && !preg_match('/' . $mathvar[$sp[0]] . '/i', $Pexplo[$z]))
+                {
+                    return false;
+                }
+                $param[$name] = $Pexplo[$z];
+                if (is_string($c) && preg_match('/(\{' . $name . '\})/', $c))
+                {
+                    $m = '/' . preg_quote($sp[0]) . '/';
+
+                    $replace[$m] = $Pexplo[$z];
+                }
+
+
+                $z++;
+            }
+        }
+        return true;
+    }
+
     private function SelectPage($page, $alcance)
     {
-
-        if (trim($page) == '')
-            $page = Mvc::App()->Config()->Controllers['DefaultControllers'];
-
-        list($Paquete, $Controller, $Method, $ext, $count) = $this->Page($page, $alcance);
-
-
-
-        if (empty($Method) || $Method == '')
+        // preg_match_all('/\{(\w+?)\?\}/', $this->uri, $matches);
+        $pageex = preg_split('/\/|\./', $page);
+        $Npagex = count($pageex);
+        foreach ($this->routes as $path => $contr)
         {
-            $Method = 'index';
-        }
+            list($c, $repl, $mathvar) = $contr;
+            $path2 = preg_split('/\/|\./', substr($path, 1));
+            $verifi = false;
+            $param = [];
+            $replace = [];
+            if (count($pageex) != count($path2))
+            {
+                continue;
+            } else
+            {
+                foreach ($pageex as $i => $p)
+                {
+                    if (isset($path2[$i]))
+                    {
+                        if ($p == $path2[$i])
+                        {
+                            $verifi = true;
+                            continue;
+                        } elseif (preg_match('/(\{.*\})/U', $path2[$i]))
+                        {
+                            if ($this->EvalueRouteVars($path2[$i], $p, $c, $mathvar, $param, $replace))
+                            {
+                                $verifi = true;
+                                continue;
+                            } else
+                            {
+                                $verifi = false;
+                                break;
+                            }
+                        } else
+                        {
+                            $verifi = false;
+                            break;
+                        }
+                    } else
+                    {
+                        $verifi = false;
+                        break;
+                    }
+                }
 
-        return array(
-            'controller' => $Controller,
-            'method' => $Method,
-            'paquete' => $Paquete,
-            'extencion' => $ext);
+
+                if ($verifi)
+                {
+
+                    Mvc::App()->DependenceInyector->SetDependenceForParamArray($param);
+                    if (is_callable($c))
+                    {
+                        return array(
+                            'controller' => NULL,
+                            'method' => NULL,
+                            'paquete' => NULL,
+                            'extencion' => NULL,
+                            'routeVars' => $param,
+                            'orig' => $path,
+                            'Callable' => true,
+                        );
+                    } else
+                    {
+                        if (is_numeric($c))
+                        {
+                            if (in_array($c, [404, 403]))
+                            {
+                                Mvc::App()->LoadError($c, " Via Enrutamiento manual");
+                                exit;
+                            }
+                        }
+
+                        if (preg_match('/\.\{.*\}$/U', $c))
+                        {
+                            list($Paquete, $Controller, $Method, $ext, $count) = $this->Page($page, $alcance);
+                            $c = preg_replace('/\.\{.*\}$/U', '.' . $ext, $c);
+                        }
+                        // var_dump($c);
+                        foreach ($replace as $r => $p2)
+                        {
+
+                            $c = preg_replace($r, $p2, $c);
+                            // var_dump($p2);
+                        }
+
+                        //  var_dump($c);
+
+                        list($Paquete, $Controller, $Method, $ext, $count) = $this->Page($c, $alcance);
+                        if (is_null($Paquete) && is_null($Method))
+                        {
+                            $Method = 'index';
+                        }
+                        return array(
+                            'controller' => $Controller,
+                            'method' => $Method,
+                            'paquete' => $Paquete,
+                            'extencion' => $ext,
+                            'routeVars' => $param,
+                            'orig' => $path,
+                            'Callable' => false
+                        );
+                    }
+                }
+            }
+        }
+        if (Mvc::App()->Config()->Router['AutomaticRoute'])
+        {
+            if (trim($page) == '')
+                $page = Mvc::App()->Config()->Controllers['DefaultControllers'];
+            list($Paquete, $Controller, $Method, $ext, $count) = $this->Page($page, $alcance);
+
+
+
+            if (empty($Method) || $Method == '')
+            {
+                $Method = 'index';
+            }
+
+            return array(
+                'controller' => $Controller,
+                'method' => $Method,
+                'paquete' => $Paquete,
+                'extencion' => $ext);
+        } else
+        {
+            Mvc::App()->LoadError(404, $this->RouterError("El Enrutamiento No Es Automatico"));
+            exit;
+        }
     }
 
     public function RouterError($string)

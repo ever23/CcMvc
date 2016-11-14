@@ -84,7 +84,7 @@ trait CoreClass
         $this->CoreClass = SearchClass::GetListAllClass($app);
         $ARRAY = var_export(['class' => $this->CoreClass, 'DIRECTORY_SEPARATOR' => DIRECTORY_SEPARATOR], true);
         $f = fopen($this->AppDir . $this->FileCoreClass, 'w+');
-        $a = '<?php return ' . $ARRAY . ';';
+        $a = "<?php\n/* Create by \\" . static ::class . " " . date("Y-m-d H:i:s") . " */\n return " . $ARRAY . ';';
         fwrite($f, $a, strlen($a));
         fclose($f);
 

@@ -77,7 +77,7 @@ require_once ("src/Mvc/Mvc.php");
  * @package CcMvc
  * 
  * @example ../examples/cine/protected/config/configuracion.php EJEMPLO DEL ARCHIVO DE CONFIGURACION DE UNA APLICACION CcMvc #2
- * @example ../examples/CERQU/protected/config/configuracion.php EJEMPLO DEL ARCHIVO DE CONFIGURACION DE UNA APLICACION CcMvc #2
+ * @example ../examples/fundabit/protected/configuracion.php EJEMPLO DEL ARCHIVO DE CONFIGURACION DE UNA APLICACION CcMvc #2
  * @link http://ccmvc.com.ve SITIO WEB
  * 
  */

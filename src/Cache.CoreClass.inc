@@ -1,4 +1,6 @@
-<?php return array (
+<?php
+/* Create by \CcMvc 2016-11-13 16:09:44 */
+ return array (
   'class' => 
   array (
     'Cc\\Autoload' => 'Cc\\Autoload\\Autoload.php',
@@ -12,7 +14,6 @@
     'Cc\\CacheFile' => 'Cc\\Cache\\CacheFile.php',
     'Cc\\CacheFilePHP' => 'Cc\\Cache\\CacheFilePHP.php',
     'Cc\\ICache' => 'Cc\\Cache\\ICache.php',
-    'Cc\\OpCache' => 'Cc\\Cache\\OpCache.php',
     'Cc\\Config' => 'Cc\\config\\Config.php',
     'Cc\\DBRow' => 'Cc\\DataBase\\DBRow.php',
     'Cc\\DBtabla' => 'Cc\\DataBase\\DBtabla.php',
@@ -66,6 +67,8 @@
     'Cc\\Mvc' => 'Mvc\\Mvc.php',
     'Cc\\Mvc\\HtmlPDF' => 'Mvc\\Adapters\\DomPDF\\HtmlPDF.php',
     'Cc\\Mvc\\EventsHtmlPDF' => 'Mvc\\Adapters\\DomPDF\\HtmlPDF.php',
+    'Cc\\Mvc\\Minify\\CSS' => 'Mvc\\Adapters\\minifi\\Css.php',
+    'Cc\\Mvc\\MinScript' => 'Mvc\\Adapters\\minifi\\MinScript.php',
     'Cc\\Mvc\\Smarty\\PluginSource' => 'Mvc\\Adapters\\Smarty\\InterfacesPlugins.php',
     'Cc\\Mvc\\Smarty\\PluginFunction' => 'Mvc\\Adapters\\Smarty\\InterfacesPlugins.php',
     'Cc\\Mvc\\Smarty\\PluginFunctionStaticAll' => 'Mvc\\Adapters\\Smarty\\InterfacesPlugins.php',
@@ -82,6 +85,7 @@
     'Cc\\Mvc\\ViewSmartyTpl' => 'Mvc\\Adapters\\Smarty\\ViewSmartyTpl.php',
     'Cc\\Mvc\\ParseObjectSmartyTpl' => 'Mvc\\Adapters\\Smarty\\ViewSmartyTpl.php',
     'Cc\\Mvc\\Config' => 'Mvc\\config\\Config.php',
+    'Cc\\Mvc\\ClouserController' => 'Mvc\\Controllers\\ClousureController.php',
     'Cc\\Mvc\\Controllers' => 'Mvc\\Controllers\\Controllers.php',
     'Cc\\Mvc\\iProtected' => 'Mvc\\Controllers\\interfaces.php',
     'Cc\\Mvc\\InfoController' => 'Mvc\\Controllers\\interfaces.php',
@@ -114,7 +118,6 @@
     'Cc\\Mvc\\PostFiles' => 'Mvc\\request\\PostFiles.php',
     'Cc\\Mvc\\Request' => 'Mvc\\request\\Request.php',
     'Cc\\Mvc\\Router' => 'Mvc\\request\\Router.php',
-    'Cc\\Mvc\\Server' => 'Mvc\\request\\server.php',
     'Cc\\Mvc\\DocumentBuffer' => 'Mvc\\Response\\DocumentBuffer.php',
     'Cc\\Mvc\\GDResponse' => 'Mvc\\Response\\GDResponse.php',
     'Cc\\Mvc\\GDexception' => 'Mvc\\Response\\GDResponse.php',
@@ -125,7 +128,7 @@
     'Cc\\Mvc\\Response' => 'Mvc\\Response\\ResponseConten.php',
     'Cc\\Mvc\\ResponseConten' => 'Mvc\\Response\\ResponseConten.php',
     'Cc\\Mvc\\TResponseConten' => 'Mvc\\Response\\ResponseConten.php',
-    'Cc\\Mvc\\ResponseCSS' => 'Mvc\\Response\\ResponseCSS.php',
+    'Cc\\Mvc\\ResponseJsCss' => 'Mvc\\Response\\ResponseJsCss.php',
     'Cc\\Mvc\\Html' => 'Mvc\\Response\\Html\\Html.php',
     'Cc\\Mvc\\JsonLD' => 'Mvc\\Response\\Html\\JsonLd.php',
     'Cc\\Mvc\\AccessUserController' => 'Mvc\\session\\AccessUserController.php',
@@ -147,6 +150,7 @@
     'Cc\\Mvc\\ViewLoader' => 'Mvc\\view\\ViewLoader.php',
     'Cc\\Mvc\\ViewLoaderException' => 'Mvc\\view\\ViewLoader.php',
     'Cc\\Mvc\\ViewLoaderExt' => 'Mvc\\view\\ViewLoader.php',
+    'Cc\\Mvc\\ViewPHP' => 'Mvc\\view\\ViewPHP.php',
     'Cc\\Ws' => 'Ws\\Ws.php',
     'Cc\\Ws\\Config' => 'Ws\\config\\Config.php',
     'Cc\\Ws\\Cookie' => 'Ws\\request\\Cookie.php',

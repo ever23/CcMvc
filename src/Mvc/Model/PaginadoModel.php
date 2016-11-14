@@ -262,7 +262,7 @@ class PaginadoModel extends Model implements \JsonSerializable
      */
     public function GetNextUrlEncode()
     {
-        return Server::SerializeGet($this->GetNext());
+        return http_build_query($this->GetNext());
     }
 
     /**
@@ -313,7 +313,7 @@ class PaginadoModel extends Model implements \JsonSerializable
      */
     public function GetLastUrlEncode()
     {
-        return Server::SerializeGet($this->GetLast());
+        return http_build_query($this->GetLast());
     }
 
     /**

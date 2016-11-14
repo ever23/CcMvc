@@ -78,7 +78,7 @@ abstract class Controllers implements InfoController
      * CAMBIA EN Content-type QUE SE ENVIARA SI EXISTE UNA CLASE MANEJADORA DE RESPUESTA PARA ESTE Content-type ESTA SERA INSTANCIADA Y REMPLAZARA AL ACTUAL OBJETO DE RESPUESTA
      * @param string $conten_type
      */
-    protected final static function ChangeContenType($conten_type)
+    protected final static function &ChangeContenType($conten_type)
     {
         if (Mvc::App()->Content_type != $conten_type)
             if (!Mvc::App()->ChangeResponseConten($conten_type))
@@ -135,7 +135,7 @@ abstract class Controllers implements InfoController
      * @param string $msj mesaje para tiempos de depuracion
 
      */
-    protected static function HttpError($errno, $msj)
+    protected static function HttpError($errno, $msj = '')
     {
         Mvc::App()->LoadError($errno, $msj);
         exit;

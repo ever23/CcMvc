@@ -111,8 +111,37 @@ class CacheFilePHP extends AbstracCache
         {
             $expire = $this->expiretime;
         }
+
+
         // echo var_dump(debug_backtrace());
-        parent::Set($name, $value, $expire);
+        parent::Set($name, $this->serialize($value), $expire);
+    }
+
+    protected function serialize($value)
+    {
+        if (is_object($value))
+        {
+            if ($value instanceof \Serializable)
+            {
+                return $this->serialize($value->serialize());
+            } elseif (method_exists($value, '__sleep'))
+            {
+                return $this->serialize($value->__sleep());
+            } else
+            {
+                return (array) $value;
+            }
+        } elseif (is_array($value))
+        {
+            foreach ($value as $i => $v)
+            {
+                $value[$i] = $this->serialize($v);
+            }
+            return $value;
+        } else
+        {
+            return $value;
+        }
     }
 
     /**
@@ -127,8 +156,10 @@ class CacheFilePHP extends AbstracCache
 
             $this->CAHCHE['VersionCache'] = $this->VersionCache;
             $this->CAHCHE['ModifyTime'] = date('Y-m-d H:i:s');
-            $save = '<?php return ' . var_export($this->CAHCHE, true) . ';?>';
-            @file_put_contents($this->FileCache, $save, LOCK_EX);
+
+            $cache = $this->CAHCHE;
+            $save = '<?php return ' . var_export($cache, true) . ';?>';
+            @file_put_contents($this->FileCache, $save);
         }
     }
 
