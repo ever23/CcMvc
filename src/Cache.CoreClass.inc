@@ -1,8 +1,10 @@
 <?php
-/* Create by \CcMvc 2016-11-13 16:09:44 */
+/* Create by \CcMvc 2016-11-16 20:17:26 */
  return array (
   'class' => 
   array (
+    'CcMvc' => 'CcMvc.php',
+    'CcWS' => 'CcWS.php',
     'Cc\\Autoload' => 'Cc\\Autoload\\Autoload.php',
     'Cc\\AutoloadExternLib' => 'Cc\\Autoload\\AutoloadExternLib.php',
     'Cc\\Autoload\\CoreClass' => 'Cc\\Autoload\\CoreClass.php',
@@ -14,6 +16,7 @@
     'Cc\\CacheFile' => 'Cc\\Cache\\CacheFile.php',
     'Cc\\CacheFilePHP' => 'Cc\\Cache\\CacheFilePHP.php',
     'Cc\\ICache' => 'Cc\\Cache\\ICache.php',
+    'Cc\\MemCached' => 'Cc\\Cache\\MemCached.php',
     'Cc\\Config' => 'Cc\\config\\Config.php',
     'Cc\\DBRow' => 'Cc\\DataBase\\DBRow.php',
     'Cc\\DBtabla' => 'Cc\\DataBase\\DBtabla.php',
@@ -84,6 +87,9 @@
     'Cc\\Mvc\\Smarty\\PluginInsertStaticAll' => 'Mvc\\Adapters\\Smarty\\InterfacesPlugins.php',
     'Cc\\Mvc\\ViewSmartyTpl' => 'Mvc\\Adapters\\Smarty\\ViewSmartyTpl.php',
     'Cc\\Mvc\\ParseObjectSmartyTpl' => 'Mvc\\Adapters\\Smarty\\ViewSmartyTpl.php',
+    'Cc\\Mvc\\Twig\\Loader' => 'Mvc\\Adapters\\Twig\\Loader.php',
+    'Cc\\Mvc\\Twig\\ViewLoader' => 'Mvc\\Adapters\\Twig\\ViewLoader.php',
+    'Cc\\Mvc\\Twig\\Extencion\\CcMvc' => 'Mvc\\Adapters\\Twig\\extenciones\\CcMvc.php',
     'Cc\\Mvc\\Config' => 'Mvc\\config\\Config.php',
     'Cc\\Mvc\\ClouserController' => 'Mvc\\Controllers\\ClousureController.php',
     'Cc\\Mvc\\Controllers' => 'Mvc\\Controllers\\Controllers.php',

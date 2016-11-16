@@ -4,3 +4,7 @@ CcMvc.zip
 
 ./docHtml
 ./examples
+/documentacion/
+/examples/
+/documentorcache/
+/libs/*

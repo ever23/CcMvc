@@ -1,9 +1,23 @@
 <?php
 
-//declare(TICKS = 1);
-
-/* define('namespace_Cc', '\\Cc\\');
-  define('namespace_CcMvc', '\\Cc\\Mvc\\'); */
+/*
+ * Copyright (C) 2016 Enyerber Franco
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ *  
+ */
 
 namespace Cc;
 
@@ -99,14 +113,15 @@ class Mvc
     public $Request = NULL;
 
     /**
-     *
+     * instancia del controlador de views 
      * @var ViewController 
+     * 
      */
     private $View = '';
 
     /**
-     *
-     * @var string directorio de procedimientos
+     * directorio de procedimientos
+     * @var string 
      */
     private $procedures;
 
@@ -204,7 +219,17 @@ class Mvc
      * @var DocumentBuffer 
      */
     public $Buffer;
+
+    /**
+     * indica si el contenido sera procesado
+     * @var bool 
+     */
     public $ProcessConten = true;
+
+    /**
+     *
+     * @var bool 
+     */
     private $fin = false;
 
     use CoreClass
@@ -364,26 +389,45 @@ class Mvc
         }
     }
 
-    /* public function __debugInfo()
-      {
-      return $this;
-      } */
+    /**
+     * @access private
+     * @return \Cc\Mvc
+     */
+    public function __debugInfo()
+    {
+        return [];
+    }
 
+    /**
+     * Retorna el nombre del cache para el enrrutamiento
+     * @return string
+     */
     public function GetNameCacheRouter()
     {
         return $this->CacheRouter['request'];
     }
 
+    /**
+     * Retorna el nombre del cache para el enrrutamiento estatico
+     * @return string
+     */
     public function GetNameStaticCacheRouter()
     {
         return $this->CacheRouter['requestStatic'];
     }
 
+    /**
+     * indica si la aplicacion se encuentra en modo de depuracion 
+     * @return bool
+     */
     public function IsDebung()
     {
         return !isset($this->conf['debung'][0]);
     }
 
+    /**
+     * procesa la configuracion para determinar si esta en modo de depuracion o de produccion 
+     */
     private function Debung()
     {
         $this->t = microtime(true);
@@ -686,7 +730,7 @@ class Mvc
     }
 
     /**
-     *  RETONNA UN INSTANCIA DE LA APP QUE SE ESTA EJECUTANDO
+     *  RETONNA LA  INSTANCIA DEL APP QUE SE ESTA EJECUTANDO
      *  @return Mvc
      */
     public static function &App()
@@ -695,7 +739,7 @@ class Mvc
     }
 
     /**
-     * EJECUTA LA APLICACION 
+     * Inicia la ejecucion de la aplicacion 
      */
     public function Run()
     {
@@ -729,6 +773,10 @@ class Mvc
         self::EndApp();
     }
 
+    /**
+     * ENRUTA BASADO EN LA INFORMACION ALMACENADA EN CACHE 
+     * @return boolean
+     */
     private function RouterByCache()
     {
         // return false;
@@ -795,6 +843,11 @@ class Mvc
         return false;
     }
 
+    /**
+     * ENRUTA UN CONTROLADOR BASADO EN LA INFORMACION ALMACENADA EN CACHE 
+     * @param array $cache
+     * @return boolean
+     */
     private function RouteControllerCache($cache)
     {
         $this->page = $cache['Controller'];
@@ -929,6 +982,9 @@ class Mvc
         }
     }
 
+    /**
+     * 
+     */
     private function RouterExt()
     {
         $accept = [];
@@ -1015,6 +1071,7 @@ class Mvc
     /**
      * RETORNA UNA REFERENCIA A EL OBJETO MANEJADOR DE BASES DE DATOS 
      * @return iDataBase
+     * @throws Exception si el objeto no es una instancia de iDataBase o es NULL
      */
     public function &DataBase()
     {
@@ -1049,6 +1106,9 @@ class Mvc
         }
     }
 
+    /**
+     * resuelve y cargar el controlador 
+     */
     private function LoadController()
     {
         Controllers::$View = &$this->View;
@@ -1076,6 +1136,12 @@ class Mvc
         }
     }
 
+    /**
+     * 
+     * @param array $aceptXss
+     * @param array $xss
+     * @return array
+     */
     private function SecurityConf($aceptXss, $xss)
     {
         if (!isset($aceptXss['_POST']) || !is_array($aceptXss['_POST']))
@@ -1114,6 +1180,9 @@ class Mvc
         return $aceptXss;
     }
 
+    /**
+     * filtra las variables de entrada 
+     */
     private function SecurityRequest()
     {
 
@@ -1135,6 +1204,9 @@ class Mvc
         $this->DependenceInyector->SetDependenceForParamArray($this->Request->Get);
     }
 
+    /**
+     * carga las librerias externas del controlador 
+     */
     private function LoadLibsExtern()
     {
 
@@ -1291,8 +1363,9 @@ class Mvc
 
     /**
      * CAMBIA EL OBJETO RESPONSE 
-     * @internal 
-     * @param string $conten_type
+     * @param string $conten_type mime-type
+     * @param array $equal
+     * @return boolean
      */
     public function ChangeResponseConten($conten_type, $equal = false)
     {
@@ -1311,6 +1384,10 @@ class Mvc
         return false;
     }
 
+    /**
+     * cambia el objeto de respuesta al objeto por defecto
+     * @param string $Content_type
+     */
     public function ResponseContenDefault($Content_type)
     {
         $this->Content_type = $this->ContentTypeOrig = $Content_type;
@@ -1322,9 +1399,10 @@ class Mvc
     /**
      * CONECTA CON LA BASE DE DATOS
      * @param array $param
-     * @return type
+     * @return iDataBase
+     * @throws Exception si la clase manejadora no se encuentra
      */
-    public function ConetDataBase(array $param = array())
+    public function &ConetDataBase(array $param = array())
     {
         $this->Log("Conectando con la base de datos ...");
         $conf = self::Config();
@@ -1353,6 +1431,7 @@ class Mvc
                 $_COOKIE = SQLi::Filter($_COOKIE, isset($conf['VarAceptSqlI']['_COOKIE']) ? $conf['VarAceptSqlI']['_COOKIE'] : []);
             }
         }
+        return $this->DataBase;
     }
 
     /**

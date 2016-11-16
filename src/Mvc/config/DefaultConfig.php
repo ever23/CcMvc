@@ -294,6 +294,10 @@ return
                     'php' => [
                         'class' => '\\Cc\\Mvc\\ViewPHP',
                         'param' => [],
+                    ],
+                    'twig' => [
+                        'class' => '\\Cc\\Mvc\\Twig\\ViewLoader',
+                        'param' => [],
                     ]
                 ]
             ],
