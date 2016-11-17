@@ -224,9 +224,10 @@ class GDResponse implements ResponseConten
         } else
         {
             $calidad = (int) $calidad;
+            $calidad = (int) ($calidad > 100 ? 100 : $calidad);
+            $calidad = (int) ($calidad < 0 ? 0 : $calidad);
         }
-        $calidad = (int) ($calidad > 100 ? 100 : $calidad);
-        $calidad = (int) ($calidad < 0 ? 0 : $calidad);
+
         if ($alto == $nuevo_alto && $ancho == $nuevo_ancho)
         {
             if ($this->DinamicCache)
@@ -260,7 +261,7 @@ class GDResponse implements ResponseConten
                 $out = $IMG->Output(NULL, "S");
                 break;
             case 'image/jpeg':
-                $out = $IMG->Output(NULL, "S", [is_null($calidad) ? 100 : $calidad]);
+                $out = $IMG->Output(NULL, "S", [is_null($calidad) ? 75 : $calidad]);
                 break;
             case 'image/png':
                 $out = $IMG->Output(NULL, "S", [is_null($calidad) ? 9 : $calidad]);

@@ -1,5 +1,5 @@
 <?php
-/* Create by \CcMvc 2016-11-16 20:17:26 */
+/* Create by \CcMvc 2016-11-17 03:54:37 */
  return array (
   'class' => 
   array (
@@ -103,6 +103,7 @@
     'Cc\\Mvc\\MapingControllers' => 'Mvc\\Controllers\\MapingControllers.php',
     'Cc\\Mvc\\MvcEvents' => 'Mvc\\Controllers\\MvcEvents.php',
     'Cc\\Mvc\\SelectorControllers' => 'Mvc\\Controllers\\SelectorControllers.php',
+    'Cc\\Mvc\\SelectorControllerException' => 'Mvc\\Controllers\\SelectorControllers.php',
     'Cc\\Mvc\\TestController' => 'Mvc\\Controllers\\TestController.php',
     'Cc\\Mvc\\DBtabla' => 'Mvc\\DataBase\\DataBase.php',
     'Cc\\Mvc\\DBRow' => 'Mvc\\DataBase\\DataBase.php',
@@ -123,7 +124,6 @@
     'Cc\\Mvc\\Cookie' => 'Mvc\\request\\Cookie.php',
     'Cc\\Mvc\\PostFiles' => 'Mvc\\request\\PostFiles.php',
     'Cc\\Mvc\\Request' => 'Mvc\\request\\Request.php',
-    'Cc\\Mvc\\Router' => 'Mvc\\request\\Router.php',
     'Cc\\Mvc\\DocumentBuffer' => 'Mvc\\Response\\DocumentBuffer.php',
     'Cc\\Mvc\\GDResponse' => 'Mvc\\Response\\GDResponse.php',
     'Cc\\Mvc\\GDexception' => 'Mvc\\Response\\GDResponse.php',
@@ -137,6 +137,8 @@
     'Cc\\Mvc\\ResponseJsCss' => 'Mvc\\Response\\ResponseJsCss.php',
     'Cc\\Mvc\\Html' => 'Mvc\\Response\\Html\\Html.php',
     'Cc\\Mvc\\JsonLD' => 'Mvc\\Response\\Html\\JsonLd.php',
+    'Cc\\Mvc\\RouteByMatch' => 'Mvc\\Route\\RouteByMatch.php',
+    'Cc\\Mvc\\Router' => 'Mvc\\Route\\Router.php',
     'Cc\\Mvc\\AccessUserController' => 'Mvc\\session\\AccessUserController.php',
     'Cc\\Mvc\\Autenticate' => 'Mvc\\session\\Autenticate.php',
     'Cc\\Mvc\\AuteticateUserDB' => 'Mvc\\session\\AuteticateUserDB.php',

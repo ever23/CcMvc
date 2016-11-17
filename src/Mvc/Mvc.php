@@ -218,6 +218,7 @@ class Mvc
     private $time = NULL;
     private $CacheCore = [];
     private $CacheRouter = ['expire' => NULL, 'request' => '', 'requestStatic' => ''];
+    private $InternalSession;
 
     /**
      *
@@ -696,6 +697,7 @@ class Mvc
         $conf = self::Config();
         ErrorHandle::SetHandle(-5);
         $session = false;
+        $this->InternalSession = new Mvc\InternalSession();
         if (!empty($conf['Autenticate']['class']) && !empty($conf['Autenticate']['SessionName']))
         {
 
@@ -710,7 +712,7 @@ class Mvc
         {
             $this->Session = new SESSION();
         }
-
+        //$this->InternalSession->SetName($name)
         $this->Session->SetName($conf['Autenticate']['SessionName']);
         if ($session)
         {

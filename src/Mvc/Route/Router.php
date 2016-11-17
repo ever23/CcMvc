@@ -484,122 +484,43 @@ class Router extends \Cc\Router
     private function SelectPage($page, $alcance)
     {
         // preg_match_all('/\{(\w+?)\?\}/', $this->uri, $matches);
-        $pageex = preg_split('/\/|\./', $page);
-        $Npagex = count($pageex);
-        foreach ($this->routes as $path => $contr)
+        $RouterRegex = new RouteByMatch($page, $this->routes);
+        if (($path = $RouterRegex->compile()) !== false)
         {
-            list($c, $repl, $mathvar) = $contr;
-            $path2 = preg_split('/\/|\./', substr($path, 1));
-            $verifi = false;
-            $param = [];
-            $replace = [];
-            if (count($pageex) != count($path2))
+            $parms = $RouterRegex->GetParams();
+
+            Mvc::App()->DependenceInyector->SetDependenceForParamArray($parms);
+            if ($RouterRegex->IsCalableRoute())
             {
-                continue;
+                return array(
+                    'controller' => NULL,
+                    'method' => NULL,
+                    'paquete' => NULL,
+                    'extencion' => NULL,
+                    'routeVars' => $RouterRegex->GetParams(),
+                    'orig' => $RouterRegex->GetOrigRegex(),
+                    'Callable' => $RouterRegex->IsCalableRoute(),
+                );
             } else
             {
-                foreach ($pageex as $i => $p)
+
+                list($Paquete, $Controller, $Method, $ext, $count) = $this->Page($path, $alcance);
+                if (is_null($Paquete) && is_null($Method))
                 {
-                    if (isset($path2[$i]))
-                    {
-                        if ($p == $path2[$i])
-                        {
-                            $verifi = true;
-                            continue;
-                        } elseif (preg_match('/(\{.*\})/U', $path2[$i]))
-                        {
-                            if ($this->EvalueRouteVars($path2[$i], $p, $c, $mathvar, $param, $replace))
-                            {
-                                $verifi = true;
-                                continue;
-                            } else
-                            {
-                                $verifi = false;
-                                break;
-                            }
-                        } elseif (preg_match('/(\{.*\?\})/U', $path2[$i]))
-                        {
-                            if ($this->EvalueRouteVars($path2[$i], $p, $c, $mathvar, $param, $replace, ['\{', '\?\}']))
-                            {
-                                $verifi = true;
-                                continue;
-                            } else
-                            {
-                                $verifi = false;
-                                break;
-                            }
-                        } else
-                        {
-                            $verifi = false;
-                            break;
-                        }
-                    } else
-                    {
-                        $verifi = false;
-                        break;
-                    }
+                    $Method = 'index';
                 }
-
-
-                if ($verifi)
-                {
-
-                    Mvc::App()->DependenceInyector->SetDependenceForParamArray($param);
-                    if (is_callable($c))
-                    {
-                        return array(
-                            'controller' => NULL,
-                            'method' => NULL,
-                            'paquete' => NULL,
-                            'extencion' => NULL,
-                            'routeVars' => $param,
-                            'orig' => $path,
-                            'Callable' => true,
-                        );
-                    } else
-                    {
-                        if (is_numeric($c))
-                        {
-                            if (in_array($c, [404, 403]))
-                            {
-                                Mvc::App()->LoadError($c, " Via Enrutamiento manual");
-                                exit;
-                            }
-                        }
-
-                        if (preg_match('/\.\{.*\}$/U', $c))
-                        {
-                            list($Paquete, $Controller, $Method, $ext, $count) = $this->Page($page, $alcance);
-                            $c = preg_replace('/\.\{.*\}$/U', '.' . $ext, $c);
-                        }
-                        // var_dump($c);
-                        foreach ($replace as $r => $p2)
-                        {
-
-                            $c = preg_replace($r, $p2, $c);
-                            // var_dump($p2);
-                        }
-
-                        //  var_dump($c);
-
-                        list($Paquete, $Controller, $Method, $ext, $count) = $this->Page($c, $alcance);
-                        if (is_null($Paquete) && is_null($Method))
-                        {
-                            $Method = 'index';
-                        }
-                        return array(
-                            'controller' => $Controller,
-                            'method' => $Method,
-                            'paquete' => $Paquete,
-                            'extencion' => $ext,
-                            'routeVars' => $param,
-                            'orig' => $path,
-                            'Callable' => false
-                        );
-                    }
-                }
+                return array(
+                    'controller' => $Controller,
+                    'method' => $Method,
+                    'paquete' => $Paquete,
+                    'extencion' => $ext,
+                    'routeVars' => $RouterRegex->GetParams(),
+                    'orig' => $RouterRegex->GetOrigRegex(),
+                    'Callable' => false
+                );
             }
         }
+
         if (Mvc::App()->Config()->Router['AutomaticRoute'])
         {
             if (trim($page) == '')

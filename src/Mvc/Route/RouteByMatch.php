@@ -19,6 +19,8 @@
 
 namespace Cc\Mvc;
 
+use Cc\Mvc;
+
 /**
  * Description of RouteByMatch
  *
@@ -33,6 +35,8 @@ class RouteByMatch
     protected $NpartsPath = 0;
     protected $params = [];
     protected $replace = [];
+    protected $isCalable = false;
+    protected $origRegex = '';
 
     public function __construct($path, $routes)
     {
@@ -45,12 +49,25 @@ class RouteByMatch
         return $this->params;
     }
 
+    public function GetOrigRegex()
+    {
+        return $this->origRegex;
+    }
+
+    public function IsCalableRoute()
+    {
+        return $this->isCalable;
+    }
+
     public function compile()
     {
         $this->PartsPath = preg_split('/\/|\./', $this->path);
         $this->NpartsPath = count($this->PartsPath);
         $this->params = [];
         $this->replace = [];
+        $this->isCalable = false;
+        $this->origRegex = '';
+        $v = false;
         foreach ($this->routes as $path => $contr)
         {
             list($controller, $repl, $mathvar) = $contr;
@@ -60,74 +77,69 @@ class RouteByMatch
             $this->replace = [];
             if (count($this->PartsPath) != count($pathRegex))
             {
+
                 continue;
             } else
             {
 
-                $verifi = $this->CompileRegex($pathRegex, $controller);
-                if ($verifi)
+                if ($this->CompileRegex($pathRegex, $controller, $mathvar))
                 {
+                    $this->origRegex = $path;
 
-                    Mvc::App()->DependenceInyector->SetDependenceForParamArray($param);
-                    if (is_callable($c))
+                    if (is_callable($controller))
                     {
-                        return $c;
+                        $this->isCalable = false;
+                        return $controller;
                     } else
                     {
-                        if (is_numeric($c))
+                        if (is_numeric($controller))
                         {
-                            if (in_array($c, [404, 403]))
+                            if (in_array($controller, [404, 403]))
                             {
-                                Mvc::App()->LoadError($c, " Via Enrutamiento manual");
+                                Mvc::App()->LoadError($controller, " Via Enrutamiento manual");
                                 exit;
                             }
                         }
 
-                        if (preg_match('/\.\{.*\}$/U', $c))
+                        if (preg_match('/\.\{.*\}$/U', $controller))
                         {
 
                             $ext = (new \SplFileInfo($this->path))->getExtension();
-                            $c = preg_replace('/\.\{.*\}$/U', '.' . $ext, $c);
+                            $controller = preg_replace('/\.\{.*\}$/U', '.' . $ext, $controller);
                         }
                         // var_dump($c);
                         foreach ($this->replace as $r => $p2)
                         {
 
-                            $c = preg_replace($r, $p2, $c);
+                            $controller = preg_replace($r, $p2, $controller);
                             // var_dump($p2);
                         }
 
                         //  var_dump($c);
-                        return $c;
+                        return $controller;
                     }
+                    return false;
                 }
             }
         }
+        return false;
     }
 
-    public function CompileRegex($pathRegex, $controller)
+    public function CompileRegex($pathRegex, $controller, $mathvar)
     {
         foreach ($this->PartsPath as $i => $p)
         {
             if (isset($pathRegex[$i]))
             {
+
                 if ($p == $pathRegex[$i])
                 {
 
                     continue;
                 } elseif (preg_match('/(\{.*\})/U', $pathRegex[$i]))
                 {
-                    if ($this->EvalueRouteVars($pathRegex[$i], $p, $c, $mathvar))
-                    {
 
-                        continue;
-                    } else
-                    {
-                        return false;
-                    }
-                } elseif (preg_match('/(\{.*\?\})/U', $pathRegex[$i]))
-                {
-                    if ($this->EvalueRouteVars($pathRegex[$i], $p, $controller, $mathvar, ['\{', '\?\}']))
+                    if ($this->EvalueRouteVars($pathRegex[$i], $p, $controller, $mathvar))
                     {
 
                         continue;
@@ -144,6 +156,7 @@ class RouteByMatch
                 return false;
             }
         }
+        return true;
     }
 
     private function EvalueRouteVars($PathT, $pathP, $c, $mathvar, $match = ['\{', '\}'])
@@ -176,15 +189,12 @@ class RouteByMatch
             {
 
                 $name = preg_replace('/' . $match[0] . '|' . $match[1] . '/', '', $sp[0]);
-                //var_dump($mathvar[$name]);
+
                 if (isset($mathvar[$name]) && !preg_match('/' . $mathvar[$name] . '/i', $Pexplo[$z]))
                 {
                     return false;
                 }
-                if ($Pexplo[$z] == '' && $match[1] != '\?\}')
-                {
-                    continue;
-                }
+
                 $this->params[$name] = $Pexplo[$z];
                 if (is_string($c) && preg_match('/(' . $match[0] . $name . $match[1] . ')/', $c))
                 {
