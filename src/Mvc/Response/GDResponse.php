@@ -264,6 +264,7 @@ class GDResponse implements ResponseConten
                 $out = $IMG->Output(NULL, "S", [is_null($calidad) ? 70 : $calidad]);
                 break;
             case 'image/png':
+                Mvc::App()->Buffer->SetCompres(false);
                 $out = $IMG->Output(NULL, "S", [is_null($calidad) ? 9 : $calidad]);
                 break;
             default :

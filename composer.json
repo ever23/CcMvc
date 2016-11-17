@@ -23,8 +23,8 @@
     },
     "autoload": {
         "classmap": [
-            "CcMvc.php",
-            "CcWs.php"
+            "src/CcMvc.php",
+            "src/CcWs.php"
         ]
     },
     "suggest": {
