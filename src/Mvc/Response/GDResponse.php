@@ -114,7 +114,7 @@ class GDResponse implements ResponseConten
 
     public function ActiveCache($is, $lifetime, $Modifytime)
     {
-        $this->DinamicCache = $is;
+        $this->DinamicCache = $is && !Mvc::App()->IsDebung();
         $this->CacheLifeTime = $lifetime;
         $this->MTime = $Modifytime;
     }
@@ -162,7 +162,7 @@ class GDResponse implements ResponseConten
     protected function ResampledImage($image, $nuevo_ancho, $nuevo_alto, $calidad = NULL, $fondo = NULL)
     {
 
-        //return $image;
+        // return $image;
         if (is_string($fondo))
         {
             if ($fondo[0] == '#')
@@ -261,7 +261,7 @@ class GDResponse implements ResponseConten
                 $out = $IMG->Output(NULL, "S");
                 break;
             case 'image/jpeg':
-                $out = $IMG->Output(NULL, "S", [is_null($calidad) ? 75 : $calidad]);
+                $out = $IMG->Output(NULL, "S", [is_null($calidad) ? 70 : $calidad]);
                 break;
             case 'image/png':
                 $out = $IMG->Output(NULL, "S", [is_null($calidad) ? 9 : $calidad]);

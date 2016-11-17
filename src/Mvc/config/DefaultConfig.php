@@ -208,7 +208,7 @@ return
              */
             'Autenticate' =>
             [
-                'class' => '\Cc\Mvc\SESSION',
+                'class' => NULL,
                 'param' =>
                 [
                     ['*/*/*']

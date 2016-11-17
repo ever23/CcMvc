@@ -1,5 +1,5 @@
 <?php
-/* Create by \CcMvc 2016-11-17 03:54:37 */
+/* Create by \CcMvc 2016-11-17 19:54:20 */
  return array (
   'class' => 
   array (
@@ -139,10 +139,13 @@
     'Cc\\Mvc\\JsonLD' => 'Mvc\\Response\\Html\\JsonLd.php',
     'Cc\\Mvc\\RouteByMatch' => 'Mvc\\Route\\RouteByMatch.php',
     'Cc\\Mvc\\Router' => 'Mvc\\Route\\Router.php',
-    'Cc\\Mvc\\AccessUserController' => 'Mvc\\session\\AccessUserController.php',
     'Cc\\Mvc\\Autenticate' => 'Mvc\\session\\Autenticate.php',
     'Cc\\Mvc\\AuteticateUserDB' => 'Mvc\\session\\AuteticateUserDB.php',
+    'Cc\\Mvc\\InternalSession' => 'Mvc\\session\\InternalSession.php',
     'Cc\\Mvc\\SESSION' => 'Mvc\\session\\session.php',
+    'Cc\\Mvc\\AccessUserController' => 'Mvc\\session\\SessionController\\AccessUserController.php',
+    'Cc\\Mvc\\SessionSaveController' => 'Mvc\\session\\SessionController\\SessionSaveController.php',
+    'Cc\\Mvc\\PropertiesInSession' => 'Mvc\\session\\SessionController\\SessionSaveController.php',
     'Cc\\Mvc\\ValidArray' => 'Mvc\\Validate\\Valid.php',
     'Cc\\Mvc\\ValidString' => 'Mvc\\Validate\\Valid.php',
     'Cc\\Mvc\\ValidNumber' => 'Mvc\\Validate\\Valid.php',

@@ -396,6 +396,15 @@ class Mvc
     }
 
     /**
+     * returna una referencia al objeto se session interna 
+     * @return Mvc\InternalSession
+     */
+    public function &GetInternalSession()
+    {
+        return $this->InternalSession;
+    }
+
+    /**
      * @access private
      * @return \Cc\Mvc
      */
@@ -663,6 +672,7 @@ class Mvc
 
         self::App()->Log("Redireccionando a " . $redirec);
         header("Location: " . $redirec);
+        exit;
     }
 
     /**
@@ -710,26 +720,24 @@ class Mvc
             $this->Session = new $class_name(...$conf['Autenticate']['param']);
         } else
         {
-            $this->Session = new SESSION();
+            $this->Session = [];
         }
-        //$this->InternalSession->SetName($name)
-        $this->Session->SetName($conf['Autenticate']['SessionName']);
+        $this->InternalSession->SetName($conf['Autenticate']['SessionName']);
+        //$this->Session->SetName($conf['Autenticate']['SessionName']);
         if ($session)
         {
             $session['path'] = !is_null($session['path']) ? $session['path'] : $this->conf['Router']['DocumentRoot'];
-            $this->Session->SetCookie($session['cahe'], $session['time'], $session['path'], $session['dominio'], $conf['Router']['protocol'] == 'https', $session['httponly']);
+            $this->InternalSession->SetCookie($session['cahe'], $session['time'], $session['path'], $session['dominio'], $conf['Router']['protocol'] == 'https', $session['httponly']);
         }
 
-
+        $this->InternalSession->Start();
         if ($this->Session instanceof Autenticate)
         {
             $this->Session->SetDependenceInyector($this->DependenceInyector);
-            $this->Session->Start();
+
+            $this->Session->Start($this->InternalSession);
             $this->Log("Autenticando....");
             $this->Session->Auth();
-        } else
-        {
-            $this->Session->Start();
         }
         ErrorHandle::RecoverHandle();
         ErrorHandle::SetHandle();

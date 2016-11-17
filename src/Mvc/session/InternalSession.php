@@ -19,12 +19,15 @@
 
 namespace Cc\Mvc;
 
+use Cc\Mvc;
+use Cc\Security;
+
 /**
  * Description of InternalSession
  *
  * @author usuario
  */
-class InternalSession extends Session
+class InternalSession extends \Cc\SESSION
 {
 
     /**
@@ -32,10 +35,10 @@ class InternalSession extends Session
      *  @param array $exet UN ARRAY CON EL NOMBRE DE LOS CONTROLADORES DONDE NO SE ARA UN EXEPCION Y NO SE EJECUTARA LA AUTENTICACION
      *  GENERALMENTE ESTOS NOMBRES DEVEN SER DEFINIDOS EN EL DOCUMENTO DE CONFIGURACION DE LA APP EN LOS PARAMENTROS  DE ATENTICACION
      */
-    public function __construct(array $exet = [], array $param = [])
+    public function __construct()
     {
 
-        parent::__construct();
+        \session_set_save_handler($this, true);
         $conf = Mvc::App()->Config();
         if (!is_dir($conf['App']['Cache']))
             mkdir($conf['App']['Cache']);
@@ -43,50 +46,124 @@ class InternalSession extends Session
         if (!is_dir($path))
             mkdir($path);
         session_save_path($path);
-        $this->EstableceParam($param);
-        $this->exept = $exet;
-        self::$ReadAndClose = (isset($conf['Autenticate']['SessionCookie']['ReadAndClose']) ? $conf['Autenticate']['SessionCookie']['ReadAndClose'] : false) && $this->is_Autenticable();
     }
 
-    /**
-     * @access private
-     * @param type $n
-     * @param type $v
-     */
-    public function __set($n, $v)
+    public function read($id)
     {
-        if ($this->statusClose)
+        $data = parent::read($id);
+
+        if (!$data)
         {
-            ErrorHandle::Notice("La modificacion del valor de \$_SESSION[$n] no surtira efecto ya que se cerro el archivo de session");
+            return "";
+        } else
+        {
+            return Security::decrypt($data, static::class . $id, false);
         }
-        parent::__set($n, $v);
     }
 
-    /**
-     * @access private
-     * @param type $offset
-     * @param type $value
-     */
-    public function offsetSet($offset, $value)
+    public function write($id, $data)
     {
-        if ($this->statusClose)
-        {
-            ErrorHandle::Notice("La modificacion del valor de \$_SESSION[$offset] no surtira efecto ya que se cerro el archivo de session");
-        }
-        parent::offsetSet($offset, $value);
+        $data = Security::encrypt($data, static::class . $id, false);
+
+        return parent::write($id, $data);
     }
 
-    /**
-     * @access private
-     * @param type $offset
-     */
-    public function offsetUnset($offset)
+    public function Start($id = NULL)
     {
-        if ($this->statusClose)
+        if (!is_null($id))
         {
-            ErrorHandle::Notice("La modificacion del valor de \$_SESSION[$offset] no surtira efecto ya que se cerro el archivo de session");
+            session_id($id);
+        } else
+        {
+            if ($this->name == '' && defined("__SESSION_NAME__"))
+            {
+
+                $this->name = __SESSION_NAME__;
+                session_name(__SESSION_NAME__);
+            }
+
+            if (!empty($_REQUEST[$this->name]))
+                session_id($_REQUEST[$this->name]);
         }
-        parent::offsetUnset($offset);
+
+        session_start();
+        $this->_SESSION = & $_SESSION;
+        if (!isset($this->_SESSION['Token' . static::class]))
+        {
+
+            $md = base64_encode(openssl_random_pseudo_bytes(16));
+            $this->_SESSION['Token' . static::class] = $md;
+            // output_add_rewrite_var('Token' . static::class, $md);
+        } else
+        {
+            //output_add_rewrite_var('Token' . static::class, $_SESSION['Token' . static::class]);
+        }
+        //  ob_start([&$this,'Handle']);
+        // $this->ID = $this->GetId();
+        return array($this->GetName() => $this->GetId());
+    }
+
+    public function SetCookie($cache = NULL, $TIME = NULL, $path = NULL, $dominio = NULL, $secure = false, $httponly = false)
+    {
+        if (!is_numeric($TIME))
+        {
+            $t = new \DateTime();
+            $t3 = new \DateTime();
+            $t3->modify($TIME);
+            // $interval = $t3->diff($t);
+            $TIME = $t3->getTimestamp() - $t->getTimestamp();
+            // $TIME = $interval->format('%s') + ($interval->format('%i') * 60) + ($interval->format('%h') * 3600) + ($interval->format('%d') * 24 * 3600) + ( $interval->format('%m') * 30 * 24 * 3600) + ($interval->format('%y') * 12 * 30 * 24 * 3600);
+        }
+        $path = \Cc\UrlManager::EncodeUrl($path);
+        session_set_cookie_params($TIME, $path, $dominio, $secure, $httponly);
+        session_cache_limiter($cache);
+    }
+
+    public function SetName($name)
+    {
+        $this->name = $name;
+        session_name($name);
+    }
+
+    public function Destroy($key = NULL)
+    {
+        if (!is_null($key))
+        {
+            return parent::destroy($key);
+        }
+        $_SESSION = array();
+        if (isset($_COOKIE[$this->GetName()]))
+        {
+            $p = $this->GetCookieParams();
+            setcookie($this->GetName(), '', time(), $p['path'], $p['domain'], $p['secure'], $p['httponly']);
+        }
+
+        session_destroy();
+    }
+
+    public function Commit()
+    {
+        session_write_close();
+    }
+
+    public function GetName()
+    {
+        return session_name();
+    }
+
+    public function GetCookieParams()
+    {
+        return session_get_cookie_params();
+    }
+
+    public function GetId()
+    {
+        return session_id();
+    }
+
+    public function &GetRefenece($name)
+    {
+        return $this->_SESSION[$name];
     }
 
 }

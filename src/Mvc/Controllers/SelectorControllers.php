@@ -93,6 +93,12 @@ class SelectorControllers
     public $ReRouterMethod = false;
 
     /**
+     *
+     * @var SessionSaveController 
+     */
+    public $sessionController;
+
+    /**
      * 
      * @param string $DirControllers
      * @param Config $conf
@@ -429,8 +435,15 @@ class SelectorControllers
         try
         {
 
+            $this->ObjControllers = $this->ReflectionClass->newInstanceWithoutConstructor();
 
-            $this->ObjControllers = $this->SearchClass->FactoryObject($param, false);
+            $this->sessionController = new SessionSaveController($this->ObjControllers, $this->ReflectionClass);
+            $this->sessionController->ParseAttrs();
+            if ($costruc)
+            {
+                $this->ObjControllers->__construct(...$param);
+            }
+            //  $this->ObjControllers = $this->SearchClass->FactoryObject($param, false);
             $this->ContextApp = $ContexApp;
         } catch (\Exception $ex)
         {

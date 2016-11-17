@@ -73,6 +73,7 @@ abstract class Controllers implements InfoController
             case 'layaut':
                 return static::$Layaut;
             default :
+
                 ErrorHandle::Notice("EL ATRIBUTO " . static::class . '::$' . $name . " NO ESTA DEFINIDO ");
                 return $NULL;
         }
@@ -186,6 +187,10 @@ abstract class Controllers implements InfoController
         Mvc::Redirec($page, $get);
     }
 
+    /**
+     * 
+     * @return \ReflectionClass
+     */
     public final static function GetReflectionClass()
     {
         return Mvc::App()->SelectorController->GetReflectionController();
