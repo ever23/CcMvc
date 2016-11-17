@@ -216,8 +216,8 @@ class GDResponse implements ResponseConten
             Mvc::App()->Log("GDResponse Cookie: w=" . $nuevo_ancho . " h=" . $nuevo_alto);
             ///return $this->ResampledImage($image, $_COOKIE['GDmaxW'], $nuevo_alto)
         }
-        $nuevo_ancho = (int) $nuevo_ancho;
-        $nuevo_alto = (int) $nuevo_alto;
+        $nuevo_ancho = (int) ($nuevo_ancho > 2000 ? 2000 : $nuevo_ancho);
+        $nuevo_alto = (int) ($nuevo_alto > 2000 ? 2000 : $nuevo_alto);
         if (!is_numeric($calidad))
         {
             $calidad = NULL;
@@ -225,6 +225,8 @@ class GDResponse implements ResponseConten
         {
             $calidad = (int) $calidad;
         }
+        $calidad = (int) ($calidad > 100 ? 100 : $calidad);
+        $calidad = (int) ($calidad < 0 ? 0 : $calidad);
         if ($alto == $nuevo_alto && $ancho == $nuevo_ancho)
         {
             if ($this->DinamicCache)

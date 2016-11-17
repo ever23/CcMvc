@@ -430,15 +430,15 @@ class Router extends \Cc\Router
         return false;
     }
 
-    private function EvalueRouteVars($PathT, $pathP, $c, $mathvar, &$param, &$replace)
+    private function EvalueRouteVars($PathT, $pathP, $c, $mathvar, &$param, &$replace, $match = ['\{', '\}'])
     {
-        $split = preg_split('/(\{.*\})/U', $PathT, PREG_SPLIT_DELIM_CAPTURE, -1);
+        $split = preg_split('/(' . $match[0] . '.*' . $match[1] . ')/U', $PathT, PREG_SPLIT_DELIM_CAPTURE, -1);
         $explo = '';
         foreach ($split as $j => $sp)
         {
             if ($j % 2 != 0)
             {
-                $explo = preg_quote($sp[0],'/') . '|';
+                $explo = preg_quote($sp[0], '/') . '|';
             }
         }
         if ($explo == '')
@@ -459,21 +459,22 @@ class Router extends \Cc\Router
             if ($j % 2 == 0)
             {
 
-                $name = preg_replace('/\{|\}/','',$sp[0]);
-                 //var_dump($mathvar[$name]);
+                $name = preg_replace('/' . $match[0] . '|' . $match[1] . '/', '', $sp[0]);
+                //var_dump($mathvar[$name]);
                 if (isset($mathvar[$name]) && !preg_match('/' . $mathvar[$name] . '/i', $Pexplo[$z]))
                 {
                     return false;
                 }
-                $param[$name] = $Pexplo[$z];
-                if (is_string($c) && preg_match('/(\{' . $name . '\})/', $c))
+                if ($Pexplo[$z] == '' && $match[1] != '\?\}')
                 {
-                    $m = '/' . preg_quote($sp[0],'/') . '/';
-
+                    continue;
+                }
+                $param[$name] = $Pexplo[$z];
+                if (is_string($c) && preg_match('/(' . $match[0] . $name . $match[1] . ')/', $c))
+                {
+                    $m = '/' . preg_quote($sp[0], '/') . '/';
                     $replace[$m] = $Pexplo[$z];
                 }
-
-
                 $z++;
             }
         }
@@ -508,6 +509,17 @@ class Router extends \Cc\Router
                         } elseif (preg_match('/(\{.*\})/U', $path2[$i]))
                         {
                             if ($this->EvalueRouteVars($path2[$i], $p, $c, $mathvar, $param, $replace))
+                            {
+                                $verifi = true;
+                                continue;
+                            } else
+                            {
+                                $verifi = false;
+                                break;
+                            }
+                        } elseif (preg_match('/(\{.*\?\})/U', $path2[$i]))
+                        {
+                            if ($this->EvalueRouteVars($path2[$i], $p, $c, $mathvar, $param, $replace, ['\{', '\?\}']))
                             {
                                 $verifi = true;
                                 continue;

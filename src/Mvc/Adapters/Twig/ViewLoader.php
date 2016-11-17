@@ -46,6 +46,12 @@ class ViewLoader implements ViewLoaderExt
     private $Twig;
 
     /**
+     *
+     * @var array 
+     */
+    private $config;
+
+    /**
      * 
      * @throws Exception si la clase \Twig_Environment no existe 
      */
@@ -62,15 +68,44 @@ class ViewLoader implements ViewLoaderExt
                 'cache' => Mvc::App()->Config()->App['Cache'] . 'twig',
                 'auto_reload' => Mvc::App()->IsDebung(),
                 'strict_variables' => false,
+                'autoescape' => false,
             ];
             $loader = new Loader();
+
             self::$TwigEnvironment = new \Twig_Environment($loader, $twigConf);
             self::$TwigEnvironment->addExtension(new Extencion\CcMvc());
+
+            $this->LoadExtensions();
+            if (isset($this->config['Lexer']))
+            {
+                $lexer = new \Twig_Lexer(self::$TwigEnvironment, $this->config['Lexer']);
+                self::$TwigEnvironment->setLexer($lexer);
+            }
+
+
 
             $this->Twig = &self::$TwigEnvironment;
         } else
         {
             $this->Twig = &self::$TwigEnvironment;
+        }
+    }
+
+    /**
+     * carga las extenciones del archivo de configuracion CcMvc
+     */
+    private function LoadExtensions()
+    {
+        if (isset($this->config['Extensiones']) && is_array($this->config['Extensiones']))
+        {
+            foreach ($this->config['Extensiones'] as $extClass)
+            {
+                if (!class_exists($extClass))
+                {
+                    throw new Exception("La extencion " . $extClass . " no se encontro ");
+                }
+                self::$TwigEnvironment->addExtension(new $extClass());
+            }
         }
     }
 
@@ -82,7 +117,7 @@ class ViewLoader implements ViewLoaderExt
      */
     protected function &ProcessAgrs(&$agrs, &$context)
     {
-        $agrs['this'] = $context;
+        $agrs['this'] = &$context;
         return $agrs;
     }
 

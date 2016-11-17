@@ -559,7 +559,7 @@ class SelectorControllers
                 return false;
             } elseif ($this->conf['debung']['ModoExeption'] != 0)
             {
-                throw new Exception($ERROR);
+                throw new SelectorControllerException($ERROR);
             }
         }
         $this->ContextApp = false;
@@ -691,4 +691,12 @@ class SelectorControllers
         }
     }
 
+}
+
+/**
+ * 
+ */
+class SelectorControllerException extends Exception
+{
+    
 }

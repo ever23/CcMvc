@@ -66,6 +66,11 @@ class Mvc
 {
 
     /**
+     * Directivas apache  para el redireccionamiento de todas las peticiones hacia el archivo de ejecucion 
+     */
+    const Htaccess = "RewriteEngine on\nRewriteCond %{REQUEST_URI} !\.(php|inc)$\nRewriteRule . ";
+
+    /**
      * 
      */
     const Version = '1.0';
@@ -257,7 +262,7 @@ class Mvc
         self::$Instance = &$this;
         $this->StartAutoloadCore(realpath(dirname(__FILE__) . '/../'));
 
-        //$this->CoreClass['Cc\\Config'] = 'Cc/Config/Config.php';
+//$this->CoreClass['Cc\\Config'] = 'Cc/Config/Config.php';
         $this->conf = new Config($defaultConf);
 
         $this->conf->Load($conf);
@@ -328,7 +333,7 @@ class Mvc
         {
             $file = basename(self::$ExecuteFile);
             $f = fopen(dirname(self::$ExecuteFile) . '/.htaccess', 'w+');
-            fwrite($f, "RewriteEngine on \nRewriteRule . " . $file);
+            fwrite($f, self::Htaccess . $file);
             fclose($f);
         }
         $this->Log('Cofigurando Dependencias ....');
@@ -342,7 +347,7 @@ class Mvc
         }
         if ($this->conf['Router']['GetControllerFormat'] == Router::Get)
         {
-            // $this->CacheRouter['expire'] = '+1 day';
+// $this->CacheRouter['expire'] = '+1 day';
             $get = isset($_GET[$this->conf['Router']['GetControllers']]) ? '?' . $this->conf['Router']['GetControllers'] . '=' . $_GET[$this->conf['Router']['GetControllers']] : '';
             $this->CacheRouter['request'] = strtolower($this->Router->GetRequestFile() . $get);
         }//requestStatic
@@ -502,7 +507,7 @@ class Mvc
         if (count(SearchClass::$classes) > 0)
             Cache::Set('AutoloadCore', SearchClass::$classes + $this->CacheCore + $this->AutoloaderLib->GetLastLoadFiles());
         Cache::Save();
-        // $this->Log(Cache::GetObjectCache());
+// $this->Log(Cache::GetObjectCache());
 
         $this->Log("Fin de la Aplicacion ...", true);
         unset($this->Response);
@@ -568,10 +573,10 @@ class Mvc
             }
             MvcEvents::TingerAndDependence('OnEndApp');
         }
-        // var_dump(Mvc::App()->ProcessConten);
+// var_dump(Mvc::App()->ProcessConten);
         self::App()->fin = true;
 
-        //  var_dump(ob_list_handlers());
+//  var_dump(ob_list_handlers());
 
         self::App()->Buffer->EndConten();
 
@@ -779,7 +784,7 @@ class Mvc
      */
     private function RouterByCache()
     {
-        // return false;
+// return false;
         $cookie = '';
         if (isset($_COOKIE['GDmaxW']))
         {
@@ -879,7 +884,7 @@ class Mvc
 
             $realfile = new \SplFileInfo($cache2['RealFile']);
             $time = new \DateTime();
-            // $age = $realfile->getMTime() - $time->getTimestamp();
+// $age = $realfile->getMTime() - $time->getTimestamp();
             if (file_exists($realfile))
             {
                 if (!$_POST && ( $time->getTimestamp() - $realfile->getMTime() ) < $cache2['LifeTime'])
@@ -902,7 +907,7 @@ class Mvc
                         }
                     }
 //echo ( $time->getTimestamp() - $realfile->getMTime()), ':', $cache2['LifeTime'];
-                    // echo "<!--Response by cache MaxAge:" . $cache2['LifeTime'] . " Age:" . ( $time->getTimestamp() - $realfile->getMTime() ) . " s -->\n";
+// echo "<!--Response by cache MaxAge:" . $cache2['LifeTime'] . " Age:" . ( $time->getTimestamp() - $realfile->getMTime() ) . " s -->\n";
 
                     readfile($realfile);
                     exit;
@@ -944,7 +949,7 @@ class Mvc
 
             $UserAppDir = $this->conf['App']['app'];
             $this->Log("Enrutado a  " . $this->Router->InfoFile->getPathname());
-            // if ($this->AppDir == substr($this->Router->InfoFile->getPathname(), 0, strlen($this->AppDir)) || $UserAppDir == substr($this->Router->InfoFile->getPathname(), 0, strlen($UserAppDir)))
+// if ($this->AppDir == substr($this->Router->InfoFile->getPathname(), 0, strlen($this->AppDir)) || $UserAppDir == substr($this->Router->InfoFile->getPathname(), 0, strlen($UserAppDir)))
             $sujeto = $this->Router->InfoFile->getPathname();
             if (preg_match('/^(' . preg_quote($this->AppDir . DIRECTORY_SEPARATOR, '/') . ')/', $sujeto) || preg_match('/^(' . preg_quote($UserAppDir, '/') . ')/', $sujeto))
             {
@@ -1259,7 +1264,7 @@ class Mvc
     private function ExecuteController()
     {
         $c = $this->conf['Controllers']['Prefijo'];
-        //echo get_class(self::$Response);
+//echo get_class(self::$Response);
 
         ErrorHandle::SetHandle(-4);
         /* if(!http_response_code())
@@ -1499,7 +1504,7 @@ class Mvc
         {
             Mvc::App()->Log("PROCESANDO LA RESPUESTA  ...");
 
-            //   Mvc::App()->Log(debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS));
+//   Mvc::App()->Log(debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS));
 
             try
             {
