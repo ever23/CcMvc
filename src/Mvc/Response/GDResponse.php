@@ -87,7 +87,7 @@ class GDResponse implements ResponseConten
           }
           } */
         $this->CacheDirectory = Mvc::App()->Config()->App['Cache'] . 'ImageGD' . DIRECTORY_SEPARATOR;
-        Cache::AutoClearCacheFile($this->CacheDirectory);
+        //Cache::AutoClearCacheFile($this->CacheDirectory);
 
 
         $this->request = &Mvc::App()->Request;

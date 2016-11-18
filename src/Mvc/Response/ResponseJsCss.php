@@ -27,12 +27,12 @@ class ResponseJsCss extends Response
         if (Mvc::App()->Content_type == 'text/css')
         {
             $this->type = 'css';
-            Cache::AutoClearCacheFile(Mvc::App()->Config()->App['Cache'] . 'Min' . $this->type . DIRECTORY_SEPARATOR);
+         //   Cache::AutoClearCacheFile(Mvc::App()->Config()->App['Cache'] . 'Min' . $this->type . DIRECTORY_SEPARATOR);
             parent::__construct($compres, $min, 'css');
         } elseif (Mvc::App()->Content_type == 'text/javascript' || Mvc::App()->Content_type == 'application/javascript')
         {
             $this->type = 'js';
-            Cache::AutoClearCacheFile(Mvc::App()->Config()->App['Cache'] . 'Min' . $this->type . DIRECTORY_SEPARATOR);
+          //  Cache::AutoClearCacheFile(Mvc::App()->Config()->App['Cache'] . 'Min' . $this->type . DIRECTORY_SEPARATOR);
             parent::__construct($compres, $min, 'js');
         }
     }
