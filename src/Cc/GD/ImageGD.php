@@ -214,7 +214,7 @@ class ImageGD
      * @param array $options parametros de opciones para las funciones gd de salida
      * @return string
      */
-    public function Output($name = "", $ouput = "I", $options = [])
+    public function Output($name = "", $ouput = "I", ...$options)
     {
 
         $image = "image";
@@ -422,19 +422,3 @@ class ImageGD
     }
 
 }
-
-/*
-  $imagen=new IMG(900,1140,"image/png");
-  $imagen->create_color('negro',255, 255, 255);
-  $imagen->create_color('amarillo',255, 255,0);
-  $imagen->linea(0,0,200,200,"negro");
-
-  $imagen->create_color('alpha',255, 255,0,100);//crear solo antes de utilizar
-  $imagen->rectangulo_ex(150, 150, 300, 300, 'alpha');
-  $imagen->load_ttf('font','airstrike.ttf');
-  $imagen->text_print_ttf(40,20,300,300,'negro','font'," esta es la cadena");
-  $imagen->importar_img('2013','../img/2013.png');
-  $imagen->print_img_import('2013',300,300,0,0,100,100);
-  $imagen->print_img_import_alpha('2013',25,25,0,0,80);
- */
-?>

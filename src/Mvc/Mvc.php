@@ -327,7 +327,8 @@ class Mvc
             {
                 $conf['DocumentRoot'].='/';
             }
-
+            if ($conf['DocumentRoot'][0] != '/')
+                $conf['DocumentRoot'] = '/' . $conf['DocumentRoot'];
             $this->conf['Router'] = $conf;
         }
         if (!file_exists(realpath('.') . '/.htaccess'))
@@ -866,8 +867,6 @@ class Mvc
     private function RouteControllerCache($cache)
     {
         $this->page = $cache['Controller'];
-
-
         if ($this->Content_type == '*/*')
         {
             $this->Content_type = 'text/html';

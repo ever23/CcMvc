@@ -756,12 +756,12 @@ abstract class FormModel extends Model implements Inyectable, \Serializable
         $attrs['name'] = $this->NameSubmited;
         if ($return)
         {
-            $r = Html::input(['type' => 'hidden', 'name' => $attrs['name'], 'value' => 1]);
-            $r.= Html::button($value, $attrs);
-            return $r;
+
+
+            return Html::button($value, $attrs);
         } else
         {
-            echo Html::input(['type' => 'hidden', 'name' => $attrs['name'], 'value' => 1]);
+            //   echo Html::input(['type' => 'hidden', 'name' => $attrs['name'], 'value' => 1]);
             echo Html::button($value, $attrs);
         }
     }
@@ -772,12 +772,14 @@ abstract class FormModel extends Model implements Inyectable, \Serializable
      */
     public function EndForm($return = false)
     {
+        $r = Html::input(['type' => 'hidden', 'name' => $this->NameSubmited, 'value' => 1]);
+        $r .= Html::CloseTang('form');
         if ($return)
         {
-            return Html::CloseTang('form');
+            return $r;
         } else
         {
-            echo Html::CloseTang('form');
+            echo $r;
         }
     }
 
