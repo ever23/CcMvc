@@ -586,7 +586,8 @@ abstract class FormModel extends Model implements Inyectable, \Serializable
             $attrValid = [ 'pattern', 'min', 'max', 'maxlength', 'size', 'accept', 'step', 'required', 'multiple', 'title', 'placeholder', 'checked'];
             if ($valid = ValidDefault::GetOptions($this->campos[$name][self::Validate]))
             {
-
+                if ($attrs['type'] == 'file')
+                    $valid = $valid['opt_files'];
                 foreach ($valid as $i => $v)
                 {
                     if (in_array($i, $attrValid))

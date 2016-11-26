@@ -1420,8 +1420,9 @@ class Mvc
     {
         $this->Log("Conectando con la base de datos ...");
         $conf = self::Config();
+        $NULL = NULL;
         if (empty($conf['DB']['class']))
-            return $conf['DB'];
+            return $NULL;
 
         $p = $conf['DB']['param'];
         foreach ($param as $i => $v)

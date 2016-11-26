@@ -207,6 +207,7 @@ abstract class AuteticateUserDB extends Autenticate
             if (isset($columsUser[$i]))
                 $row[$i] = $columsUser[$i];
         }
+
         $this->MejorCosto();
         $this->PasswordHash->SetOptions($this->OptionHash);
         $row[$this->ColPassword] = $this->PasswordHash->CreateHash($password);
