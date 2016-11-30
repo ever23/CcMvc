@@ -79,7 +79,7 @@ class ImageGD
             if (is_numeric($ancho))
             {
                 $this->Create($ancho, $alto, $tipo);
-            } elseif (is_file($ancho) || is_readable($ancho))
+            } elseif (strlen($ancho) <= 300 && (is_file($ancho) || is_readable($ancho)))
             {
                 $this->LoadFile($ancho);
             } elseif (is_string($ancho))
@@ -158,6 +158,7 @@ class ImageGD
         $type = $tam['mime'];
         // return var_export($tam, true);
         $this->img = imagecreatefromstring($string);
+        $this->hader = $type;
         switch ($type)
         {
             case 'image/png':
@@ -207,6 +208,26 @@ class ImageGD
         imagealphablending($this->img, true);
     }
 
+    public function To($tipo)
+    {
+        $this->hader = $tipo;
+        if ($tipo == "image/x-png" || $tipo == "image/png")
+        {
+            //  $this->img = imagecreatetruecolor($ancho, $alto);
+            $this->tipo = 'png';
+        }
+        if ($tipo == "image/pjpeg" || $tipo == "image/jpeg" || $tipo == "image/jpg")
+        {
+            $this->tipo = 'jpeg';
+            // $this->img = imagecreatetruecolor($ancho, $alto);
+        }
+        if ($tipo == "image/gif" || $tipo == "image/gif")
+        {
+            $this->tipo = 'gif';
+            //  $this->img = imagecreatetruecolor($ancho, $alto);
+        }
+    }
+
     /**
      * Guarda o retorn la imagen
      * @param string $name nombre de laimagen
@@ -216,9 +237,10 @@ class ImageGD
      */
     public function Output($name = "", $ouput = "I", ...$options)
     {
-
+        //  imageinterlace($this->img, true);
         $image = "image";
         $image.=$this->tipo;
+
         switch ($ouput)
         {
             case "I":
@@ -239,6 +261,17 @@ class ImageGD
                 $str = file_get_contents($name);
                 unlink($name);
                 return $str;
+        }
+    }
+
+    public function OutputBase64($uri = false, ...$options)
+    {
+        if ($uri)
+        {
+            return 'data:' . $this->hader . ';base64,' . base64_encode($this->Output("", 'S', ...$options));
+        } else
+        {
+            return base64_encode($this->Output("", 'S', ...$options));
         }
     }
 
@@ -372,15 +405,26 @@ class ImageGD
         imagefilledrectangle($this->img, $x, $y, $w, $h, $this->Color($rgb_color));
     }
 
-    public function Text($cadena, $tam, $angulo, $x, $y, $rgb_color, $fuente = 'arial.ttf')
+    public function TextTtf($cadena, $tam, $angulo, $x, $y, $rgb_color, $fuente = false)
     {
 
+
         imagettftext($this->img, $tam, $angulo, $x, $y, $this->Color($rgb_color), $this->Font($fuente), $cadena);
+    }
+
+    public function Text($cadena, $x, $y, $rgb_color, $fuente = NULL)
+    {
+        imagestring($this->img, $fuente, $x, $y, $cadena, $this->Color($rgb_color));
     }
 
     public function CopyResample(ImageGD $img_class, $dst_x, $dst_y, $src_x, $src_y, $dst_w, $dst_h, $src_w, $src_h)
     {
         imagecopyresampled($this->img, $img_class->img, $dst_x, $dst_y, $src_x, $src_y, $dst_w, $dst_h, $src_w, $src_h);
+    }
+
+    public function Copy(ImageGD $src_im, $dst_x, $dst_y, $src_x, $src_y, $src_w, $src_h)
+    {
+        imagecopy($this->img, $src_im->img, $dst_x, $dst_y, $src_x, $src_y, $src_w, $src_h);
     }
 
     private function Color($rgb_color)

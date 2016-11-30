@@ -390,9 +390,10 @@ abstract class AuteticateUserDB extends Autenticate
                     $usuario = $this->DBtabla->fetch();
                     $this->DBtabla->FreeResult();
                     $ath = [$this->ColUserName => $usuario[$this->ColUserName], $this->ColPassword => $usuario[$this->ColPassword], 'CreadorHashClass' => static::class] + $usuario->GetRow();
-
+                    // var_dump($usuario[$this->ColUserType]);
                     if (!is_null($this->ColUserType))
                     {
+                        // var_dump($usuario[$this->ColUserType]);
 
                         if (!$this->UserTypeAccess($usuario[$this->ColUserType]))
                         {

@@ -272,7 +272,9 @@ class DependenceInyector
 
             try
             {
+
                 $ParamName = $param->name;
+                $GLOBALS['ParamName'] = $ParamName;
                 $p = $clase::CtorParam();
                 if ($p instanceof $class->name)
                 {

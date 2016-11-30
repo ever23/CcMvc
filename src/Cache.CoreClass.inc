@@ -1,5 +1,5 @@
 <?php
-/* Create by \CcMvc 2016-11-23 17:49:44 */
+/* Create by \CcMvc 2016-11-30 03:13:29 */
  return array (
   'class' => 
   array (
@@ -124,17 +124,17 @@
     'Cc\\Mvc\\Cookie' => 'Mvc\\request\\Cookie.php',
     'Cc\\Mvc\\PostFiles' => 'Mvc\\request\\PostFiles.php',
     'Cc\\Mvc\\Request' => 'Mvc\\request\\Request.php',
-    'Cc\\Mvc\\DocumentBuffer' => 'Mvc\\Response\\DocumentBuffer.php',
-    'Cc\\Mvc\\GDResponse' => 'Mvc\\Response\\GDResponse.php',
-    'Cc\\Mvc\\GDexception' => 'Mvc\\Response\\GDResponse.php',
     'Cc\\Mvc\\Json' => 'Mvc\\Response\\Json.php',
-    'Cc\\Mvc\\LayautManager' => 'Mvc\\Response\\LayautManeger.php',
-    'Cc\\Mvc\\LayautException' => 'Mvc\\Response\\LayautManeger.php',
-    'Cc\\Mvc\\iLayaut' => 'Mvc\\Response\\LayautManeger.php',
-    'Cc\\Mvc\\Response' => 'Mvc\\Response\\ResponseConten.php',
-    'Cc\\Mvc\\ResponseConten' => 'Mvc\\Response\\ResponseConten.php',
-    'Cc\\Mvc\\TResponseConten' => 'Mvc\\Response\\ResponseConten.php',
     'Cc\\Mvc\\ResponseJsCss' => 'Mvc\\Response\\ResponseJsCss.php',
+    'Cc\\Mvc\\DocumentBuffer' => 'Mvc\\Response\\Abstract\\DocumentBuffer.php',
+    'Cc\\Mvc\\LayautManager' => 'Mvc\\Response\\Abstract\\LayautManeger.php',
+    'Cc\\Mvc\\LayautException' => 'Mvc\\Response\\Abstract\\LayautManeger.php',
+    'Cc\\Mvc\\iLayaut' => 'Mvc\\Response\\Abstract\\LayautManeger.php',
+    'Cc\\Mvc\\Response' => 'Mvc\\Response\\Abstract\\ResponseConten.php',
+    'Cc\\Mvc\\ResponseConten' => 'Mvc\\Response\\Abstract\\ResponseConten.php',
+    'Cc\\Mvc\\TResponseConten' => 'Mvc\\Response\\Abstract\\ResponseConten.php',
+    'Cc\\Mvc\\GDResponse' => 'Mvc\\Response\\GD\\GDResponse.php',
+    'Cc\\Mvc\\GDexception' => 'Mvc\\Response\\GD\\GDResponse.php',
     'Cc\\Mvc\\Html' => 'Mvc\\Response\\Html\\Html.php',
     'Cc\\Mvc\\JsonLD' => 'Mvc\\Response\\Html\\JsonLd.php',
     'Cc\\Mvc\\RouteByMatch' => 'Mvc\\Route\\RouteByMatch.php',

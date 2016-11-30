@@ -3,6 +3,9 @@
     "type": "framework",
     "description": "CcMvc Framework php",
     "keywords": [
+        "Mvc",
+        "php",
+        "Optimizacion de sitios Web"
     ],
     "homepage": "http://ccmvc.com.ve",
     "license": "GPL-3.0",

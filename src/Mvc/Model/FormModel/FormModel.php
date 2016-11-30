@@ -105,7 +105,7 @@ abstract class FormModel extends Model implements Inyectable, \Serializable
      */
     public function __construct($action = NULL, $method = 'POST', $protected = true, $inyected = false)
     {
-        $this->Method = $method;
+        $this->Method = $method != 'GET' && $method != 'POST' ? 'POST' : $method;
         $this->NameSubmited = 'Submited' . static::class . self::$count;
         self::$count++;
         $this->protected = $protected;
@@ -165,7 +165,8 @@ abstract class FormModel extends Model implements Inyectable, \Serializable
     {
         if (is_null($method))
         {
-            $this->Method = $method;
+            $this->Method = $method != 'GET' && $method != 'POST' ? 'POST' : $method;
+            ;
         }
         return $this;
     }
@@ -422,7 +423,7 @@ abstract class FormModel extends Model implements Inyectable, \Serializable
      */
     private function ProcessSubmit()
     {
-
+        // Mvc::App()->Response->error = 1;
         if ($this->Method == 'GET')
         {
             if (isset($_GET[$this->NameSubmited]))
@@ -436,9 +437,11 @@ abstract class FormModel extends Model implements Inyectable, \Serializable
             }
         } elseif ($this->Method == 'POST')
         {
+
             if (isset($_POST[$this->NameSubmited]))
             {
                 $this->Sumited = true;
+
                 $r = $this->ValidateValues($_POST);
             } else
             {

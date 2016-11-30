@@ -1390,7 +1390,7 @@ class Mvc
             $this->Response = NULL;
             $this->ContentTypeOrig = $conten_type;
             $this->Content_type = $conten_type;
-
+            header('Content-type: ' . $conten_type);
             $this->IntanceResponseConten();
             return true;
         }
