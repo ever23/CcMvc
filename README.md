@@ -17,7 +17,7 @@ un servidor de bases de datos sql
 ## INSTALACION 
 Se debe installar via composer usando 
 ```sh
-composer required ccmvc/ccmvc
+composer require ccmvc/ccmvc
 ```
 
 en GutHub se puede descargar un [proyecto](https://github.com/ever23/CcMvcBasicProject "proyecto") base CcMvc con el que se puede comenzar un proyecto real 
