@@ -22,9 +22,11 @@ namespace Cc\Mvc;
 use Cc\Mvc;
 
 /**
- * Description of RouteByMatch
+ * Compila el enrutamiento manual 
  *
- * @author usuario
+ * @author Enyerber Franco 
+ * @package CcMvc
+ * @subpackage Router
  */
 class RouteByMatch
 {

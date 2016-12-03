@@ -1,7 +1,7 @@
 {
     "name": "ccmvc/ccmvc",
     "type": "framework",
-    "description": "CcMvc Framework php",
+    "description": "CcMvc Framework php Modelo Vista Controlador",
     "keywords": [
         "Mvc",
         "php",
@@ -34,6 +34,11 @@
         "smarty/smarty": "El motor de plantillas smarty puede ser usado para cargar templetes en los views y layauts (3.1.*)",
         "twig/twig": "El motor de plantillas twig puede ser usado para cargar plantillas en los views y layauts (1.*)",
         "dompdf/dompdf": "El framework lo puede usar para convertir la salida html en pdf automaticamente  (*)"
+    },
+    "extra": {
+        "branch-alias": {
+            "master": "0.8.4.0"
+        }
     },
     "minimum-stability": "dev"
 }

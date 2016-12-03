@@ -12,9 +12,11 @@ use Cc\Mvc;
 use Cc\Cache;
 
 /**
- * Description of ResponseCSS
+ * Clase manejadora de respuesta css y javascript 
  *
- * @author usuario
+ * @author Enyerber Franco 
+ * @package CcMvc
+ * @subpackage Response
  */
 class ResponseJsCss extends Response
 {

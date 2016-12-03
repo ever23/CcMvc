@@ -78,21 +78,81 @@ abstract class FormModel extends Model implements Inyectable, \Serializable
      * @var string 
      */
     private $Method = 'POST';
-    private $existFile = false;
-    private $NameSubmited;
-    private $Sumited = false;
-    private static $count = 0;
-    protected $valid = false;
-    protected $action = '';
-    protected $protected = false;
-    private $UseCache = true;
 
+    /**
+     * indica si en el furmulario hay uno o mas campos tipo file
+     * @var bool 
+     */
+    private $existFile = false;
+
+    /**
+     * nombre del formulario
+     * @var string 
+     */
+    private $NameSubmited;
+
+    /**
+     * indica si se recibieron los datos
+     * @var bool 
+     */
+    private $Sumited = false;
+
+    /**
+     * cantidad de instancias de la clase
+     * @var int 
+     */
+    private static $count = 0;
+
+    /**
+     * indica si el formulario es valido
+     * @var bool 
+     */
+    protected $valid = false;
+
+    /**
+     * url donde se enviara el formulario
+     * @var string 
+     */
+    protected $action = '';
+
+    /**
+     * indica si solo se aceptaran datos provenientes de la misma url
+     * @var bool 
+     */
+    protected $protected = false;
+
+    /**
+     * indice en el array de campos que indica el tipo de campo 
+     */
     const TypeHtml = 0;
+
+    /**
+     * indice en el array de campos que indica el valor por defecto del campo
+     */
     const DefaultConten = 1;
+
+    /**
+     * indice en el array de campos que indica la configuracion de validacion
+     */
     const Validate = 2;
 
+    /**
+     * indica si el objeto contruido fue inyectado como dependencia o no
+     * @var bool 
+     */
     private $inyected = false;
+
+    /**
+     *
+     * @var url 
+     */
     protected $RequestUri = '';
+
+    /**
+     *
+     * @var Request 
+     */
+    protected $Request;
 
     public static function CtorParam()
     {
@@ -100,8 +160,11 @@ abstract class FormModel extends Model implements Inyectable, \Serializable
     }
 
     /**
-     * methodo que se utilizara para trasmitir los datos puede ser _POST o _GET
-     * @param string $method
+     * 
+     * @param string|NULL $action indica a que url se enviara el formulario
+     * @param string $method el metodo de envio por ahora solo se acepta GET o POST
+     * @param bool $protected indica si solo se aceptaran datos provenientes otra url
+     * @param bool $inyected indica si el objeto contruido fue inyectado como dependencia o no
      */
     public function __construct($action = NULL, $method = 'POST', $protected = true, $inyected = false)
     {
@@ -110,6 +173,7 @@ abstract class FormModel extends Model implements Inyectable, \Serializable
         self::$count++;
         $this->protected = $protected;
         $this->inyected = $inyected;
+        $this->Request = Mvc::App()->Request;
         $this->RequestUri = Mvc::App()->Request->Uri();
         if (!is_null($action))
         {
@@ -121,6 +185,11 @@ abstract class FormModel extends Model implements Inyectable, \Serializable
         }
     }
 
+    /**
+     * serializa el objeto 
+     * @return string
+     * @access private
+     */
     public function serialize()
     {
         $seri = [
@@ -130,53 +199,84 @@ abstract class FormModel extends Model implements Inyectable, \Serializable
             'NameSubmited' => $this->NameSubmited,
             'lastPage' => $this->RequestUri,
             '_ValuesModel' => $this->_ValuesModel,
-            'existFile' => $this->existFile
+            'existFile' => $this->existFile,
         ];
         return serialize($seri);
     }
 
+    /**
+     * 
+     * @param array|string $serialized
+     * @access private
+     */
     public function unserialize($serialized)
     {
-        $serialized = unserialize($serialized);
+        if (is_string($serialized))
+            $serialized = unserialize($serialized);
         $this->campos = $serialized['campos'];
         $this->Method = $serialized['Method'];
         $this->action = NULL;
-        if (!preg_match("/(" . preg_quote($serialized['action'], '/') . ")/i", Mvc::App()->Request->Url()))
+        if (is_null($serialized['action']))
         {
-            $process = false;
+            $this->protected = true;
         } else
         {
-            $process = $serialized['lastPage'] == Mvc::App()->Request->Refere();
+            $hostaction = parse_url($serialized['action'], PHP_URL_HOST);
+            $pathAction = parse_url($serialized['action'], PHP_URL_PATH);
+            if ((!$hostaction || (strcasecmp($hostaction, $this->Request->Host()) == 0)) && (strcasecmp($pathAction, $this->Request->Path())))
+            {
+                $this->protected = true;
+            } else
+            {
+                $this->protected = false;
+            }
         }
+
+
         $this->inyected = false;
         $this->NameSubmited = $serialized['NameSubmited'];
-        $this->protected = $serialized['lastPage'] == Mvc::App()->Request->Uri() || $serialized['lastPage'] != Mvc::App()->Request->Refere();
+        //  $this->protected = $serialized['lastPage'] == Mvc::App()->Request->Uri() || $serialized['lastPage'] != Mvc::App()->Request->Referer();
         $this->inyected = false;
         $this->_ValuesModel = $serialized['_ValuesModel'];
         $this->existFile = $serialized['existFile'];
         $this->RequestUri = Mvc::App()->Request->Uri();
+        $this->Request = Mvc::App()->Request;
         ;
-        $this->Request(true, $process);
+        $this->Request(true, true);
 
         //return $this;
     }
 
+    /**
+     * Establece el metodo de envio del formulario puede ser GET o POST
+     * @param string $method
+     * @return \Cc\Mvc\FormModel
+     */
     public function &Method($method = NULL)
     {
         if (is_null($method))
         {
             $this->Method = $method != 'GET' && $method != 'POST' ? 'POST' : $method;
-            ;
         }
         return $this;
     }
 
+    /**
+     * Establece donde sera enviado el formulario
+     * @param string $action
+     * @return \Cc\Mvc\FormModel
+     */
     public function &Action($action)
     {
         $this->action = $action;
         return $this;
     }
 
+    /**
+     * Establece si se recibiran datos desde otra url
+     * @param bool $protected
+     * @return \Cc\Mvc\FormModel
+     */
     public function &ProtectedUrl($protected)
     {
         if (is_null($protected))
@@ -186,6 +286,11 @@ abstract class FormModel extends Model implements Inyectable, \Serializable
         return $this;
     }
 
+    /**
+     * carga los campos y verifica si existen en get o post segun se aya establecido
+     * @param bool $serialized indica si se llamo desde el metodod serialized 
+     * @param bool $process indica si se procesara la entrada de datos
+     */
     private function Request($serialized = false, $process = true)
     {
         $this->inyected = false;
@@ -207,6 +312,10 @@ abstract class FormModel extends Model implements Inyectable, \Serializable
         }
     }
 
+    /**
+     * retorna los campos del formulario tomadolos de las propiedades publicas de la clase
+     * @return array
+     */
     protected function campos()
     {
         $reflexion = new \ReflectionClass($this);
@@ -225,6 +334,9 @@ abstract class FormModel extends Model implements Inyectable, \Serializable
         return $array;
     }
 
+    /**
+     * carga los metadatos de los campos
+     */
     private function LoadMetaData()
     {
         foreach ($this->campos() as $i => $v)
@@ -271,6 +383,13 @@ abstract class FormModel extends Model implements Inyectable, \Serializable
         }
     }
 
+    /**
+     * 
+     * @param array $v configuracion de validacion
+     * @param string $type
+     * @param array $options configuracion de validacion del usuario
+     * @return array
+     */
     protected function ParseValid($v, $type, $options)
     {
         switch (strtolower($type))
@@ -358,8 +477,12 @@ abstract class FormModel extends Model implements Inyectable, \Serializable
         }
     }
 
-//  abstract protected function Campos();
-
+    /**
+     * obtiene el valor de un campo dado
+     * @param string $name
+     * @return mixes
+     * @internal funcion magica
+     */
     public function __get($name)
     {
 
@@ -378,6 +501,12 @@ abstract class FormModel extends Model implements Inyectable, \Serializable
         }
     }
 
+    /**
+     * obtiene el valor de un campo dado
+     * @param string $offset
+     * @return mixes
+     * @internal \ArrayAccess
+     */
     public function offsetGet($offset)
     {
         if (isset($this->_ValuesModel[$offset]))
@@ -423,13 +552,16 @@ abstract class FormModel extends Model implements Inyectable, \Serializable
      */
     private function ProcessSubmit()
     {
-        // Mvc::App()->Response->error = 1;
+        if ($this->protected && !$this->VerificateReferer($this->Request->Referer()))
+        {
+            return false;
+        }
         if ($this->Method == 'GET')
         {
-            if (isset($_GET[$this->NameSubmited]))
+            if (isset($this->Request->Get[$this->NameSubmited]))
             {
                 $this->Sumited = true;
-                $r = $this->ValidateValues($_GET);
+                $r = $this->ValidateValues($this->Request->Get);
             } else
             {
 
@@ -438,11 +570,11 @@ abstract class FormModel extends Model implements Inyectable, \Serializable
         } elseif ($this->Method == 'POST')
         {
 
-            if (isset($_POST[$this->NameSubmited]))
+            if (isset($this->Request->Post[$this->NameSubmited]))
             {
                 $this->Sumited = true;
 
-                $r = $this->ValidateValues($_POST);
+                $r = $this->ValidateValues($this->Request->Post);
             } else
             {
                 return false;
@@ -458,14 +590,7 @@ abstract class FormModel extends Model implements Inyectable, \Serializable
         }
 
 
-        if ($this->protected)
-        {
 
-            if (!Mvc::App()->Router->is_self(isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : ''))
-            {
-                $r = false;
-            }
-        }
         if ($this->Sumited)
         {
             if (method_exists($this, 'OnSubmit'))
@@ -476,6 +601,26 @@ abstract class FormModel extends Model implements Inyectable, \Serializable
         return $r;
     }
 
+    private function VerificateReferer($referer)
+    {
+
+        $url = parse_url($referer, PHP_URL_PATH);
+        $hostReferer = parse_url($referer, PHP_URL_HOST);
+        if (!(strcasecmp($hostReferer, $this->Request->Host()) == 0))
+        {
+            return false;
+        }
+        if (!(strcasecmp($url, $this->Request->Path()) == 0))
+        {
+            return false;
+        }
+        return true;
+    }
+
+    /**
+     * valida los archivos recibidos
+     * @return boolean
+     */
     private function ValidateFile()
     {
 

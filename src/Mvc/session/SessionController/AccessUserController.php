@@ -22,7 +22,8 @@ namespace Cc\Mvc;
 /**
  * Description of AccessUserController
  *
- * @author usuario
+ * @package CcMvc
+ * @subpackage Session 
  */
 interface AccessUserController extends iProtected
 {

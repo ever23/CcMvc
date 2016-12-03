@@ -134,8 +134,17 @@ abstract class AbstracCache implements ICache
 
 }
 
+/**
+ *  @package Cc
+ * @subpackage Cache
+ */
 class NoCache extends AbstracCache
 {
+
+    public function Destruct()
+    {
+        
+    }
 
     public function Save()
     {
@@ -143,11 +152,6 @@ class NoCache extends AbstracCache
     }
 
     public function __construct(Config $c)
-    {
-        $this->CAHCHE = [];
-    }
-
-    public function Destruct()
     {
         
     }

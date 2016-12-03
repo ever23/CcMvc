@@ -26,6 +26,8 @@ use Cc\Security;
  * Description of InternalSession
  *
  * @author usuario
+ *  @package CcMvc
+ * @subpackage Session 
  */
 class InternalSession extends \Cc\SESSION
 {

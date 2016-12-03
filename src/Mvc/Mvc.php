@@ -27,7 +27,6 @@ use Cc\Autoload\SearchClass;
 use Cc\Autoload\CoreClass;
 use Cc\Mvc\Autenticate;
 use Cc\Mvc\DocumentBuffer;
-use Cc\Mvc\SESSION;
 use Cc\Mvc\Controllers;
 use Cc\Mvc\ViewController;
 use Cc\Mvc\Request;
@@ -773,7 +772,6 @@ class Mvc
         $this->LayautManager->Obj = &$this->Response;
         if (!$this->RouterByCache())
         {
-
             $this->Router();
         }
 

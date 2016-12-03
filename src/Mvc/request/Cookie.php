@@ -6,7 +6,7 @@ namespace Cc\Mvc;
  * clase Cookie para administrar las cokies mas efisientemente
  * <code>
  * <?php
- * // @var $conf Config
+ * 
  * $cookie= new Cookie($conf);
  * 
  * echo $cookie['micookie1'];// leyendo la cookie 
@@ -40,20 +40,28 @@ class Cookie extends \Cc\Cookie
      */
     public function __construct(Config $conf)
     {
-
-
         $this->Cookie = &$_COOKIE;
-
-        if(isset($conf['Autenticate']) && isset($conf['Autenticate']['SessionCookie']))
+        if (isset($conf['Autenticate']) && isset($conf['Autenticate']['SessionCookie']))
         {
             $this->path = $conf['Autenticate']['SessionCookie']['path'];
             $this->host = $conf['Autenticate']['SessionCookie']['dominio'];
         }
-        if(isset($conf['protocol']))
+        if (isset($conf['protocol']))
             $this->secure = $conf['protocol'] == 'https';
         $this->httponly = false;
     }
 
+    /**
+     * 
+     * @param string $name
+     * @param mixes $value
+     * @param string $expire
+     * @param string $path
+     * @param string $dominio
+     * @param bool $secure
+     * @param bool $httponly
+     * @see \Cc\Cookie::SaveCookie()
+     */
     protected function SaveCookie($name, $value, $expire = NULL, $path = NULL, $dominio = NULL, $secure = NULL, $httponly = NULL)
     {
         setcookie($name, $value, $expire, $path, $dominio, $secure, $httponly);

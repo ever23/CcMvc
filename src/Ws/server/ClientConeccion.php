@@ -22,7 +22,7 @@ namespace Cc\Ws;
 /**
  * Description of ClientConeccion
  *
- * @author usuario
+ * @author Enyerber 
  * @package CcWs
  */
 class ClientConexion
@@ -37,7 +37,7 @@ class ClientConexion
 
     public function __call($name, $arguments)
     {
-        switch($name)
+        switch ($name)
         {
             case 'Messaje':
                 break;

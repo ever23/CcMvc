@@ -140,7 +140,7 @@ class Request implements \ArrayAccess, \Countable, \IteratorAggregate
         return $this->uri;
     }
 
-    public function Refere()
+    public function Referer()
     {
         return isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : NULL;
     }

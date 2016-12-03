@@ -25,7 +25,7 @@ use Cc\Mvc;
  * Maneja los layauts 
  * @author ENYREBER FRANCO <enyerverfranco@gmail.com> , <enyerverfranco@outlook.com>  
  * @package CcMvc  
- * @subpackage Controladores 
+ * @subpackage Response 
  */
 class LayautManager extends Model
 {
@@ -227,6 +227,10 @@ class LayautManager extends Model
 
 }
 
+/**
+ *  @package CcMvc  
+ * @subpackage Response 
+ */
 interface iLayaut
 {
 
@@ -261,6 +265,10 @@ interface iLayaut
     public function GetLayaut();
 }
 
+/**
+ *  @package CcMvc  
+ * @subpackage Response 
+ */
 class LayautException extends \Exception
 {
     

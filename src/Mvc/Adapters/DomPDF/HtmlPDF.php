@@ -96,6 +96,7 @@ class HtmlPDF extends Html
     const PageOrizontal = 'landscape';
 
     protected $size;
+    private $fontCache = '';
 
     /**
      * @access private
@@ -116,7 +117,10 @@ class HtmlPDF extends Html
     public function __construct($size = 'letter', $orientation = "portrait", $compress = true)
     {
         parent::__construct($compress, false);
-
+        $cache = Mvc::App()->Config()->App['Cache'] . 'FontFpdf' . DIRECTORY_SEPARATOR;
+        if (!is_dir($cache))
+            mkdir($cache);
+        $this->fontCache = $cache;
         $this->setPaper($size, $orientation);
     }
 
@@ -318,7 +322,18 @@ class HtmlPDF extends Html
 
             throw new Exception("HtmlPDF REQUIERE LA LIBRERIA EXTERNA Dompdf");
         }
-        $this->domPdf = new Dompdf(['isHtml5ParserEnabled' => true, 'enable_remote' => true, 'isJavascriptEnabled' => true, 'isFontSubsettingEnabled' => true]);
+        $DomPdfConfig = new \Dompdf\Options();
+        $DomPdfConfig->setIsHtml5ParserEnabled(true);
+        $DomPdfConfig->setIsRemoteEnabled(true);
+        $DomPdfConfig->setIsJavascriptEnabled(true);
+        $DomPdfConfig->setIsFontSubsettingEnabled(true);
+        $DomPdfConfig->setFontCache($this->fontCache);
+        // $DomPdfConfig->getFontDir()
+
+
+        $this->domPdf = new Dompdf($DomPdfConfig);
+
+        $this->domPdf->setHttpContext($this->contextHttp());
         $this->domPdf->setBaseHost($_SERVER['HTTP_HOST']);
         $this->domPdf->setProtocol($this->AppConfig->Router['protocol']);
         $this->domPdf->setBasePath($this->BasePath);
@@ -336,6 +351,26 @@ class HtmlPDF extends Html
         $this->domPdf->render();
 
         return $this->domPdf->output();
+    }
+
+    private function contextHttp()
+    {
+        /* $coo = new Cookie(Mvc::App()->Config());
+          $cookie = '';
+          foreach ($coo as $i => $k)
+          {
+          $cookie.=$i . '=' . $k . ';';
+          }
+         */
+        $opciones = array(
+            'http' => array(
+                'method' => "GET",
+                //'header' => "Cookie: " . $cookie . "\r\n",
+                'user_agent' => 'HtmlPDf (' . Dompdf::class . ') CcMvc ' . \CcMvc::Version
+            )
+        );
+
+        return stream_context_create($opciones);
     }
 
 }
