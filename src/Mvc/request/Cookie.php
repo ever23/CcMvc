@@ -27,19 +27,16 @@ namespace Cc\Mvc;
 class Cookie extends \Cc\Cookie
 {
 
-    protected $path = '/';
-    protected $host = NULL;
-    protected $secure = false;
-    protected $httponly = false;
-    protected $Cookie = [];
-    protected $padre = NULL;
-
     /**
      * contrctor de la clase
      * @param Config $conf
      */
-    public function __construct(Config $conf)
+    public function __construct(Config $conf = NULL)
     {
+        if (is_null($conf))
+        {
+            $conf = \Cc\Mvc::Config();
+        }
         $this->Cookie = &$_COOKIE;
         if (isset($conf['Autenticate']) && isset($conf['Autenticate']['SessionCookie']))
         {

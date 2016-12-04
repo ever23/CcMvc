@@ -123,6 +123,10 @@ class TemplateLoad
 
 }
 
+/**
+ *  @package CcMvc  
+ * @subpackage Template
+ */
 class TempleteLoaderException extends Exception
 {
     
@@ -131,7 +135,7 @@ class TempleteLoaderException extends Exception
 /**
  * interface a ser implementada en las clase cargadoras de plantillas
  * @package CcMvc  
- * @subpackage view
+ * @subpackage Template
  */
 interface TemplateLoader
 {

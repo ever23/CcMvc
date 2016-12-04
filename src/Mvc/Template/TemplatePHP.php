@@ -29,6 +29,13 @@ namespace Cc\Mvc;
 class TemplatePHP implements TemplateLoader
 {
 
+    /**
+     * 
+     * @param object $context
+     * @param string $file
+     * @param array $agrs
+     * @return string
+     */
     public function Fetch(&$context, $file, array $agrs)
     {
         ob_start();
@@ -38,6 +45,13 @@ class TemplatePHP implements TemplateLoader
         return $conten;
     }
 
+    /**
+     * 
+     * @param object $context
+     * @param string $file
+     * @param array $agrs
+     *
+     */
     public function Load(&$context, $file, array $agrs)
     {
         if (!file_exists($file) && ($t = strpos($file, ':')) !== false)

@@ -27,12 +27,35 @@ namespace Cc;
 abstract class Cookie implements \ArrayAccess, \Countable, \IteratorAggregate
 {
 
+    /**
+     * Path por defecto de la cookie
+     * @var string 
+     */
     protected $path = '/';
+
+    /**
+     * host por defecto de la cookie
+     * @var string 
+     */
     protected $host = NULL;
+
+    /**
+     * parametro secure por defecto de la cookie
+     * @var bool 
+     */
     protected $secure = false;
+
+    /**
+     * parametro httponly por defecto de la cookie
+     * @var bool 
+     */
     protected $httponly = false;
+
+    /**
+     * cookies
+     * @var array 
+     */
     protected $Cookie = [];
-    protected $padre = NULL;
 
     /**
      * @access private
@@ -55,27 +78,27 @@ abstract class Cookie implements \ArrayAccess, \Countable, \IteratorAggregate
      */
     public function Set($name, $value, $expire = NULL, $path = NULL, $dominio = NULL, $secure = NULL, $httponly = NULL)
     {
-        if(is_null($path))
+        if (is_null($path))
         {
             $path = $this->path;
         }
-        if(is_null($dominio))
+        if (is_null($dominio))
         {
             $dominio = $this->host;
         }
-        if(is_null($secure))
+        if (is_null($secure))
         {
             $secure = $this->secure;
         }
-        if(is_null($httponly))
+        if (is_null($httponly))
         {
             $httponly = $this->httponly;
         }
 
 
-        if(is_array($value) || $value instanceof \Traversable)
+        if (is_array($value) || $value instanceof \Traversable)
         {
-            foreach($value as $i => $v)
+            foreach ($value as $i => $v)
             {
                 $this->Set($name . '[' . $i . ']', $v, $expire, $path, $dominio, $secure, $httponly);
             }
@@ -100,15 +123,15 @@ abstract class Cookie implements \ArrayAccess, \Countable, \IteratorAggregate
     }
 
     /**
-     * @access private
-     * @param type $offset
-     * @param type $value
+     * modifica una cookie o envia una con los parametros por defecto de no existir
+     * @param string $offset nombre de la cookie
+     * @param mixes $value valor de la cookie
      */
     public function offsetSet($offset, $value)
     {
-        if(is_array($value) || $value instanceof \Traversable)
+        if (is_array($value) || $value instanceof \Traversable)
         {
-            foreach($value as $i => $v)
+            foreach ($value as $i => $v)
             {
                 $this->offsetSet($offset . '[' . $i . ']', $v);
             }
@@ -120,9 +143,9 @@ abstract class Cookie implements \ArrayAccess, \Countable, \IteratorAggregate
     }
 
     /**
-     *  @access private
-     * @param type $offset
-     * @return type
+     * comprueva si existe una cookie
+     * @param string $offset nombre de la cookie
+     * @return bool
      */
     public function offsetExists($offset)
     {
@@ -130,13 +153,13 @@ abstract class Cookie implements \ArrayAccess, \Countable, \IteratorAggregate
     }
 
     /**
-     *  @access private
-     * @param type $offset
+     * elimina una cookie
+     * @param string $offset nombre de la cookie
      */
     public function offsetUnset($offset)
     {
 
-        if(isset($this->Cookie[$offset]))
+        if (isset($this->Cookie[$offset]))
         {
             $this->CookieUnset($offset, $this->Cookie[$offset]);
 
@@ -145,17 +168,17 @@ abstract class Cookie implements \ArrayAccess, \Countable, \IteratorAggregate
     }
 
     /**
-     *  @access private
-     * @param type $name
-     * @param type $cookie
+     * elimina una cookie de tipo array
+     * @param string $name
+     * @param array|string $cookie
      */
     protected function CookieUnset($name, $cookie)
     {
 
-        if(is_array($cookie) || $cookie instanceof \Traversable)
+        if (is_array($cookie) || $cookie instanceof \Traversable)
         {
 
-            foreach($cookie as $i => $v)
+            foreach ($cookie as $i => $v)
             {
                 $this->CookieUnset($name . '[' . $i . ']', $v);
             }
@@ -166,13 +189,13 @@ abstract class Cookie implements \ArrayAccess, \Countable, \IteratorAggregate
     }
 
     /**
-     *  @access private
-     * @param type $offset
-     * @return type
+     * Obtiene el valor de una cookie
+     * @param string $offset nombre de la cookie
+     * @return mixes
      */
     public function offsetGet($offset)
     {
-        if(!$this->offsetExists($offset))
+        if (!$this->offsetExists($offset))
         {
             ErrorHandle::Notice("Undefined index: " . $offset);
             return;
@@ -182,29 +205,47 @@ abstract class Cookie implements \ArrayAccess, \Countable, \IteratorAggregate
     }
 
     /**
-     *  @access private
-     * @return type
+     * retorna el numero de cookies que existe
+     * @return int
      */
     public function count()
     {
         return count($this->Cookie);
     }
 
+    /**
+     * @internal funcion magica para acceso a cookie como atributos de la clase 
+     * @param string $name
+     * @param mixes $value
+     */
     public function __set($name, $value)
     {
         $this->offsetSet($name, $value);
     }
 
+    /**
+     * @internal funcion magica para acceso a cookie como atributos de la clase 
+     * @param string $name
+     * @return mixes
+     */
     public function __get($name)
     {
         return $this->offsetGet($name);
     }
 
+    /**
+     * @internal funcion magica para acceso a cookie como atributos de la clase 
+     * @param string $name
+     */
     public function __unset($name)
     {
         $this->offsetUnset($name);
     }
 
+    /**
+     * @internal funcion magica para acceso a cookie como atributos de la clase 
+     * @param string $name
+     */
     public function __isset($name)
     {
         $this->offsetExists($name);
