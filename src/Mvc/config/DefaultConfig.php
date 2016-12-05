@@ -151,7 +151,15 @@ return
              */
             'Router' =>
             [
+
                 'AutomaticRoute' => true,
+                'Routing' => [
+                /* [
+                  'uri' => '',
+                  'controller' => '',
+                  'where' => []
+                  ] */
+                ],
                 /**
                  * PROTOCOLO EN EL QUE TRABAJARA LA APLICACION
                  */

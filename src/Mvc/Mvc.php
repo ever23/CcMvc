@@ -697,6 +697,10 @@ class Mvc
             FilterXss::SetFilterXssExeption(FilterXss::FilterXssCookie, $this->conf['Autenticate']['SessionName']);
         FilterXss::SetFilterXssExeption(FilterXss::FilterXssGet, $this->conf['Router']['GetControllers']);
         FilterXss::Filter(FilterXss::FilterXssCookie);
+        if (isset($this->page['routeVars']))
+        {
+            $this->page['routeVars'] = FilterXss::FilterXssArray($this->page['routeVars']);
+        }
     }
 
     /**
@@ -1208,11 +1212,18 @@ class Mvc
         }
         $this->Log("Filtrando Xss...");
         $this->FilterXss();
+        if (isset($this->page['routeVars']))
+        {
+            $this->DependenceInyector->SetDependenceForParamArray($this->page['routeVars']);
+        }
         $this->Request = new Request();
         if ($this->Request->method() == 'POST')
         {
             $this->DependenceInyector->SetDependenceForParamArray($this->Request->Post);
         }
+
+        //  $parms = $RouterRegex->GetParams();
+        //  Mvc::App()->DependenceInyector->SetDependenceForParamArray($parms);
         $this->DependenceInyector->SetDependenceForParamArray($this->Request->Get);
     }
 
@@ -1442,6 +1453,11 @@ class Mvc
                 $_GET = SQLi::Filter($_GET, isset($conf['VarAceptSqlI']['_GET']) ? $conf['VarAceptSqlI']['_GET'] : []);
                 $_POST = SQLi::Filter($_POST, isset($conf['VarAceptSqlI']['_POST']) ? $conf['VarAceptSqlI']['_POST'] : []);
                 $_COOKIE = SQLi::Filter($_COOKIE, isset($conf['VarAceptSqlI']['_COOKIE']) ? $conf['VarAceptSqlI']['_COOKIE'] : []);
+                if (isset($this->page['routeVars']))
+                {
+                    $this->page['routeVars'] = SQLi::Filter($this->page['routeVars']);
+                    //  $this->DependenceInyector->SetDependenceForParamArray($this->page['routeVars']);
+                }
             }
         }
         return $this->DataBase;

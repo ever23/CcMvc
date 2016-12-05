@@ -67,9 +67,14 @@ class Router extends \Cc\Router
                 self::$query = $query;
             }
         }
+        if (isset($this->config['Routing']))
+            foreach ($this->config['Routing'] as $route)
+            {
+                $this->Route($route['uri'], $route['controller'], isset($route['where']) ? $route['where'] : []);
+            }
     }
 
-    public function Route($path, $controller, $match = [], $replace = true)
+    public function Route($path, $controller, $match = [])
     {
         $this->routes[$path] = [$controller, true, $match];
     }
@@ -512,9 +517,7 @@ class Router extends \Cc\Router
         $RouterRegex = new RouteByMatch($page, $this->routes);
         if (($path = $RouterRegex->compile()) !== false)
         {
-            $parms = $RouterRegex->GetParams();
 
-            Mvc::App()->DependenceInyector->SetDependenceForParamArray($parms);
             if ($RouterRegex->IsCalableRoute())
             {
                 return array(
