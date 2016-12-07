@@ -179,7 +179,7 @@ class Mvc
     public $isRouter = false;
 
     /**
-     *
+     * controlador
      * @var Controllers 
      */
     private $ObjController;
@@ -203,16 +203,22 @@ class Mvc
     public $DependenceInyector;
 
     /**
-     *
+     * cargador de layauts
      * @var Mvc\LayautManager 
      */
     public $LayautManager = NULL;
 
     /**
-     *
+     * cargador automatico de clases 
      * @var AutoloadExternLib 
      */
     public $AutoloaderLib;
+
+    /**
+     * manejador de eventos
+     * @var MvcEvents 
+     */
+    public $Events;
     private $id = NULL;
     private $time = NULL;
     private $CacheCore = [];
@@ -267,7 +273,7 @@ class Mvc
 
         $this->conf->Load($conf);
 
-        MvcEvents::Start($this->conf);
+        $this->Events = MvcEvents::Start($this->conf);
         $this->View = new ViewController($this->conf['App']['view']);
         MvcEvents::$View = &$this->View;
         $this->Debung();
@@ -778,14 +784,16 @@ class Mvc
         {
             $this->Router();
         }
+        MvcEvents::TingerAndDependence('Route');
 
         $this->LoadController();
 
         $this->RouterExt();
+
         $this->SecurityRequest();
+        MvcEvents::TingerAndDependence('LoadController');
         $this->ConetDataBase();
-
-
+        MvcEvents::TingerAndDependence('ConetDatabase');
         $this->Auth();
         $this->ExecuteController();
         self::EndApp();
@@ -810,7 +818,6 @@ class Mvc
 
         if (!isset($cache['type']))
         {
-
             return false;
         }
         switch ($cache['type'])
@@ -1222,6 +1229,7 @@ class Mvc
             $this->DependenceInyector->SetDependenceForParamArray($this->Request->Post);
         }
 
+        $this->DependenceInyector->AddDependence('{cookie}', $this->Request->Cookie);
         //  $parms = $RouterRegex->GetParams();
         //  Mvc::App()->DependenceInyector->SetDependenceForParamArray($parms);
         $this->DependenceInyector->SetDependenceForParamArray($this->Request->Get);

@@ -53,7 +53,7 @@ interface Inyectable
      *      }
      * } 
      * </code>
-     * @global string $ParamName nombre de paramentro
+     * @global string $name_param nombre de paramentro
      * @return array 
      */
     public static function CtorParam();

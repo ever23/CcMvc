@@ -75,9 +75,7 @@ return
                 [
                     '\\Cc\\Mvc\\DBtabla' => ['{DB}', '{name_param}'],
                     '\\Cc\\Mvc\\DBtablaModel' => ['{DB}', '{name_param}'],
-                    '\\Cc\\Mvc\\Cookie' => ['{config}'],
                     '\\Cc\\Mvc\\PostFiles' => ['{name_param}'],
-                    '\\Cc\\Mvc\\Server' => [],
                     '\\Cc\\Mvc\\MapingControllers' => ['{config}']
                 ],
             ],

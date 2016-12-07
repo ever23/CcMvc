@@ -2,6 +2,8 @@
 
 namespace Cc\Mvc;
 
+use Cc\Mvc;
+
 /**
  * recibe los archivos enviados por el navegador
  *  <code>
@@ -33,7 +35,7 @@ namespace Cc\Mvc;
  * @subpackage Request
  *
  */
-class PostFiles extends \SplFileInfo implements \ArrayAccess, \IteratorAggregate
+class PostFiles extends \SplFileInfo implements \ArrayAccess, \IteratorAggregate, \Cc\Inyectable
 {
 
     protected $name;
@@ -42,6 +44,18 @@ class PostFiles extends \SplFileInfo implements \ArrayAccess, \IteratorAggregate
     protected $multiple = false;
     protected $MultiFile = array();
     protected $numFiles = 0;
+
+    public static function CtorParam()
+    {
+        global $name_param;
+        if (isset(Mvc::App()->Request->Files[$name_param]))
+        {
+            return Mvc::App()->Request->Files[$name_param];
+        } else
+        {
+            return ['{name_param}'];
+        }
+    }
 
     /**
      * 

@@ -95,23 +95,23 @@ class GDResponse implements ResponseConten
 
     /**
      * 
-     * @global string $ParamName nombre de paramentro
+     * @global string $name_param nombre de paramentro
      * @return array
      * @throws Exception
      */
     public static function CtorParam()
     {
-        global $ParamName;
-        if (isset(Mvc::App()->Config()->Response['ExtencionContenType'][$ParamName]) && in_array(Mvc::App()->Config()->Response['ExtencionContenType'][$ParamName], self::ImgSoported))
+        global $name_param;
+        if (isset(Mvc::App()->Config()->Response['ExtencionContenType'][$name_param]) && in_array(Mvc::App()->Config()->Response['ExtencionContenType'][$name_param], self::ImgSoported))
         {
-            Mvc::App()->ChangeResponseConten(Mvc::App()->Config()->Response['ExtencionContenType'][$ParamName]);
+            Mvc::App()->ChangeResponseConten(Mvc::App()->Config()->Response['ExtencionContenType'][$name_param]);
 
             return Mvc::App()->Response;
         } else
         {
 //Mvc::App()->Response = new static(true);
 //return Mvc::App()->Response;
-            throw new Exception("LA extencion .$ParamName no esta soportada por " . static::class);
+            throw new Exception("LA extencion .$name_param no esta soportada por " . static::class);
         }
         return [true, '{name_param}'];
     }

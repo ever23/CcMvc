@@ -17,6 +17,8 @@ class Request implements \ArrayAccess, \Countable, \IteratorAggregate
 
     public $Get = [];
     public $Post = [];
+    public $Files = [];
+    public $Cookie = [];
     protected $uri = '';
     protected $OrigGET = [];
 
@@ -25,6 +27,7 @@ class Request implements \ArrayAccess, \Countable, \IteratorAggregate
         $this->OrigGET = $_GET;
         $this->Get = &$_GET;
         $this->Post = & $_POST;
+        //$this->Cookie = &$_COOKIE;
         $this->uri = !empty($_SERVER['REQUEST_URI']) ? $_SERVER['REQUEST_URI'] : '';
 //$_POST=  $this->Post;
         if (isset($_SERVER['REQUEST_METHOD']) && strtoupper($_SERVER['REQUEST_METHOD']) == 'POST' && !$_POST && !is_array($_POST))
@@ -35,6 +38,7 @@ class Request implements \ArrayAccess, \Countable, \IteratorAggregate
             $this->Post = FilterXss::FilterXssArray($_POST, FilterXss::FilterXssPost);
         }
         $this->Get = FilterXss::FilterXssArray($_GET, FilterXss::FilterXssGet);
+        $this->Cookie = new Cookie(Mvc::Config());
     }
 
     /**
