@@ -4,6 +4,11 @@ namespace Cc\Autoload;
 
 include_once dirname(__FILE__) . DIRECTORY_SEPARATOR . 'SearchClass' . DIRECTORY_SEPARATOR . 'SearchClass.php';
 
+/**
+ * nombre del achivo de cache para el cargador de clases
+ * @package Cc
+ * @subpackage Autoload
+ */
 const FileCore = 'Cache.CoreClass.inc';
 
 /**

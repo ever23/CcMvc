@@ -228,7 +228,8 @@ class LayautManager extends Model
 }
 
 /**
- *  @package CcMvc  
+ * Implementada por las clases manejadoras de respuesta
+ * @package CcMvc  
  * @subpackage Response 
  */
 interface iLayaut
@@ -266,7 +267,8 @@ interface iLayaut
 }
 
 /**
- *  @package CcMvc  
+ * Exceptiones para layauts
+ * @package CcMvc  
  * @subpackage Response 
  */
 class LayautException extends \Exception

@@ -1,5 +1,22 @@
 <?php
 
+/*
+ * Copyright (C) 2016 Enyerber Franco
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 namespace Cc;
 
 /**
@@ -12,9 +29,34 @@ namespace Cc;
 class DependenceInyector
 {
 
+    /**
+     * funcion en la que se inyectaran las dependencias 
+     * @var callable|\Closure 
+     */
+    protected $calable;
+
+    /**
+     * Objeto de reflexion para ma funcion o metodo
+     * @var \ReflectionFunctionAbstract 
+     */
     protected $function;
+
+    /**
+     * lista de clases que podran ser instanceadas e inyectadas al momento de ser requeridas como dependencia
+     * @var array 
+     */
     protected $InyectDependence = [];
+
+    /**
+     * objetos que seran inyectados como dependencias 
+     * @var array 
+     */
     protected $DependenceDefault = [];
+
+    /**
+     * lista de parametros que seran inyectados en las funciones que los requirean 
+     * @var array 
+     */
     protected $DependenceForParam = [0 => []];
 
     /**
@@ -29,6 +71,18 @@ class DependenceInyector
             $this->SetFunction($function);
         }
         $this->AddDependence('{--DependenceInyector--}', $this);
+    }
+
+    /**
+     * llama e inyecta los parametros de la funcion pasada
+     * @param callable $function
+     * @param array $params
+     * @return mixes
+     */
+    public function Call(callable $function, $params = [])
+    {
+        $this->SetFunction($function);
+        return $function(...$this->Param($params));
     }
 
     /**
@@ -54,7 +108,7 @@ class DependenceInyector
                 $this->function = $c->getMethod($method);
             } catch (\Exception $ex)
             {
-                throw new InyectorException($ex->getMessage(), $ex->getCode(), $ex);
+                throw new InyectorException($ex->getMessage(), InyectorException::LoadReflection, $ex);
             }
         } else
         {
@@ -63,7 +117,7 @@ class DependenceInyector
                 $this->function = new \ReflectionFunction($function);
             } catch (\Exception $ex)
             {
-                throw new InyectorException($ex->getMessage(), $ex->getCode(), $ex);
+                throw new InyectorException($ex->getMessage(), InyectorException::LoadReflection, $ex);
             }
         }
         return $this;
@@ -122,6 +176,7 @@ class DependenceInyector
 
     /**
      * objtiene los parametros de la funcion actual
+     * @param array $params lista de parametros que seran remplazados por los que ya se han preparados
      * @return array
      * @throws InyectorException si ocurrio un error
      */
@@ -174,7 +229,7 @@ class DependenceInyector
                     $class = $p->getClass();
                 } catch (\Exception $ex)
                 {
-                    throw new InyectorException($ex->getMessage(), $ex->getCode(), $ex);
+                    throw new InyectorException($ex->getMessage(), InyectorException::NotFoundClassParam, $ex);
                 }
                 if (is_object($class))
                 {
@@ -187,7 +242,7 @@ class DependenceInyector
                     if (!is_object($OBJ))
                     {
                         $mensaje = "NO SE PUDO RESOLVER EL PARAMETRO NUMERO " . ($i + 1) . " " . $class->name . " $" . $p->name . "  LA CLASE " . $class->name . " DEVE IMPLEMENTAR LA INTERFACE Inyectable ";
-                        throw new InyectorException($mensaje);
+                        throw new InyectorException($mensaje, InyectorException::NotResolveParamObjec);
                     }
                     $parametros[] = &$OBJ;
                 } else
@@ -195,28 +250,37 @@ class DependenceInyector
                     if (method_exists($p, 'getType') && $p->getType())
                     {
                         $t = $this->DependenceRequest($p, $p->getType());
-                        if (is_null($t))
+                        if (gettype($t) != $p->getType())
                         {
                             $mensaje = "EL PARAMETRO NUMERO " . ($i + 1) . " " . $p->getType() . " $" . $p->name . "  DEBE SER DE TIPO " . $p->getType();
 
-                            throw new InyectorException($mensaje);
+                            throw new InyectorException($mensaje, InyectorException::FaileTypeParam);
                         }
                         $parametros[] = $t;
                     } elseif ($p->isArray())
                     {
                         $t = $this->DependenceRequest($p, 'array');
-                        if (is_null($t))
+                        if (gettype($t) != 'array')
                         {
                             $mensaje = "EL PARAMETRO NUMERO " . ($i + 1) . " array $" . $p->name . " DEBE SER DE UN ARRAY VALIDO";
 
 
-                            throw new InyectorException($mensaje);
+                            throw new InyectorException($mensaje, InyectorException::FaileTypeParam);
                         }
                         $parametros[] = &$t;
                     } else
                     {
+                        $t = $this->DependenceRequest($p);
+                        if (!$p->isDefaultValueAvailable() && is_null($t))
+                        {
+                            $mensaje = "EL PARAMETRO NUMERO " . ($i + 1) . " $" . $p->name . " NO SE PUDO RESOLVER Y ES OBLIGATORIO";
 
-                        $parametros[] = $this->DependenceRequest($p);
+
+                            throw new InyectorException($mensaje, InyectorException::NotResolveParam);
+                        } else
+                        {
+                            $parametros[] = $this->DependenceRequest($p);
+                        }
                     }
                 }
                 unset($class);
@@ -399,7 +463,39 @@ class DependenceInyector
 
 }
 
+/**
+ * Ecxepciones de Inyeccion
+ * @autor ENYREBER FRANCO <enyerverfranco@gmail.com> , <enyerverfranco@outlook.com>  
+ * @package Cc
+ * @subpackage Dependencias
+ */
 class InyectorException extends Exception
 {
-    
+
+    /**
+     * Codigo de error cuando se genera una Exception al crear el objeto de refection para la funcion 
+     */
+    const LoadReflection = 0x1;
+
+    /**
+     * Codigo de error indica que no existe una clase que define el tipo de un parametro
+     */
+    const NotFoundClassParam = 0x2;
+
+    /**
+     * Codigo de error indica que el parametro definido con una clase no se ha podido resolver
+     */
+    const NotResolveParamObjec = 0x3;
+
+    /**
+     * Codigo de error indica que el parametro no se ha podido resolver
+     */
+    const NotResolveParam = 0x4;
+
+    /**
+     * Codigo de error indica que el tipo del parametro encontrado no es el mismo que el definido en
+     * la funcion 
+     */
+    const FaileTypeParam = 0x5;
+
 }

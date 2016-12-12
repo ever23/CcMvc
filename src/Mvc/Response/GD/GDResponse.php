@@ -477,6 +477,9 @@ class GDResponse implements ResponseConten
 
 /**
  * exepciones 
+ * @author Enyerber Franco <enyerverfranco@gmail.com> , <enyerverfranco@outlook.com>  
+ * @package CcMvc
+ * @subpackage Response
  */
 class GDexception extends Exception
 {

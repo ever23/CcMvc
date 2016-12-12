@@ -40,6 +40,7 @@ interface iProtected
  * @author ENYREBER FRANCO <enyerverfranco@gmail.com> , <enyerverfranco@outlook.com>  
  * @package CcMvc  
  * @subpackage Controladores 
+ * @internal implementado en  {@link Controllers}
  */
 interface InfoController extends iProtected
 {
@@ -96,8 +97,21 @@ interface ExtByController extends iProtected
 {
 
     /**
-     * 
-     * @return array ['require'=>[method=>[..ext]],'accept'=>[method=>[..ext]]]
+     * <code><?php
+     *  [
+     *          'require'=>[
+     *              method=>[..ext],
+     *              .   
+     *              .
+     *              ],
+     *          'accept'=>[
+     *              method=>[..ext],
+     *              .   
+     *              .
+     *              ]
+     *  ];
+     * </code>
+     * @return array 
      */
     public static function ExtAccept();
 }
@@ -114,7 +128,7 @@ interface SecurityRequest extends iProtected
 
     /**
      * establece las variables que no se pasaran por del filtro Xss
-     * <code>
+     * <code><?php
      * public static function XssAcept()
      * {
      *     return [ 
@@ -130,7 +144,7 @@ interface SecurityRequest extends iProtected
 
     /**
      * establece las variables que no se pasaran por del filtro SQLi
-     * <code>
+     * <code><?php
      * public static function SQliAcept()
      * {
      *     return [ 
@@ -163,6 +177,9 @@ interface ProtectedMetodHttp extends iProtected
 }
 
 /**
+ * enruta metodos no existentes
+ * @package CcMvc  
+ * @subpackage Controladores 
  * @deprecated since version 8.8.3.8 
  */
 interface ReRouterMethod extends iProtected

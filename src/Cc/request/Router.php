@@ -1,19 +1,22 @@
 <?php
 
+namespace Cc;
+
+use Cc\Autoload\SearchClass;
+
 /**
  * enruta controladores y archivos 
  * @autor ENYREBER FRANCO       <enyerverfranco@gmail.com> , <enyerverfranco@outlook.com>                                                    
  * @package Cc
  * @subpackage Request
  */
-
-namespace Cc;
-
-use Cc\Autoload\SearchClass;
-
 class Router
 {
 
+    /**
+     *
+     * @var array 
+     */
     protected $config;
 
     /**

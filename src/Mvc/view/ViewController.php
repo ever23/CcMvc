@@ -255,8 +255,3 @@ class ViewController
     }
 
 }
-
-class TemplateException extends Exception
-{
-    
-}

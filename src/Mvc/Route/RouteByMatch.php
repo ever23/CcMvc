@@ -31,36 +31,96 @@ use Cc\Mvc;
 class RouteByMatch
 {
 
+    /**
+     *
+     * @var array 
+     */
     protected $routes;
+
+    /**
+     * path de peticion
+     * @var string 
+     */
     protected $path;
+
+    /**
+     * path dividido 
+     * @var array 
+     */
     protected $PartsPath = [];
+
+    /**
+     * numero de partes del path
+     * @var int 
+     */
     protected $NpartsPath = 0;
+
+    /**
+     * parametros
+     * @var array 
+     */
     protected $params = [];
+
+    /**
+     * parametros a remplazar en el path
+     * @var array 
+     */
     protected $replace = [];
+
+    /**
+     * indica si es un callable
+     * @var bool 
+     */
     protected $isCalable = false;
+
+    /**
+     *
+     * @var string 
+     */
     protected $origRegex = '';
 
+    /**
+     * 
+     * @param string $path path de la peticion
+     * @param array $routes
+     */
     public function __construct($path, $routes)
     {
         $this->routes = $routes;
         $this->path = $path;
     }
 
+    /**
+     * Retorna los parametros que surgen de la compilacion del path
+     * @return array
+     */
     public function GetParams()
     {
         return $this->params;
     }
 
+    /**
+     * 
+     * @return string
+     */
     public function GetOrigRegex()
     {
         return $this->origRegex;
     }
 
+    /**
+     * Verifica si el controlador es un calback
+     * @return bool
+     */
     public function IsCalableRoute()
     {
         return $this->isCalable;
     }
 
+    /**
+     * compila el enrutamiento
+     * @return boolean
+     */
     public function compile()
     {
         $this->PartsPath = preg_split('/\/|\./', $this->path);
@@ -125,7 +185,14 @@ class RouteByMatch
         return false;
     }
 
-    public function CompileRegex($pathRegex, $controller, $mathvar)
+    /**
+     * compila las expreciones
+     * @param array $pathRegex
+     * @param string $controller
+     * @param array $mathvar
+     * @return boolean
+     */
+    protected function CompileRegex($pathRegex, $controller, $mathvar)
     {
         foreach ($this->PartsPath as $i => $p)
         {
@@ -159,9 +226,18 @@ class RouteByMatch
         return true;
     }
 
+    /**
+     * 
+     * @param string $PathT
+     * @param string $pathP
+     * @param string $c
+     * @param array $mathvar
+     * @param array $match
+     * @return boolean
+     */
     private function EvalueRouteVars($PathT, $pathP, $c, $mathvar, $match = ['\{', '\}'])
     {
-        $split = preg_split('/(' . $match[0] . '.*' . $match[1] . ')/U', $PathT, PREG_SPLIT_DELIM_CAPTURE, -1);
+        $split = preg_split('/(' . $match[0] . '.*' . $match[1] . ')/Ui', $PathT, PREG_SPLIT_DELIM_CAPTURE, -1);
         $explo = '';
         foreach ($split as $j => $sp)
         {
@@ -175,8 +251,8 @@ class RouteByMatch
             $Pexplo = [$pathP];
         } else
         {
-            $Pexplo = preg_split('/' . substr($explo, 0, -1) . '/', $pathP);
-            $PExpAth = preg_split('/' . substr($explo, 0, -1) . '/', $PathT);
+            $Pexplo = preg_split('/' . substr($explo, 0, -1) . '/i', $pathP);
+            $PExpAth = preg_split('/' . substr($explo, 0, -1) . '/i', $PathT);
             if (count($Pexplo) != count($PExpAth))
             {
                 return false;
@@ -188,17 +264,17 @@ class RouteByMatch
             if ($j % 2 == 0)
             {
 
-                $name = preg_replace('/' . $match[0] . '|' . $match[1] . '/', '', $sp[0]);
+                $name = preg_replace('/' . $match[0] . '|' . $match[1] . '/i', '', $sp[0]);
 
-                if (isset($mathvar[$name]) && !preg_match('/' . $mathvar[$name] . '/i', $Pexplo[$z]))
+                if ((isset($mathvar[$name]) && !preg_match('/' . $mathvar[$name] . '/i', $Pexplo[$z])) || trim($Pexplo[$z]) == '')
                 {
                     return false;
                 }
 
                 $this->params[$name] = $Pexplo[$z];
-                if (is_string($c) && preg_match('/(' . $match[0] . $name . $match[1] . ')/', $c))
+                if (is_string($c) && preg_match('/(' . $match[0] . $name . $match[1] . ')/i', $c))
                 {
-                    $m = '/' . preg_quote($sp[0], '/') . '/';
+                    $m = '/' . preg_quote($sp[0], '/') . '/i';
                     $this->replace[$m] = $Pexplo[$z];
                 }
                 $z++;

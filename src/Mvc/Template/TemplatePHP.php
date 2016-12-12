@@ -30,7 +30,7 @@ class TemplatePHP implements TemplateLoader
 {
 
     /**
-     * 
+     * carga una plantilla php
      * @param object $context
      * @param string $file
      * @param array $agrs
@@ -46,7 +46,7 @@ class TemplatePHP implements TemplateLoader
     }
 
     /**
-     * 
+     * carga una plantilla php y retorna su contenido
      * @param object $context
      * @param string $file
      * @param array $agrs
@@ -64,6 +64,7 @@ class TemplatePHP implements TemplateLoader
         $function = \Closure::bind(function($__agrs, $__file)
                 {
                     extract($__agrs);
+
                     include ($__file);
                 }, $context, get_class($context));
         $function($agrs, $file);

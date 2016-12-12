@@ -22,7 +22,8 @@ namespace Cc\Mvc;
 use Cc\UrlManager;
 
 /**
- *  @package CcMvc  
+ * JsonLD marcado de datos
+ * @package CcMvc  
  * @subpackage Response 
  */
 class JsonLD extends \Cc\Json

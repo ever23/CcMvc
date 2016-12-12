@@ -20,9 +20,11 @@
 namespace Cc;
 
 /**
- * Description of TraitDataBase
+ * Trait que define los metodos que deben implementar las clases manejadoras de  iDataBase
  *
- * @author usuario
+ * @autor ENYREBER FRANCO <enyerverfranco@gmail.com> , <enyerverfranco@outlook.com>  
+ * @package Cc
+ * @subpackage DataBase 
  */
 trait TraitDataBase
 {

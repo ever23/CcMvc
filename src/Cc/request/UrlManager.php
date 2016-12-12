@@ -71,6 +71,11 @@ class UrlManager
         }
     }
 
+    /**
+     * codifica una url
+     * @param string $url
+     * @return string
+     */
     public static function EncodeUrl($url)
     {
 

@@ -184,6 +184,11 @@ class DBRow extends \Cc\DBRow
 class MySQLi extends \Cc\MySQLi
 {
 
+    /**
+     * 
+     * @param string $tabla
+     * @return \Cc\Mvc\DBtabla
+     */
     public function Tab($tabla)
     {
 

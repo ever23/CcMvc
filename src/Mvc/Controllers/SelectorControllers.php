@@ -26,6 +26,7 @@ use Cc\DependenceInyector;
 use Cc\Autoload\SearchClass;
 use Cc\Cache;
 use Cc\HelperArray;
+use Cc\InyectorException;
 
 /**
  * SelectorControllers                                             
@@ -160,7 +161,7 @@ class SelectorControllers
      * @param type $end
      * @ignore
      */
-    protected function ExceptionManager($ex, $method, $end = NULL)
+    protected function ExceptionManager($ex, $method, $end = NULL, $HttpCode = 500)
     {
         $plustrace = NULL;
         if ($method instanceof \ReflectionMethod)
@@ -185,7 +186,9 @@ class SelectorControllers
                 'args' => $this->ParamStringArray($method->getParameters())
             ];
         }
-        ErrorHandle::ExceptionManager($ex, 0, $end, $plustrace);
+        //  var_dump($method);
+        // exit;
+        ErrorHandle::ExceptionManager($ex, 0, $end, $plustrace, $HttpCode);
     }
 
     /**
@@ -409,11 +412,30 @@ class SelectorControllers
             try
             {
                 $param = $this->Inyector->SetFunction($costruc)->Param();
+            } catch (InyectorException $ex)
+            {
+
+                if ($ContexApp)
+                {
+                    switch ($ex->getCode())
+                    {
+                        case InyectorException::FaileTypeParam:
+                        case InyectorException::NotResolveParam:
+
+                            $this->ExceptionManager($ex, $costruc, -4, 400);
+                            break;
+                        default :
+                            $this->ExceptionManager($ex, $costruc, -4);
+                    }
+                } else
+                {
+                    throw $ex;
+                }
             } catch (\Exception $ex)
             {
                 if ($ContexApp)
                 {
-                    $this->ExceptionManager($ex, $this->Reflexion, -5);
+                    $this->ExceptionManager($ex, $costruc, -4);
                 } else
                 {
                     throw $ex;
@@ -422,7 +444,7 @@ class SelectorControllers
             {
                 if ($ContexApp)
                 {
-                    $this->ExceptionManager($ex, $this->Reflexion, -5);
+                    $this->ExceptionManager($ex, $costruc, -4);
                 } else
                 {
                     throw $ex;
@@ -449,7 +471,7 @@ class SelectorControllers
         {
             if ($ContexApp && $costruc)
             {
-                $this->ExceptionManager($ex, $costruc, -7);
+                $this->ExceptionManager($ex, $costruc, -4);
             } else
             {
                 throw $ex;
@@ -458,7 +480,7 @@ class SelectorControllers
         {
             if ($ContexApp && $costruc)
             {
-                $this->ExceptionManager($ex, $costruc, -7);
+                $this->ExceptionManager($ex, $costruc, -4);
             } else
             {
                 throw $ex;
@@ -648,6 +670,25 @@ class SelectorControllers
         try
         {
             $param = $this->Inyector->SetFunction($this->Reflexion)->Param();
+        } catch (InyectorException $ex)
+        {
+
+            if ($ContexApp)
+            {
+                switch ($ex->getCode())
+                {
+                    case InyectorException::FaileTypeParam:
+                    case InyectorException::NotResolveParam:
+
+                        $this->ExceptionManager($ex, $this->Reflexion, -5, 400);
+                        break;
+                    default :
+                        $this->ExceptionManager($ex, $this->Reflexion, -5);
+                }
+            } else
+            {
+                throw $ex;
+            }
         } catch (\Exception $ex)
         {
             if ($ContexApp)

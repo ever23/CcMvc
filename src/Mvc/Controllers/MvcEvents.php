@@ -112,6 +112,11 @@ class MvcEvents
         }
     }
 
+    public function Error400($mensaje)
+    {
+        $this->View->LoadInternalView('Error400.php');
+    }
+
     public function Error401($mensaje)
     {
         $this->View->LoadInternalView('Error401.php');

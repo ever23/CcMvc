@@ -21,7 +21,7 @@ namespace Cc\Mvc;
 
 /**
  * 
- *
+ * Carga los tempaltes 
  * @author Enyerber Franco
  * @package CcMvc  
  * @subpackage Template
@@ -29,10 +29,28 @@ namespace Cc\Mvc;
 class TemplateLoad
 {
 
+    /**
+     * configuracion 
+     * @var Config 
+     */
     protected $Config;
+
+    /**
+     * 
+     * @var array 
+     */
     protected $evaluadores = [];
+
+    /**
+     * loader por defecto
+     * @var array 
+     */
     protected $DefaultLoader = [];
 
+    /**
+     * 
+     * @param \Cc\Mvc\Config $c
+     */
     public function __construct(Config $c)
     {
         $this->Config = $c;
@@ -43,6 +61,14 @@ class TemplateLoad
         }
     }
 
+    /**
+     * cargara una plantilla 
+     * @param object $context
+     * @param string $file
+     * @param array $agrs
+     * @return bool
+     * @throws TempleteLoaderException
+     */
     public function Load(&$context, $file, array $agrs)
     {
         $splfile = new \SplFileInfo($file);
@@ -59,6 +85,14 @@ class TemplateLoad
         return $this->Evaluate($context, $splfile, $agrs);
     }
 
+    /**
+     * cargara una plantilla y retorna su contenido 
+     * @param object $context
+     * @param string $file
+     * @param array $agrs
+     * @return bool
+     * @throws TempleteLoaderException
+     */
     public function Fetch(&$context, $file, array $agrs)
     {
         $splfile = new \SplFileInfo($file);
@@ -75,6 +109,13 @@ class TemplateLoad
         return $this->LoadFetch($context, $splfile, $agrs);
     }
 
+    /**
+     * carga una plantilla
+     * @param object $context
+     * @param \SplFileInfo $file
+     * @param array $agrs
+     * @return string
+     */
     protected function LoadFetch(&$context, \SplFileInfo $file, array $agrs)
     {
         $ext = $file->getExtension();
@@ -91,6 +132,13 @@ class TemplateLoad
         }
     }
 
+    /**
+     * carga un plantilla y retorna su contenido
+     * @param Object $context
+     * @param \SplFileInfo $file
+     * @param array $agrs
+     * @return string
+     */
     protected function Evaluate(&$context, \SplFileInfo $file, array $agrs)
     {
         $ext = $file->getExtension();
@@ -106,6 +154,11 @@ class TemplateLoad
         }
     }
 
+    /**
+     * construlle el objeto cargador de plantillas
+     * @param string $ext
+     * @return \Cc\Mvc\class
+     */
     private function FactoryLoaders($ext = NULL)
     {
         if (!is_null($ext))
@@ -124,10 +177,19 @@ class TemplateLoad
 }
 
 /**
- *  @package CcMvc  
+ * @package CcMvc  
  * @subpackage Template
  */
 class TempleteLoaderException extends Exception
+{
+    
+}
+
+/**
+ * @package CcMvc  
+ * @subpackage Template
+ */
+class TemplateException extends Exception
 {
     
 }
@@ -142,17 +204,18 @@ interface TemplateLoader
 
     /**
      * cargar y retorna el contenido de una plantilla
-     * @param object $context
-     * @param string $file
-     * @param array $agrs
+     * @param object $context contexto en el que sera cargado la plantilla
+     * @param string $file nombre de la plantilla
+     * @param array $agrs parametros de la plantilla
      */
     public function Load(&$context, $file, array $agrs);
 
     /**
-     * carga e imprime en el buffer el contenido de una plantilla
-     * @param object $context
-     * @param string $file
-     * @param array $agrs
+     * carga y retorna  el contenido de una plantilla
+     * @param object $context contexto en el que sera cargado la plantilla
+     * @param string $file nombre de la plantilla
+     * @param array $agrs parametros de la plantilla
+     * @return string plantilla evaluada 
      */
     public function Fetch(&$context, $file, array $agrs);
 }

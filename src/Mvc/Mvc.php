@@ -1,5 +1,6 @@
 <?php
 
+//declare (ticks = 1);
 /*
  * Copyright (C) 2016 Enyerber Franco
  *
@@ -51,15 +52,7 @@ include_once __DIR__ . '/../Cc/Autoload/CoreClass.php';
  * @email: <enyerverfranco@gmail.com> , <enyerverfranco@outlook.com>  
  * @copyright © 2015-2016, Enyerber Franco, Todos Los Derechos Reservados 
  * @package CcMvc    
- * @uses CoreClass.php se usa para cargar automaticamente las clases de core 
- * @uses Mvc\Router enruta las peticiones 
- * @uses Mvc\ResponseConten para el Objeto de respuesta 
- * @uses Mvc\Autenticate PARA AUTENTICAR USUARIOS 
- * @uses DependenceInyector para proporcionar las dependencias para los controladores y clase autenticadora 
- * @uses Mvc\Config para cargar la configuracion
- * @uses Mvc\SelectorControllers para ejecutar los controladores 
- * @uses iDataBase para el manejo de bases de datos
- * @uses Mvc\ErrorHandle para la captura de errores y excepciones 
+ *
  */
 class Mvc
 {
@@ -70,7 +63,7 @@ class Mvc
     const Htaccess = "RewriteEngine on\nRewriteCond %{REQUEST_URI} !\.(php|inc)$\nRewriteRule . ";
 
     /**
-     * 
+     * version
      */
     const Version = '1.0';
 
@@ -142,13 +135,13 @@ class Mvc
     private static $Instance = NULL;
 
     /**
-     *
+     * intancia del objeto manejador de base de datos 
      * @var iDataBase 
      */
     private $DataBase = NULL;
 
     /**
-     *
+     * objeto de configuracion 
      * @var Config 
      */
     private $conf;
@@ -219,14 +212,39 @@ class Mvc
      * @var MvcEvents 
      */
     public $Events;
+
+    /**
+     * id de ejecucion
+     * @var int 
+     */
     private $id = NULL;
+
+    /**
+     * time
+     * @var int 
+     */
     private $time = NULL;
+
+    /**
+     * cache del cargador de clases 
+     * @var array 
+     */
     private $CacheCore = [];
-    private $CacheRouter = ['expire' => NULL, 'request' => '', 'requestStatic' => ''];
-    private $InternalSession;
 
     /**
      *
+     * @var array 
+     */
+    private $CacheRouter = ['expire' => NULL, 'request' => '', 'requestStatic' => ''];
+
+    /**
+     * objeto manejador de sessiones interna 
+     * @var Mvc\InternalSession 
+     */
+    private $InternalSession;
+
+    /**
+     * buffer
      * @var DocumentBuffer 
      */
     public $Buffer;
@@ -402,7 +420,7 @@ class Mvc
     }
 
     /**
-     * returna una referencia al objeto se session interna 
+     * retorna una referencia al objeto se session interna 
      * @return Mvc\InternalSession
      */
     public function &GetInternalSession()
@@ -615,6 +633,7 @@ class Mvc
      * @param int $num
      * @param string $msj
      * @uses ViewController::LoadInternalView() 
+     * @uses Error400.php SE CARGA CUANDO OCURRE UN ERROR DE TIPO 400
      * @uses Error401.php SE CARGA CUANDO OCURRE UN ERROR DE TIPO 401
      * @uses Error403.php SE CARGA CUANDO OCURRE UN ERROR DE TIPO 403
      * @uses Error404.php SE CARGA CUANDO OCURRE UN ERROR DE TIPO 404
