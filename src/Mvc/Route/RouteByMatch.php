@@ -80,6 +80,12 @@ class RouteByMatch
     protected $origRegex = '';
 
     /**
+     *
+     * @var string 
+     */
+    protected $extencion;
+
+    /**
      * 
      * @param string $path path de la peticion
      * @param array $routes
@@ -117,14 +123,31 @@ class RouteByMatch
         return $this->isCalable;
     }
 
+    private function DividePath($path)
+    {
+        $ParstPath = preg_split('/\//', $path);
+        /* $popParnts = array_pop($ParstPath);
+          foreach (explode('.', $popParnts) as $p)
+          {
+          $ParstPath[] = $p;
+          } */
+        return $ParstPath;
+    }
+
     /**
      * compila el enrutamiento
      * @return boolean
      */
     public function compile()
     {
-        $this->PartsPath = preg_split('/\/|\./', $this->path);
+        $this->PartsPath = $this->DividePath($this->path);
+
         $this->NpartsPath = count($this->PartsPath);
+        if (count($ex = explode('.', $this->PartsPath[$this->NpartsPath - 1])) > 1)
+        {
+            $this->extencion = $ex[1];
+            $this->PartsPath[$this->NpartsPath - 1] = $ex[0];
+        }
         $this->params = [];
         $this->replace = [];
         $this->isCalable = false;
@@ -135,52 +158,81 @@ class RouteByMatch
             list($controller, $repl, $mathvar) = $contr;
 
             $Rpath = substr($path, 1);
-            $pathRegex = preg_split('/\/|\./', $Rpath);
+            $pathRegex = $this->DividePath($Rpath);
+            $extRegex = NULL;
+            $CountpathRegex = count($pathRegex);
+            if (count($ex = explode('.', $pathRegex[$CountpathRegex - 1])) > 1)
+            {
+                $extRegex = $ex[1];
+                $pathRegex[$CountpathRegex - 1] = $ex[0];
+            }
             $verifi = false;
             $param = [];
             $this->replace = [];
-            if (count($this->PartsPath) != count($pathRegex))
+            $this->params = [];
+            if (strcasecmp($Rpath, $this->path) === 0)
+            {
+
+                return $this->ReturnedController($controller, $path);
+            } elseif (count($this->PartsPath) != count($pathRegex))
             {
                 continue;
-            } elseif ($this->CompileRegex($pathRegex, $controller, $mathvar))
+            } elseif (( (is_null($this->extencion) && is_null($extRegex)) || (!is_null($this->extencion) && !is_null($extRegex))) && $this->CompileRegex($pathRegex, $controller, $mathvar))
+            {
+                // var_dump($controller, $path);
+
+                if (!is_null($this->extencion) && !is_null($extRegex))
+                {
+                    if (preg_match('/\{.*\}$/U', $extRegex))
+                    {
+                        $this->replace['/' . preg_quote($extRegex, '/') . '/i'] = $this->extencion;
+                    } elseif (strcasecmp($extRegex, $this->extencion) !== 0)
+                    {
+                        continue;
+                    }
+                }
+                return $this->ReturnedController($controller, $path);
+            }
+        }
+        return false;
+    }
+
+    protected function ReturnedController($controller, $path)
+    {
+        $this->origRegex = $path;
+
+        if (is_callable($controller))
+        {
+            $this->isCalable = true;
+            return $controller;
+        } else
+        {
+            if (is_numeric($controller))
+            {
+                if (in_array($controller, [404, 403]))
+                {
+                    Mvc::App()->LoadError($controller, " Via Enrutamiento manual");
+                    exit;
+                }
+            }
+
+            if (preg_match('/\.\{.*\}$/U', $controller))
             {
 
-                $this->origRegex = $path;
-
-                if (is_callable($controller))
-                {
-                    $this->isCalable = true;
-                    return $controller;
-                } else
-                {
-                    if (is_numeric($controller))
-                    {
-                        if (in_array($controller, [404, 403]))
-                        {
-                            Mvc::App()->LoadError($controller, " Via Enrutamiento manual");
-                            exit;
-                        }
-                    }
-
-                    if (preg_match('/\.\{.*\}$/U', $controller))
-                    {
-
-                        $ext = (new \SplFileInfo($this->path))->getExtension();
-                        $controller = preg_replace('/\.\{.*\}$/U', '.' . $ext, $controller);
-                    }
-
-                    foreach ($this->replace as $r => $p2)
-                    {
-
-                        $controller = preg_replace($r, $p2, $controller);
-                        // var_dump($p2);
-                    }
-
-
-                    return $controller;
-                }
-                return false;
+                $ext = (new \SplFileInfo($this->path))->getExtension();
+                $controller = preg_replace('/\.\{.*\}$/U', '.' . $ext, $controller);
             }
+
+            foreach ($this->replace as $r => $p2)
+            {
+                // var_dump($r, $p2, $controller);
+                $controller = preg_replace($r, $p2, $controller);
+                // var_dump($p2);
+            }
+
+            //  var_dump($controller);
+            // exit;
+            return $controller;
         }
         return false;
     }
@@ -259,6 +311,7 @@ class RouteByMatch
             }
         }
         $z = 0;
+
         foreach ($split as $j => $sp)
         {
             if ($j % 2 == 0)

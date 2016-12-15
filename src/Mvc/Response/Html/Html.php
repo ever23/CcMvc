@@ -589,10 +589,10 @@ class Html extends Response
             if (!Mvc::App()->IsDebung() && isset($this->AppConfig->SEO['CDNs'][$css]))
             {
 
-                $link.=self::link(['rel' => 'stylesheet', 'href' => $this->AppConfig->SEO['CDNs'][$css], 'media' => 'all']);
+                $link.=self::link(['rel' => 'stylesheet', 'href' => $this->AppConfig->SEO['CDNs'][$css]]);
             } else
             {
-                $link.=self::link(['rel' => 'stylesheet', 'href' => $css, 'media' => 'screen']);
+                $link.=self::link(['rel' => 'stylesheet', 'href' => $css]);
             }
         }
         return $link;

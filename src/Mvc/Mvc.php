@@ -311,6 +311,7 @@ class Mvc
         {
             throw new Exception("EL DIRECTORIO DE LIBRERIAS EXTERNAS (" . $this->conf['App']['extern'] . ") NO EXISTE");
         }
+        set_include_path($this->conf['App']['extern']);
         Cache::Start($this->conf);
 
         $this->Log("Abriendo Cache ...");
@@ -804,7 +805,9 @@ class Mvc
             $this->Router();
         }
         MvcEvents::TingerAndDependence('Route');
-
+        /* echo '<pre>';
+          var_dump($this->page);
+          echo '</pre>'; */
         $this->LoadController();
 
         $this->RouterExt();
@@ -1030,7 +1033,10 @@ class Mvc
     private function RouterExt()
     {
         $accept = [];
-
+        if (trim($this->page['extencion']) == '')
+        {
+            $this->page['extencion'] = NULL;
+        }
         if (Controllers::GetReflectionClass()->implementsInterface(Mvc\ExtByController::class))
         {
             $class = Controllers::GetReflectionClass()->name;
