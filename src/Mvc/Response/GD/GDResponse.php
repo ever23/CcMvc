@@ -227,7 +227,6 @@ class GDResponse implements ResponseConten
      * @param int $nuevo_ancho
      * @param int $nuevo_alto
      * @param int $calidad
-     *
      * @return bynary
      */
     protected function ResampledImage($image, $nuevo_ancho, $nuevo_alto, $calidad = NULL)
@@ -368,7 +367,6 @@ class GDResponse implements ResponseConten
      * @param int $w
      * @param int $h
      * @param int $c
-     * 
      * @return boolean
      */
     protected function CacheImg($w, $h, $c)
@@ -453,6 +451,11 @@ class GDResponse implements ResponseConten
         return $out;
     }
 
+    /**
+     *
+     * @param binary $out
+     * @return ImageGD
+     */
     private function SaveFileCache($out)
     {
         //$compres= new \smushit();

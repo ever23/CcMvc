@@ -131,11 +131,13 @@ class Mail extends \Cc\Mail
                     try
                     {
                         $param = ['content' => $content] + $LayautController->jsonSerialize();
+
                         if (isset($layaut['params']))
                         {
                             $param+=$layaut['params'];
                         }
                         $loader = new TemplateLoad(Mvc::App()->Config());
+
                         return $loader->Fetch($this, $__name, $param);
                     } catch (LayautException $ex)
                     {

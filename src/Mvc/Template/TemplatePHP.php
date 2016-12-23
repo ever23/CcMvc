@@ -39,10 +39,18 @@ class TemplatePHP implements TemplateLoader
     public function Fetch(&$context, $file, array $agrs)
     {
         ob_start();
-        $this->Load($context, $file, $agrs);
-        $conten = ob_get_contents();
-        ob_end_clean();
-        return $conten;
+        try
+        {
+
+            $this->Load($context, $file, $agrs);
+            $conten = ob_get_contents();
+            ob_end_clean();
+            return $conten;
+        } catch (\Exception $ex)
+        {
+            ob_end_clean();
+            throw $ex;
+        }
     }
 
     /**

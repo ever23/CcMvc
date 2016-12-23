@@ -128,7 +128,9 @@ class TemplateLoad
         } else
         {
             $eval = $this->FactoryLoaders();
-            return $this->Fetch($context, $file, $agrs);
+            $file = new \SplFileInfo($file . '.' . $this->DefaultLoader['ext']);
+
+            return $eval->Fetch($context, $file, $agrs);
         }
     }
 
@@ -150,6 +152,7 @@ class TemplateLoad
         } else
         {
             $eval = $this->FactoryLoaders();
+            $file = new \SplFileInfo($file . '.' . $this->DefaultLoader['ext']);
             return $eval->Load($context, $file->__toString(), $agrs);
         }
     }
