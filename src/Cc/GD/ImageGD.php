@@ -602,6 +602,13 @@ class ImageGD
                 list($red, $green, $blue, $alpha) = $rgb_color;
                 return imagecolorallocatealpha($this->img, $red, $green, $blue, $alpha);
             }
+        } elseif (is_int($rgb_color))
+        {
+            /// $exad = dechex($rgb_color);
+            $r = ($rgb_color >> 16) & 0xFF;
+            $g = ($rgb_color >> 8) & 0xFF;
+            $b = $rgb_color & 0xFF;
+            return imagecolorallocate($this->img, $r, $g, $b);
         } elseif (isset($this->colores[$rgb_color]))
         {
             return $this->colores[$rgb_color];

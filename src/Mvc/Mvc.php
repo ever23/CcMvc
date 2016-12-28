@@ -60,7 +60,7 @@ class Mvc
     /**
      * Directivas apache  para el redireccionamiento de todas las peticiones hacia el archivo de ejecucion 
      */
-    const Htaccess = "RewriteEngine on\nRewriteCond %{REQUEST_URI} !\.(php|inc)$\nRewriteRule . ";
+    const Htaccess = "RewriteEngine on\nRewriteCond %{REQUEST_URI} !\.(php)$\nRewriteRule . ";
 
     /**
      * version
@@ -285,7 +285,13 @@ class Mvc
         }
         self::$Instance = &$this;
         $this->StartAutoloadCore(realpath(dirname(__FILE__) . '/../'));
-
+        if (is_null(self::$ExecuteFile))
+        {
+            $bak = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS);
+            $t = array_pop($bak);
+            self::$ExecuteFile = $t['file'];
+            $this->isRouter = true;
+        }
 //$this->CoreClass['Cc\\Config'] = 'Cc/Config/Config.php';
         $this->conf = new Config($defaultConf);
 
@@ -333,13 +339,7 @@ class Mvc
         }
 
 
-        if (is_null(self::$ExecuteFile))
-        {
-            $bak = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS);
-            $t = array_pop($bak);
-            self::$ExecuteFile = $t['file'];
-            $this->isRouter = true;
-        }
+
         if (is_null($this->conf['Router']['DocumentRoot']))
         {
             $ExecuteFile = str_replace(DIRECTORY_SEPARATOR, "/", dirname(self::$ExecuteFile));
@@ -418,7 +418,6 @@ class Mvc
         {
             $this->AutoloaderLib->AddAutoloader($vendor);
         }
-        
     }
 
     /**
@@ -992,7 +991,8 @@ class Mvc
             $this->Log("Enrutado a  " . $this->Router->InfoFile->getPathname());
 // if ($this->AppDir == substr($this->Router->InfoFile->getPathname(), 0, strlen($this->AppDir)) || $UserAppDir == substr($this->Router->InfoFile->getPathname(), 0, strlen($UserAppDir)))
             $sujeto = $this->Router->InfoFile->getPathname();
-            if (preg_match('/^(' . preg_quote($this->AppDir . DIRECTORY_SEPARATOR, '/') . ')/', $sujeto) || preg_match('/^(' . preg_quote($UserAppDir, '/') . ')/', $sujeto))
+
+            if (preg_match('/^(' . preg_quote($this->AppDir . DIRECTORY_SEPARATOR, '/') . ')/', $sujeto) || preg_match('/^(' . preg_quote($UserAppDir, '/') . ')/', $sujeto) || preg_match('/(\.ConfigCompled\.inc)$/Ui', $sujeto))
             {
                 $this->LoadError(403, 'EL SISTEMA PROHIBIO EL ACCESO A ESTE ARCHIVO');
                 exit;
