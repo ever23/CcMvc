@@ -220,7 +220,13 @@ class Html extends Response
         {
             return $this->CacheMin($conten, $this->min);
         }
-        return parent::ProccessConten($conten);
+        if ($this->min && !Mvc::App()->IsDebung())
+        {
+            $min = new MinScript();
+            $min->file = Mvc::App()->GetExecutedFile();
+            return $min->Min($conten, $this->typeMin);
+        }
+        return $conten;
     }
 
     public function CacheMin($conten, $minify = false)

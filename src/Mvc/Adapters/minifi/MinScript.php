@@ -70,7 +70,7 @@ class MinScript extends \Cc\MinScript
         if (class_exists("\\MatthiasMullie\\Minify\\CSS"))
         {
             $min = new \Cc\Mvc\Minify\CSS();
-
+            // $min->setImportExtensions(['svg']);
             if ($this->file)
             {
                 $min->addContext($css_script, $this->file);
