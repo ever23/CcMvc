@@ -17,11 +17,14 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace Cc;
+namespace Cc\Cache;
+
+use Cc\Config;
+use Cc\AbstracCache;
 
 /**
- * Description of CaheFile
- * Clase manejadora de Cache que lo almacena en un archivo local
+ * 
+ * Clase manejadora de Cache usando la extencion MemCached
  * @author Enyerber Franco
  * @version 1.0.0.5
  * @package Cc

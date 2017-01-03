@@ -1,6 +1,6 @@
 <?php
 
-//declare (ticks = 1);
+declare (ticks = 1);
 /*
  * Copyright (C) 2016 Enyerber Franco
  *
@@ -1022,7 +1022,7 @@ class Mvc
             }
             $this->IntanceResponseConten();
             $this->page = $this->Router->GetController();
-
+            Cache::Set($this->CacheRouter['request'], ['type' => 'Controllers', 'Controller' => $this->page], $this->CacheRouter['expire']);
             $this->Log("Enrutado a " . (is_null($this->page['paquete']) ? '' : 'paquete: ' . $this->page['paquete'] . ',') . ' '
                     . 'Controlador: ' . $this->page['controller'] . ', Metodo: ' . $this->page['method']);
         }

@@ -38,8 +38,9 @@ return
             'Cache' =>
             [
                 'debung' => false,
-                'class' => '\\Cc\\CacheFilePHP',
-                'File' => 'CcMvcCache' . \CcMvc::Version,
+                'class' => '\\Cc\\Cache\\MultifilePhp',
+                'dir' => 'AppCache',
+                'File' => 'CcMvc' . \CcMvc::Version,
                 'ExpireTime' => '+1 month'
             ],
             /**
