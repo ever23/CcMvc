@@ -1,10 +1,12 @@
 <?php
+
 /**
  * @package dompdf
  * @link    http://dompdf.github.com/
  * @author  Benj Carson <benjcarson@digitaljunkies.ca>
  * @license http://www.gnu.org/copyleft/lesser.html GNU Lesser General Public License
  */
+
 namespace Dompdf\Renderer;
 
 use Dompdf\Frame;
@@ -28,7 +30,8 @@ class Inline extends AbstractRenderer
         if (!$frame->get_first_child())
             return; // No children, no service
 
-        // Draw the left border if applicable
+            
+// Draw the left border if applicable
         $bp = $style->get_border_properties();
         $widths = array($style->length_in_pt($bp["top"]["width"]),
             $style->length_in_pt($bp["right"]["width"]),
@@ -47,31 +50,34 @@ class Inline extends AbstractRenderer
 
         $first_row = true;
 
-        foreach ($frame->get_children() as $child) {
+        foreach ($frame->get_children() as $child)
+        {
             list($child_x, $child_y, $child_w, $child_h) = $child->get_padding_box();
 
-            if (!is_null($w) && $child_x < $x + $w) {
+            if (!is_null($w) && $child_x < $x + $w)
+            {
                 //This branch seems to be supposed to being called on the first part
                 //of an inline html element, and the part after the if clause for the
                 //parts after a line break.
                 //But because $w initially mostly is 0, and gets updated only on the next
                 //round, this seem to be never executed and the common close always.
-
                 // The next child is on another line.  Draw the background &
                 // borders on this line.
-
                 // Background:
                 if (($bg = $style->background_color) !== "transparent")
                     $this->_canvas->filled_rectangle($x, $y, $w, $h, $bg);
 
-                if (($url = $style->background_image) && $url !== "none") {
+                if (($url = $style->background_image) && $url !== "none")
+                {
                     $this->_background_image($url, $x, $y, $w, $h, $style);
                 }
 
                 // If this is the first row, draw the left border
-                if ($first_row) {
+                if ($first_row)
+                {
 
-                    if ($bp["left"]["style"] !== "none" && $bp["left"]["color"] !== "transparent" && $bp["left"]["width"] > 0) {
+                    if ($bp["left"]["style"] !== "none" && $bp["left"]["color"] !== "transparent" && $bp["left"]["width"] > 0)
+                    {
                         $method = "_border_" . $bp["left"]["style"];
                         $this->$method($x, $y, $h + $widths[0] + $widths[2], $bp["left"]["color"], $widths, "left");
                     }
@@ -79,25 +85,30 @@ class Inline extends AbstractRenderer
                 }
 
                 // Draw the top & bottom borders
-                if ($bp["top"]["style"] !== "none" && $bp["top"]["color"] !== "transparent" && $bp["top"]["width"] > 0) {
+                if ($bp["top"]["style"] !== "none" && $bp["top"]["color"] !== "transparent" && $bp["top"]["width"] > 0)
+                {
                     $method = "_border_" . $bp["top"]["style"];
                     $this->$method($x, $y, $w + $widths[1] + $widths[3], $bp["top"]["color"], $widths, "top");
                 }
 
-                if ($bp["bottom"]["style"] !== "none" && $bp["bottom"]["color"] !== "transparent" && $bp["bottom"]["width"] > 0) {
+                if ($bp["bottom"]["style"] !== "none" && $bp["bottom"]["color"] !== "transparent" && $bp["bottom"]["width"] > 0)
+                {
                     $method = "_border_" . $bp["bottom"]["style"];
                     $this->$method($x, $y + $h + $widths[0] + $widths[2], $w + $widths[1] + $widths[3], $bp["bottom"]["color"], $widths, "bottom");
                 }
 
                 // Handle anchors & links
                 $link_node = null;
-                if ($frame->get_node()->nodeName === "a") {
+                if ($frame->get_node()->nodeName === "a")
+                {
                     $link_node = $frame->get_node();
-                } else if ($frame->get_parent()->get_node()->nodeName === "a") {
+                } else if ($frame->get_parent()->get_node()->nodeName === "a")
+                {
                     $link_node = $frame->get_parent()->get_node();
                 }
 
-                if ($link_node && $href = $link_node->getAttribute("href")) {
+                if ($link_node && $href = $link_node->getAttribute("href"))
+                {
                     $href = Helpers::build_url($this->_dompdf->getProtocol(), $this->_dompdf->getBaseHost(), $this->_dompdf->getBasePath(), $href);
                     $this->_canvas->add_link($href, $x, $y, $w, $h);
                 }
@@ -116,9 +127,11 @@ class Inline extends AbstractRenderer
 
             $h = max($h, $child_h);
 
-            if ($this->_dompdf->get_option("debugLayout") && $this->_dompdf->get_option("debugLayoutInline")) {
+            if ($this->_dompdf->get_option("debugLayout") && $this->_dompdf->get_option("debugLayoutInline"))
+            {
                 $this->_debug_layout($child->get_border_box(), "blue");
-                if ($this->_dompdf->get_option("debugLayoutPaddingBox")) {
+                if ($this->_dompdf->get_option("debugLayoutPaddingBox"))
+                {
                     $this->_debug_layout($child->get_padding_box(), "blue", array(0.5, 0.5));
                 }
             }
@@ -149,18 +162,21 @@ class Inline extends AbstractRenderer
         $x += $left_margin;
 
         // If this is the first row, draw the left border too
-        if ($first_row && $bp["left"]["style"] !== "none" && $bp["left"]["color"] !== "transparent" && $widths[3] > 0) {
+        if ($first_row && $bp["left"]["style"] !== "none" && $bp["left"]["color"] !== "transparent" && $widths[3] > 0)
+        {
             $method = "_border_" . $bp["left"]["style"];
             $this->$method($x, $y, $h, $bp["left"]["color"], $widths, "left");
         }
 
         // Draw the top & bottom borders
-        if ($bp["top"]["style"] !== "none" && $bp["top"]["color"] !== "transparent" && $widths[0] > 0) {
+        if ($bp["top"]["style"] !== "none" && $bp["top"]["color"] !== "transparent" && $widths[0] > 0)
+        {
             $method = "_border_" . $bp["top"]["style"];
             $this->$method($x, $y, $w, $bp["top"]["color"], $widths, "top");
         }
 
-        if ($bp["bottom"]["style"] !== "none" && $bp["bottom"]["color"] !== "transparent" && $widths[2] > 0) {
+        if ($bp["bottom"]["style"] !== "none" && $bp["bottom"]["color"] !== "transparent" && $widths[2] > 0)
+        {
             $method = "_border_" . $bp["bottom"]["style"];
             $this->$method($x, $y + $h, $w, $bp["bottom"]["color"], $widths, "bottom");
         }
@@ -168,31 +184,38 @@ class Inline extends AbstractRenderer
         //    Helpers::var_dump(get_class($frame->get_next_sibling()));
         //    $last_row = get_class($frame->get_next_sibling()) !== 'Inline';
         // Draw the right border if this is the last row
-        if ($bp["right"]["style"] !== "none" && $bp["right"]["color"] !== "transparent" && $widths[1] > 0) {
+        if ($bp["right"]["style"] !== "none" && $bp["right"]["color"] !== "transparent" && $widths[1] > 0)
+        {
             $method = "_border_" . $bp["right"]["style"];
             $this->$method($x + $w, $y, $h, $bp["right"]["color"], $widths, "right");
         }
 
         // Only two levels of links frames
         $link_node = null;
-        if ($frame->get_node()->nodeName === "a") {
+        if ($frame->get_node()->nodeName === "a")
+        {
             $link_node = $frame->get_node();
 
-            if (($name = $link_node->getAttribute("name")) || ($name = $link_node->getAttribute("id"))) {
+            if (($name = $link_node->getAttribute("name")) || ($name = $link_node->getAttribute("id")))
+            {
                 $this->_canvas->add_named_dest($name);
             }
         }
 
-        if ($frame->get_parent() && $frame->get_parent()->get_node()->nodeName === "a") {
+        if ($frame->get_parent() && $frame->get_parent()->get_node()->nodeName === "a")
+        {
             $link_node = $frame->get_parent()->get_node();
         }
 
         // Handle anchors & links
-        if ($link_node) {
-            if ($href = $link_node->getAttribute("href")) {
+        if ($link_node)
+        {
+            if ($href = $link_node->getAttribute("href"))
+            {
                 $href = Helpers::build_url($this->_dompdf->getProtocol(), $this->_dompdf->getBaseHost(), $this->_dompdf->getBasePath(), $href);
                 $this->_canvas->add_link($href, $x, $y, $w, $h);
             }
         }
     }
+
 }

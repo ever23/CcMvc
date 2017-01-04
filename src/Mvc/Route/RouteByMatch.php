@@ -225,7 +225,7 @@ class RouteByMatch
 
             foreach ($this->replace as $r => $p2)
             {
-                // var_dump($r, $p2, $controller);
+
                 $controller = preg_replace($r, $p2, $controller);
                 // var_dump($p2);
             }
@@ -251,7 +251,7 @@ class RouteByMatch
             if (isset($pathRegex[$i]))
             {
 
-                if ($p == $pathRegex[$i])
+                if (strcasecmp($p, $pathRegex[$i]) === 0)
                 {
 
                     continue;

@@ -57,7 +57,6 @@ class Autoload
     }
 
     /**
-     * 
      * @param string $dirname DIRECTORIO DONDE EL AUTOCARGADOR BUSCARA LAS CLASES
      * @param boolean $restart indica que si el cache se reinicia el sitio debe recargarse 
      */

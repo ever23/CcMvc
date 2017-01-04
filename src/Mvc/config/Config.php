@@ -165,6 +165,7 @@ class Config extends \Cc\Config
 
     private $configFile = '';
     private $cacheCompile;
+    private $Compiled = false;
 
     public function __construct($DEF = 'DefaultConfig.php')
     {
@@ -228,8 +229,9 @@ class Config extends \Cc\Config
         /* if (file_exists($this->cacheCompile))
           {
           $this->config = include($this->cacheCompile);
-          if ($this->config['ConfigCompled'] == md5_file($config_name))
+          if (isset($this->config['ConfigCompled']) && $this->config['ConfigCompled'] == md5_file($config_name))
           {
+          $this->Compiled = true;
           return;
           }
           } */
@@ -275,11 +277,12 @@ class Config extends \Cc\Config
             }
         $this->LoadConf($this->config, $this->orig);
         $this->config['App'] = $this->RemplaceApp($this->config['App']);
-        //$this->Compile();
     }
 
     public function Compile()
     {
+        if ($this->Compiled)
+            return;
         $md = md5_file($this->configFile);
         $this->config['ConfigCompled'] = $md;
         $md5 = md5_file(Mvc::App()->GetExecutedFile());

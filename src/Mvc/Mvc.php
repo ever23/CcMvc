@@ -471,9 +471,12 @@ class Mvc
     private function Debung()
     {
         $this->t = microtime(true);
-        if (is_bool($this->conf['debung']))
+        if (is_bool($this->conf['debung']) || isset($this->conf['debung'][0]))
         {
-            if (!$this->conf['debung'])
+            if (isset($this->conf['debung'][0]))
+            {
+                
+            } elseif (!$this->conf['debung'])
             {
                 $this->conf['debung'] = [false, 'ModoExeption' => 0, 'error_reporting' => 0, 'NoReenviarFiles' => false, 'UseErrorResponseCode' => true];
             } else
@@ -1326,7 +1329,7 @@ class Mvc
         $this->Log("Ejecutando el constuctor del  Controlador " . $c . $this->page['controller'] . " ...");
         if (($clousure = $this->Router->GetRoute($this->page)) == false)
         {
-            if ($this->SelectorController->InstanceController($this->page['method'], true))
+            if ($this->SelectorController->InstanceController(true))
             {
                 $this->ObjController = &$this->SelectorController->GetController();
 
