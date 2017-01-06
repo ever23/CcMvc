@@ -135,7 +135,9 @@ abstract class AbstracCache implements ICache
 }
 
 /**
- *  @package Cc
+ * NoCache
+ * @author Enyerber Franco
+ * @package Cc
  * @subpackage Cache
  */
 class NoCache extends AbstracCache

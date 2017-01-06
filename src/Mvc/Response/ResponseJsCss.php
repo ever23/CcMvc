@@ -1,9 +1,20 @@
 <?php
 
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * Copyright (C) 2016 Enyerber Franco
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 namespace Cc\Mvc;
@@ -21,9 +32,23 @@ use Cc\Cache;
 class ResponseJsCss extends Response
 {
 
+    /**
+     * nombre del archivo para cache
+     * @var string 
+     */
     protected $filecache = '';
+
+    /**
+     * tipo de archivo puede ser css o js
+     * @var string 
+     */
     protected $type = '';
 
+    /**
+     * 
+     * @param bool $compres indica si se activa la compresion 
+     * @param bool $min inica si de minifiara 
+     */
     public function __construct($compres = false, $min = false)
     {
         if (Mvc::App()->Content_type == 'text/css')
@@ -39,6 +64,11 @@ class ResponseJsCss extends Response
         }
     }
 
+    /**
+     * procesa la respuesta 
+     * @param string $conten
+     * @return string
+     */
     public function ProccessConten($conten)
     {
 
@@ -70,6 +100,12 @@ class ResponseJsCss extends Response
         return $conten;
     }
 
+    /**
+     * crea y almacena el cache del minifiado
+     * @param \SplFileInfo $file
+     * @param string $conten
+     * @return string
+     */
     public function CacheMin(\SplFileInfo $file, $conten)
     {
         $cache = Mvc::App()->Config()->App['Cache'] . 'Min' . $this->type . DIRECTORY_SEPARATOR;

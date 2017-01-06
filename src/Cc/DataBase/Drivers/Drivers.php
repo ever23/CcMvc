@@ -24,6 +24,7 @@ use Cc\iDataBase;
 include_once dirname(__FILE__) . '/../TypeMetaData/MetaData.php';
 
 /**
+ * Exceptiones 
  * @autor ENYREBER FRANCO <enyerverfranco@gmail.com> , <enyerverfranco@outlook.com>
  * @package Cc
  * @subpackage DataBase  

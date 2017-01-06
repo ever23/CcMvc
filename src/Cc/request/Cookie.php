@@ -60,11 +60,11 @@ abstract class Cookie implements \ArrayAccess, \Countable, \IteratorAggregate
     /**
      * @access private
      * @return type
-     */
-    public function __debugInfo()
-    {
-        return $this->Cookie;
-    }
+
+      public function __debugInfo()
+      {
+      return $this->Cookie || [];
+      } */
 
     /**
      * ENVIA UNA COOKIE AL NAVEGADOR 

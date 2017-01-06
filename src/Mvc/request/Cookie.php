@@ -2,6 +2,8 @@
 
 namespace Cc\Mvc;
 
+use Cc\Mvc;
+
 /**
  * clase Cookie para administrar las cokies mas efisientemente
  * <code>

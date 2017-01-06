@@ -1,5 +1,5 @@
 <?php
-/* Create by \CcMvc 2016-11-30 03:13:29 */
+/* Create by \CcMvc 2017-01-03 18:44:06 */
  return array (
   'class' => 
   array (
@@ -13,10 +13,11 @@
     'Cc\\AbstracCache' => 'Cc\\Cache\\AbstracCache.php',
     'Cc\\NoCache' => 'Cc\\Cache\\AbstracCache.php',
     'Cc\\Cache' => 'Cc\\Cache\\Cache.php',
-    'Cc\\CacheFile' => 'Cc\\Cache\\CacheFile.php',
-    'Cc\\CacheFilePHP' => 'Cc\\Cache\\CacheFilePHP.php',
     'Cc\\ICache' => 'Cc\\Cache\\ICache.php',
-    'Cc\\MemCached' => 'Cc\\Cache\\MemCached.php',
+    'Cc\\Cache\\File' => 'Cc\\Cache\\CacheManager\\File.php',
+    'Cc\\Cache\\FilePHP' => 'Cc\\Cache\\CacheManager\\FilePHP.php',
+    'Cc\\Cache\\MemCached' => 'Cc\\Cache\\CacheManager\\MemCached.php',
+    'Cc\\Cache\\MultifilePhp' => 'Cc\\Cache\\CacheManager\\MultifilePhp.php',
     'Cc\\Config' => 'Cc\\config\\Config.php',
     'Cc\\DBRow' => 'Cc\\DataBase\\DBRow.php',
     'Cc\\DBtabla' => 'Cc\\DataBase\\DBtabla.php',
@@ -148,6 +149,7 @@
     'Cc\\Mvc\\PropertiesInSession' => 'Mvc\\session\\SessionController\\SessionSaveController.php',
     'Cc\\Mvc\\TemplateLoad' => 'Mvc\\Template\\TemplateLoader.php',
     'Cc\\Mvc\\TempleteLoaderException' => 'Mvc\\Template\\TemplateLoader.php',
+    'Cc\\Mvc\\TemplateException' => 'Mvc\\Template\\TemplateLoader.php',
     'Cc\\Mvc\\TemplateLoader' => 'Mvc\\Template\\TemplateLoader.php',
     'Cc\\Mvc\\TemplatePHP' => 'Mvc\\Template\\TemplatePHP.php',
     'Cc\\Mvc\\ValidArray' => 'Mvc\\Validate\\Valid.php',
@@ -161,7 +163,6 @@
     'Cc\\Mvc\\ValidUrl' => 'Mvc\\Validate\\Valid.php',
     'Cc\\Mvc\\ValidFilename' => 'Mvc\\Validate\\Valid.php',
     'Cc\\Mvc\\ViewController' => 'Mvc\\view\\ViewController.php',
-    'Cc\\Mvc\\TemplateException' => 'Mvc\\view\\ViewController.php',
     'Cc\\Ws' => 'Ws\\Ws.php',
     'Cc\\Ws\\Config' => 'Ws\\config\\Config.php',
     'Cc\\Ws\\Cookie' => 'Ws\\request\\Cookie.php',

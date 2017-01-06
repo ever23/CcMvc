@@ -1,5 +1,6 @@
 <?php
 
+declare (ticks = 1);
 /*
  * Copyright (C) 2016 Enyerber Franco
  *
@@ -51,15 +52,7 @@ include_once __DIR__ . '/../Cc/Autoload/CoreClass.php';
  * @email: <enyerverfranco@gmail.com> , <enyerverfranco@outlook.com>  
  * @copyright © 2015-2016, Enyerber Franco, Todos Los Derechos Reservados 
  * @package CcMvc    
- * @uses CoreClass.php se usa para cargar automaticamente las clases de core 
- * @uses Mvc\Router enruta las peticiones 
- * @uses Mvc\ResponseConten para el Objeto de respuesta 
- * @uses Mvc\Autenticate PARA AUTENTICAR USUARIOS 
- * @uses DependenceInyector para proporcionar las dependencias para los controladores y clase autenticadora 
- * @uses Mvc\Config para cargar la configuracion
- * @uses Mvc\SelectorControllers para ejecutar los controladores 
- * @uses iDataBase para el manejo de bases de datos
- * @uses Mvc\ErrorHandle para la captura de errores y excepciones 
+ *
  */
 class Mvc
 {
@@ -67,10 +60,10 @@ class Mvc
     /**
      * Directivas apache  para el redireccionamiento de todas las peticiones hacia el archivo de ejecucion 
      */
-    const Htaccess = "RewriteEngine on\nRewriteCond %{REQUEST_URI} !\.(php|inc)$\nRewriteRule . ";
+    const Htaccess = "RewriteEngine on\nRewriteCond %{REQUEST_URI} !\.(php)$\nRewriteRule . ";
 
     /**
-     * 
+     * version
      */
     const Version = '1.0';
 
@@ -142,13 +135,13 @@ class Mvc
     private static $Instance = NULL;
 
     /**
-     *
+     * intancia del objeto manejador de base de datos 
      * @var iDataBase 
      */
     private $DataBase = NULL;
 
     /**
-     *
+     * objeto de configuracion 
      * @var Config 
      */
     private $conf;
@@ -179,7 +172,7 @@ class Mvc
     public $isRouter = false;
 
     /**
-     *
+     * controlador
      * @var Controllers 
      */
     private $ObjController;
@@ -203,24 +196,55 @@ class Mvc
     public $DependenceInyector;
 
     /**
-     *
+     * cargador de layauts
      * @var Mvc\LayautManager 
      */
     public $LayautManager = NULL;
 
     /**
-     *
+     * cargador automatico de clases 
      * @var AutoloadExternLib 
      */
     public $AutoloaderLib;
+
+    /**
+     * manejador de eventos
+     * @var MvcEvents 
+     */
+    public $Events;
+
+    /**
+     * id de ejecucion
+     * @var int 
+     */
     private $id = NULL;
+
+    /**
+     * time
+     * @var int 
+     */
     private $time = NULL;
+
+    /**
+     * cache del cargador de clases 
+     * @var array 
+     */
     private $CacheCore = [];
-    private $CacheRouter = ['expire' => NULL, 'request' => '', 'requestStatic' => ''];
-    private $InternalSession;
 
     /**
      *
+     * @var array 
+     */
+    private $CacheRouter = ['expire' => NULL, 'request' => '', 'requestStatic' => ''];
+
+    /**
+     * objeto manejador de sessiones interna 
+     * @var Mvc\InternalSession 
+     */
+    private $InternalSession;
+
+    /**
+     * buffer
      * @var DocumentBuffer 
      */
     public $Buffer;
@@ -261,13 +285,19 @@ class Mvc
         }
         self::$Instance = &$this;
         $this->StartAutoloadCore(realpath(dirname(__FILE__) . '/../'));
-
+        if (is_null(self::$ExecuteFile))
+        {
+            $bak = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS);
+            $t = array_pop($bak);
+            self::$ExecuteFile = $t['file'];
+            $this->isRouter = true;
+        }
 //$this->CoreClass['Cc\\Config'] = 'Cc/Config/Config.php';
         $this->conf = new Config($defaultConf);
 
         $this->conf->Load($conf);
 
-        MvcEvents::Start($this->conf);
+        $this->Events = MvcEvents::Start($this->conf);
         $this->View = new ViewController($this->conf['App']['view']);
         MvcEvents::$View = &$this->View;
         $this->Debung();
@@ -287,6 +317,7 @@ class Mvc
         {
             throw new Exception("EL DIRECTORIO DE LIBRERIAS EXTERNAS (" . $this->conf['App']['extern'] . ") NO EXISTE");
         }
+        set_include_path($this->conf['App']['extern']);
         Cache::Start($this->conf);
 
         $this->Log("Abriendo Cache ...");
@@ -308,13 +339,7 @@ class Mvc
         }
 
 
-        if (is_null(self::$ExecuteFile))
-        {
-            $bak = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS);
-            $t = array_pop($bak);
-            self::$ExecuteFile = $t['file'];
-            $this->isRouter = true;
-        }
+
         if (is_null($this->conf['Router']['DocumentRoot']))
         {
             $ExecuteFile = str_replace(DIRECTORY_SEPARATOR, "/", dirname(self::$ExecuteFile));
@@ -396,7 +421,7 @@ class Mvc
     }
 
     /**
-     * returna una referencia al objeto se session interna 
+     * retorna una referencia al objeto se session interna 
      * @return Mvc\InternalSession
      */
     public function &GetInternalSession()
@@ -446,9 +471,12 @@ class Mvc
     private function Debung()
     {
         $this->t = microtime(true);
-        if (is_bool($this->conf['debung']))
+        if (is_bool($this->conf['debung']) || isset($this->conf['debung'][0]))
         {
-            if (!$this->conf['debung'])
+            if (isset($this->conf['debung'][0]))
+            {
+                
+            } elseif (!$this->conf['debung'])
             {
                 $this->conf['debung'] = [false, 'ModoExeption' => 0, 'error_reporting' => 0, 'NoReenviarFiles' => false, 'UseErrorResponseCode' => true];
             } else
@@ -609,6 +637,7 @@ class Mvc
      * @param int $num
      * @param string $msj
      * @uses ViewController::LoadInternalView() 
+     * @uses Error400.php SE CARGA CUANDO OCURRE UN ERROR DE TIPO 400
      * @uses Error401.php SE CARGA CUANDO OCURRE UN ERROR DE TIPO 401
      * @uses Error403.php SE CARGA CUANDO OCURRE UN ERROR DE TIPO 403
      * @uses Error404.php SE CARGA CUANDO OCURRE UN ERROR DE TIPO 404
@@ -697,6 +726,10 @@ class Mvc
             FilterXss::SetFilterXssExeption(FilterXss::FilterXssCookie, $this->conf['Autenticate']['SessionName']);
         FilterXss::SetFilterXssExeption(FilterXss::FilterXssGet, $this->conf['Router']['GetControllers']);
         FilterXss::Filter(FilterXss::FilterXssCookie);
+        if (isset($this->page['routeVars']))
+        {
+            $this->page['routeVars'] = FilterXss::FilterXssArray($this->page['routeVars']);
+        }
     }
 
     /**
@@ -774,14 +807,18 @@ class Mvc
         {
             $this->Router();
         }
-
+        MvcEvents::TingerAndDependence('Route');
+        /* echo '<pre>';
+          var_dump($this->page);
+          echo '</pre>'; */
         $this->LoadController();
 
         $this->RouterExt();
+
         $this->SecurityRequest();
+        MvcEvents::TingerAndDependence('LoadController');
         $this->ConetDataBase();
-
-
+        MvcEvents::TingerAndDependence('ConetDatabase');
         $this->Auth();
         $this->ExecuteController();
         self::EndApp();
@@ -806,7 +843,6 @@ class Mvc
 
         if (!isset($cache['type']))
         {
-
             return false;
         }
         switch ($cache['type'])
@@ -958,7 +994,8 @@ class Mvc
             $this->Log("Enrutado a  " . $this->Router->InfoFile->getPathname());
 // if ($this->AppDir == substr($this->Router->InfoFile->getPathname(), 0, strlen($this->AppDir)) || $UserAppDir == substr($this->Router->InfoFile->getPathname(), 0, strlen($UserAppDir)))
             $sujeto = $this->Router->InfoFile->getPathname();
-            if (preg_match('/^(' . preg_quote($this->AppDir . DIRECTORY_SEPARATOR, '/') . ')/', $sujeto) || preg_match('/^(' . preg_quote($UserAppDir, '/') . ')/', $sujeto))
+
+            if (preg_match('/^(' . preg_quote($this->AppDir . DIRECTORY_SEPARATOR, '/') . ')/', $sujeto) || preg_match('/^(' . preg_quote($UserAppDir, '/') . ')/', $sujeto) || preg_match('/(\.ConfigCompled\.inc)$/Ui', $sujeto))
             {
                 $this->LoadError(403, 'EL SISTEMA PROHIBIO EL ACCESO A ESTE ARCHIVO');
                 exit;
@@ -988,7 +1025,7 @@ class Mvc
             }
             $this->IntanceResponseConten();
             $this->page = $this->Router->GetController();
-
+            Cache::Set($this->CacheRouter['request'], ['type' => 'Controllers', 'Controller' => $this->page], $this->CacheRouter['expire']);
             $this->Log("Enrutado a " . (is_null($this->page['paquete']) ? '' : 'paquete: ' . $this->page['paquete'] . ',') . ' '
                     . 'Controlador: ' . $this->page['controller'] . ', Metodo: ' . $this->page['method']);
         }
@@ -1000,7 +1037,10 @@ class Mvc
     private function RouterExt()
     {
         $accept = [];
-
+        if (trim($this->page['extencion']) == '')
+        {
+            $this->page['extencion'] = NULL;
+        }
         if (Controllers::GetReflectionClass()->implementsInterface(Mvc\ExtByController::class))
         {
             $class = Controllers::GetReflectionClass()->name;
@@ -1208,11 +1248,19 @@ class Mvc
         }
         $this->Log("Filtrando Xss...");
         $this->FilterXss();
+        if (isset($this->page['routeVars']))
+        {
+            $this->DependenceInyector->SetDependenceForParamArray($this->page['routeVars']);
+        }
         $this->Request = new Request();
         if ($this->Request->method() == 'POST')
         {
             $this->DependenceInyector->SetDependenceForParamArray($this->Request->Post);
         }
+
+        $this->DependenceInyector->AddDependence('{cookie}', $this->Request->Cookie);
+        //  $parms = $RouterRegex->GetParams();
+        //  Mvc::App()->DependenceInyector->SetDependenceForParamArray($parms);
         $this->DependenceInyector->SetDependenceForParamArray($this->Request->Get);
     }
 
@@ -1281,7 +1329,7 @@ class Mvc
         $this->Log("Ejecutando el constuctor del  Controlador " . $c . $this->page['controller'] . " ...");
         if (($clousure = $this->Router->GetRoute($this->page)) == false)
         {
-            if ($this->SelectorController->InstanceController($this->page['method'], true))
+            if ($this->SelectorController->InstanceController(true))
             {
                 $this->ObjController = &$this->SelectorController->GetController();
 
@@ -1442,6 +1490,11 @@ class Mvc
                 $_GET = SQLi::Filter($_GET, isset($conf['VarAceptSqlI']['_GET']) ? $conf['VarAceptSqlI']['_GET'] : []);
                 $_POST = SQLi::Filter($_POST, isset($conf['VarAceptSqlI']['_POST']) ? $conf['VarAceptSqlI']['_POST'] : []);
                 $_COOKIE = SQLi::Filter($_COOKIE, isset($conf['VarAceptSqlI']['_COOKIE']) ? $conf['VarAceptSqlI']['_COOKIE'] : []);
+                if (isset($this->page['routeVars']))
+                {
+                    $this->page['routeVars'] = SQLi::Filter($this->page['routeVars']);
+                    //  $this->DependenceInyector->SetDependenceForParamArray($this->page['routeVars']);
+                }
             }
         }
         return $this->DataBase;

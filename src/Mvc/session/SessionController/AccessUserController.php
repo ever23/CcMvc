@@ -20,8 +20,9 @@
 namespace Cc\Mvc;
 
 /**
- * Description of AccessUserController
+ * Se implementa en las clase para definir que tipos de usuarios tendran acceso a sus metodos
  *
+ * @author Enyerber Franco
  * @package CcMvc
  * @subpackage Session 
  */
@@ -33,12 +34,15 @@ interface AccessUserController extends iProtected
      * QUE LOS DIFERENTES TIPOS DE USUARIO TIENE ACCESO
      * EN CASO  DE QUE EL USUARIO EJECUTE EL UN METODO AL QUE NO POSEE ACCESSO
      * SE MOSTRARA EL MENSAJE 403 O SE EJECURAR EL EVENTO OnFailed DE AuteticateUserDB
-     * <code>
+     * <code><?php
      * public static function AccessUser();
      * {
      *      return array(
      *      'NoAth'=>array(lista de metodos que no seran afectador por la autentificacion),
-     *      'tipo de usuario'=>array( 'Access'=>array(metodos accesibles),'NoAccess'=>array(metodos inaccsibles));
+     *      'tipo de usuario'=>array( 
+     *              'Access'=>array(metodos accesibles),
+     *              'NoAccess'=>array(metodos inaccsibles)
+     *              ),
      *       .  
      *       .
      *       .
@@ -46,7 +50,7 @@ interface AccessUserController extends iProtected
      *  
      * }
      * </code>
-     * <pre>
+     * 
      * 'NoAuth' en este indice sera un array con los metodos que no seran afectador por la autenticacion es decir
      * cualquier usuario o visitante tendra acceso 
      * El resto de los indices podran ser los direrentes tipos de usuarios que se puedan encontrar en la clumna 

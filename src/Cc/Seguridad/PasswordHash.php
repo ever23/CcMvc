@@ -27,9 +27,23 @@ namespace Cc;
 class PasswordHash
 {
 
+    /**
+     * Algoritmo que se usara
+     * @var int 
+     */
     private $Algorim;
+
+    /**
+     * opciones del algoritmo
+     * @var array 
+     */
     private $Options;
 
+    /**
+     * 
+     * @param int $algo algoritmo que se usara 
+     * @param array $options opciones del algoritmo
+     */
     public function __construct($algo = PASSWORD_BCRYPT, $options = [])
     {
         $this->Algorim = $algo;
@@ -39,26 +53,47 @@ class PasswordHash
         // echo $this->Options['cost'];
     }
 
+    /**
+     * establece las opciones para el hash
+     * @param array $options
+     */
     public function SetOptions(array $options)
     {
         $this->Options = $options;
     }
 
+    /**
+     * crea un hash a partir de una cadena 
+     * @param string $password
+     * @return string
+     */
     public function CreateHash($password)
     {
         return password_hash($password, $this->Algorim, $this->Options);
     }
 
+    /**
+     * Verifica si un hash dado pertenece a una cadena dada
+     * @param string $password
+     * @param string $Hash
+     * @return bool true si el pasword conicide con el hash false si no
+     */
     public function VerifyPassword($password, $Hash)
     {
         return password_verify($password, $Hash);
     }
 
+    /**
+     *  Verifica si un hash dado pertenece a una cadena dada y verifica si se puede actualizar el algoritmo
+     * @param string $password
+     * @param string $hash
+     * @return NULL|string 
+     */
     public function VerifyUpdateAlgorim($password, $hash)
     {
-        if(self::PasswordVerify($password, $hash))
+        if (self::PasswordVerify($password, $hash))
         {
-            if(password_needs_rehash($hash, $this->Algorim, $this->Options))
+            if (password_needs_rehash($hash, $this->Algorim, $this->Options))
             {
                 return password_hash($password, $this->Algorim, $this->Options);
             }
@@ -66,6 +101,10 @@ class PasswordHash
         return NULL;
     }
 
+    /**
+     * genera el costo de tiempo que usara pasword hash
+     * @return int
+     */
     public function GenerateCost()
     {
         // return 10;
@@ -77,7 +116,7 @@ class PasswordHash
             $inicio = microtime(true);
             password_hash("test", $this->Algorim, ["cost" => $coste]);
             $fin = microtime(true);
-        } while(($fin - $inicio) < $timeTarget);
+        } while (($fin - $inicio) < $timeTarget);
 
         return $coste;
     }

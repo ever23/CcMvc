@@ -25,7 +25,7 @@ use Cc\Mvc;
  * Administra el almacenamiento de las propiedades publicas de los controladores en la session 
  *
  * @author Enyerber Franco
- *  @package CcMvc
+ * @package CcMvc
  * @subpackage Session 
  */
 class SessionSaveController implements \ArrayAccess
@@ -216,6 +216,9 @@ class SessionSaveController implements \ArrayAccess
 
 /**
  * establece metodos para el manejo de session en las propiedades de los controladores 
+ * @author Enyerber Franco
+ * @package CcMvc
+ * @subpackage Session 
  */
 trait PropertiesInSession
 {

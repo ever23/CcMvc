@@ -36,6 +36,7 @@ class Json extends \Cc\Json implements ResponseConten
 
     public static function CtorParam()
     {
+
         Mvc::App()->ChangeResponseConten('application/json');
         return Mvc::App()->Response;
     }

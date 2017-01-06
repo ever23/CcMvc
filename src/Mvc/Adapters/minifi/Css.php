@@ -32,6 +32,9 @@ class CSS extends \MatthiasMullie\Minify\CSS
 {
 
     protected $importExtensions = array(
+        'svg' => 'data:image/svg+xml',
+        'woff' => 'data:application/x-font-woff',
+        'woff2' => 'data:application/x-font-woff',
     );
 
     /**

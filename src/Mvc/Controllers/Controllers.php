@@ -109,6 +109,7 @@ abstract class Controllers implements InfoController
     /**
      * CAMBIA EN Content-type QUE SE ENVIARA SI EXISTE UNA CLASE MANEJADORA DE RESPUESTA PARA ESTE Content-type ESTA SERA INSTANCIADA Y REMPLAZARA AL ACTUAL OBJETO DE RESPUESTA
      * @param string $conten_type
+     * @return ResponseConten Objeto de respuesta
      */
     protected final static function &ChangeContenType($conten_type)
     {

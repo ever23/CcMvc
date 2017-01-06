@@ -95,23 +95,23 @@ class GDResponse implements ResponseConten
 
     /**
      * 
-     * @global string $ParamName nombre de paramentro
+     * @global string $name_param nombre de paramentro
      * @return array
      * @throws Exception
      */
     public static function CtorParam()
     {
-        global $ParamName;
-        if (isset(Mvc::App()->Config()->Response['ExtencionContenType'][$ParamName]) && in_array(Mvc::App()->Config()->Response['ExtencionContenType'][$ParamName], self::ImgSoported))
+        global $name_param;
+        if (isset(Mvc::App()->Config()->Response['ExtencionContenType'][$name_param]) && in_array(Mvc::App()->Config()->Response['ExtencionContenType'][$name_param], self::ImgSoported))
         {
-            Mvc::App()->ChangeResponseConten(Mvc::App()->Config()->Response['ExtencionContenType'][$ParamName]);
+            Mvc::App()->ChangeResponseConten(Mvc::App()->Config()->Response['ExtencionContenType'][$name_param]);
 
             return Mvc::App()->Response;
         } else
         {
 //Mvc::App()->Response = new static(true);
 //return Mvc::App()->Response;
-            throw new Exception("LA extencion .$ParamName no esta soportada por " . static::class);
+            throw new Exception("LA extencion .$name_param no esta soportada por " . static::class);
         }
         return [true, '{name_param}'];
     }
@@ -227,7 +227,6 @@ class GDResponse implements ResponseConten
      * @param int $nuevo_ancho
      * @param int $nuevo_alto
      * @param int $calidad
-     *
      * @return bynary
      */
     protected function ResampledImage($image, $nuevo_ancho, $nuevo_alto, $calidad = NULL)
@@ -368,7 +367,6 @@ class GDResponse implements ResponseConten
      * @param int $w
      * @param int $h
      * @param int $c
-     * 
      * @return boolean
      */
     protected function CacheImg($w, $h, $c)
@@ -453,6 +451,11 @@ class GDResponse implements ResponseConten
         return $out;
     }
 
+    /**
+     *
+     * @param binary $out
+     * @return ImageGD
+     */
     private function SaveFileCache($out)
     {
         //$compres= new \smushit();
@@ -477,6 +480,9 @@ class GDResponse implements ResponseConten
 
 /**
  * exepciones 
+ * @author Enyerber Franco <enyerverfranco@gmail.com> , <enyerverfranco@outlook.com>  
+ * @package CcMvc
+ * @subpackage Response
  */
 class GDexception extends Exception
 {

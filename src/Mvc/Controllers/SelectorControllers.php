@@ -26,6 +26,7 @@ use Cc\DependenceInyector;
 use Cc\Autoload\SearchClass;
 use Cc\Cache;
 use Cc\HelperArray;
+use Cc\InyectorException;
 
 /**
  * SelectorControllers                                             
@@ -160,7 +161,7 @@ class SelectorControllers
      * @param type $end
      * @ignore
      */
-    protected function ExceptionManager($ex, $method, $end = NULL)
+    protected function ExceptionManager($ex, $method, $end = NULL, $HttpCode = 500)
     {
         $plustrace = NULL;
         if ($method instanceof \ReflectionMethod)
@@ -185,7 +186,9 @@ class SelectorControllers
                 'args' => $this->ParamStringArray($method->getParameters())
             ];
         }
-        ErrorHandle::ExceptionManager($ex, 0, $end, $plustrace);
+        //  var_dump($method);
+        // exit;
+        ErrorHandle::ExceptionManager($ex, 0, $end, $plustrace, $HttpCode);
     }
 
     /**
@@ -255,6 +258,7 @@ class SelectorControllers
         $dir = $this->DirController . (is_null($paquete) ? '' : $paquete . '/');
         if (!is_dir($dir) && !is_null($paquete))
         {
+
             Mvc::App()->LoadError(404, "EL PAQUETE " . $paquete . " NO EXISTE");
             Mvc::EndApp();
             return false;
@@ -315,17 +319,13 @@ class SelectorControllers
                     throw $ex;
                 }
             }
-            $this->ReflectionClass = new \ReflectionClass($this->controllers);
-
-
-
-
+            $this->CreateReflection($method, $ContexApp);
 
             if ($ContexApp)
             {
                 return [$paquete, $controllers, $method];
             } else
-                return $this->InstanceController($method, $ContexApp);
+                return $this->InstanceController($ContexApp);
         } else
         {
 
@@ -356,6 +356,45 @@ class SelectorControllers
         }
     }
 
+    protected function CreateReflection($method, $ContexApp)
+    {
+        $this->method = $method;
+        $this->ReflectionClass = new \ReflectionClass($this->controllers);
+        if (!$this->ReflectionClass->isSubclassOf(Controllers::class))
+        {
+            if ($ContexApp)
+            {
+                Mvc::App()->LoadError(403, "LA CLASE " . $this->controllers . " DEBE SER EXTENDIDA DE LA CLASE Controllers PARA SER ACCESIBLE AL NAVEGADOR");
+                exit;
+            }
+
+            return false;
+        }
+        if ($this->CreateReflectionMethod($method))
+        {
+
+            return $this->VerificaMethod($ContexApp);
+        } else
+        {
+            if ($ContexApp)
+            {
+                if ($this->ReflectionClass->implementsInterface(ReRouterMethod::class))
+                {
+                    $this->ReRouterMethod = true;
+                } else
+                {
+                    if ($ContexApp)
+                    {
+                        Mvc::App()->LoadError(404, "EL METODO " . $this->method . " NO EXISTE EN EL CONTROLADOR " . $this->controllers);
+                        exit;
+                    }
+
+                    return false;
+                }
+            }
+        }
+    }
+
     /**
      * crea una instancia del controlador y ejecuta un metodo
      *
@@ -364,56 +403,46 @@ class SelectorControllers
      * @return boolean
      * @throws \Exception si la clase o el metodo no existe 
      */
-    public function InstanceController($method, $ContexApp)
+    public function InstanceController($ContexApp = false)
     {
 
-        if (!$this->ReflectionClass->isSubclassOf(Controllers::class))
-        {
-            if ($ContexApp)
-                Mvc::App()->LoadError(403, "LA CLASE " . $this->controllers . " DEBE SER EXTENDIDA DE LA CLASE Controllers PARA SER ACCESIBLE AL NAVEGADOR");
-            return false;
-        }
+
         $costruc = $this->ReflectionClass->getConstructor();
-        if (!is_null($method))
+
+        if ($this->Reflexion->isStatic())
         {
-
-            $this->method = $method;
-
-            if ($this->CreateReflectionMethod($method))
-            {
-                if ($this->Reflexion->isStatic())
-                {
-                    return true;
-                }
-            } else
-            {
-
-                if ($ContexApp)
-                {
-
-                    if ($this->ReflectionClass->implementsInterface(ReRouterMethod::class))
-                    {
-                        $this->ReRouterMethod = true;
-                    } else
-                    {
-                        Mvc::App()->LoadError(404, "EL METODO " . $this->method . " NO EXISTE EN EL CONTROLADOR " . $this->controllers);
-                        return false;
-                    }
-                }
-            }
+            return true;
         }
-
         $param = [];
         if ($costruc)
         {
             try
             {
                 $param = $this->Inyector->SetFunction($costruc)->Param();
+            } catch (InyectorException $ex)
+            {
+
+                if ($ContexApp)
+                {
+                    switch ($ex->getCode())
+                    {
+                        case InyectorException::FaileTypeParam:
+                        case InyectorException::NotResolveParam:
+
+                            $this->ExceptionManager($ex, $costruc, -4, 400);
+                            break;
+                        default :
+                            $this->ExceptionManager($ex, $costruc, -4);
+                    }
+                } else
+                {
+                    throw $ex;
+                }
             } catch (\Exception $ex)
             {
                 if ($ContexApp)
                 {
-                    $this->ExceptionManager($ex, $this->Reflexion, -5);
+                    $this->ExceptionManager($ex, $costruc, -4);
                 } else
                 {
                     throw $ex;
@@ -422,7 +451,7 @@ class SelectorControllers
             {
                 if ($ContexApp)
                 {
-                    $this->ExceptionManager($ex, $this->Reflexion, -5);
+                    $this->ExceptionManager($ex, $costruc, -4);
                 } else
                 {
                     throw $ex;
@@ -449,7 +478,7 @@ class SelectorControllers
         {
             if ($ContexApp && $costruc)
             {
-                $this->ExceptionManager($ex, $costruc, -7);
+                $this->ExceptionManager($ex, $costruc, -4);
             } else
             {
                 throw $ex;
@@ -458,7 +487,7 @@ class SelectorControllers
         {
             if ($ContexApp && $costruc)
             {
-                $this->ExceptionManager($ex, $costruc, -7);
+                $this->ExceptionManager($ex, $costruc, -4);
             } else
             {
                 throw $ex;
@@ -501,6 +530,74 @@ class SelectorControllers
         return $this->Call($name);
     }
 
+    protected function VerificaMethod($ContexApp = false)
+    {
+
+
+        if ($this->ReflectionClass->implementsInterface(ProtectedMetodHttp::class))
+        {
+            $class = $this->ReflectionClass->name;
+
+            if (in_array($this->method, HelperArray::TolowerRecursive($class::MethodsNoHttp())))
+            {
+                if ($ContexApp)
+                {
+                    Mvc::App()->LoadError(403, "EL METODO " . $this->method . " NO SE PUEDE EJECUTAR YA QUE SE ESTA PROTEGIDO POR " . ProtectedMetodHttp::class . "::MethodsNoHttp()");
+                    exit;
+                }
+            }
+        }
+
+
+        if ($ContexApp && in_array($this->method, $this->NoCalable))
+        {
+            Mvc::App()->LoadError(403, "EL METODO " . $this->method . " NO SE PUEDE EJECUTAR YA QUE SE ENCUENTRA EL LA LISTA NoCalable");
+            exit;
+        }
+
+        if ($this->Reflexion->isConstructor())
+        {
+            $ERROR = "NO ES POSIBLE ACCESAR AL METODO " . $this->method
+                    . " DEL CONTROLADOR " . $this->controllers
+                    . " POR QUE ES EL CONSTRUCTOR DE LA CLASE ";
+            if ($ContexApp)
+            {
+                Mvc::App()->LoadError(403, $ERROR);
+                exit;
+            } elseif ($this->conf['debung']['ModoExeption'] != 0)
+            {
+                throw new SelectorControllerException($ERROR, SelectorControllerException::NoAcces);
+            }
+        } elseif ($this->Reflexion->isDestructor())
+        {
+            $ERROR = "NO ES POSIBLE ACCESAR AL METODO " . $this->method
+                    . " DEL CONTROLADOR " . $this->controllers
+                    . " POR QUE ES EL DESTRUCTOR DE LA CLASE ";
+            if ($ContexApp)
+            {
+                Mvc::App()->LoadError(403, $ERROR);
+                exit;
+            } elseif ($this->conf['debung']['ModoExeption'] != 0)
+            {
+                throw new SelectorControllerException($ERROR, SelectorControllerException::NoAcces);
+            }
+        } elseif ($this->Reflexion->isAbstract())
+        {
+            $ERROR = "NO ES POSIBLE ACCESAR AL METODO " . $this->method
+                    . " DEL CONTROLADOR " . $this->controllers
+                    . " POR QUE ES UN METODO ABSTRACTO ";
+            if ($ContexApp)
+            {
+                Mvc::App()->LoadError(403, $ERROR);
+                exit;
+            } elseif ($this->conf['debung']['ModoExeption'] != 0)
+            {
+                throw new SelectorControllerException($ERROR, SelectorControllerException::NoAcces);
+            }
+        }
+        RETURN TRUE;
+    }
+
     /**
      * llama un metodo sel controlador actual 
      * @param string $metod
@@ -523,10 +620,14 @@ class SelectorControllers
                     {
                         Mvc::App()->LoadError(404, "EL METODO " . $this->method . " NO EXISTE EN EL CONTROLADOR " . $this->controllers);
                     }
+                } else
+                {
+                    throw new SelectorControllerException("EL METODO " . $this->method . " NO EXISTE EN EL CONTROLADOR ", SelectorControllerException::UndefinedMetod);
                 }
 
                 return false;
             }
+            $this->VerificaMethod($ContexApp);
         }
         if ($this->ReflectionClass->implementsInterface(ReRouterMethod::class) && $this->ReRouterMethod)
         {
@@ -538,44 +639,10 @@ class SelectorControllers
             return;
         }
 
-        if ($this->ReflectionClass->implementsInterface(ProtectedMetodHttp::class))
-        {
-            $class = $this->ReflectionClass->name;
+        $this->ExecuteMethod();
 
-            if (in_array($this->method, HelperArray::TolowerRecursive($class::MethodsNoHttp())))
-            {
-                Mvc::App()->LoadError(403, "EL METODO " . $this->method . " NO SE PUEDE EJECUTAR YA QUE SE ESTA PROTEGIDO POR " . ProtectedMetodHttp::class . "::MethodsNoHttp()");
-                return false;
-            }
-        }
-
-
-        if ($ContexApp && in_array($this->method, $this->NoCalable))
-        {
-            Mvc::App()->LoadError(403, "EL METODO " . $this->method . " NO SE PUEDE EJECUTAR YA QUE SE ENCUENTRA EL LA LISTA NoCalable");
-            return false;
-        }
-
-        if ($this->Reflexion->isPublic() && !$this->Reflexion->isConstructor() && !$this->Reflexion->isDestructor() && !$this->Reflexion->isAbstract())
-        {
-            $this->ExecuteMethod();
-            return true;
-        } else
-        {
-            $ERROR = "NO ES POSIBLE ACCESAR AL METODO " . $this->method
-                    . " DEL CONTROLADOR " . $this->controllers
-                    . " PUEDE SER POR QUE NO SEA UN METODO "
-                    . "DEFINIDO COMO PUBLIC O SEA EL CONSTRUCTOR O DESTRUCTOR";
-            if ($ContexApp)
-            {
-                Mvc::App()->LoadError(403, $ERROR);
-                return false;
-            } elseif ($this->conf['debung']['ModoExeption'] != 0)
-            {
-                throw new SelectorControllerException($ERROR);
-            }
-        }
         $this->ContextApp = false;
+        return true;
     }
 
     public function CallFunction($fun)
@@ -648,6 +715,25 @@ class SelectorControllers
         try
         {
             $param = $this->Inyector->SetFunction($this->Reflexion)->Param();
+        } catch (InyectorException $ex)
+        {
+
+            if ($ContexApp)
+            {
+                switch ($ex->getCode())
+                {
+                    case InyectorException::FaileTypeParam:
+                    case InyectorException::NotResolveParam:
+
+                        $this->ExceptionManager($ex, $this->Reflexion, -5, 400);
+                        break;
+                    default :
+                        $this->ExceptionManager($ex, $this->Reflexion, -5);
+                }
+            } else
+            {
+                throw $ex;
+            }
         } catch (\Exception $ex)
         {
             if ($ContexApp)
@@ -709,7 +795,3 @@ class SelectorControllers
 /**
  * 
  */
-class SelectorControllerException extends Exception
-{
-    
-}

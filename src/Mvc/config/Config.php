@@ -19,6 +19,8 @@
 
 namespace Cc\Mvc;
 
+use Cc\Mvc;
+
 /**
  * Representacion de la configuracion de CcMvc 
  * @autor ENYREBER FRANCO       <enyerverfranco@gmail.com> , <enyerverfranco@outlook.com>                                                    
@@ -161,6 +163,17 @@ namespace Cc\Mvc;
 class Config extends \Cc\Config
 {
 
+    private $configFile = '';
+    private $cacheCompile;
+    private $Compiled = false;
+
+    public function __construct($DEF = 'DefaultConfig.php')
+    {
+        parent::__construct($DEF);
+        /* $md5 = md5_file(Mvc::App()->GetExecutedFile());
+          $this->cacheCompile = '.' . $md5 . '.ConfigCompled.inc'; */
+    }
+
     public function LoadConfig($name, $config_name)
     {
 
@@ -169,13 +182,13 @@ class Config extends \Cc\Config
             $conf = $config_name;
         } else
         {
-            $File = new \SplFileInfo(realpath($config_name));
+            $this->configFile = new \SplFileInfo(realpath($config_name));
 
-            if (!$File->isFile())
+            if (!$this->configFile->isFile())
             {
                 throw new Exception("el archivo de configuracion " . realpath($config_name) . " no existe");
             }
-            if ($File->getExtension() == 'ini')
+            if ($this->configFile->getExtension() == 'ini')
             {
                 $conf = $this->LoadIni($config_name, true);
             } else
@@ -213,15 +226,24 @@ class Config extends \Cc\Config
 
     public function Load($config_name)
     {
+        /* if (file_exists($this->cacheCompile))
+          {
+          $this->config = include($this->cacheCompile);
+          if (isset($this->config['ConfigCompled']) && $this->config['ConfigCompled'] == md5_file($config_name))
+          {
+          $this->Compiled = true;
+          return;
+          }
+          } */
         if (is_string($config_name))
         {
-            $File = new \SplFileInfo(realpath($config_name));
+            $this->configFile = new \SplFileInfo(realpath($config_name));
             $this->config = $this->default;
-            if (!$File->isFile())
+            if (!$this->configFile->isFile())
             {
                 throw new Exception("el archivo de configuracion " . realpath($config_name) . " no existe");
             }
-            if ($File->getExtension() == 'ini')
+            if ($this->configFile->getExtension() == 'ini')
             {
                 $conf = $this->LoadIni($config_name, true);
             } else
@@ -255,6 +277,21 @@ class Config extends \Cc\Config
             }
         $this->LoadConf($this->config, $this->orig);
         $this->config['App'] = $this->RemplaceApp($this->config['App']);
+    }
+
+    public function Compile()
+    {
+        if ($this->Compiled)
+            return;
+        $md = md5_file($this->configFile);
+        $this->config['ConfigCompled'] = $md;
+        $md5 = md5_file(Mvc::App()->GetExecutedFile());
+        file_put_contents('.' . $md5 . '.ConfigCompled.inc', '<?php return ' . var_export($this->config, true) . ';?>');
+        /* $f = glob('*.ConfigCompled.inc');
+          foreach ($f as $v)
+          {
+
+          } */
     }
 
 }

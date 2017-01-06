@@ -54,10 +54,16 @@ class MvcEvents
      * @var LayautManager 
      */
     public static $Layaut;
+    public $events = [];
 
     public function __construct()
     {
         
+    }
+
+    public function Add($name, \Closure $claback)
+    {
+        $this->events[$name] = $claback;
     }
 
     public final function &__get($name)
@@ -76,23 +82,39 @@ class MvcEvents
         }
     }
 
-    public static function Start(Config $conf)
+    public static function &Start(Config $conf)
     {
         $class = $conf->Events['class'];
         static::$Event = new $class();
+        return static::$Event;
     }
 
     public static function Tinger($events, ...$params)
     {
+        if (isset(static::$Event->events[$events]))
+        {
+            $clousure = \Closure::bind(static::$Event->events[$events], static::$Event);
+            $clousure(...$params);
+        }
         return static::$Event->{$events}(...$params);
     }
 
     public static function TingerAndDependence($events)
     {
+        if (isset(static::$Event->events[$events]))
+        {
+            $clousure = \Closure::bind(static::$Event->events[$events], static::$Event);
+            $clousure(...Mvc::App()->DependenceInyector->ParamFunction(static::$Event->events[$events]));
+        }
         if (method_exists(static::$Event, $events))
         {
             return static::$Event->{$events}(...Mvc::App()->DependenceInyector->ParamFunction([static::$Event, $events]));
         }
+    }
+
+    public function Error400($mensaje)
+    {
+        $this->View->LoadInternalView('Error400.php');
     }
 
     public function Error401($mensaje)

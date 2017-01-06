@@ -38,8 +38,9 @@ return
             'Cache' =>
             [
                 'debung' => false,
-                'class' => '\\Cc\\CacheFilePHP',
-                'File' => 'CcMvcCache' . \CcMvc::Version,
+                'class' => '\\Cc\\Cache\\MultifilePhp',
+                'dir' => 'AppCache',
+                'File' => 'CcMvc' . \CcMvc::Version,
                 'ExpireTime' => '+1 month'
             ],
             /**
@@ -75,9 +76,7 @@ return
                 [
                     '\\Cc\\Mvc\\DBtabla' => ['{DB}', '{name_param}'],
                     '\\Cc\\Mvc\\DBtablaModel' => ['{DB}', '{name_param}'],
-                    '\\Cc\\Mvc\\Cookie' => ['{config}'],
                     '\\Cc\\Mvc\\PostFiles' => ['{name_param}'],
-                    '\\Cc\\Mvc\\Server' => [],
                     '\\Cc\\Mvc\\MapingControllers' => ['{config}']
                 ],
             ],
@@ -151,7 +150,15 @@ return
              */
             'Router' =>
             [
+
                 'AutomaticRoute' => true,
+                'Routing' => [
+                /* [
+                  'uri' => '',
+                  'controller' => '',
+                  'where' => []
+                  ] */
+                ],
                 /**
                  * PROTOCOLO EN EL QUE TRABAJARA LA APLICACION
                  */

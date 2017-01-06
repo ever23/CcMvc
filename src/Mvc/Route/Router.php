@@ -24,7 +24,7 @@ use Cc\Autoload\SearchClass;
 use Cc\UrlManager;
 
 /**
- * enruta controladores y archivos 
+ * Enruta controladores y archivos 
  * @autor ENYREBER FRANCO       <enyerverfranco@gmail.com> , <enyerverfranco@outlook.com>                                                    
  * @package CcMvc
  * @subpackage Router
@@ -32,16 +32,54 @@ use Cc\UrlManager;
 class Router extends \Cc\Router
 {
 
+    /**
+     * Tipo de erutamiento via get
+     */
     const Get = 0x2;
+
+    /**
+     * Tipo de enrutamiento via path
+     */
     const Path = 0x4;
+
+    /**
+     * no usa extenciones para controladores
+     */
     const NoExtContr = 'NoUse';
+
+    /**
+     * requiere extencion para los controladores
+     */
     const RequireExtContr = 'Require';
+
+    /**
+     * se puede usar extenciones para controladores pero no es obligatorio
+     */
     const UseExtContr = 'Use';
 
+    /**
+     * archivo requerido
+     * @var string 
+     */
     protected $RequestFilename;
+
+    /**
+     *
+     * @var string 
+     */
     public static $query = NULL;
+
+    /**
+     *
+     * @var array 
+     */
     protected $routes = [];
 
+    /**
+     * 
+     * @param array $Conf configuracion de enrutamiento
+     * @param string $query
+     */
     public function __construct($Conf, $query = NULL)
     {
         parent::__construct($Conf);
@@ -67,13 +105,37 @@ class Router extends \Cc\Router
                 self::$query = $query;
             }
         }
+        if (isset($this->config['Routing']))
+            foreach ($this->config['Routing'] as $route)
+            {
+                $this->Route($route['uri'], $route['controller'], isset($route['where']) ? $route['where'] : []);
+            }
     }
 
-    public function Route($path, $controller, $match = [], $replace = true)
+    /**
+     * agrega una exprecion de enrutamiento
+     * @param string|array $path path de peticion 
+     * @param string|\Closure $controller controlador al que se redigira 
+     * @param array $match validacion para cada exprecion 
+     */
+    public function Route($path, $controller, $match = [])
     {
-        $this->routes[$path] = [$controller, true, $match];
+        if (is_array($path))
+        {
+            foreach ($path as $p)
+            {
+                $this->Route($p, $controller, $match);
+            }
+        } else
+        {
+            $this->routes[$path] = [$controller, true, $match];
+        }
     }
 
+    /**
+     * retorna el archivo de peticion
+     * @return string
+     */
     public function GetRequestFile()
     {
         return $this->RequestFilename;
@@ -131,6 +193,12 @@ class Router extends \Cc\Router
         }
     }
 
+    /**
+     * 
+     * @param string|array $page
+     * @param string $alcance
+     * @return string
+     */
     protected function CreateHref($page, $alcance)
     {
         $ext = $paquete = $class = $method = '';
@@ -217,6 +285,14 @@ class Router extends \Cc\Router
         }
     }
 
+    /**
+     * Envia las cabeceras corespondientes para que el navegador almacene cache corectamente
+     * @param \SplFileInfo|int $spl timestamp de la ultima modificacion
+     * @param string $ContentType Mime-type
+     * @param string|int $caheExpire tiempo de expiracion del cache
+     * @param bool $reenv indica si respondera con un mensaje  301  si el navegador ya lo tiene en cache
+     * @return bool
+     */
     public static function HeadersReponseFiles($spl, $ContentType, $caheExpire = NULL, $reenv = false)
     {
 
@@ -229,6 +305,10 @@ class Router extends \Cc\Router
         return parent::HeadersReponseFiles($spl, $ContentType, $caheExpire, $reenv);
     }
 
+    /**
+     * Enruta un archivo .php
+     * @param \SplFileInfo $spl
+     */
     protected static function LoadFilePhp(\SplFileInfo &$spl)
     {
 
@@ -309,6 +389,10 @@ class Router extends \Cc\Router
         return $dir;
     }
 
+    /**
+     * resuelve el controlador via path
+     * @return bool
+     */
     private function SelectPagePath()
     {
         $path = $this->GetPath();
@@ -330,6 +414,10 @@ class Router extends \Cc\Router
         return $this->SelectPage($path, '/');
     }
 
+    /**
+     * resuelve el controlador via get
+     * @return type
+     */
     private function SelectPageGet()
     {
         $page = self::$query;
@@ -405,6 +493,12 @@ class Router extends \Cc\Router
         return ($class && $metodo && $pakage) || ($class2 && $metodo2 && $pakage2);
     }
 
+    /**
+     * divide una exprecion de controlador en sus partes 
+     * @param string $page
+     * @param string $alcance
+     * @return array 0=>Paquete,1=>Controller,2=>Method,4=>extencion
+     */
     private function Page($page, $alcance)
     {
 
@@ -434,18 +528,28 @@ class Router extends \Cc\Router
         return [$Paquete, $Controller, $Method, $ext, $n];
     }
 
-    public function ValidateController(array $controller)
-    {
-        $cont = $this->CreateHref($controller, Mvc::Config()->Router['OperadorAlcance']);
-        if (in_array($cont, $this->routes))
-        {
-            return false;
-        } else
-        {
-            return true;
-        }
-    }
+    /**
+     * 
+     * @param array $controller
+     * @return boolean
 
+      private function ValidateController(array $controller)
+      {
+      $cont = $this->CreateHref($controller, Mvc::Config()->Router['OperadorAlcance']);
+      if (in_array($cont, $this->routes))
+      {
+      return false;
+      } else
+      {
+      return true;
+      }
+      } */
+
+    /**
+     * retorna el clousure del si existe
+     * @param array $page
+     * @return boolean|\Closure
+     */
     public function GetRoute(array $page)
     {
         if (isset($page['orig']) && isset($page['Callable']) && $page['Callable'])
@@ -455,66 +559,19 @@ class Router extends \Cc\Router
         return false;
     }
 
-    private function EvalueRouteVars($PathT, $pathP, $c, $mathvar, &$param, &$replace, $match = ['\{', '\}'])
-    {
-        $split = preg_split('/(' . $match[0] . '.*' . $match[1] . ')/U', $PathT, PREG_SPLIT_DELIM_CAPTURE, -1);
-        $explo = '';
-        foreach ($split as $j => $sp)
-        {
-            if ($j % 2 != 0)
-            {
-                $explo = preg_quote($sp[0], '/') . '|';
-            }
-        }
-        if ($explo == '')
-        {
-            $Pexplo = [$pathP];
-        } else
-        {
-            $Pexplo = preg_split('/' . substr($explo, 0, -1) . '/', $pathP);
-            $PExpAth = preg_split('/' . substr($explo, 0, -1) . '/', $PathT);
-            if (count($Pexplo) != count($PExpAth))
-            {
-                return false;
-            }
-        }
-        $z = 0;
-        foreach ($split as $j => $sp)
-        {
-            if ($j % 2 == 0)
-            {
-
-                $name = preg_replace('/' . $match[0] . '|' . $match[1] . '/', '', $sp[0]);
-                //var_dump($mathvar[$name]);
-                if (isset($mathvar[$name]) && !preg_match('/' . $mathvar[$name] . '/i', $Pexplo[$z]))
-                {
-                    return false;
-                }
-                if ($Pexplo[$z] == '' && $match[1] != '\?\}')
-                {
-                    continue;
-                }
-                $param[$name] = $Pexplo[$z];
-                if (is_string($c) && preg_match('/(' . $match[0] . $name . $match[1] . ')/', $c))
-                {
-                    $m = '/' . preg_quote($sp[0], '/') . '/';
-                    $replace[$m] = $Pexplo[$z];
-                }
-                $z++;
-            }
-        }
-        return true;
-    }
-
+    /**
+     * resuelve el controlador
+     * @param string $page
+     * @param string $alcance
+     * @return bool
+     */
     private function SelectPage($page, $alcance)
     {
         // preg_match_all('/\{(\w+?)\?\}/', $this->uri, $matches);
         $RouterRegex = new RouteByMatch($page, $this->routes);
         if (($path = $RouterRegex->compile()) !== false)
         {
-            $parms = $RouterRegex->GetParams();
 
-            Mvc::App()->DependenceInyector->SetDependenceForParamArray($parms);
             if ($RouterRegex->IsCalableRoute())
             {
                 return array(
@@ -571,6 +628,11 @@ class Router extends \Cc\Router
         }
     }
 
+    /**
+     * mensaje de error para enrutamiento
+     * @param string $string
+     * @return string
+     */
     public function RouterError($string)
     {
         if ($this->config['GetControllerFormat'] == self::Get)
@@ -583,6 +645,12 @@ class Router extends \Cc\Router
         }
     }
 
+    /**
+     * valida extenciones de controladores 
+     * @param string $ext
+     * @param array $aprovadas
+     * @return boolean
+     */
     public function ValidateExt($ext, array $aprovadas = [])
     {
         $config = Mvc::App()->Config();

@@ -31,40 +31,123 @@ use Cc\Mvc;
 class RouteByMatch
 {
 
+    /**
+     *
+     * @var array 
+     */
     protected $routes;
+
+    /**
+     * path de peticion
+     * @var string 
+     */
     protected $path;
+
+    /**
+     * path dividido 
+     * @var array 
+     */
     protected $PartsPath = [];
+
+    /**
+     * numero de partes del path
+     * @var int 
+     */
     protected $NpartsPath = 0;
+
+    /**
+     * parametros
+     * @var array 
+     */
     protected $params = [];
+
+    /**
+     * parametros a remplazar en el path
+     * @var array 
+     */
     protected $replace = [];
+
+    /**
+     * indica si es un callable
+     * @var bool 
+     */
     protected $isCalable = false;
+
+    /**
+     *
+     * @var string 
+     */
     protected $origRegex = '';
 
+    /**
+     *
+     * @var string 
+     */
+    protected $extencion;
+
+    /**
+     * 
+     * @param string $path path de la peticion
+     * @param array $routes
+     */
     public function __construct($path, $routes)
     {
         $this->routes = $routes;
         $this->path = $path;
     }
 
+    /**
+     * Retorna los parametros que surgen de la compilacion del path
+     * @return array
+     */
     public function GetParams()
     {
         return $this->params;
     }
 
+    /**
+     * 
+     * @return string
+     */
     public function GetOrigRegex()
     {
         return $this->origRegex;
     }
 
+    /**
+     * Verifica si el controlador es un calback
+     * @return bool
+     */
     public function IsCalableRoute()
     {
         return $this->isCalable;
     }
 
+    private function DividePath($path)
+    {
+        $ParstPath = preg_split('/\//', $path);
+        /* $popParnts = array_pop($ParstPath);
+          foreach (explode('.', $popParnts) as $p)
+          {
+          $ParstPath[] = $p;
+          } */
+        return $ParstPath;
+    }
+
+    /**
+     * compila el enrutamiento
+     * @return boolean
+     */
     public function compile()
     {
-        $this->PartsPath = preg_split('/\/|\./', $this->path);
+        $this->PartsPath = $this->DividePath($this->path);
+
         $this->NpartsPath = count($this->PartsPath);
+        if (count($ex = explode('.', $this->PartsPath[$this->NpartsPath - 1])) > 1)
+        {
+            $this->extencion = $ex[1];
+            $this->PartsPath[$this->NpartsPath - 1] = $ex[0];
+        }
         $this->params = [];
         $this->replace = [];
         $this->isCalable = false;
@@ -75,64 +158,100 @@ class RouteByMatch
             list($controller, $repl, $mathvar) = $contr;
 
             $Rpath = substr($path, 1);
-            $pathRegex = preg_split('/\/|\./', $Rpath);
+            $pathRegex = $this->DividePath($Rpath);
+            $extRegex = NULL;
+            $CountpathRegex = count($pathRegex);
+            if (count($ex = explode('.', $pathRegex[$CountpathRegex - 1])) > 1)
+            {
+                $extRegex = $ex[1];
+                $pathRegex[$CountpathRegex - 1] = $ex[0];
+            }
             $verifi = false;
             $param = [];
             $this->replace = [];
-            if (count($this->PartsPath) != count($pathRegex))
+            $this->params = [];
+            if (strcasecmp($Rpath, $this->path) === 0)
+            {
+
+                return $this->ReturnedController($controller, $path);
+            } elseif (count($this->PartsPath) != count($pathRegex))
             {
                 continue;
-            } elseif ($this->CompileRegex($pathRegex, $controller, $mathvar))
+            } elseif (( (is_null($this->extencion) && is_null($extRegex)) || (!is_null($this->extencion) && !is_null($extRegex))) && $this->CompileRegex($pathRegex, $controller, $mathvar))
             {
+                // var_dump($controller, $path);
 
-                $this->origRegex = $path;
-
-                if (is_callable($controller))
+                if (!is_null($this->extencion) && !is_null($extRegex))
                 {
-                    $this->isCalable = true;
-                    return $controller;
-                } else
-                {
-                    if (is_numeric($controller))
+                    if (preg_match('/\{.*\}$/U', $extRegex))
                     {
-                        if (in_array($controller, [404, 403]))
-                        {
-                            Mvc::App()->LoadError($controller, " Via Enrutamiento manual");
-                            exit;
-                        }
-                    }
-
-                    if (preg_match('/\.\{.*\}$/U', $controller))
+                        $this->replace['/' . preg_quote($extRegex, '/') . '/i'] = $this->extencion;
+                    } elseif (strcasecmp($extRegex, $this->extencion) !== 0)
                     {
-
-                        $ext = (new \SplFileInfo($this->path))->getExtension();
-                        $controller = preg_replace('/\.\{.*\}$/U', '.' . $ext, $controller);
+                        continue;
                     }
-
-                    foreach ($this->replace as $r => $p2)
-                    {
-
-                        $controller = preg_replace($r, $p2, $controller);
-                        // var_dump($p2);
-                    }
-
-
-                    return $controller;
                 }
-                return false;
+                return $this->ReturnedController($controller, $path);
             }
         }
         return false;
     }
 
-    public function CompileRegex($pathRegex, $controller, $mathvar)
+    protected function ReturnedController($controller, $path)
+    {
+        $this->origRegex = $path;
+
+        if (is_callable($controller))
+        {
+            $this->isCalable = true;
+            return $controller;
+        } else
+        {
+            if (is_numeric($controller))
+            {
+                if (in_array($controller, [404, 403]))
+                {
+                    Mvc::App()->LoadError($controller, " Via Enrutamiento manual");
+                    exit;
+                }
+            }
+
+            if (preg_match('/\.\{.*\}$/U', $controller))
+            {
+
+                $ext = (new \SplFileInfo($this->path))->getExtension();
+                $controller = preg_replace('/\.\{.*\}$/U', '.' . $ext, $controller);
+            }
+
+            foreach ($this->replace as $r => $p2)
+            {
+
+                $controller = preg_replace($r, $p2, $controller);
+                // var_dump($p2);
+            }
+
+            //  var_dump($controller);
+            // exit;
+            return $controller;
+        }
+        return false;
+    }
+
+    /**
+     * compila las expreciones
+     * @param array $pathRegex
+     * @param string $controller
+     * @param array $mathvar
+     * @return boolean
+     */
+    protected function CompileRegex($pathRegex, $controller, $mathvar)
     {
         foreach ($this->PartsPath as $i => $p)
         {
             if (isset($pathRegex[$i]))
             {
 
-                if ($p == $pathRegex[$i])
+                if (strcasecmp($p, $pathRegex[$i]) === 0)
                 {
 
                     continue;
@@ -159,9 +278,18 @@ class RouteByMatch
         return true;
     }
 
+    /**
+     * 
+     * @param string $PathT
+     * @param string $pathP
+     * @param string $c
+     * @param array $mathvar
+     * @param array $match
+     * @return boolean
+     */
     private function EvalueRouteVars($PathT, $pathP, $c, $mathvar, $match = ['\{', '\}'])
     {
-        $split = preg_split('/(' . $match[0] . '.*' . $match[1] . ')/U', $PathT, PREG_SPLIT_DELIM_CAPTURE, -1);
+        $split = preg_split('/(' . $match[0] . '.*' . $match[1] . ')/Ui', $PathT, PREG_SPLIT_DELIM_CAPTURE, -1);
         $explo = '';
         foreach ($split as $j => $sp)
         {
@@ -175,30 +303,31 @@ class RouteByMatch
             $Pexplo = [$pathP];
         } else
         {
-            $Pexplo = preg_split('/' . substr($explo, 0, -1) . '/', $pathP);
-            $PExpAth = preg_split('/' . substr($explo, 0, -1) . '/', $PathT);
+            $Pexplo = preg_split('/' . substr($explo, 0, -1) . '/i', $pathP);
+            $PExpAth = preg_split('/' . substr($explo, 0, -1) . '/i', $PathT);
             if (count($Pexplo) != count($PExpAth))
             {
                 return false;
             }
         }
         $z = 0;
+
         foreach ($split as $j => $sp)
         {
             if ($j % 2 == 0)
             {
 
-                $name = preg_replace('/' . $match[0] . '|' . $match[1] . '/', '', $sp[0]);
+                $name = preg_replace('/' . $match[0] . '|' . $match[1] . '/i', '', $sp[0]);
 
-                if (isset($mathvar[$name]) && !preg_match('/' . $mathvar[$name] . '/i', $Pexplo[$z]))
+                if ((isset($mathvar[$name]) && !preg_match('/' . $mathvar[$name] . '/i', $Pexplo[$z])) || trim($Pexplo[$z]) == '')
                 {
                     return false;
                 }
 
                 $this->params[$name] = $Pexplo[$z];
-                if (is_string($c) && preg_match('/(' . $match[0] . $name . $match[1] . ')/', $c))
+                if (is_string($c) && preg_match('/(' . $match[0] . $name . $match[1] . ')/i', $c))
                 {
-                    $m = '/' . preg_quote($sp[0], '/') . '/';
+                    $m = '/' . preg_quote($sp[0], '/') . '/i';
                     $this->replace[$m] = $Pexplo[$z];
                 }
                 $z++;

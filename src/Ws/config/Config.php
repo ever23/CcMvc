@@ -36,7 +36,6 @@ namespace Cc\Ws;
  * 'layauts' => string,         //directorio que contiene los layauts 
  * 'Cache' => string,           //directorio donde se almacena el cache 
  * );
-
  */
 class Config extends \Cc\Config
 {

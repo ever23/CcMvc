@@ -69,7 +69,7 @@ require_once ("Mvc/Mvc.php");
  * CcMvc::Start($config, "CcMvc")->Run();
  * ?>
  * </code>                                                                             
- * @version: 0.8.4.0                                                  
+ * @version: 0.8.5.0                                                  
  * @fecha: 2016-10-21                                                         
  * @autor ENYREBER FRANCO   <enyerberfranco.com.ve>                                                    
  * @copyright (C) 2015-2016, Enyerber Franco 
@@ -84,7 +84,7 @@ require_once ("Mvc/Mvc.php");
 class CcMvc extends \Cc\Mvc
 {
 
-    const Version = '0.8.4.0';
+    const Version = '0.8.5.0';
     const CopyRight = '&copy; 2015-2016, Enyerber Franco';
     const License = '<a href=" http://opensource.org/licenses/gpl-license.php ">GNU  GPL</a>';
     const WebPage = 'http://ccmvc.com.ve';

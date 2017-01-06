@@ -44,12 +44,16 @@ class ErrorHandle extends \Cc\ErrorHandle
         parent::__construct($errno, $errstr, $errfile, $errline, $errcontex);
     }
 
-    public static function ExceptionManager($e, $ini = 0, $end = NULL, $plustrace = NULL, $fatal = NULL)
+    public static function ExceptionManager($e, $ini = 0, $end = NULL, $plustrace = NULL, $HttpCode = 500)
     {
         /* @var $e \Exception */
         DocumentBuffer::Clear();
         $error = parent::ExceptionManager($e, $ini, $end, $plustrace, false);
-        Mvc::App()->LoadError(500, $error);
+        if (is_bool($HttpCode))
+        {
+            $HttpCode = 500;
+        }
+        Mvc::App()->LoadError($HttpCode, $error);
 
 
         exit;

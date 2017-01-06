@@ -79,20 +79,20 @@ class ErrorHandle
      */
     public static function ExceptionManager($e, $ini = 0, $end = NULL, $plustrace = NULL, $exit = true)
     {
-        if ($end < 0)
-        {
-            $end = count($e->getTrace()) + $end;
-        }
+
         if (self::$debung['error_reporting'] == 0)
         {
             $error = get_class($e);
         } else
         {
             $trace = $e->getTrace();
-
+            if ($end < 0)
+            {
+                $end = count($e->getTrace()) + $end;
+            }
             if ($plustrace)
             {
-                array_push($trace, $plustrace);
+                array_unshift($trace, $plustrace);
                 if (!is_null($end))
                     $end++;
             }

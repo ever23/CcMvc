@@ -28,18 +28,27 @@ use Cc\Mvc;
 class Mail extends \Cc\Mail
 {
 
+    /**
+     * nombre del layaut
+     * @var string 
+     */
     protected $namelayaut;
+
+    /**
+     * directorio del layaut
+     * @var string 
+     */
     protected $DirLayaut;
 
     /**
-     *
+     * cargador de views
      * @var ViewController 
      */
     public $view;
 
     /**
-     *
-     * @var type 
+     * 
+     * @var LayautManager 
      */
     public $layaut;
 
@@ -50,6 +59,9 @@ class Mail extends \Cc\Mail
     public $html;
     private $BufferView = '';
 
+    /**
+     *  contructor
+     */
     public function __construct()
     {
         $conf = Mvc::Config();
@@ -63,24 +75,38 @@ class Mail extends \Cc\Mail
         $this->BufferView = '';
     }
 
+    /**
+     * titulo del correo
+     * @param string $title
+     */
     public function Titulo($title)
     {
         $this->html->titulo = $title;
         parent::Titulo($title);
     }
 
+    /**
+     * layaut
+     * @param string $layaut
+     * @param string $dir
+     */
     public function SetLayaut($layaut, $dir = NULL)
     {
         $this->html->SetLayaut($layaut, $dir);
     }
 
+    /**
+     * carga una plantilla view
+     * @param string $view
+     * @param array $agrs
+     * @return string
+     */
     public function LoadView($view, $agrs = [])
     {
-        ob_start();
+
         $this->view->ObjResponse = $this->html;
-        $this->view->Load($view, $agrs);
-        $b = ob_get_contents();
-        ob_end_clean();
+        $b = $this->view->Fetch($view, $agrs);
+
         $this->BufferView.=$b;
         return $b;
     }
@@ -94,10 +120,7 @@ class Mail extends \Cc\Mail
 
                     //$__name = ($layaut['Dir'] . $layaut['Layaut'] . '.php');
                     $__name = ($layaut['Dir'] . $layaut['Layaut']);
-                    if (!file_exists($__name))
-                    {
-                        $__name.='.php';
-                    }
+
                     if ((strpos($layaut['Layaut'], ':') !== false))
                     {
                         $__name.=$layaut['Layaut'];
@@ -108,11 +131,13 @@ class Mail extends \Cc\Mail
                     try
                     {
                         $param = ['content' => $content] + $LayautController->jsonSerialize();
+
                         if (isset($layaut['params']))
                         {
                             $param+=$layaut['params'];
                         }
                         $loader = new TemplateLoad(Mvc::App()->Config());
+
                         return $loader->Fetch($this, $__name, $param);
                     } catch (LayautException $ex)
                     {
