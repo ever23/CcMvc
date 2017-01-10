@@ -1,5 +1,5 @@
 <?php
-/* Create by \CcMvc 2017-01-03 18:44:06 */
+/* Create by \CcMvc 2017-01-07 02:56:06 */
  return array (
   'class' => 
   array (
@@ -103,8 +103,8 @@
     'Cc\\Mvc\\ReRouterMethod' => 'Mvc\\Controllers\\interfaces.php',
     'Cc\\Mvc\\MapingControllers' => 'Mvc\\Controllers\\MapingControllers.php',
     'Cc\\Mvc\\MvcEvents' => 'Mvc\\Controllers\\MvcEvents.php',
+    'Cc\\Mvc\\SelectorControllerException' => 'Mvc\\Controllers\\SelectorControllerException.php',
     'Cc\\Mvc\\SelectorControllers' => 'Mvc\\Controllers\\SelectorControllers.php',
-    'Cc\\Mvc\\SelectorControllerException' => 'Mvc\\Controllers\\SelectorControllers.php',
     'Cc\\Mvc\\TestController' => 'Mvc\\Controllers\\TestController.php',
     'Cc\\Mvc\\DBtabla' => 'Mvc\\DataBase\\DataBase.php',
     'Cc\\Mvc\\DBRow' => 'Mvc\\DataBase\\DataBase.php',
@@ -138,6 +138,7 @@
     'Cc\\Mvc\\GDexception' => 'Mvc\\Response\\GD\\GDResponse.php',
     'Cc\\Mvc\\Html' => 'Mvc\\Response\\Html\\Html.php',
     'Cc\\Mvc\\JsonLD' => 'Mvc\\Response\\Html\\JsonLd.php',
+    'Cc\\Mvc\\Html\\Tang' => 'Mvc\\Response\\Html\\Tang.php',
     'Cc\\Mvc\\RouteByMatch' => 'Mvc\\Route\\RouteByMatch.php',
     'Cc\\Mvc\\Router' => 'Mvc\\Route\\Router.php',
     'Cc\\Mvc\\Autenticate' => 'Mvc\\session\\Autenticate.php',
