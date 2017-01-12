@@ -20,6 +20,7 @@
 namespace Cc\Mvc\Mailer;
 
 use Cc\Mvc\ViewController;
+use Cc\Mvc;
 
 /**
  * Cargador de vistas para mailer 
@@ -33,7 +34,7 @@ class MailerView extends ViewController
 
     protected $htmlMail;
 
-    public function __construct($dir = NULL, HtmlMail &$htmlMail)
+    public function __construct($dir = NULL, Html &$htmlMail)
     {
         parent::__construct($dir);
         $this->htmlMail = &$htmlMail;

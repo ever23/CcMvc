@@ -19,6 +19,9 @@
 
 namespace Cc\Mvc\Mailer;
 
+use Cc\Mvc;
+use Cc\UrlManager;
+
 /**
  * Manejador de html para Miler 
  *

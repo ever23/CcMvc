@@ -19,6 +19,8 @@
 
 namespace Cc\Mvc;
 
+use Cc\Mvc;
+
 /**
  * Envio de correos electronicos implementando os views y layauts para enviar html 
  *
@@ -78,6 +80,7 @@ class Mailer extends \PHPMailer
         if (isset($layaut['Layaut']) && !is_null($layaut['Layaut']))
         {
             $this->isHTML(true);
+            //  $this->msgHTML($message, $this->html->BasePath)
             $this->Body = $this->ExecuteLayaut();
         } else
         {
