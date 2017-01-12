@@ -31,9 +31,10 @@
         ]
     },
     "suggest": {
-        "smarty/smarty": "El motor de plantillas smarty puede ser usado para cargar templetes en los views y layauts (3.1.*)",
-        "twig/twig": "El motor de plantillas twig puede ser usado para cargar plantillas en los views y layauts (1.*)",
-        "dompdf/dompdf": "El framework lo puede usar para convertir la salida html en pdf automaticamente  (*)"
+        "smarty/smarty": "El motor de plantillas smarty puede ser usado para cargar platillas smarty en los views y layauts (3.1.*)",
+        "twig/twig": "El motor de plantillas twig puede ser usado para cargar plantillas twig en los views y layauts (1.*)",
+        "dompdf/dompdf": "El framework lo puede usar para convertir la salida html en pdf automaticamente  (*)",
+        "phpmailer/phpmailer": "El framework lo puede usar para el envio de correos electronicos (5.2.*)"
     },
     "extra": {
         "branch-alias": {

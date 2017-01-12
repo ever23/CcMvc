@@ -37,12 +37,15 @@ class MvcHook
      * @var AbstractHook
      */
     protected static $Hook;
+    protected static $Hooks;
     public static $events = [];
+    private static $View;
+    private static $Layaut;
 
     public static function Configure(&$view, &$layaut)
     {
-        self::$Hook->View = $view;
-        self::$Hook->Layaut = $layaut;
+        self::$View = $view;
+        self::$Layaut = $layaut;
     }
 
     public final function Add($name, \Closure $claback)
@@ -50,11 +53,16 @@ class MvcHook
         $this->events[$name] = $claback;
     }
 
-    public static final function &Start(Config $conf)
+    public static final function Start(Config $conf)
     {
-        $class = $conf->Hooks['class'];
-        static::$Hook = new $class();
-        return static::$Hook;
+        foreach ($conf->Hooks as $class)
+        {
+            $hook = new $class();
+            $hook->View = & self::$View;
+            $hook->Layaut = & self::$Layaut;
+
+            self::$Hooks[] = $hook;
+        }
     }
 
     public static final function Tinger($events, ...$params)
@@ -64,7 +72,11 @@ class MvcHook
             $clousure = \Closure::bind(static::$events[$events], static::$Hook);
             $clousure(...$params);
         }
-        return static::$Hook->{$events}(...$params);
+        foreach (self::$Hooks as &$hook)
+        {
+            if (method_exists($hook, $events))
+                $hook->{$events}(...$params);
+        }
     }
 
     public static final function TingerAndDependence($events)
@@ -74,9 +86,13 @@ class MvcHook
             $clousure = \Closure::bind(static::$events[$events], static::$Hook);
             $clousure(...Mvc::App()->DependenceInyector->ParamFunction(static::$events[$events]));
         }
-        if (method_exists(static::$Hook, $events))
+        foreach (self::$Hooks as &$hook)
         {
-            return static::$Hook->{$events}(...Mvc::App()->DependenceInyector->ParamFunction([static::$Hook, $events]));
+            if (method_exists($hook, $events))
+            {
+                $params = Mvc::App()->DependenceInyector->ParamFunction([$hook, $events]);
+                $hook->{$events}(...$params);
+            }
         }
     }
 

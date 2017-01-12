@@ -29,7 +29,7 @@ namespace Cc\Mvc;
  * @subpackage Hook
  *
  */
-class BaseHook extends AbstractHook
+class HttpErrors extends AbstractHook
 {
 
     /**

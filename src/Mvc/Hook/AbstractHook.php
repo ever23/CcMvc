@@ -36,6 +36,11 @@ namespace Cc\Mvc;
  * @method void PreConstrucController() PreConstrucController(mixes ...$_) Se ejecuta antes de instancial el controlador y ejecutar su constructor
  * @method void PostConstrucController() PostConstrucController(mixes ...$_) Se ejecuta despues de ejecutar el constructor del controlador
  * @method void AppEnd() AppEnd(mixes ...$_) Se ejecuta al finalizar la aplicacion 
+ * @method void Error400() Error400(string $mensaje) Se ejecuta al ocurrir un error http 400 cuando la peticion del cliente es erronea y no puede ser procesada
+ * @method void Error401() Error401(string $mensaje) Se ejecuta al ocurrir un error http 401 cuando la autenticacion  falla y no se captura
+ * @method void Error403() Error403(string $mensaje) Se ejecuta al ocurrir un error http 403 cuando al framework niega el acceso a un url 
+ * @method void Error404() Error404(string $mensaje) Se ejecuta al ocurrir un error http 404 cuando una url no existe 
+ * @method void Error500() Error500(string $mensaje) Se ejecuta al ocurrir un error http 500 cuando ocurre un erro en el framework tambien en caso exception no capturada por el usuario, o en caso de ser php 7 en algun error de sintaxis  
  * @method void LayautController() LayautController(mixes ...$_) 
  */
 abstract class AbstractHook

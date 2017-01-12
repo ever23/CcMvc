@@ -335,7 +335,7 @@ class Mvc
         $prot = !empty($_SERVER['HTTPS']) && ('on' == $_SERVER['HTTPS']) ? 'https' : 'http';
         if ($prot != $this->conf['Router']['protocol'])
         {
-            header("Location: " . $this->conf['Router']['protocol'] . '://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI']);
+            // header("Location: " . $this->conf['Router']['protocol'] . '://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI']);
         }
 
 
@@ -355,7 +355,7 @@ class Mvc
                 $conf['DocumentRoot'] = '/' . $conf['DocumentRoot'];
             $this->conf['Router'] = $conf;
         }
-        if (!file_exists(realpath('.') . '/.htaccess'))
+        if (!file_exists(dirname(self::$ExecuteFile) . '/.htaccess'))
         {
             $file = basename(self::$ExecuteFile);
             $f = fopen(dirname(self::$ExecuteFile) . '/.htaccess', 'w+');
@@ -701,6 +701,7 @@ class Mvc
         }
 
         self::App()->Log("Redireccionando a " . $redirec);
+
         header("Location: " . $redirec);
         exit;
     }

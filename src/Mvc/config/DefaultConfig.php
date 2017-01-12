@@ -237,7 +237,7 @@ return
                 ]
             ],
             'Hooks' => [
-                'class' => '\\Cc\\Mvc\\BaseHook'
+                '\\Cc\\Mvc\\HttpErrors'
             ],
             'debung' =>
             [
