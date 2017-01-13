@@ -55,7 +55,7 @@ class LayautManager extends Model
                 if ($LayautController->GetNivel() == 1 && $LayautController->Obj instanceof iLayaut)
                 {
                     $layaut = $this->GetLayaut();
-                    MvcEvents::TingerAndDependence("LayautController");
+                    MvcHook::TingerAndDependence("LayautController");
                 } else
                 {
                     $layaut = $LayautController->GetLayaut();

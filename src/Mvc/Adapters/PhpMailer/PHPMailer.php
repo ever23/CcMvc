@@ -1,7 +1,7 @@
 <?php
 
 /*
- * Copyright (C) 2016 Enyerber Franco
+ * Copyright (C) 2017 Enyerber Franco
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -22,23 +22,14 @@ namespace Cc\Mvc;
 use Cc\Mvc;
 
 /**
+ * Envio de correos electronicos implementando os views y layauts para enviar html 
+ *
+ * @author Enyerber Franco
  * @package CcMvc
  * @subpackage Mail
  */
-class Mail extends \Cc\Mail
+class Mailer extends \PHPMailer
 {
-
-    /**
-     * nombre del layaut
-     * @var string 
-     */
-    protected $namelayaut;
-
-    /**
-     * directorio del layaut
-     * @var string 
-     */
-    protected $DirLayaut;
 
     /**
      * cargador de views
@@ -47,42 +38,58 @@ class Mail extends \Cc\Mail
     public $view;
 
     /**
-     * 
+     * cargador de layauts 
      * @var LayautManager 
      */
     public $layaut;
 
     /**
-     *
+     * manejador de html 
      * @var Html 
      */
     public $html;
-    private $BufferView = '';
 
     /**
-     *  contructor
+     * buffer para los views 
+     * @var string 
      */
-    public function __construct()
+    private $BufferView = '';
+
+    public function __construct($exceptions = null)
     {
+        parent::__construct($exceptions);
         $conf = Mvc::Config();
-        parent::__construct(Mvc::Config());
-        $this->view = new ViewController($conf->App['view']);
+
         $this->layaut = new LayautManager();
-        $class = $conf->Response['Accept']['text/html']['class'];
-        $param = $conf->Response['Accept']['text/html']['param'];
-        $this->html = new HtmlMail(...$param);
-        $this->html->SetLayaut('mail', $conf->App['layauts']);
+        $this->html = new Mailer\Html();
+        $this->view = new Mailer\MailerView($conf->App['view'], $this->html);
+        $this->DirLayaut = $conf->App['layauts'];
+        $this->html->SetLayaut(NULL, $conf->App['layauts']);
         $this->BufferView = '';
     }
 
     /**
-     * titulo del correo
-     * @param string $title
+     * Crea el mensaje y lo envia 
+     * Uses the sending method specified by $Mailer.
+     * @throws \phpmailerException
+     * @return boolean false on error - See the ErrorInfo property for details of the error.
      */
-    public function Titulo($title)
+    public function send()
     {
-        $this->html->titulo = $title;
-        parent::Titulo($title);
+        $layaut = $this->html->GetLayaut();
+        if (isset($layaut['Layaut']) && !is_null($layaut['Layaut']))
+        {
+            $this->isHTML(true);
+            //  $this->msgHTML($message, $this->html->BasePath)
+            $this->Body = $this->ExecuteLayaut();
+        } else
+        {
+            if ($this->isHTML())
+            {
+                $this->Body.=$this->BufferView;
+            }
+        }
+        parent::send();
     }
 
     /**
@@ -103,17 +110,14 @@ class Mail extends \Cc\Mail
      */
     public function LoadView($view, $agrs = [])
     {
-
         $this->view->ObjResponse = $this->html;
         $b = $this->view->Fetch($view, $agrs);
-
         $this->BufferView.=$b;
         return $b;
     }
 
-    public function SendHtml()
+    private function ExecuteLayaut()
     {
-
         $function = \Closure::bind(function( $content, $LayautController)
                 {
                     $layaut = $this->GetLayaut();
@@ -151,13 +155,7 @@ class Mail extends \Cc\Mail
                     }
                 }, $this->html, get_class($this->html));
 
-        $text = $function($this->BufferView, $this->layaut);
-
-        $this->Header('MIME-Version', '1.0');
-        $this->Header("Content-type", 'text/html; charset=utf-8');
-        $this->Mensaje($text);
-
-        return $this->Send();
+        return $function($this->BufferView, $this->layaut);
     }
 
 }

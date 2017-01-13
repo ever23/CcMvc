@@ -236,8 +236,8 @@ return
                     'ReadAndClose' => false
                 ]
             ],
-            'Events' => [
-                'class' => '\\Cc\\Mvc\\MvcEvents'
+            'Hooks' => [
+                '\\Cc\\Mvc\\HttpErrors'
             ],
             'debung' =>
             [

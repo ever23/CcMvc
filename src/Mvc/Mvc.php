@@ -35,7 +35,7 @@ use Cc\Mvc\ResponseConten;
 use Cc\Mvc\SelectorControllers;
 use Cc\Mvc\Router;
 use Cc\Mvc\SQLi;
-use Cc\Mvc\MvcEvents;
+use Cc\Mvc\MvcHook;
 use Cc\Mvc\ReRouterMethod;
 
 //use Cc\OpCache;
@@ -297,9 +297,9 @@ class Mvc
 
         $this->conf->Load($conf);
 
-        $this->Events = MvcEvents::Start($this->conf);
+        $this->Events = MvcHook::Start($this->conf);
         $this->View = new ViewController($this->conf['App']['view']);
-        MvcEvents::$View = &$this->View;
+        // MvcHook::$View = &$this->View;
         $this->Debung();
         $this->Log(" Archivo de configuracion :" . $conf . " cargado...");
 
@@ -335,7 +335,7 @@ class Mvc
         $prot = !empty($_SERVER['HTTPS']) && ('on' == $_SERVER['HTTPS']) ? 'https' : 'http';
         if ($prot != $this->conf['Router']['protocol'])
         {
-            header("Location: " . $this->conf['Router']['protocol'] . '://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI']);
+            // header("Location: " . $this->conf['Router']['protocol'] . '://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI']);
         }
 
 
@@ -355,7 +355,7 @@ class Mvc
                 $conf['DocumentRoot'] = '/' . $conf['DocumentRoot'];
             $this->conf['Router'] = $conf;
         }
-        if (!file_exists(realpath('.') . '/.htaccess'))
+        if (!file_exists(dirname(self::$ExecuteFile) . '/.htaccess'))
         {
             $file = basename(self::$ExecuteFile);
             $f = fopen(dirname(self::$ExecuteFile) . '/.htaccess', 'w+');
@@ -382,7 +382,7 @@ class Mvc
         $this->Content_type = $this->SelectResponseConten();
 
 
-        MvcEvents::$Layaut = &$this->LayautManager;
+        //MvcHook::$Layaut = &$this->LayautManager;
         $this->DependenceInyector = new DependenceInyector();
         $this->DependenceInyector->AddDependenceInstanciable($this->conf['Controllers']['Dependencias']);
         $this->DependenceInyector->AddDependence("{Response}", $this->Response);
@@ -418,6 +418,7 @@ class Mvc
         {
             $this->AutoloaderLib->AddAutoloader($vendor);
         }
+        MvcHook::Configure($this->View, $this->LayautManager);
     }
 
     /**
@@ -609,7 +610,7 @@ class Mvc
 
                 self::App()->LoadLayaut();
             }
-            MvcEvents::TingerAndDependence('OnEndApp');
+            MvcHook::TingerAndDependence('AppEnd');
         }
 // var_dump(Mvc::App()->ProcessConten);
         self::App()->fin = true;
@@ -669,7 +670,7 @@ class Mvc
             http_response_code($num);
         if ($this->IsDebung())
             error_reporting(E_ALL ^ E_NOTICE ^ E_WARNING);
-        MvcEvents::Tinger('Error' . $num, $this->View->error);
+        MvcHook::Tinger('Error' . $num, $this->View->error);
     }
 
     /**
@@ -700,6 +701,7 @@ class Mvc
         }
 
         self::App()->Log("Redireccionando a " . $redirec);
+
         header("Location: " . $redirec);
         exit;
     }
@@ -737,6 +739,7 @@ class Mvc
      */
     private function Auth()
     {
+        MvcHook::TingerAndDependence('PreSessionStart');
         $conf = self::Config();
         ErrorHandle::SetHandle(-5);
         $session = false;
@@ -764,6 +767,7 @@ class Mvc
         }
 
         $this->InternalSession->Start();
+        MvcHook::TingerAndDependence('PostSessionStart');
         if ($this->Session instanceof Autenticate)
         {
             $this->Session->SetDependenceInyector($this->DependenceInyector);
@@ -803,24 +807,24 @@ class Mvc
 
         $this->LayautManager = Mvc\LayautManager::BeginConten(null);
         $this->LayautManager->Obj = &$this->Response;
+        MvcHook::TingerAndDependence('AppRun');
         if (!$this->RouterByCache())
         {
             $this->Router();
         }
-        MvcEvents::TingerAndDependence('Route');
+        MvcHook::TingerAndDependence('Route');
         /* echo '<pre>';
           var_dump($this->page);
           echo '</pre>'; */
         $this->LoadController();
-
         $this->RouterExt();
-
         $this->SecurityRequest();
-        MvcEvents::TingerAndDependence('LoadController');
+        MvcHook::TingerAndDependence('LoadController');
         $this->ConetDataBase();
-        MvcEvents::TingerAndDependence('ConetDatabase');
         $this->Auth();
+
         $this->ExecuteController();
+
         self::EndApp();
     }
 
@@ -870,6 +874,7 @@ class Mvc
                         $this->Buffer->SetAutoMin(false);
                         if ($this->Response instanceof Mvc\Response)
                             $this->Response->SetMin(false);
+                        header("CcMvc-Cache: " . $file->getMTime());
                         $this->Router->RouterFile($realfile);
                         exit;
                     } else
@@ -880,6 +885,7 @@ class Mvc
 
                 $this->Router->InfoFile = new \SplFileInfo($cache['Controller']);
                 $this->Log("Enrutado a  " . $this->Router->InfoFile . " desde el cache");
+                header("CcMvc-Cache: " . $this->Router->InfoFile->getMTime());
                 $this->Router->RouterFile($this->Router->InfoFile);
 
 
@@ -1329,8 +1335,10 @@ class Mvc
         $this->Log("Ejecutando el constuctor del  Controlador " . $c . $this->page['controller'] . " ...");
         if (($clousure = $this->Router->GetRoute($this->page)) == false)
         {
+            MvcHook::TingerAndDependence('PreConstrucController');
             if ($this->SelectorController->InstanceController(true))
             {
+                MvcHook::TingerAndDependence('PostConstrucController');
                 $this->ObjController = &$this->SelectorController->GetController();
 
                 $this->Log("Ejecutando el metodo " . $c . $this->page['controller'] . "->" . $this->page['method'] . " ...");
@@ -1495,6 +1503,7 @@ class Mvc
                     $this->page['routeVars'] = SQLi::Filter($this->page['routeVars']);
                     //  $this->DependenceInyector->SetDependenceForParamArray($this->page['routeVars']);
                 }
+                MvcHook::TingerAndDependence('ConetDatabase');
             }
         }
         return $this->DataBase;
