@@ -42,6 +42,8 @@ use Cc\Mvc;
 class DBtabla extends \Cc\DBtabla implements \Serializable, ParseObjectSmartyTpl
 {
 
+    protected static $activeRecord = [];
+
     /**
      * constructor
      * <code>
@@ -98,6 +100,36 @@ class DBtabla extends \Cc\DBtabla implements \Serializable, ParseObjectSmartyTpl
         if (!($this->db instanceof iDataBase))
             $this->db = Mvc::App()->DataBase();
         parent::unserialize($serialized);
+    }
+
+    protected function &Query($sql)
+    {
+        $md5 = md5($sql);
+        if (isset(self::$activeRecord[$this->Tabla()]) && isset(self::$activeRecord[$this->Tabla()][$md5]))
+        {
+            Mvc::App()->Log("Consulta de ActiveRecord ");
+            $this->sql = $sql;
+            $this->ResultAll = self::$activeRecord[$this->Tabla()][$md5]['ResultAll'];
+            $this->rewind();
+            // var_dump($this->ResultAll);
+            $this->end_result = NULL;
+            $this->num_rows = self::$activeRecord[$this->Tabla()][$md5]['num_rows'];
+            $this->ActiveRow = NULL;
+            return $this;
+        } else
+        {
+            // Mvc::App()->Log("Consulta sql ");
+            $r = parent::Query($sql);
+            if (!isset(self::$activeRecord[$this->Tabla()]))
+            {
+                self::$activeRecord[$this->Tabla()] = [];
+            }
+            self::$activeRecord[$this->Tabla()][$md5] = [
+                'ResultAll' => $this->ResultAll,
+                'num_rows' => $this->num_rows
+            ];
+            return $r;
+        }
     }
 
     private $each = true;

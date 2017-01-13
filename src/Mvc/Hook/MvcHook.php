@@ -37,11 +37,36 @@ class MvcHook
      * @var AbstractHook
      */
     protected static $Hook;
+
+    /**
+     * hooks 
+     * @var array  AbstractHook
+     */
     protected static $Hooks;
+
+    /**
+     * eventos
+     * @var array 
+     */
     public static $events = [];
+
+    /**
+     *
+     * @var ViewController 
+     */
     private static $View;
+
+    /**
+     *
+     * @var LayautManager 
+     */
     private static $Layaut;
 
+    /**
+     * 
+     * @param type $view
+     * @param type $layaut
+     */
     public static function Configure(&$view, &$layaut)
     {
         self::$View = $view;

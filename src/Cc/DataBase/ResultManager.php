@@ -46,7 +46,7 @@ class ResultManager extends SqlFormat implements \Iterator, \Countable
      * resultado de la ultima consulta 
      * @var array 
      */
-    private $ResultAll;
+    protected $ResultAll;
 
     /**
      *

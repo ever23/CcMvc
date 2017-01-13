@@ -874,6 +874,7 @@ class Mvc
                         $this->Buffer->SetAutoMin(false);
                         if ($this->Response instanceof Mvc\Response)
                             $this->Response->SetMin(false);
+                        header("CcMvc-Cache: " . $file->getMTime());
                         $this->Router->RouterFile($realfile);
                         exit;
                     } else
@@ -884,6 +885,7 @@ class Mvc
 
                 $this->Router->InfoFile = new \SplFileInfo($cache['Controller']);
                 $this->Log("Enrutado a  " . $this->Router->InfoFile . " desde el cache");
+                header("CcMvc-Cache: " . $this->Router->InfoFile->getMTime());
                 $this->Router->RouterFile($this->Router->InfoFile);
 
 
