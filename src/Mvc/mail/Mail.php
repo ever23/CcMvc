@@ -24,6 +24,7 @@ use Cc\Mvc;
 /**
  * @package CcMvc
  * @subpackage Mail
+ * @deprecated since version 0.8.5.0
  */
 class Mail extends \Cc\Mail
 {

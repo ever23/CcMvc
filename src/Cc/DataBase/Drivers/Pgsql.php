@@ -80,6 +80,30 @@ class pgsql extends Drivers
         }
     }
 
+    /* public function ForeingKey()
+      {
+      $this->contarint = [];
+      if ($RESUT = $this->db->query("SELECT * FROM information_schema.key_column_usage WHERE table_name=" . $this->tabla() . "' and TABLE_SCHEMA='" . $this->db->dbName() . "'"))
+      {
+      if ($this->num_rows($RESUT) == 0)
+      {
+      throw new Exception("LA TABLA " . $this->tabla . " NO EXISTE EN LA BASE DE DATOS");
+      }
+      while ($campo = $this->fecth_result($RESUT))
+      {
+      // $this->contarint[$campo['ORDINAL_POSITION']] = $campo['COLUMN_NAME'];REFERENCED_TABLE_NAME
+      if ($campo['REFERENCED_TABLE_NAME'] != '')
+      $this->contarint+=[$campo['column_name'] => [
+      'table' => $campo['referenced_table_name'],
+      'colum' => $campo['REFERENCED_COLUMN_NAME'],
+      'name' => $campo['CONSTRAINT_NAME'],
+      'DBname' => $campo['REFERENCED_TABLE_SCHEMA'],
+      ]];
+      }
+      return $this->contarint;
+      }
+      } */
+
     public function CreateKeys()
     {
         parent::CreateKeys();

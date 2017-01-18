@@ -399,17 +399,17 @@ class Mvc
         if (is_bool($confAutoload['UseStandarAutoloader']))
         {
             $confAutoload['UseStandarAutoloader'] = [];
-            $confAutoload['UseStandarAutoloader'][] = [$libs, true];
+            $confAutoload['UseStandarAutoloader']['libs'] = [$libs, true];
             if ($this->conf->AutoloadLibs['UseStandarAutoloader'])
             {
-                $confAutoload['UseStandarAutoloader'][] = $this->conf->App['extern'];
+                $confAutoload['UseStandarAutoloader']['extern'] = $this->conf->App['extern'];
             }
 
-            $confAutoload['UseStandarAutoloader'][] = [$this->conf->App['model'], true];
+            $confAutoload['UseStandarAutoloader']['model'] = [$this->conf->App['model'], true];
         } else
         {
-            $confAutoload['UseStandarAutoloader'][] = [$libs, true];
-            $confAutoload['UseStandarAutoloader'][] = [$this->conf->App['model'], true];
+            $confAutoload['UseStandarAutoloader']['libs'] = [$libs, true];
+            $confAutoload['UseStandarAutoloader']['model'] = [$this->conf->App['model'], true];
         }
 
         $this->AutoloaderLib = new AutoloadExternLib($confAutoload, $this->conf->App['extern'], $this->IsDebung());
@@ -616,8 +616,8 @@ class Mvc
         self::App()->fin = true;
 
 //  var_dump(ob_list_handlers());
-
-        self::App()->Buffer->EndConten();
+        if (self::App()->Buffer)
+            self::App()->Buffer->EndConten();
 
         if (self::App()->conf['debung'])
         {
@@ -737,27 +737,18 @@ class Mvc
     /**
      * METODO DONDE SE EJECUTARA LA CLASE DE  AUNTENTIFICACION
      */
-    private function Auth()
+    private function SessionStart()
     {
         MvcHook::TingerAndDependence('PreSessionStart');
         $conf = self::Config();
         ErrorHandle::SetHandle(-5);
         $session = false;
         $this->InternalSession = new Mvc\InternalSession();
-        if (!empty($conf['Autenticate']['class']) && !empty($conf['Autenticate']['SessionName']))
+        if (!empty($conf['Autenticate']['SessionName']))
         {
-
             $session = $conf['Autenticate']['SessionCookie'];
-            $class_name = $conf['Autenticate']['class'];
-            if (!class_exists($class_name, true))
-            {
-                throw new Exception("LA CLASE " . $class_name . " MANEJADORA DE AUTENTIFICACION NO EXISTE ");
-            }
-            $this->Session = new $class_name(...$conf['Autenticate']['param']);
-        } else
-        {
-            $this->Session = [];
         }
+
         $this->InternalSession->SetName($conf['Autenticate']['SessionName']);
         //$this->Session->SetName($conf['Autenticate']['SessionName']);
         if ($session)
@@ -768,14 +759,7 @@ class Mvc
 
         $this->InternalSession->Start();
         MvcHook::TingerAndDependence('PostSessionStart');
-        if ($this->Session instanceof Autenticate)
-        {
-            $this->Session->SetDependenceInyector($this->DependenceInyector);
 
-            $this->Session->Start($this->InternalSession);
-            $this->Log("Autenticando....");
-            $this->Session->Auth();
-        }
         ErrorHandle::RecoverHandle();
         ErrorHandle::SetHandle();
         $this->Log("Autenticacion finalizada....");
@@ -788,6 +772,14 @@ class Mvc
     public static function &App()
     {
         return self::$Instance;
+    }
+
+    public function Console($argv)
+    {
+        $console = new Mvc\RouteConsole($argv);
+        $console->Route();
+        $console->CreateReflexion();
+        $console->Execute();
     }
 
     /**
@@ -821,7 +813,7 @@ class Mvc
         $this->SecurityRequest();
         MvcHook::TingerAndDependence('LoadController');
         $this->ConetDataBase();
-        $this->Auth();
+        $this->SessionStart();
 
         $this->ExecuteController();
 
@@ -885,7 +877,7 @@ class Mvc
 
                 $this->Router->InfoFile = new \SplFileInfo($cache['Controller']);
                 $this->Log("Enrutado a  " . $this->Router->InfoFile . " desde el cache");
-                header("CcMvc-Cache: " . $this->Router->InfoFile->getMTime());
+
                 $this->Router->RouterFile($this->Router->InfoFile);
 
 
@@ -1488,12 +1480,20 @@ class Mvc
             throw new Exception("ERROR LA CLASE MANEJADORA DE BD " . $conf['DB']['class'] . " NO SE ENCONTRO");
         }
         $DBClass = $conf['DB']['class'];
+        try
+        {
+            $this->DataBase = new $DBClass(...$p);
+        } catch (Exception $ex)
+        {
+            $this->DependenceInyector->AddDependence('errno', $ex->getCode());
+            $this->DependenceInyector->AddDependence('error', $ex->getMessage());
+            MvcHook::TingerAndDependence('FailConetDatabase');
+        }
 
-        $this->DataBase = new $DBClass(...$p);
 
         if ($this->DataBase instanceof iDataBase)
         {
-            if (!$this->DataBase->error())
+            if (!$this->DataBase->errno())
             {
                 $_GET = SQLi::Filter($_GET, isset($conf['VarAceptSqlI']['_GET']) ? $conf['VarAceptSqlI']['_GET'] : []);
                 $_POST = SQLi::Filter($_POST, isset($conf['VarAceptSqlI']['_POST']) ? $conf['VarAceptSqlI']['_POST'] : []);
@@ -1501,9 +1501,16 @@ class Mvc
                 if (isset($this->page['routeVars']))
                 {
                     $this->page['routeVars'] = SQLi::Filter($this->page['routeVars']);
-                    //  $this->DependenceInyector->SetDependenceForParamArray($this->page['routeVars']);
+                    //  $this->DependenceInyector->SetDependenceForParamArray($this->page['routeVars']); FailConetDatabase
                 }
                 MvcHook::TingerAndDependence('ConetDatabase');
+            } else
+            {
+                $errno = $this->DataBase->errno();
+                $error = $this->DataBase->error();
+                $this->DependenceInyector->AddDependence('errno', $errno);
+                $this->DependenceInyector->AddDependence('error', $error);
+                MvcHook::TingerAndDependence('FailConetDatabase');
             }
         }
         return $this->DataBase;
@@ -1523,6 +1530,10 @@ class Mvc
      */
     public function Log($msj, $fin = false)
     {
+        if (isset($_SERVER['SESSIONNAME']) && $_SERVER['SESSIONNAME'] == 'Console' && !defined('__DEBUNG_CONSOLE_'))
+        {
+            return;
+        }
         if (!empty($this->conf) && $this->stdErr)
             if ($this->conf['debung'] && !isset($this->conf['debung'][0]))
             {

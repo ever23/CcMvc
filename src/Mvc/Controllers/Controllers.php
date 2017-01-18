@@ -59,6 +59,18 @@ abstract class Controllers implements InfoController
     public static $Layaut;
 
     /**
+     * representacion de variables del layaut
+     * @var Request 
+     */
+    public static $Request;
+
+    /**
+     * representacion de variables del layaut
+     * @var Config 
+     */
+    public static $Config;
+
+    /**
      * 
      * @param string $name
      * @return mixes
@@ -72,6 +84,10 @@ abstract class Controllers implements InfoController
                 return static::$View;
             case 'layaut':
                 return static::$Layaut;
+            case 'request':
+                return static::$Request;
+            case 'config':
+                return static::$Config;
             default :
 
                 ErrorHandle::Notice("EL ATRIBUTO " . static::class . '::$' . $name . " NO ESTA DEFINIDO ");
@@ -229,6 +245,15 @@ abstract class Controllers implements InfoController
     public final static function Href($page, $get = [])
     {
         return Router::Href($page, $get);
+    }
+
+    /**
+     * Retorna la instancia del controlador actual 
+     * @return Controllers 
+     */
+    public final static function GetInstance()
+    {
+        return Mvc::App()->SelectorController->GetController();
     }
 
 }

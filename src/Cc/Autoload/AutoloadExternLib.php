@@ -67,17 +67,17 @@ class AutoloadExternLib
         {
             if (is_array($this->Conf['UseStandarAutoloader']))
             {
-                foreach ($this->Conf['UseStandarAutoloader'] as $d)
+                foreach ($this->Conf['UseStandarAutoloader'] as $i => $d)
                 {
                     $dir = is_array($d) ? $d[0] : $d;
 
                     if (is_dir($dir))
                     {
 
-                        $this->loaders[] = Autoload::Start($dir);
+                        $this->loaders[$i] = Autoload::Start($dir);
                     } elseif (!is_null($this->PathToExternLib) && is_dir($this->PathToExternLib . $dir))
                     {
-                        $this->loaders[] = Autoload::Start($this->PathToExternLib . $dir);
+                        $this->loaders[$i] = Autoload::Start($this->PathToExternLib . $dir);
                     } else
                     {
                         throw new Exception("EL DIRECTPRIO " . ($this->PathToExternLib . $dir) . " INDICADO EN UseStandarAutoloader NO EXISTE ");
@@ -95,6 +95,16 @@ class AutoloadExternLib
     public function StopAutoloader()
     {
         spl_autoload_unregister([$this, '__autoload']);
+    }
+
+    /**
+     * retorna el loader indicado
+     * @param string $id
+     * @return Autoload
+     */
+    public function &GetLoader($id)
+    {
+        return $this->loaders[$id];
     }
 
     public function AddAutoloader($f)
@@ -186,6 +196,14 @@ class AutoloadExternLib
             }
         }
         return false;
+    }
+
+    public function GetListStardarAutoloader($id)
+    {
+        if (isset($this->Conf['UseStandarAutoloader'][$id]))
+        {
+            return $this->Conf['UseStandarAutoloader'][$id];
+        }
     }
 
     private function FindClass($class, $path, $hard = false)

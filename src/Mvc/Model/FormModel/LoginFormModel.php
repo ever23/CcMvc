@@ -20,9 +20,8 @@
 namespace Cc\Mvc;
 
 /**
- * Description of LoginFormModel
  *  modelo de formulario para un inicio de session de usuario
- * @author Enyerber Franco
+ * @author ENYREBER FRANCO <enyerverfranco@gmail.com> , <enyerverfranco@outlook.com>  
  * @package CcMvc
  * @subpackage Modelo
  * @category FormModel

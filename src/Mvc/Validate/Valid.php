@@ -50,6 +50,7 @@ class ValidArray extends ValidDependence
             return false;
         }
 
+
         if (isset($this->option['ValidItems']))
         {
             foreach ($value as $i => $v)
@@ -105,7 +106,50 @@ class ValidString extends ValidDependence
         {
             return false;
         }
+        if (isset($this->option['alpha']) && !ctype_alpha($value))
+        {
+            return false;
+        }
+        if (isset($this->option['alpha_num']) && !ctype_alnum($value))
+        {
+            return false;
+        }
+        if (isset($this->option['size']) && $n != $this->option['size'])
+        {
+            return false;
+        }
+        if (isset($this->option['between']) && ($n <= $this->option['between'][0] || $n >= $this->option['between'][1]))
+        {
+            return false;
+        }
+        if (isset($this->option['numeric']) && !is_numeric($value))
+        {
+            return false;
+        }
+        if (isset($this->option['in']))
+        {
+            $in = false;
+            foreach ($this->option['in'] as $v)
+            {
+                if ($v == $value)
+                {
+                    $in = true;
+                }
+            }
+            if (!$in)
+                return false;
+        }
+        if (isset($this->option['not_in']))
+        {
 
+            foreach ($this->option['not_in'] as $v)
+            {
+                if ($v == $value)
+                {
+                    return false;
+                }
+            }
+        }
         if (isset($this->option['options']) && (is_array($this->option['options']) || $this->option['options'] instanceof \Traversable))
         {
             foreach ($this->option['options'] as $v)
@@ -284,7 +328,7 @@ class ValidEmail extends ValidDependence
  * @package CcMvc
  * @subpackage Validacion
  */
-class ValidDate extends ValidDependence
+class ValidDate extends ValidString
 {
 
     /**
@@ -300,7 +344,29 @@ class ValidDate extends ValidDependence
         {
             return false;
         }
-        return new \DateTime($value);
+        $value = parent::Validate($value);
+        if (is_bool($value) && $value == false)
+        {
+            return false;
+        }
+        $time = new \DateTime($value);
+        if (isset($this->option['despues_de']) && $time->getTimestamp() <= (new \DateTime($this->option['despues_de']))->getTimestamp())
+        {
+            return false;
+        }
+        if (isset($this->option['before']) && $time->getTimestamp() <= (new \DateTime($this->option['before']))->getTimestamp())
+        {
+            return false;
+        }
+        if (isset($this->option['antes_de']) && $time->getTimestamp() >= (new \DateTime($this->option['antes_de']))->getTimestamp())
+        {
+            return false;
+        }
+        if (isset($this->option['after']) && $time->getTimestamp() >= (new \DateTime($this->option['after']))->getTimestamp())
+        {
+            return false;
+        }
+        return $time;
     }
 
     public function __toString()
@@ -393,8 +459,16 @@ class ValidUrl extends ValidDependence
         {
             return false;
         }
-        if (filter_var($value, FILTER_VALIDATE_URL))
-            return $value;
+        if (!filter_var($value, FILTER_VALIDATE_URL))
+        {
+            return false;
+        }
+        if (isset($this->option['active']) && !checkdnsrr($value))
+        {
+            return false;
+        }
+
+        return $value;
     }
 
 //put your code here

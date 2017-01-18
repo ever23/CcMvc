@@ -31,6 +31,7 @@ namespace Cc\Mvc;
  * @method void Route() Route(mixes ...$_)  Se ejecuta despues del enrutamiento              
  * @method void LoadController() LoadController(mixes ...$_) Se ejecuta una vez se ha cargado la clase controladora y antes de crear la coneccion con la base de datos 
  * @method void ConetDatabase() ConetDatabase(mixes ...$_)  se ejecuta al conectar con la base de datos solo cuando esta es exitosa
+ * @method void FailConetDatabase() FailConetDatabase(mixes ...$_)  se ejecuta cuando ocurre un error de coneccion con la base de datos
  * @method void PreSessionStart() PreSessionStart(mixes ...$_) se ejecuta justo antes de iniciar la session 
  * @method void PostSessionStart() PostSessionStart(mixes ...$_) se ejecuta al establecer la session 
  * @method void PreConstrucController() PreConstrucController(mixes ...$_) Se ejecuta antes de instancial el controlador y ejecutar su constructor

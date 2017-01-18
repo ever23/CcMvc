@@ -153,9 +153,14 @@ class RouteByMatch
         $this->isCalable = false;
         $this->origRegex = '';
         $v = false;
+        /* @var $contr \Cc\Mvc\Router\Route */
         foreach ($this->routes as $path => $contr)
         {
-            list($controller, $repl, $mathvar) = $contr;
+            $controller = $contr->controller;
+            $mathvar = $contr->math;
+            $path = $contr->url;
+            $repl = true;
+            //list($controller, $repl, $mathvar) = $contr;
 
             $Rpath = substr($path, 1);
             $pathRegex = $this->DividePath($Rpath);
@@ -334,6 +339,25 @@ class RouteByMatch
             }
         }
         return true;
+    }
+
+    public static function ResolveUrl($name, $params)
+    {
+        if (isset(Router\Route::$routes[$name]))
+        {
+            /* @var $obj Router\Route */
+            $obj = Router\Route::$routes[$name];
+            $url = $obj->url;
+            // return preg_replace('/(\{' . preg_quote($i) . '\})/i', $params, $url);
+            foreach ($params as $i => $v)
+            {
+                $url = preg_replace('/(\{' . preg_quote($i) . '\})/i', $v, $url);
+            }
+            return substr($url, 1);
+        } else
+        {
+            return false;
+        }
     }
 
 }

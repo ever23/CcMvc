@@ -31,6 +31,7 @@ return
                 'view' => "{App}view" . DIRECTORY_SEPARATOR,
                 'layauts' => "{App}layauts" . DIRECTORY_SEPARATOR,
                 'Cache' => "{App}Cache" . DIRECTORY_SEPARATOR,
+                'Console' => "{App}Console" . DIRECTORY_SEPARATOR,
             ],
             /**
              * CACHE INTERNO DE CcMvc
@@ -237,7 +238,8 @@ return
                 ]
             ],
             'Hooks' => [
-                '\\Cc\\Mvc\\HttpErrors'
+                'HttpErrors' => '\\Cc\\Mvc\\HttpErrors',
+                'Autenticate' => '\\Cc\\Mvc\\Session\\HookAutenticate'
             ],
             'debung' =>
             [

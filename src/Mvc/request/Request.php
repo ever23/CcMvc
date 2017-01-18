@@ -95,12 +95,27 @@ class Request implements \ArrayAccess, \Countable, \IteratorAggregate
 
     public function Path()
     {
-        return Mvc::APP()->Config()->Router['DocumentRoot'] . Mvc::App()->Router->GetPath();
+        return Mvc::App()->Config()->Router['DocumentRoot'] . Mvc::App()->Router->GetPath();
     }
 
     public function BasePath()
     {
         return Mvc::App()->Router->GetPath();
+    }
+
+    public function Base()
+    {
+        return UrlManager::BuildUrl($this->Protocolo(), $this->Host(), Mvc::App()->Config()->Router['DocumentRoot'], '');
+    }
+
+    public function RouteUrl($id, $params)
+    {
+        $url = RouteByMatch::ResolveUrl($id, $params);
+        if ($url == false)
+        {
+            return Controllers::Href($id, $params);
+        }
+        return UrlManager::BuildUrl($this->Protocolo(), $this->Host(), Mvc::App()->Config()->Router['DocumentRoot'], $url);
     }
 
     public function Query()

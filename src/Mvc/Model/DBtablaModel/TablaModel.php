@@ -53,7 +53,142 @@ namespace Cc\Mvc\DBtablaModel;
 abstract class TablaModel extends \Cc\Mvc\Model
 {
 
+    /**
+     * primary key
+     */
     const PrimaryKey = 'PRI';
+
+    /**
+     * AutoIncrement
+     */
     const AutoIncrement = 'auto_increment';
+
+    /**
+     * nombre de la tabla 
+     * @var string
+     */
+    protected $tabla = '';
+
+    /**
+     * columnas 
+     * @var array 
+     */
+    private $columnas = [];
+
+    /**
+     *
+     * @var claves foraneas 
+     */
+    private $ForeingKey = [];
+
+    /**
+     * 
+     * @param string $tabla
+     * @internal 
+     */
+    public function __construct($tabla)
+    {
+        $this->tabla = $tabla;
+        parent::__construct();
+    }
+
+    /**
+     *  retorna los metadatos de una tabla 
+     * @return array
+     */
+    public function getMetadata()
+    {
+        $colums = [];
+        $i = 1;
+        /* @var $obj ColumModel */
+        foreach ($this->columnas as $name => $obj)
+        {
+            $this->columnas[$name] = [
+                'Type' => $obj->GetFullType(),
+                'TypeName' => $obj->GetType(),
+                'KEY' => $obj->PrimaryKey ? self::PrimaryKey : '',
+                'Extra' => $obj->IsAutoIncrement() ? self::AutoIncrement : '',
+                'Default' => $obj->GetDefault(),
+                'Position' => $i++
+            ];
+        }
+        return $colums;
+    }
+
+    /**
+     * retorna la tabla en sql create 
+     * @return string
+     */
+    public function Sql()
+    {
+
+        $sql = 'CREATE TABLE ' . $this->tabla . ' (';
+        $primary = [];
+        $index = [];
+        $unique = [];
+        /* @var $obj ColumModel */
+        foreach ($this->columnas as $name => $obj)
+        {
+            $sql.=$obj->Sql() . ',';
+            if ($obj->PrimaryKey)
+            {
+                $primary[] = $name;
+            }
+            if ($obj->index)
+            {
+                $index[] = $name;
+            }
+            if ($obj->unique)
+            {
+                $unique[] = $name;
+            }
+        }
+        $sql = substr($sql, 0, -1);
+        if ($primary)
+        {
+            $sql.= ',PRIMARY KEY (' . implode(',', $primary) . ')';
+        }
+        if ($unique)
+        {
+            $sql.= ',UNIQUE (' . implode(',', $unique) . ')';
+        }
+        if ($index)
+        {
+            $sql.= ',INDEX (' . implode(',', $index) . ')';
+        }
+        if ($this->ForeingKey)
+        {
+
+            $sql.=',key(' . implode(',', array_keys($this->ForeingKey)) . '),';
+            /* @var $key ForeingKey */
+            foreach ($this->ForeingKey as $key)
+            {
+                $sql.=$key->Sql() . ',';
+            }
+        }
+        $sql = substr($sql, 0, -1);
+        $sql.=');';
+        return $sql;
+    }
+
+    /**
+     * crea una columna 
+     * @param string $name
+     * @return ColumModel
+     */
+    protected function Colum($name)
+    {
+        return $this->columnas[$name] = new ColumModel($name);
+    }
+
+    /**
+     * CREA CLAVES FORANEAS 
+     * @param string $colum nombre de la columna 
+     * @return ForeingKey
+     */
+    protected function ForeingKey($colum)
+    {
+        return $this->ForeingKey[$colum] = new ForeingKey($colum);
+    }
 
 }

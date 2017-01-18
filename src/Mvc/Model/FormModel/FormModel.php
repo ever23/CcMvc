@@ -61,6 +61,20 @@ use Cc\Inyectable;
  * @package CcMvc
  * @subpackage Modelo
  * @category FormModel
+ * @method FormModel\Campo text() text(string $campo,string $valid = NULL)  crea un nuevo campo de tipo text
+ * @method FormModel\Campo tel() tel(string $campo,string $valid = NULL)  crea un nuevo campo de tipo tel
+ * @method FormModel\Campo email() email(string $campo,string $valid = NULL)  crea un nuevo campo de tipo email
+ * @method FormModel\Campo number() number(string $campo,string $valid = NULL)  crea un nuevo campo de tipo number
+ * @method FormModel\Campo range() range(string $campo,string $valid = NULL)  crea un nuevo campo de tipo range
+ * @method FormModel\Campo url() url(string $campo,string $valid = NULL)  crea un nuevo campo de tipo url
+ * @method FormModel\Campo date() date(string $campo,string $valid = NULL)  crea un nuevo campo de tipo date
+ * @method FormModel\Campo datetime() datetime(string $campo,string $valid = NULL)  crea un nuevo campo de tipo datetime
+ * @method FormModel\Campo week() week(string $campo,string $valid = NULL)  crea un nuevo campo de tipo week
+ * @method FormModel\Campo year() year(string $campo,string $valid = NULL)  crea un nuevo campo de tipo year
+ * @method FormModel\Campo month() month(string $campo,string $valid = NULL)  crea un nuevo campo de tipo month
+ * @method FormModel\Campo datetime_local() datetime_local(string $campo,string $valid = NULL)  crea un nuevo campo de tipo datetime-local
+ * @method FormModel\Campo file() file(string $campo,string $valid = NULL)  crea un nuevo campo de tipo file
+ * 
  */
 abstract class FormModel extends Model implements Inyectable, \Serializable
 {
@@ -153,6 +167,8 @@ abstract class FormModel extends Model implements Inyectable, \Serializable
      * @var Request 
      */
     protected $Request;
+    protected $macros = [];
+    protected $alternativeCampos = [];
 
     public static function CtorParam()
     {
@@ -178,6 +194,9 @@ abstract class FormModel extends Model implements Inyectable, \Serializable
         if (!is_null($action))
         {
             $this->action = $action;
+        } else
+        {
+            $this->action = Mvc::App()->Request->Url();
         }
         if (!$inyected)
         {
@@ -339,15 +358,33 @@ abstract class FormModel extends Model implements Inyectable, \Serializable
      */
     private function LoadMetaData()
     {
-        foreach ($this->campos() as $i => $v)
+        $campos = $this->campos();
+        if (!is_array($campos))
         {
+            $campos = $this->alternativeCampos;
+        }
+
+        foreach ($campos as $i => $v)
+        {
+            if ($v instanceof FormModel\Campo)
+            {
+                $obj = $v;
+                $v = [];
+                $v[self::TypeHtml] = $obj->type;
+                $v[self::DefaultConten] = $obj->default;
+                $v[self::Validate] = $obj->GetValid();
+            } else
+            {
+                $this->Campo($i, isset($v[self::TypeHtml]) ? $v[self::TypeHtml] : 'text')
+                        ->Validator(isset($v[self::Validate]) ? $v[self::Validate] : [])->DefaultValue(isset($v[self::DefaultConten]) ? $v[self::DefaultConten] : '');
+                $v[self::Validate] = $this->alternativeCampos[$i]->GetValid();
+            }
             if ($v[self::TypeHtml] == 'file')
             {
                 if (!is_array($this->existFile))
                 {
                     $this->existFile = [];
                 }
-
                 array_push($this->existFile, $i);
             }
 
@@ -368,8 +405,6 @@ abstract class FormModel extends Model implements Inyectable, \Serializable
                 }
                 if (preg_match('/\w\[\]/', $v[self::TypeHtml]))
                 {
-
-
                     $item = $this->ParseValid([], str_replace('[]', '', $v[self::TypeHtml]), ['required' => true] + $options);
                     $v[self::Validate] = ValidArray::CreateValid(['ValidItems' => $item] + $options);
                 } else
@@ -377,7 +412,7 @@ abstract class FormModel extends Model implements Inyectable, \Serializable
                     $v[self::Validate] = $this->ParseValid($v[self::Validate], $v[self::TypeHtml], $options);
                 }
             }
-
+            $this->alternativeCampos[$i]->SetRealValid($v[self::Validate]);
             $this->campos[$i] = $v;
             $this->_ValuesModel[$i] = '';
         }
@@ -662,8 +697,6 @@ abstract class FormModel extends Model implements Inyectable, \Serializable
         foreach ($this->campos as $i => $v)
         {
             $type = $v[self::TypeHtml];
-
-
             if (!isset($values[$i]))
             {
                 $val[$i] = NULL;
@@ -746,7 +779,7 @@ abstract class FormModel extends Model implements Inyectable, \Serializable
             }
 
 
-            $buff = Html::input($attrs);
+            $buff = $this->PrintMacro($attrs['type'], $attrs['name'], $attrs);
             if ($buff)
             {
                 return $buff;
@@ -802,12 +835,16 @@ abstract class FormModel extends Model implements Inyectable, \Serializable
                     }
                 }
             }
+            $type = $attrs['type'];
+            unset($attrs['type']);
+
+            $buff = $this->PrintMacro($type, $attrs['name'], $attrs, $value);
             if ($return)
             {
-                return Html::textarea($value, $attrs);
+                return $buff;
             } else
             {
-                echo Html::textarea($value, $attrs);
+                echo $buff;
             }
         } else
         {
@@ -852,12 +889,13 @@ abstract class FormModel extends Model implements Inyectable, \Serializable
 
 
             $attrs['name'] = $name;
+            $buff = $this->PrintMacro('select', $attrs['name'], $attrs, $options);
             if ($return)
             {
-                return Html::select($attrs, $options);
+                return $buff;
             } else
             {
-                echo Html::select($attrs, $options);
+                return $buff;
             }
         } else
         {
@@ -878,6 +916,7 @@ abstract class FormModel extends Model implements Inyectable, \Serializable
         }
         $attrs['action'] = $this->action;
         $attrs['method'] = $this->Method;
+
         if ($return)
         {
             return Html::OpenTang('form', $attrs);
@@ -897,22 +936,20 @@ abstract class FormModel extends Model implements Inyectable, \Serializable
     {
         if (is_object($attrs) && $attrs instanceof \Smarty_Internal_Template)
         {
-
             $attrs = $value;
             $value = $attrs['value'];
             $return = false;
         }
         $attrs['value'] = 1;
         $attrs['name'] = $this->NameSubmited;
+        $buff = $this->PrintMacro('button', 'submit', $attrs, $value);
         if ($return)
         {
-
-
-            return Html::button($value, $attrs);
+            return $buff;
         } else
         {
             //   echo Html::input(['type' => 'hidden', 'name' => $attrs['name'], 'value' => 1]);
-            echo Html::button($value, $attrs);
+            return $buff;
         }
     }
 
@@ -934,10 +971,10 @@ abstract class FormModel extends Model implements Inyectable, \Serializable
     }
 
     /**
-     * 
-     * @param type $attrs
-     * @param array $campos
-     * @param type $submit
+     *  imprime el formulario completo 
+     * @param array $attrs atrubutos de la etiqueta de formulario
+     * @param array $campos atributos de los campos
+     * @param array $submit stributos de el boton submit
      *  @param bool $return indica si en contenido sera impreso en el buffer o retornado
      */
     public function PrintForm($attrs, array $campos = [], $submit = [], $return = false)
@@ -992,6 +1029,12 @@ abstract class FormModel extends Model implements Inyectable, \Serializable
                         break;
                 }
             }
+            $error = $this->GetError($i);
+            if ($error)
+            {
+                $buff.= Html::br() . Html::span($error, ['style' => 'color:red;', 'class' => 'FormError']);
+            }
+
             $buff.= Html::CloseTang('li');
         }
 
@@ -1009,6 +1052,15 @@ abstract class FormModel extends Model implements Inyectable, \Serializable
         }
     }
 
+    /**
+     * funcion de bloque para el motor de templetes smarty para imprimir el formulario 
+     * @param array $params
+     * @param string|NULL $content
+     * @param \Smarty &$smarty
+     * @param bool &$repeat
+     * @return string
+     * @internal soopara efectos de plantillas smarty
+     */
     public function Form($params, $content, &$smarty, &$repeat)
     {
         if (!isset($content))
@@ -1021,12 +1073,148 @@ abstract class FormModel extends Model implements Inyectable, \Serializable
         return $content;
     }
 
+    /**
+     * registra el objeto para las funciones smarty
+     * @return string
+     * @internal soopara efectos de plantillas smarty
+     */
     public function ParseSmaryTpl()
     {
         $smarty = parent::ParseSmaryTpl();
         $smarty['allowed'] = [];
         $smarty['block_methods'][] = 'Form';
         return $smarty;
+    }
+
+    /**
+     * Registra un Macro para imprimir el html de un campo 
+     * ejemplo:
+     * <code>
+     * <?php
+     * $this->RegisterMacros('campo1',function($attrs)
+     * {
+     *      return '<input type="text" name="campo1">';
+     * });
+     * </code>
+     * @param type $name
+     * @param \Cc\Mvc\callable $callback
+     */
+    protected function RegisterMacros($name, callable $callback)
+    {
+        $this->macros[$name] = $callback;
+    }
+
+    /**
+     * imprime el macro 
+     * @param type $type
+     * @param type $name
+     * @param type $attrs
+     * @param type $options
+     * @return type
+     */
+    private function PrintMacro($type, $name, $attrs, $options = [])
+    {
+        if (isset($this->macros[$name]))
+        {
+            return $this->macros[$name]($attrs);
+        } else
+        {
+            $buff = '';
+            switch ($type)
+            {
+                case 'textarea':
+
+                    $buff = Html::TextArea($options, $attrs);
+                    break;
+                case 'select':
+                    $buff = Html::select($attrs, $options);
+                    break;
+                case 'button':
+                    $buff = Html::button($options, $attrs);
+                    break;
+                default :
+                    $buff = Html::input($attrs);
+            }
+            return $buff;
+        }
+    }
+
+    /**
+     * Agrega un campo en el formulario 
+     * @param string $name nombre del campo
+     * @param string $type tipo de campo 
+     * @param array $valid validacion
+     * @param mixes $defaul valor por defecto
+     * @return FormModel\Campo campo
+     */
+    protected function &Campo($name, $type = 'text')
+    {
+        $this->alternativeCampos[$name] = new FormModel\Campo($name, $type);
+        return $this->alternativeCampos[$name];
+    }
+
+    public function &__call($name, $arguments)
+    {
+
+        $otros = [
+            'telefono' => 'tel',
+            'texto' => 'text',
+            'datetime_local' => 'datetime-local',
+        ];
+        if (isset($otros[$name]))
+        {
+            $name = $otros[$name];
+        }
+        if (isset($arguments[1]))
+        {
+            return $this->Campo($arguments[0], $name)->Validator($arguments[1]);
+        }
+        return $this->Campo($arguments[0], $name);
+    }
+
+    /**
+     * copia la configuracion y validacion de un campo a otro
+     * @param string $copy
+     * @param string $to
+     * @return FormModel\Campo campo
+     */
+    protected function &CopyCampo($copy, $to)
+    {
+        if (isset($this->alternativeCampos[$copy]))
+        {
+            $this->alternativeCampos[$to] = clone $this->alternativeCampos[$copy];
+            $this->alternativeCampos[$to]->name = $to;
+        }
+        return $this->alternativeCampos[$to];
+    }
+
+    /**
+     * optiene el error de validacion de un campo
+     * @param string $offset
+     * @param \Smarty_Internal_Template $options
+     * @param type $attrs
+     * @return boolean
+     */
+    public function GetError($offset, $options = NULL, $attrs = [])
+    {
+        if (is_object($options) && $options instanceof \Smarty_Internal_Template)
+        {
+            $offset = $attrs['name'];
+        }
+
+        if ($this->offsetExists($offset))
+        {
+            if ($this->_ValuesModel[$offset] instanceof ValidDependence && !$this->_ValuesModel[$offset]->IsValid())
+            {
+                return $this->alternativeCampos[$offset]->GetError($this->_ValuesModel[$offset]);
+            } else
+            {
+                return false;
+            }
+        } else
+        {
+            ErrorHandle::Notice("Indice '" . $offset . "' no definido ");
+        }
     }
 
 }

@@ -97,6 +97,13 @@ use Cc\Mvc;
  *                         //  ['path' => string,'cahe' => string,'time' => int, 'dominio' => string, 'httponly' => bool,'ReadAndClose' => bool]
  * );
  * </code></pre>
+ * 
+ * @property-read array $Hooks  REGISTRA UNA CLASE PARA EXTENDER CcMvc <br><pre><code>
+ * array(
+ * NombreHook=>ClassHook   //clase hook
+ * ...
+ * );
+ *  </code></pre>
  * @property-read array $debung  CONFIGURACION DE DEPURACION  <br><pre><code>
  * array(
  * 'error_reporting'=>int   //VALOR PARA error_reporting
@@ -145,18 +152,35 @@ use Cc\Mvc;
  * 'class'=>string    //clase extendidad de MvcEvents
  * );
  *  </code></pre>
- *  </code></pre>
+ *  
  * @property-read array $SEO CONFIGURACION DE SEO  <br><pre><code>
  * array(
  * 'MetaTang'=>array    //etiquetas meta 
  * 'keywords'=>array    // palabras clave
  * );
  *  </code></pre>
- *  </code></pre>
+ * 
  * @property-read array $TemplateLoaders Configuraciones para los views y layauts en general   <br><pre><code>
  * array(
  * 'Default'=>array    //indica el loader por defecto
  * 'Loaders'=>array    // loaders
+ * );
+ *  </code></pre>
+ * @property-read array $SmartyConfig Configuraciones templates smarty   <br><pre><code>
+ * array(
+ * 'LeftDelimiter'=>string    //delimitador izquierdo
+ * 'RightDelimiter'=>string    //delimitador derecho
+ * 'PluginsDir'=>string    //sub directorio de el directorio App donde se encuentra los plugins
+ * 'ConfigDir'=>string    //sub directorio de el directorio App donde se encuentra la configuracion de smarty
+ * 'DebungConsole'=>bool    //indica si esta en modo debung
+ * 'Plugins'=>array    //plugins registrados
+ * );
+ *  </code></pre>
+ * @property-read array $TwigConfig Configuraciones templates Twig   <br><pre><code>
+ * array(
+ * 'Extensiones'=>array    //extenciones registradas
+ * 'Lexer'=>array    //configuraciones de lexico
+ * 
  * );
  *  </code></pre>
  */
@@ -239,17 +263,23 @@ class Config extends \Cc\Config
         {
             $this->configFile = new \SplFileInfo(realpath($config_name));
             $this->config = $this->default;
-            if (!$this->configFile->isFile())
+
+            if ($this->configFile->isFile())
             {
-                throw new Exception("el archivo de configuracion " . realpath($config_name) . " no existe");
-            }
-            if ($this->configFile->getExtension() == 'ini')
+                if ($this->configFile->getExtension() == 'ini')
+                {
+                    $conf = $this->LoadIni($config_name, true);
+                } else
+                {
+
+                    $this->orig = include($config_name);
+                }
+            } elseif ($this->configFile->isDir())
             {
-                $conf = $this->LoadIni($config_name, true);
+                $this->orig = $this->ReadDir($config_name);
             } else
             {
-
-                $this->orig = include($config_name);
+                throw new Exception("el archivo de configuracion " . realpath($config_name) . " no existe");
             }
         } elseif (is_array($config_name))
         {
@@ -292,6 +322,38 @@ class Config extends \Cc\Config
           {
 
           } */
+    }
+
+    private function ReadDir($dir)
+    {
+        $dir2 = realpath($dir);
+        if ($dir2 === false)
+        {
+            throw new Exception("El directorio de aplicacion no existe $dir");
+        }
+        $dir3 = $dir2 . DIRECTORY_SEPARATOR . 'Config';
+        if ($dir3 === false)
+        {
+            throw new Exception("El directorio de Configuracion no existe $dir");
+        }
+        $d = dir($dir3);
+
+        $config = [];
+        $config['App'] = ['app' => $dir2];
+        while ($f = $d->read())
+        {
+            if ($f != '.' && $f != '..')
+            {
+                $file = new \SplFileInfo($dir3 . DIRECTORY_SEPARATOR . $f);
+                if ($file->getExtension() == 'php')
+                {
+                    $name = $file->getBasename('.php');
+                    $config[$name] = include($file);
+                }
+            }
+        }
+
+        return $config;
     }
 
 }

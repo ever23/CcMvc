@@ -108,5 +108,54 @@ class mysql extends Drivers
         }
     }
 
+    protected $contarint = [];
+
+    public function ForeingKey()
+    {
+        $this->contarint = [];
+        if ($RESUT = $this->db->query("SELECT * FROM information_schema.key_column_usage WHERE table_name='" . $this->tabla() . "' and TABLE_SCHEMA='" . $this->db->dbName() . "'"))
+        {
+            if ($this->num_rows($RESUT) == 0)
+            {
+                throw new Exception("LA TABLA " . $this->tabla . " NO EXISTE EN LA BASE DE DATOS");
+            }
+            while ($campo = $this->fecth_result($RESUT))
+            {
+                // $this->contarint[$campo['ORDINAL_POSITION']] = $campo['COLUMN_NAME'];REFERENCED_TABLE_NAME
+                if ($campo['REFERENCED_TABLE_NAME'] != '')
+                {
+                    if ($RESUT2 = $this->db->query("SELECT * FROM information_schema.REFERENTIAL_CONSTRAINTS "
+                            . "WHERE table_name='" . $campo['REFERENCED_TABLE_NAME'] . "' "
+                            . "and CONSTRAINT_SCHEMA='" . $this->db->dbName() . "' and "
+                            . "REFERENCED_TABLE_NAME='" . $this->tabla() . "'"))
+                    {
+                        $campo2 = $this->fecth_result($RESUT2);
+                        $this->contarint+=[$campo['COLUMN_NAME'] => [
+                                'table' => $campo['REFERENCED_TABLE_NAME'],
+                                'colum' => $campo['REFERENCED_COLUMN_NAME'],
+                                'name' => $campo['CONSTRAINT_NAME'],
+                                'DBname' => $campo['REFERENCED_TABLE_SCHEMA'],
+                                'OnUpdate' => $campo2['UPDATE_RULE'],
+                                'OnDelete' => $campo2['DELETE_RULE'],
+                                'Match' => $campo2['MATCH_OPTION']
+                        ]];
+                    }
+                }
+            }
+            return $this->contarint;
+        }
+    }
+
+    public function ListTablas()
+    {//where Tables_in_" . $this->db . "='" . $tabla . "'
+        $tablas = [];
+        $result = $this->db->query("show tables");
+        while ($campo = $this->fecth_result($result))
+        {
+            $tablas[] = $campo["Tables_in_" . $this->db->dbName()];
+        }
+        return $tablas;
+    }
+
 //put your code here
 }

@@ -87,7 +87,7 @@ class Router extends \Cc\Router
 
         $a = explode('?', $_SERVER['REQUEST_URI']);
         $request = urldecode(trim($a[0]));
-        if ($request[0] != '/')
+        if (strlen($request) > 0 && $request[0] != '/')
             $request = '/' . $request;
         $this->RequestFilename = $request;
 
@@ -117,19 +117,43 @@ class Router extends \Cc\Router
      * @param string|array $path path de peticion 
      * @param string|\Closure $controller controlador al que se redigira 
      * @param array $match validacion para cada exprecion 
+     * @return Router\Route
      */
-    public function Route($path, $controller, $match = [])
+    public function &Route($path, $controller, $match = [])
     {
+
+
         if (is_array($path))
         {
             foreach ($path as $p)
             {
                 $this->Route($p, $controller, $match);
             }
+            return $this->routes[$p];
         } else
         {
-            $this->routes[$path] = [$controller, true, $match];
+            $this->routes[$path] = new Router\Route($controller, $path);
+            if ($match)
+            {
+                foreach ($match as $i => $v)
+                {
+                    $this->routes[$path]->cuando($i, $v);
+                }
+            }
+            return $this->routes[$path];
         }
+
+        /*
+          if (is_array($path))
+          {
+          foreach ($path as $p)
+          {
+          $this->Route($p, $controller, $match);
+          }
+          } else
+          {
+          $this->routes[$path] = [$controller, true, $match];
+          } */
     }
 
     /**
@@ -695,6 +719,11 @@ class Router extends \Cc\Router
                 }
         }
         return false;
+    }
+
+    public function ResolveUrl($name, ...$params)
+    {
+        
     }
 
 }

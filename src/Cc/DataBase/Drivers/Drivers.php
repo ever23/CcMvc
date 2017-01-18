@@ -134,6 +134,7 @@ abstract class Drivers
     protected $swap_pre = '';
     private $ar_aliased_tables = [];
     public $FilterSqli = true;
+    protected $contarint = [];
 
     const view = 'view';
     const table = 'table';
@@ -148,6 +149,16 @@ abstract class Drivers
     {
         $this->db = &$db;
         $this->tabla = $tabla;
+    }
+
+    public function ForeingKey()
+    {
+        return [];
+    }
+
+    public function ListTablas()
+    {
+        return [];
     }
 
     /**
