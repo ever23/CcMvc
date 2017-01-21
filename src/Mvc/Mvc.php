@@ -400,7 +400,7 @@ class Mvc
         if (is_bool($confAutoload['UseStandarAutoloader']))
         {
             $confAutoload['UseStandarAutoloader'] = [];
-            $confAutoload['UseStandarAutoloader']['libs'] = [$libs, true];
+            //   $confAutoload['UseStandarAutoloader']['libs'] = [$libs, true];
             if ($this->conf->AutoloadLibs['UseStandarAutoloader'])
             {
                 $confAutoload['UseStandarAutoloader']['extern'] = $this->conf->App['extern'];
@@ -409,7 +409,7 @@ class Mvc
             $confAutoload['UseStandarAutoloader']['model'] = [$this->conf->App['model'], true];
         } else
         {
-            $confAutoload['UseStandarAutoloader']['libs'] = [$libs, true];
+            // $confAutoload['UseStandarAutoloader']['libs'] = [$libs, true];
             $confAutoload['UseStandarAutoloader']['model'] = [$this->conf->App['model'], true];
         }
 
