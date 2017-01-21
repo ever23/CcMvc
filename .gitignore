@@ -61,3 +61,4 @@ CcMvc.zip
 /src/Cache.CoreClass.inc
 !/libs/Cache.CoreClass.inc
 /vendor/
+/nbproject/
