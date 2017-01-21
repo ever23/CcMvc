@@ -22,7 +22,11 @@
     },
     "require": {
         "php": ">=5.6",
-        "matthiasmullie/minify": "*"
+        "matthiasmullie/minify": "*",
+        "smarty/smarty": "3.1.*",
+        "twig/twig": "1.*",
+        "phpmailer/phpmailer": "5.2.*",
+        "dompdf/dompdf": "*"
     },
     "autoload": {
         "classmap": [

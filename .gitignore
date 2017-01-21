@@ -57,6 +57,7 @@ CcMvc.zip
 /documentacion/
 /examples/
 /documentorcache/
-/libs/*
+/libs/
 /src/Cache.CoreClass.inc
 !/libs/Cache.CoreClass.inc
+/vendor/
