@@ -29,6 +29,8 @@ namespace Cc;
 class SQLite3 extends \SQLite3 implements iDataBase
 {
 
+    public $connect_error = '';
+
     public function __construct($filename, $flags = SQLITE3_OPEN_READWRITE, $encryption_key = null)
     {
         if (file_exists($filename))
@@ -44,6 +46,9 @@ class SQLite3 extends \SQLite3 implements iDataBase
             parent::__construct($filename, SQLITE3_OPEN_READWRITE | SQLITE3_OPEN_CREATE, $encryption_key);
             $sql = file_get_contents($flags);
             $this->exec($sql);
+        } else
+        {
+            parent::__construct($filename, SQLITE3_OPEN_READWRITE | SQLITE3_OPEN_CREATE, $encryption_key);
         }
     }
 
@@ -76,6 +81,17 @@ class SQLite3 extends \SQLite3 implements iDataBase
     public function dbName()
     {
         
+    }
+
+    public function GetDriver()
+    {
+        $class = __NAMESPACE__ . "\\DB\\Drivers\\sqlite";
+        if (!class_exists($class))
+        {
+            throw new Exception(" NO EXISTE EL DRIVER DE " . $class);
+        }
+
+        return new $class($this);
     }
 
 //put your code here

@@ -257,4 +257,15 @@ class MySQLi extends \MySQLi implements iDataBase
         return $json;
     }
 
+    public function GetDriver()
+    {
+        $class = __NAMESPACE__ . "\\DB\\Drivers\\mysql";
+        if (!class_exists($class))
+        {
+            throw new Exception(" NO EXISTE EL DRIVER DE " . $class);
+        }
+
+        return new $class($this);
+    }
+
 }

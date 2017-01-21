@@ -122,4 +122,22 @@ trait CoreClass
         return false;
     }
 
+    /**
+     * Retorna la lista de clases disponibles 
+     * @return array
+     */
+    public function GetCoreClass()
+    {
+        return $this->CoreClass;
+    }
+
+    public function Reiniciar()
+    {
+        $this->StopAutoloadCore();
+        if (file_exists($this->AppDir . $this->FileCoreClass))
+            unlink($this->AppDir . $this->FileCoreClass);
+        $this->Reestart = false;
+        $this->StartAutoloadCore($this->AppDir, false);
+    }
+
 }

@@ -264,6 +264,7 @@ class Mvc
     use CoreClass
     {
         autoloadCore as private Autoload;
+        GetCoreClass as private GetCoreClassParent;
     }
 
     /**
@@ -502,6 +503,22 @@ class Mvc
 
         ErrorHandle::$debung = $this->conf['debung'];
         ErrorHandle::SetHandle();
+    }
+
+    /**
+     * Retorna la lista de clases disponibles 
+     * @return array
+     */
+    public function GetCoreClass()
+    {
+        $clases = [];
+        $loaders = $this->AutoloaderLib->GetLoader();
+        /* @var $loader Autoload */
+        foreach ($loaders as $loader)
+        {
+            $clases +=$loader->GetCoreClass();
+        }
+        return $this->GetCoreClassParent() + $clases;
     }
 
     /**
@@ -776,6 +793,7 @@ class Mvc
 
     public function Console($argv)
     {
+        ErrorHandle::RecoverHandle();
         $console = new Mvc\RouteConsole($argv);
         $console->Route();
         $console->CreateReflexion();
@@ -1524,13 +1542,22 @@ class Mvc
         $this->time++;
     }
 
+    protected function IsConsole()
+    {
+        if (isset($_SERVER['SESSIONNAME']) && $_SERVER['SESSIONNAME'] == 'Console' && !defined('__DEBUNG_CONSOLE_'))
+        {
+            return true;
+        }
+        return false;
+    }
+
     /**
      * 
      * @access private 
      */
     public function Log($msj, $fin = false)
     {
-        if (isset($_SERVER['SESSIONNAME']) && $_SERVER['SESSIONNAME'] == 'Console' && !defined('__DEBUNG_CONSOLE_'))
+        if ($this->IsConsole())
         {
             return;
         }

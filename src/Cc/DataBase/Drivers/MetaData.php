@@ -36,9 +36,9 @@ interface iMetaData extends \JsonSerializable
 /**
  * Description of Date
  *
- * @autor ENYREBER FRANCO <enyerverfranco@gmail.com> , <enyerverfranco@outlook.com>
+ * @autor ENYREBER FRANCO <enyerverfranco@gmail.com>, <enyerverfranco@outlook.com>
  * @package Cc
- * @subpackage DataBase  
+ * @subpackage DataBase
  * @category MetaData
  */
 class date extends \DateTime implements iMetaData
@@ -74,39 +74,6 @@ class date extends \DateTime implements iMetaData
  * @subpackage DataBase  
  * @category MetaData
  */
-class time extends \DateTime implements iMetaData
-{
-
-    protected $key;
-
-    public function __construct($time, $key)
-    {
-        $this->key = $key;
-        if ($time instanceof \DateTime)
-        {
-            $time = $time->format(self::W3C);
-        }
-        parent::__construct($time);
-    }
-
-    public function __toString()
-    {
-        return $this->format("H:i:s");
-    }
-
-    public function jsonSerialize()
-    {
-        return $this->format("H:i:s");
-    }
-
-}
-
-/**
- * @autor ENYREBER FRANCO <enyerverfranco@gmail.com> , <enyerverfranco@outlook.com>
- * @package Cc
- * @subpackage DataBase  
- * @category MetaData
- */
 class datetime extends \DateTime implements iMetaData
 {
 
@@ -130,6 +97,39 @@ class datetime extends \DateTime implements iMetaData
     public function jsonSerialize()
     {
         return $this->format("Y-m-d H:i:s");
+    }
+
+}
+
+/**
+ * @autor ENYREBER FRANCO <enyerverfranco@gmail.com> , <enyerverfranco@outlook.com>
+ * @package Cc
+ * @subpackage DataBase  
+ * @category MetaData
+ */
+class time extends \DateTime implements iMetaData
+{
+
+    protected $key;
+
+    public function __construct($time, $key)
+    {
+        $this->key = $key;
+        if ($time instanceof \DateTime)
+        {
+            $time = $time->format(self::W3C);
+        }
+        parent::__construct($time);
+    }
+
+    public function __toString()
+    {
+        return $this->format("H:i:s");
+    }
+
+    public function jsonSerialize()
+    {
+        return $this->format("H:i:s");
     }
 
 }

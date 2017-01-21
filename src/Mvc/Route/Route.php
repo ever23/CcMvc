@@ -42,7 +42,8 @@ class Route
     {
         $this->url = $url;
         $this->controller = $controller;
-        self::$routes[$controller] = $this;
+        if (is_string($controller))
+            self::$routes[$controller] = $this;
     }
 
     public function has($has)

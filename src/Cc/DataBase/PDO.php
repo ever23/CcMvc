@@ -62,12 +62,23 @@ class PDO extends \PDO implements iDataBase
 
         if ($sq == '')
             return $sq;
-        $str = $this->quote($sq);
-        if (strpos($str, "'") === 0)
+        if (is_string($sq))
         {
-            $str = substr($str, 1, -1);
+            $str = $this->quote($sq);
+            if (strpos($str, "'") === 0)
+            {
+                $str = substr($str, 1, -1);
+            }
+            return $str;
+        } else
+        {
+            return $sq;
         }
-        return $str;
+    }
+
+    public function begin_transaction()
+    {
+        return $this->beginTransaction();
     }
 
     public function error()
@@ -76,6 +87,30 @@ class PDO extends \PDO implements iDataBase
             return $this->connect_error;
         $arr = $this->errorInfo();
         return $arr[count($arr) - 1];
+    }
+
+    public function GetDriver()
+    {
+        $class = __NAMESPACE__ . "\\DB\\Drivers\\" . $this->getAttribute(\PDO::ATTR_DRIVER_NAME);
+        if (!class_exists($class))
+        {
+            throw new Exception(" NO EXISTE EL DRIVER DE " . $class);
+        }
+
+        return new $class($this);
+    }
+
+    public function __get($name)
+    {
+        if ($name == 'error')
+        {
+            return $this->error();
+        }
+        if ($name == 'errno')
+        {
+            return $this->errno();
+        }
+        trigger_error("propiedad $name no definida ", E_USER_NOTICE);
     }
 
 }

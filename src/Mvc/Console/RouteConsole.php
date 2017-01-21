@@ -98,6 +98,10 @@ class RouteConsole
 
         $this->class = $controller[0];
         $this->method = isset($controller[1]) ? $controller[1] : 'index';
+        if (!is_dir(Mvc::App()->Config()->App['Console']))
+        {
+            mkdir(Mvc::App()->Config()->App['Console']);
+        }
         $this->autoload = new \Cc\Autoload(Mvc::App()->Config()->App['Console'], false);
         $this->ReadParameters();
     }
@@ -192,12 +196,20 @@ class RouteConsole
             {
                 switch ($ex->getCode())
                 {
+                    case InyectorException::NotResolveParam:
+                        self::Out("El parametro -" . $ex->GetReflectionParameter()->name . " no es opcional y es obligatorio \n");
+                        break;
+                    case InyectorException::FaileTypeParam:
+                        self::Out("El parametro -" . $ex->GetReflectionParameter()->name . " no es del tipo correcto \n");
+                        break;
+
+
                     default :
                         self::Out($ex->getMessage() . "\n");
                 }
                 exit;
             }
-            $this->consoleController->__construc(...$params);
+            $this->consoleController->__construct(...$params);
         }
         try
         {
@@ -206,6 +218,12 @@ class RouteConsole
         {
             switch ($ex->getCode())
             {
+                case InyectorException::NotResolveParam:
+                    self::Out("El parametro -" . $ex->GetReflectionParameter()->name . " no es opcional y es obligatorio \n");
+                    break;
+                case InyectorException::FaileTypeParam:
+                    self::Out("El parametro -" . $ex->GetReflectionParameter()->name . " no es del tipo correcto \n");
+                    break;
 
                 default :
                     self::Out($ex->getMessage() . "\n");

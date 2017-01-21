@@ -1,5 +1,5 @@
 <?php
-/* Create by \Cc\Autoload 2017-01-12 23:46:53 */
+/* Create by \Cc\Autoload 2017-01-20 04:55:12 */
  return array (
   'class' => 
   array (
@@ -144,6 +144,12 @@
     'Dompdf\\Renderer\\TableCell' => 'dompdf-master\\src\\Renderer\\TableCell.php',
     'Dompdf\\Renderer\\TableRowGroup' => 'dompdf-master\\src\\Renderer\\TableRowGroup.php',
     'Dompdf\\Renderer\\Text' => 'dompdf-master\\src\\Renderer\\Text.php',
+    'JakubOnderka\\PhpConsoleColor\\ConsoleColor' => 'jakub-onderka\\php-console-color\\src\\JakubOnderka\\PhpConsoleColor\\ConsoleColor.php',
+    'JakubOnderka\\PhpConsoleColor\\InvalidStyleException' => 'jakub-onderka\\php-console-color\\src\\JakubOnderka\\PhpConsoleColor\\InvalidStyleException.php',
+    'ConsoleColorWithForceSupport' => 'jakub-onderka\\php-console-color\\tests\\JakubOnderka\\PhpConsoleColor\\ConsoleColorTest.php',
+    'ConsoleColorTest' => 'jakub-onderka\\php-console-color\\tests\\JakubOnderka\\PhpConsoleColor\\ConsoleColorTest.php',
+    'JakubOnderka\\PhpConsoleHighlighter\\Highlighter' => 'jakub-onderka\\php-console-highlighter\\src\\JakubOnderka\\PhpConsoleHighlighter\\Highlighter.php',
+    'JakubOnderka\\PhpConsoleHighlighter\\HighlighterTest' => 'jakub-onderka\\php-console-highlighter\\tests\\JakubOnderka\\PhpConsoleHighligter\\HigligterTest.php',
     'MatthiasMullie\\Minify\\CSS' => 'minify-master\\src\\CSS.php',
     'MatthiasMullie\\Minify\\Exception' => 'minify-master\\src\\Exception.php',
     'MatthiasMullie\\Minify\\JS' => 'minify-master\\src\\JS.php',

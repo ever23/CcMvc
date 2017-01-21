@@ -229,7 +229,7 @@ class DependenceInyector
                     $class = $p->getClass();
                 } catch (\Exception $ex)
                 {
-                    throw new InyectorException($ex->getMessage(), InyectorException::NotFoundClassParam, $ex);
+                    throw (new InyectorException($ex->getMessage(), InyectorException::NotFoundClassParam, $ex))->SetReflection($p);
                 }
                 if (is_object($class))
                 {
@@ -242,7 +242,7 @@ class DependenceInyector
                     if (!is_object($OBJ))
                     {
                         $mensaje = "NO SE PUDO RESOLVER EL PARAMETRO NUMERO " . ($i + 1) . " " . $class->name . " $" . $p->name . "  LA CLASE " . $class->name . " DEVE IMPLEMENTAR LA INTERFACE Inyectable ";
-                        throw new InyectorException($mensaje, InyectorException::NotResolveParamObjec);
+                        throw (new InyectorException($mensaje, InyectorException::NotResolveParamObjec))->SetReflection($p);
                     }
                     $parametros[] = &$OBJ;
                 } else
@@ -254,7 +254,7 @@ class DependenceInyector
                         {
                             $mensaje = "EL PARAMETRO NUMERO " . ($i + 1) . " " . $p->getType() . " $" . $p->name . "  DEBE SER DE TIPO " . $p->getType();
 
-                            throw new InyectorException($mensaje, InyectorException::FaileTypeParam);
+                            throw (new InyectorException($mensaje, InyectorException::FaileTypeParam))->SetReflection($p);
                         }
                         $parametros[] = $t;
                     } elseif ($p->isArray())
@@ -265,7 +265,7 @@ class DependenceInyector
                             $mensaje = "EL PARAMETRO NUMERO " . ($i + 1) . " array $" . $p->name . " DEBE SER DE UN ARRAY VALIDO";
 
 
-                            throw new InyectorException($mensaje, InyectorException::FaileTypeParam);
+                            throw (new InyectorException($mensaje, InyectorException::FaileTypeParam))->SetReflection($p);
                         }
                         $parametros[] = &$t;
                     } else
@@ -276,7 +276,7 @@ class DependenceInyector
                             $mensaje = "EL PARAMETRO NUMERO " . ($i + 1) . " $" . $p->name . " NO SE PUDO RESOLVER Y ES OBLIGATORIO";
 
 
-                            throw new InyectorException($mensaje, InyectorException::NotResolveParam);
+                            throw (new InyectorException($mensaje, InyectorException::NotResolveParam))->SetReflection($p);
                         } else
                         {
                             $parametros[] = $this->DependenceRequest($p);
@@ -312,10 +312,10 @@ class DependenceInyector
                 return new $clase(...$this->RemplaceParam($this->InyectDependence[$class->name], $param->name));
             } catch (\Exception $ex)
             {
-                throw new InyectorException($ex->getMessage(), $ex->getCode(), $ex);
+                throw (new InyectorException($ex->getMessage(), $ex->getCode(), $ex))->SetReflection($param);
             } catch (\Error $ex)
             {
-                throw new InyectorException($ex->getMessage(), $ex->getCode(), $ex);
+                throw (new InyectorException($ex->getMessage(), $ex->getCode(), $ex))->SetReflection($param);
             }
         } elseif (isset($this->InyectDependence['\\' . $class->name]))
         {
@@ -325,10 +325,10 @@ class DependenceInyector
                 return new $clase(...$this->RemplaceParam($this->InyectDependence['\\' . $class->name], $param->name));
             } catch (\Exception $ex)
             {
-                throw new InyectorException($ex->getMessage(), $ex->getCode(), $ex);
+                throw (new InyectorException($ex->getMessage(), $ex->getCode(), $ex))->SetReflection($param);
             } catch (\Error $ex)
             {
-                throw new InyectorException($ex->getMessage(), $ex->getCode(), $ex);
+                throw (new InyectorException($ex->getMessage(), $ex->getCode(), $ex))->SetReflection($param);
             }
         } elseif ($class->implementsInterface(Inyectable::class))
         {
@@ -348,10 +348,10 @@ class DependenceInyector
                 return new $clase(...$this->RemplaceParam($p, $name_param));
             } catch (\Exception $ex)
             {
-                throw new InyectorException($ex->getMessage(), $ex->getCode(), $ex);
+                throw (new InyectorException($ex->getMessage(), $ex->getCode(), $ex))->SetReflection($param);
             } catch (\Error $ex)
             {
-                throw new InyectorException($ex->getMessage(), $ex->getCode(), $ex);
+                throw (new InyectorException($ex->getMessage(), $ex->getCode(), $ex))->SetReflection($param);
             }
         } elseif ($class->isSubclassOf(ValidDependence::class))
         {
@@ -361,10 +361,10 @@ class DependenceInyector
                 return new $clase($this->DependenceRequest($param));
             } catch (\Exception $ex)
             {
-                throw new InyectorException($ex->getMessage(), $ex->getCode(), $ex);
+                throw (new InyectorException($ex->getMessage(), $ex->getCode(), $ex))->SetReflection($param);
             } catch (\Error $ex)
             {
-                throw new InyectorException($ex->getMessage(), $ex->getCode(), $ex);
+                throw (new InyectorException($ex->getMessage(), $ex->getCode(), $ex))->SetReflection($param);
             }
         }
         $var = NULL;
@@ -497,5 +497,31 @@ class InyectorException extends Exception
      * la funcion 
      */
     const FaileTypeParam = 0x5;
+
+    /**
+     *
+     * @var \ReflectionParameter 
+     */
+    private $Param = NULL;
+
+    /**
+     * 
+     * @param \ReflectionParameter $param
+     * @internal
+     */
+    public function &SetReflection(\ReflectionParameter $param)
+    {
+        $this->Param = $param;
+        return $this;
+    }
+
+    /**
+     * 
+     * @return \ReflectionParameter
+     */
+    public function GetReflectionParameter()
+    {
+        return $this->Param;
+    }
 
 }

@@ -36,6 +36,11 @@ interface iDataBase
     public function errno();
 
     public function dbName();
+
+    /**
+     * @return DB\Drivers
+     */
+    public function GetDriver();
 }
 
 /**

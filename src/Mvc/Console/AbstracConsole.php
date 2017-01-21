@@ -39,6 +39,15 @@ abstract class AbstracConsole
     }
 
     /**
+     * imprime un texto en el flujo STDOUT
+     * @param string $out
+     */
+    protected function OutLn($out)
+    {
+        RouteConsole::Out($out . "\r\n");
+    }
+
+    /**
      * obtiene una entrada de el flujo STDIN
      * @return string 
      */

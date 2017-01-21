@@ -1120,13 +1120,14 @@ abstract class FormModel extends Model implements Inyectable, \Serializable
         } else
         {
             $buff = '';
-            switch ($type)
+            switch (strtolower($type))
             {
                 case 'textarea':
 
                     $buff = Html::TextArea($options, $attrs);
                     break;
                 case 'select':
+
                     $buff = Html::select($attrs, $options);
                     break;
                 case 'button':

@@ -21,7 +21,7 @@ namespace Cc\DB;
 
 use Cc\iDataBase;
 
-include_once dirname(__FILE__) . '/../TypeMetaData/MetaData.php';
+include_once dirname(__FILE__) . '/MetaData.php';
 
 /**
  * Exceptiones 
@@ -145,21 +145,20 @@ abstract class Drivers
      * @param iDataBase $db
      * @param string $tabla
      */
-    public function __construct(iDataBase &$db, $tabla)
+    public function __construct(iDataBase &$db, $tabla = NULL)
     {
         $this->db = &$db;
         $this->tabla = $tabla;
     }
 
-    public function ForeingKey()
+    public function SetTabla($tabla)
     {
-        return [];
+        $this->tabla = $tabla;
     }
 
-    public function ListTablas()
-    {
-        return [];
-    }
+    public abstract function ForeingKey();
+
+    public abstract function ListTablas();
 
     /**
      * 
@@ -238,9 +237,14 @@ abstract class Drivers
 
         if (!is_null($valor) && class_exists($class_name, false))
         {
-
-            $obj = new $class_name($valor, $this->colum[$ColumName]);
-            return $obj->__toString();
+            try
+            {
+                $obj = new $class_name($valor, $this->colum[$ColumName]);
+                return $obj->__toString();
+            } catch (\Exception $ex)
+            {
+                return $valor;
+            }
         }
         return $valor;
     }
@@ -306,7 +310,7 @@ abstract class Drivers
         return $this->tabla;
     }
 
-    protected function num_rows($result)
+    public function num_rows($result)
     {
         /* $result \mysqli_result */
         if ($result instanceof \mysqli_result)
@@ -325,7 +329,7 @@ abstract class Drivers
         }
     }
 
-    protected function fecth_result($result)
+    public function fecth_result($result)
     {
         if ($result instanceof \mysqli_result)
         {
@@ -355,7 +359,7 @@ abstract class Drivers
         if (key_exists($ColumName, $this->colum))
             $type = $this->colum[$ColumName]['Type'];
 
-        $var = $this->FilterSqlI($var);
+
         if (preg_match("/" . implode("|", $this->FormatBinary) . "/i", $type))
         {
             $bin = '';
@@ -388,13 +392,16 @@ abstract class Drivers
             } elseif ((is_string($var) && strncmp($var, '0x', 2) === 0))
             {
                 return $var;
+            } else
+            {
+                return '0x' . bin2hex($var);
             }
         }
-
+        $var = $this->FilterSqlI($var);
         if (is_null($var) || (is_string($var) && strtolower($var) == 'null'))
         {
             return 'NULL';
-        } elseif (is_int($var) || is_float($var) || is_double($var))
+        } elseif (is_numeric($var) || is_int($var) || is_float($var) || is_double($var))
         {
             return $var;
         } elseif (is_bool($var))
@@ -621,6 +628,98 @@ abstract class Drivers
             return $this->db->real_escape_string($val);
         }
         return $val;
+    }
+
+    public function CreateTable($colums, $index, $unique, $primary, $ForeingKey)
+    {
+        $sql = 'Create table ' . $this->_escape_char . $this->tabla . $this->_escape_char . "(";
+        $SqlColum = '';
+        foreach ($colums as $i => $colum)
+        {
+            $SqlColum.=' ' . $this->_escape_char . $i . $this->_escape_char . " "
+                    . $this->GetFullType($colum['type'], $colum['ParamType']);
+            if ($colum['NULL'])
+            {
+                $SqlColum.= " " . $colum['NULL'];
+            }
+            if ($colum['Defalut'])
+            {
+                $SqlColum.= "  DEFAULT " . $this->FormatVarInsert($colum['Defalut']) . "";
+            }
+            if ($colum['Extra'])
+            {
+                $SqlColum.= " " . $colum['Extra'];
+            }
+            $SqlColum.=",\n";
+        }
+        $sql.=substr($SqlColum, 0, -2) . "\n";
+        if ($primary)
+        {
+            $sql.= ',PRIMARY KEY (' . $this->_escape_char . implode($this->_escape_char . ',' . $this->_escape_char, $primary) . $this->_escape_char . ")\n";
+        }
+        if ($unique)
+        {
+            $sql.= ',UNIQUE (' . $this->_escape_char . implode($this->_escape_char . ',' . $this->_escape_char, $unique) . $this->_escape_char . ")\n";
+        }
+        if ($ForeingKey)
+            foreach (array_keys($ForeingKey) as $ke)
+            {
+                $index[] = $ke;
+            }
+        if ($index)
+        {
+            $sql.= ',INDEX (' . $this->_escape_char . implode($this->_escape_char . ',' . $this->_escape_char, $index) . $this->_escape_char . ")\n";
+        }
+        if ($ForeingKey)
+        {
+            // $sql.=',key(' . implode(',', array_keys($this->ForeingKey)) . '),';
+            /* @var $key ForeingKey */
+            $Fkey = ",\n";
+            foreach ($ForeingKey as $i => $key)
+            {
+                $Fkey .= 'FOREIGN KEY (' . $this->_escape_char . $i . $this->_escape_char . ') REFERENCES ' . $this->_escape_char . $key['reference'] . $this->_escape_char . ' '
+                        . '(' . $this->_escape_char . implode($this->_escape_char . ',' . $this->_escape_char, $key['keys']) . $this->_escape_char . ")\n";
+                if ($key['MATCH'])
+                {
+                    $Fkey.=' MATCH ' . $key['MATCH'] . " \n";
+                }
+                if ($key['ONDELETE'])
+                {
+                    $Fkey.=' ON DELETE ' . $key['ONDELETE'] . " \n";
+                }
+                if ($key['ONUPDATE'])
+                {
+                    $Fkey.=' ON UPDATE ' . $key['ONDELETE'] . " \n";
+                }
+                $Fkey .= ",\n";
+            }
+            $sql.=substr($Fkey, 0, -2);
+        }
+        $sql .= ');';
+        return $sql;
+    }
+
+    protected function GetFullType($type, $TypeParams = [])
+    {
+        $sql = $type;
+        if ($TypeParams)
+        {
+            $sql.='(';
+            $tipe = '';
+            if (is_string($TypeParams))
+            {
+                $tipe.=$TypeParams;
+            } else
+            {
+                foreach ($TypeParams as $var)
+                {
+                    $tipe.=$this->FormatVarInsert($var) . ',';
+                }
+            }
+
+            $sql.=substr($tipe, 0, -1) . ')';
+        }
+        return $sql;
     }
 
 }

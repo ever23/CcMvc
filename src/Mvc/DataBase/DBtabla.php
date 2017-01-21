@@ -104,12 +104,15 @@ class DBtabla extends \Cc\DBtabla implements \Serializable, ParseObjectSmartyTpl
             $Cache = Cache::Get($this->CacheName);
             static::$_CACHE[$this->CacheName] = $Cache;
             $this->unserialize($Cache);
-        } elseif (($data = $this->MetadataFromModel($tabla)) != false)
+        } elseif (($data = $this->MetadataFromModel($tabla)) !== false)
         {
+
+            Mvc::App()->Log("Creando objeto para la tabla " . $tabla . " desde el modelo de datos...");
             static::$_CACHE[$this->CacheName] = $data;
             $this->unserialize($data);
         } else
         {
+
             Mvc::App()->Log("Creando objeto para la tabla " . $tabla);
             parent::__construct($db, $tabla, $this->useStmt);
             Cache::Set($this->CacheName, $this->serialize());
@@ -247,27 +250,29 @@ class DBtabla extends \Cc\DBtabla implements \Serializable, ParseObjectSmartyTpl
         //return false;
 
 
-        $class = '\\Cc\\Mvc\\DBtablaModel\\' . $tabla;
+        $class = 'Cc\\Mvc\\TablaModel\\' . $tabla;
         if (Mvc::App()->AutoloaderLib->GetLoader('model')->autoloadCore($class))
         {
-            $this->model = new $class();
-            if (!($this->model instanceof DBtablaModel\TablaModel))
+            $this->model = new $class($tabla);
+            if (!($this->model instanceof TablaModel))
             {
-                throw new Exception("LA CLASE " . $class . " DEBE SER EXTENDIDA DE " . DBtablaModel\TablaModel::class);
+                throw new Exception("LA CLASE " . $class . " DEBE SER EXTENDIDA DE " . TablaModel::class);
             }
             $cache = [];
-
+            $this->model->Create();
             $cache['colum'] = $this->model->getMetadata();
             $cache['primary'] = [];
             $cache['autoinrement'] = '';
+            $order = 1;
+            $cache['OrderColum'] = [];
             foreach ($cache['colum'] as $i => $campo)
             {
-
-                if (isset($campo['Key']) && $campo['Key'] == DBtablaModel\TablaModel::PrimaryKey && !in_array($i, $cache['primary']))
+                $cache['OrderColum'][$order++] = $i;
+                if (isset($campo['Key']) && $campo['Key'] == TablaModel::PrimaryKey && !in_array($i, $cache['primary']))
                 {
                     array_push($cache['primary'], $i);
                 }
-                if (isset($campo['Extra']) && $campo['Extra'] === DBtablaModel\TablaModel::AutoIncrement)
+                if (isset($campo['Extra']) && $campo['Extra'] === TablaModel::AutoIncrement)
                 {
                     $cache['autoinrement'] = $i;
                 }
@@ -278,7 +283,7 @@ class DBtabla extends \Cc\DBtabla implements \Serializable, ParseObjectSmartyTpl
             $cache['Ttipe'] = self::table;
             $cache['tabla'] = $tabla;
             $cache['typeDB'] = $this->GetTypeDB();
-            $cache['OrderColum'] = array_keys($cache['colum']);
+            // $cache['OrderColum'] = array_keys($cache['colum']);
             return $cache;
         } else
         {

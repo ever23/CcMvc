@@ -20,25 +20,68 @@
 namespace Cc\Mvc\DBtablaModel;
 
 /**
- * Description of ForeingKey
+ * Un objeto instanciado de esta clase representa una clave foranea de una tabla
  *
- * @author enyerber
+ * @autor ENYREBER FRANCO <enyerverfranco@gmail.com> , <enyerverfranco@outlook.com>  
+ * @package CcMvc
+ * @subpackage Modelo
+ * @category DBtablaModel
  */
 class ForeingKey
 {
 
+    /**
+     * Nombre de la columna 
+     * @var string 
+     */
     protected $colum = '';
+
+    /**
+     * Nombre de la tabla donde se encuentra la clave foranea 
+     * @var string 
+     */
     protected $references = '';
+
+    /**
+     * claves foraneas 
+     * @var array 
+     */
     protected $referencesId = [];
+
+    /**
+     * Opciones para ON DELETE
+     * @var string 
+     */
     protected $OnDelete = 'NO ACTION';
+
+    /**
+     * Opciones para ON UPDATE
+     * @var string 
+     */
     protected $OnUpdate = 'NO ACTION';
+
+    /**
+     * Opciones para MATCH
+     * @var string 
+     */
     protected $match = '';
 
+    /**
+     * 
+     * @param string $colum nombre de la columna 
+     * @internal 
+     */
     public function __construct($colum)
     {
         $this->colum = $colum;
     }
 
+    /**
+     * Establece la clave foranea
+     * @param string $tabla tabla donde esta la clave foranea 
+     * @param array $campos campos de la tabla que se usaran para asociar
+     * @return \Cc\Mvc\DBtablaModel\ForeingKey
+     */
     public function &References($tabla, $campos = NULL)
     {
         $this->references = $tabla;
@@ -54,27 +97,53 @@ class ForeingKey
         return $this;
     }
 
+    /**
+     * Establece la sentencia ON DELETE 
+     * 
+     * @param string $valor  pueden ser RESTRICT, CASCADE, SET NULL, SET NULL o  SET DEFAULT
+     * @return \Cc\Mvc\DBtablaModel\ForeingKey
+     */
     public function &OnDelete($valor)
     {
         $this->OnDelete = $valor;
         return $this;
     }
 
+    /**
+     * Establece la sentencia ON UPDATE 
+     * 
+     * @param STRING $valor pueden ser RESTRICT, CASCADE, SET NULL, SET NULL o  SET DEFAULT
+     * @return \Cc\Mvc\DBtablaModel\ForeingKey
+     */
     public function &OnUpdate($valor)
     {
         $this->OnUpdate = $valor;
         return $this;
     }
 
+    /**
+     * Estable la seletcia match
+     * @param type $math puede ser FULL, PARTIAL o SIMPLE
+     * @return \Cc\Mvc\DBtablaModel\ForeingKey
+     */
     public function &Match($math)
     {
         $this->match = $math;
         return $this;
     }
 
+    /**
+     * crea el sql de la clave foranea 
+     * @return string
+     * @internal 
+     */
     public function Sql()
     {
         $sql = 'FOREIGN KEY (' . $this->colum . ') REFERENCES ' . $this->references . ' (' . implode(',', $this->referencesId) . ')';
+        if ($this->match)
+        {
+            $sql.=' MATCH ' . $this->match . ' ';
+        }
         if ($this->OnDelete)
         {
             $sql.=' ON DELETE ' . $this->OnDelete . ' ';
@@ -84,6 +153,17 @@ class ForeingKey
             $sql.=' ON UPDATE ' . $this->OnUpdate . ' ';
         }
         return $sql;
+    }
+
+    public function GetData()
+    {
+        return [
+            'reference' => $this->references,
+            'keys' => $this->referencesId,
+            'MATCH' => $this->match,
+            'ONDELETE' => $this->OnDelete,
+            'ONUPDATE' => $this->OnUpdate
+        ];
     }
 
 }

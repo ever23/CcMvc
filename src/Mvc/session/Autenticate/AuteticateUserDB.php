@@ -100,15 +100,29 @@ abstract class AuteticateUserDB extends Autenticate
         $this->PasswordHash = new PasswordHash();
         $this->cache = Cache::IsSave(static::class) ? Cache::Get(static::class) : [];
         $aut = $this->InfoUserDB();
-        $this->ColPassword = $aut[self::CollPassword];
-        $this->ColUserName = $aut[self::CollUser];
-        $this->TabUsers = $aut[self::TablaUsers];
-        $coll = [$this->ColUserName, $this->ColPassword, 'CreadorHashClass'];
-        if (isset($aut[self::CollUserType]))
+        if (is_array($aut))
         {
-            $this->ColUserType = $aut[self::CollUserType];
-            $coll[] = $this->ColUserType;
+            $this->ColPassword = $aut[self::CollPassword];
+            $this->ColUserName = $aut[self::CollUser];
+            $this->TabUsers = $aut[self::TablaUsers];
+            $coll = [$this->ColUserName, $this->ColPassword, 'CreadorHashClass'];
+            if (isset($aut[self::CollUserType]))
+            {
+                $this->ColUserType = $aut[self::CollUserType];
+                $coll[] = $this->ColUserType;
+            }
+        } else
+        {
+
+            $coll = [$this->ColUserName, $this->ColPassword, 'CreadorHashClass'];
+            if ($this->ColUserType)
+            {
+
+                $coll[] = $this->ColUserType;
+            }
         }
+
+
 
         parent::__construct(is_null($exeptions) ? [] : $exeptions, $coll);
     }
@@ -531,6 +545,42 @@ abstract class AuteticateUserDB extends Autenticate
             $this->cache['cost'] = $this->OptionHash['cost'] = $this->PasswordHash->GenerateCost();
             Cache::Set(static::class, $this->cache);
         }
+    }
+
+    /**
+     * establece el nombre de la tabla de usuarios en la base de datos
+     * @param string $tabla nombre de la tabla
+     */
+    protected function TablaDeUsuarios($tabla)
+    {
+        $this->TabUsers = $tabla;
+    }
+
+    /**
+     * establece la columna que almacena el nombre de usuario en la tabla de usuarios
+     * @param string $columna
+     */
+    protected function ColUserName($columna)
+    {
+        $this->ColUserName = $columna;
+    }
+
+    /**
+     * establece la columna que almacena el hash de contraseña de usuario en la tabla de usuarios
+     * @param string $columna
+     */
+    protected function ColPassword($columna)
+    {
+        $this->ColPassword = $columna;
+    }
+
+    /**
+     * establece la columna que almacena el el tipo o permiso del  usuario en la tabla de usuarios
+     * @param string $columna
+     */
+    protected function ColUserType($columna)
+    {
+        $this->ColUserType = $columna;
     }
 
 }

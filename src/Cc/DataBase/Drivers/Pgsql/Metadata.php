@@ -1,7 +1,7 @@
 <?php
 
 /*
- * Copyright (C) 2016 Enyerber Franco
+ * Copyright (C) 2017 Enyerber Franco
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -18,6 +18,29 @@
  */
 
 namespace Cc\DB\MetaData;
+
+/**
+ * @autor ENYREBER FRANCO <enyerverfranco@gmail.com> , <enyerverfranco@outlook.com>
+ * @package Cc
+ * @subpackage DataBase  
+ * @category MetaData
+ */
+class json extends \Cc\Json implements iMetaData
+{
+
+    protected $key;
+
+    public function __construct($json, $key)
+    {
+        $this->key = $key;
+        if ($json instanceof \Cc\Json)
+        {
+            $this->Copy($json);
+        }
+        parent::__construct($json);
+    }
+
+}
 
 /**
  * @autor ENYREBER FRANCO <enyerverfranco@gmail.com> , <enyerverfranco@outlook.com>
@@ -212,29 +235,6 @@ class pgARRAY extends \ArrayObject implements iMetaData
  * @subpackage DataBase  
  * @category MetaData
  */
-class json extends \Cc\Json implements iMetaData
-{
-
-    protected $key;
-
-    public function __construct($json, $key)
-    {
-        $this->key = $key;
-        if ($json instanceof \Cc\Json)
-        {
-            $this->Copy($json);
-        }
-        parent::__construct($json);
-    }
-
-}
-
-/**
- * @autor ENYREBER FRANCO <enyerverfranco@gmail.com> , <enyerverfranco@outlook.com>
- * @package Cc
- * @subpackage DataBase  
- * @category MetaData
- */
 class xml extends \DOMDocument implements iMetaData
 {
 
@@ -263,4 +263,65 @@ class xml extends \DOMDocument implements iMetaData
         return $this->saveXML();
     }
 
+}
+
+/**
+ * @autor ENYREBER FRANCO <enyerverfranco@gmail.com> , <enyerverfranco@outlook.com>
+ * @package Cc
+ * @subpackage DataBase  
+ * @category MetaData
+ */
+class bytea implements iMetaData
+{
+
+    protected $key;
+    protected $value = '';
+
+    public function __construct($var, $key)
+    {
+        if (is_resource($var))
+        {
+            $this->value = '';
+            while (!feof($var))
+            {
+                $this->value .=fgets($var);
+            }
+        } else
+        {
+            $this->value = $var;
+        }
+    }
+
+    public function __toString()
+    {
+        return $this->value;
+    }
+
+    public function jsonSerialize()
+    {
+        return $this->value;
+    }
+
+}
+
+/**
+ * @autor ENYREBER FRANCO <enyerverfranco@gmail.com> , <enyerverfranco@outlook.com>
+ * @package Cc
+ * @subpackage DataBase  
+ * @category MetaData
+ */
+class blob extends bytea
+{
+    
+}
+
+/**
+ * @autor ENYREBER FRANCO <enyerverfranco@gmail.com> , <enyerverfranco@outlook.com>
+ * @package Cc
+ * @subpackage DataBase  
+ * @category MetaData
+ */
+class longblob extends bytea
+{
+    
 }

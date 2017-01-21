@@ -17,10 +17,13 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace Cc\Mvc\DBtablaModel;
+namespace Cc\Mvc;
+
+use Cc\Mvc\DBtablaModel\ColumModel;
+use Cc\Mvc\DBtablaModel\ForeingKey;
 
 /**
- * Description of TablaModel
+ * 
  * ESTA CLASE PROPORCIONA UNA INTERFACE ABSTRACTA  DE DEFINICION PARA 
  * PROPORCIONAR A LA CLASE {@link \Cc\Mvc\DBtablaModel} LOS METADATOS DE UNA TABLA EN LA BASE DE DATOS 
  * LA CLASE EXTENDIDA DE ESTA DEBE TENER EL MISMO NOMBRE QUE LA TABLA EN LA BASE DE DATOS A LA 
@@ -67,7 +70,7 @@ abstract class TablaModel extends \Cc\Mvc\Model
      * nombre de la tabla 
      * @var string
      */
-    protected $tabla = '';
+    private $tabla = '';
 
     /**
      * columnas 
@@ -82,6 +85,12 @@ abstract class TablaModel extends \Cc\Mvc\Model
     private $ForeingKey = [];
 
     /**
+     *
+     * @var array 
+     */
+    private $Inserts = [];
+
+    /**
      * 
      * @param string $tabla
      * @internal 
@@ -93,8 +102,17 @@ abstract class TablaModel extends \Cc\Mvc\Model
     }
 
     /**
+     * @ignore
+     */
+    public function Campos()
+    {
+        ;
+    }
+
+    /**
      *  retorna los metadatos de una tabla 
      * @return array
+     * @internal 
      */
     public function getMetadata()
     {
@@ -103,7 +121,7 @@ abstract class TablaModel extends \Cc\Mvc\Model
         /* @var $obj ColumModel */
         foreach ($this->columnas as $name => $obj)
         {
-            $this->columnas[$name] = [
+            $colums[$name] = [
                 'Type' => $obj->GetFullType(),
                 'TypeName' => $obj->GetType(),
                 'KEY' => $obj->PrimaryKey ? self::PrimaryKey : '',
@@ -116,20 +134,30 @@ abstract class TablaModel extends \Cc\Mvc\Model
     }
 
     /**
-     * retorna la tabla en sql create 
+     * crea el sql para crear la tabla 
+     * @param \Cc\iDataBase $db manejador de bases de datos
      * @return string
+     * @internal 
      */
-    public function Sql()
+    public function CreateSQL(\Cc\iDataBase $db)
     {
-
-        $sql = 'CREATE TABLE ' . $this->tabla . ' (';
         $primary = [];
+        $columnas = [];
         $index = [];
+        $indexParams = [];
         $unique = [];
         /* @var $obj ColumModel */
         foreach ($this->columnas as $name => $obj)
         {
-            $sql.=$obj->Sql() . ',';
+            $columnas[$name] = [
+                'type' => $obj->GetType(),
+                'ParamType' => $obj->GetParamType(),
+                'atributo' => $obj->GetAtributos(),
+                'Defalut' => $obj->GetDefault(),
+                'NULL' => $obj->GetNull(),
+                'Extra' => $obj->GetExtra(),
+            ];
+
             if ($obj->PrimaryKey)
             {
                 $primary[] = $name;
@@ -137,38 +165,57 @@ abstract class TablaModel extends \Cc\Mvc\Model
             if ($obj->index)
             {
                 $index[] = $name;
+                if (!$obj->index === true)
+                    $indexParams[$name] = $obj->index;
             }
             if ($obj->unique)
             {
                 $unique[] = $name;
             }
         }
-        $sql = substr($sql, 0, -1);
-        if ($primary)
-        {
-            $sql.= ',PRIMARY KEY (' . implode(',', $primary) . ')';
-        }
-        if ($unique)
-        {
-            $sql.= ',UNIQUE (' . implode(',', $unique) . ')';
-        }
+//        $sql = substr($sql, 0, -1);
+
         if ($index)
         {
-            $sql.= ',INDEX (' . implode(',', $index) . ')';
+            foreach ($index as $i => $v)
+            {
+                if (isset($indexParams[$v]))
+                {
+                    $index[$i].='(' . $indexParams[$v] . ')';
+                }
+            }
         }
+        $ForeingKey = [];
         if ($this->ForeingKey)
         {
 
-            $sql.=',key(' . implode(',', array_keys($this->ForeingKey)) . '),';
+
             /* @var $key ForeingKey */
-            foreach ($this->ForeingKey as $key)
+            foreach ($this->ForeingKey as $i => $key)
             {
-                $sql.=$key->Sql() . ',';
+                $ForeingKey[$i] = $key->GetData();
             }
         }
-        $sql = substr($sql, 0, -1);
-        $sql.=');';
-        return $sql;
+        $driver = $db->GetDriver();
+        $driver->SetTabla($this->tabla);
+        return $driver->CreateTable($columnas, $index, $unique, $primary, $ForeingKey);
+    }
+
+    /**
+     * retorna las claves foraneas de la tabla
+     * @return array
+     * @internal 
+     */
+    public function GetReferences()
+    {
+        $forge = [];
+        /* @var $key ForeingKey */
+        foreach ($this->ForeingKey as $i => $key)
+        {
+            $key = $key->GetData();
+            $forge[] = $key['reference'];
+        }
+        return $forge;
     }
 
     /**
@@ -189,6 +236,52 @@ abstract class TablaModel extends \Cc\Mvc\Model
     protected function ForeingKey($colum)
     {
         return $this->ForeingKey[$colum] = new ForeingKey($colum);
+    }
+
+    /**
+     * Este metodo se ejecutara cuando se inicialize la tabla 
+     */
+    public abstract function Initialized();
+
+    /**
+     * Este metodo se ejecutara cuando se nesesite obtener los metadatos de la tabla
+     */
+    public abstract function Create();
+
+    /**
+     *  INSERTA UNA FILA EN LA TABLA
+     * <code>
+     * <?php
+     * $this->Insert("hola1","ejemplo");//insertando
+     * </code>
+     * <code>
+     * <?php
+     * $this->Insert(["hola1","ejemplo"]);//insertando
+     * </code>
+     *  <code>
+     * <?php
+     * $this->Insert(["campo1"=>"hola1","campo2"=>"ejemplo"]);//insertando
+     * </code>
+     *  @param ...$param LA FILA QUE SE INSERTARA SI ES UN ARRAY CON INDICES NUMERICOS INSERTAR POR ORDEN NUMERICO
+     *  SI ES UN ARRAY DE INDICE ALFANUMERICO SE INSERTAR CON EL ORDEN QUE TENGA LA TABLA EN LA BASE DE DATOS
+     *  TAMBIEN PUEDE SER UN OBJETO DBRow
+     *  
+     * @see DBtabla::Insert()
+     * 
+     */
+    protected function Insert(...$params)
+    {
+        $this->Inserts[] = $params;
+    }
+
+    /**
+     * Retorna los datos para inicializar la tabla
+     * @return array
+     * @internal 
+     */
+    public function GetInserts()
+    {
+        return $this->Inserts;
     }
 
 }

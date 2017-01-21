@@ -102,8 +102,12 @@ class AutoloadExternLib
      * @param string $id
      * @return Autoload
      */
-    public function &GetLoader($id)
+    public function &GetLoader($id = NULL)
     {
+        if (is_null($id))
+        {
+            return $this->loaders;
+        }
         return $this->loaders[$id];
     }
 

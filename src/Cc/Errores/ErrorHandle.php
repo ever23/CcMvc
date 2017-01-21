@@ -217,7 +217,8 @@ class ErrorHandle
 
         $war = 'Warning: ' . $error . ' en ' . (isset($trance[$tr + 1]['file']) ? $trance[$tr + 1]['file'] : $file) . ' linea ' . (isset($trance[$tr + 1]['file']) ? $trance[$tr + 1]['line'] : $line);
 
-        echo $war;
+        echo $war . "\n";
+        ;
         return $war;
     }
 
@@ -230,7 +231,7 @@ class ErrorHandle
 
         $not = 'Notice: ' . $error . ' en ' . (isset($trance[$tr + 1]['file']) ? $trance[$tr + 1]['file'] : '') . ' linea ' . (isset($trance[$tr + 1]['file']) ? $trance[$tr + 1]['line'] : '');
 
-        echo $not;
+        echo $not . "\n";
         return $not;
     }
 

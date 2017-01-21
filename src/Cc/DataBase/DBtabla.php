@@ -214,14 +214,15 @@ class DBtabla extends ResultManager implements \JsonSerializable
         {
             $auto = $this->autoinrement;
         }
-        if (!$result = $this->db->query("SELECT max(" . $auto . ") from " . $this->Tabla()))
+        if (!$result = $this->db->query("SELECT max(" . $auto . ") as autoinrement from " . $this->Tabla()))
         {
             $e = new CcException("ERROR NO AUTOINCREMET");
 
             ErrorHandle::Notice("Error no se ha podido obtener el valor autoincrement de la tabla  " . $this->Tabla());
         }
         $r = $this->fecth_result($result);
-        return $r["max(" . $auto . ")"];
+
+        return $r["autoinrement"];
     }
 
     /**
@@ -803,21 +804,34 @@ class DBtabla extends ResultManager implements \JsonSerializable
             break;
         }
         $attrs = [];
+
         if (!$int)
         {
+            if ($this->autoinrement && (!isset($array[$this->autoinrement]) || is_null($array[$this->autoinrement])) || strtolower($array[$this->autoinrement]) == 'null')
+            {
+                $array[$this->autoinrement] = $this->AutoIncrement($this->autoinrement) + 1;
+            }
+
 
             foreach ($array as $coll => $v)
             {
                 array_push($attrs, $coll);
-
-
                 $col.=$this->Driver->FormatVarInsert($v, $coll) . ',';
             }
         } else
         {
             $attrs = $this->OrderColum;
             $count = count($array);
+            // var_dump($this->colum);
 
+            if ($this->autoinrement)
+            {
+                $auto = $this->GetCol($this->autoinrement)['Position'];
+                if (!key_exists($auto - 1, $array) || is_null($array[$auto - 1]) || strtolower($array[$auto - 1]) == 'null')
+                {
+                    $array[$auto - 1] = $this->AutoIncrement($this->autoinrement) + 1;
+                }
+            }
             for ($i = 1; $i <= $count; $i++)
             {
                 //  if (isset($array[$i - 1]))
@@ -833,7 +847,7 @@ class DBtabla extends ResultManager implements \JsonSerializable
 
         if (!$this->Excecute($sql))
         {
-            ErrorHandle::Notice("Error al insertar datos en la tabla " . $this->tabla . " errno:" . $this->errno . " error:" . $this->error);
+            ErrorHandle::Notice("Error al insertar datos en la tabla  " . $this->tabla . " errno:" . $this->errno . " error:" . $this->error);
             return false;
         }
         return true;
@@ -1187,15 +1201,13 @@ class DBtabla extends ResultManager implements \JsonSerializable
         $this->OrderColum = $this->Driver->OrderColum();
     }
 
-    protected function CreateDriver($tab)
+    protected function &CreateDriver($tab)
     {
-        $class = __NAMESPACE__ . "\\DB\\Drivers\\" . $this->typeDB;
-        if (!class_exists($class))
-        {
-            throw new Exception(" NO EXISTE EL DRIVER DE " . $class);
-        }
+        $driver = $this->db->GetDriver();
+        $driver->SetTabla($tab);
 
-        return new $class($this->db, $tab);
+
+        return $driver;
     }
 
     /**
@@ -1215,7 +1227,7 @@ class DBtabla extends ResultManager implements \JsonSerializable
     public function GetValuesEnum($attr)
     {
         $a = [];
-        if (preg_match("/enum\(.*\)/", $this->colum[$attr]['Type'], $a))
+        if (preg_match("/enum\(.*\)/i", $this->colum[$attr]['Type'], $a))
         {
             $exp = explode(",", substr($a[0], 5, -1));
             $ret = [];

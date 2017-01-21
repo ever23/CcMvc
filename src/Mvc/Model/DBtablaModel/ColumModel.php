@@ -20,7 +20,8 @@
 namespace Cc\Mvc\DBtablaModel;
 
 /**
- * Description of ColumModel
+ * Una instancia de esta clase representa un campo de base de datos 
+ * se usa para crear capos de una tabla
  * @autor ENYREBER FRANCO <enyerverfranco@gmail.com> , <enyerverfranco@outlook.com>  
  * @package CcMvc
  * @subpackage Modelo
@@ -58,41 +59,122 @@ namespace Cc\Mvc\DBtablaModel;
 class ColumModel
 {
 
+    /**
+     * nombre de la columna 
+     * @var string 
+     */
     protected $name;
+
+    /**
+     * tipo de dato
+     * @var string 
+     */
     protected $type;
+
+    /**
+     * parametros de tipo de dato
+     * @var array 
+     */
     protected $typeParams = NULL;
+
+    /**
+     * extra
+     * @var string 
+     */
     protected $extra = '';
-    protected $NotNull = '';
+
+    /**
+     * indicca si el campo es Not NULL
+     * @var string 
+     */
+    protected $NotNull = 'NOT NULL';
+
+    /**
+     * valor por defecto
+     * @var string 
+     */
     protected $DefaulValue = '';
+
+    /**
+     * indice
+     * @var  bool
+     *  @internal 
+     */
     public $index = false;
+
+    /**
+     * indica si el campo es una clave primaria
+     * @var bool 
+     *  @internal 
+     */
     public $PrimaryKey = false;
+
+    /**
+     * indica si el campo es unico
+     * @var bool 
+     *  @internal 
+     */
     public $unique = false;
+
+    /**
+     * attributes
+     * @var string 
+     */
     protected $attribute = '';
+
+    /**
+     * indica si el campo es auroincrement 
+     * @var bool 
+     */
     protected $auroincrement = false;
 
+    /**
+     * 
+     * @param string $name nombre del campo
+     *  @internal 
+     */
     public function __construct($name)
     {
         $this->name = $name;
     }
 
+    /**
+     * establece el campo como unico
+     * @return \Cc\Mvc\DBtablaModel\ColumModel
+     */
     public function &Unique()
     {
         $this->unique = true;
         return $this;
     }
 
-    public function &index()
+    /**
+     * estable el campo como index
+     * @param array $params parametros del indes
+     * @return \Cc\Mvc\DBtablaModel\ColumModel
+     */
+    public function &index($params = true)
     {
-        $this->index = true;
+        $this->index = $params;
         return $this;
     }
 
+    /**
+     * establece el campo como clave primaria 
+     * @return \Cc\Mvc\DBtablaModel\ColumModel
+     */
     public function &PrimaryKey()
     {
         $this->PrimaryKey = true;
         return $this;
     }
 
+    /**
+     * establece el tipo de dato del campo
+     * @param string $name nombre del tipo de dato
+     * @param array|string $params parametros del tipo de dato
+     * @return \Cc\Mvc\DBtablaModel\ColumModel
+     */
     public function &type($name, $params = NULL)
     {
         $this->type = $name;
@@ -104,12 +186,22 @@ class ColumModel
         return $this;
     }
 
+    /**
+     * 
+     * @param string $extra
+     * @return \Cc\Mvc\DBtablaModel\ColumModel
+     */
     public function &extra($extra)
     {
         $this->extra = $extra;
         return $this;
     }
 
+    /**
+     * establece el campo como autoincrement
+     * @param array $params parametros del tipo de dato INT
+     * @return \Cc\Mvc\DBtablaModel\ColumModel
+     */
     public function &autoincrement($params = [])
     {
         $this->extra = 'AUTO_INCREMENT';
@@ -121,35 +213,65 @@ class ColumModel
         return $this;
     }
 
+    /**
+     * agrega un atributo al campo
+     * @param string $attrs
+     * @return \Cc\Mvc\DBtablaModel\ColumModel
+     */
     public function &Atributo($attrs)
     {
         $this->attribute = $attrs;
         return $this;
     }
 
+    /**
+     * Estable el campo como no nullo
+     * @return \Cc\Mvc\DBtablaModel\ColumModel
+     */
     public function &NotNull()
     {
         $this->NotNull = 'NOT NULL';
         return $this;
     }
 
+    /**
+     * Establece el valor por defecto del campo como NULL
+     * @return \Cc\Mvc\DBtablaModel\ColumModel
+     */
     public function &DefaultNull()
     {
         $this->NotNull = 'NULL';
         return $this;
     }
 
+    /**
+     * Estable el valor por defecto del campo
+     * @param type $value
+     * @return \Cc\Mvc\DBtablaModel\ColumModel
+     */
     public function &DefaultValue($value)
     {
         $this->DefaulValue = $value;
         return $this;
     }
 
+    /**
+     * funcion magica para los tipos de datos
+     * @param string $name
+     * @param array $arguments
+     * @return this
+     * @internal
+     */
     public function __call($name, $arguments)
     {
         return $this->type(str_replace('_', ' ', $name), $arguments);
     }
 
+    /**
+     * genera el sql del campo
+     * @return string
+     * @internal 
+     */
     public function Sql()
     {
         $sql = $this->name . ' ';
@@ -160,29 +282,93 @@ class ColumModel
         return $sql;
     }
 
+    public function GetNull()
+    {
+        return $this->NotNull;
+    }
+
+    public function GetParamType()
+    {
+        return $this->typeParams;
+    }
+
+    /**
+     * retorna al tipo de dato en el formato sql
+     * @return string
+     * @internal 
+     */
     public function GetFullType()
     {
         $sql = $this->type;
         if ($this->typeParams)
         {
-            $sql.='(' . implode(',', $this->typeParams) . ')';
+            $sql.='(';
+            $tipe = '';
+            foreach ($this->typeParams as $var)
+            {
+                $tipe.=$this->SqlType($var) . ',';
+            }
+            $sql.=substr($tipe, 0, -1) . ')';
         }
         return $sql;
     }
 
+    private function SqlType($var)
+    {
+
+        if (is_null($var) || (is_string($var) && strtolower($var) == 'null'))
+        {
+            return 'NULL';
+        } elseif (is_numeric($var) || is_int($var) || is_float($var) || is_double($var))
+        {
+            return $var;
+        } elseif (is_bool($var))
+        {
+            return $var ? 'true' : 'false';
+        } else
+        {
+
+            return "'" . $var . "'";
+        }
+    }
+
+    /**
+     * retorna el tipo de dato
+     * @return string
+     * @internal 
+     */
     public function GetType()
     {
         return $this->type;
     }
 
+    /**
+     * indica si el campo es AutoIncrement
+     * @return bool
+     * @internal 
+     */
     public function IsAutoIncrement()
     {
         return $this->auroincrement;
     }
 
+    /**
+     * retorna el valor por defecto del campo
+     * @return string
+     * @internal 
+     */
     public function GetDefault()
     {
         return $this->DefaulValue;
+    }
+
+    /**
+     * 
+     * @return string
+     */
+    public function GetExtra()
+    {
+        return $this->extra;
     }
 
 }

@@ -23,7 +23,7 @@ use Cc\DB\Drivers;
 use Cc\DB\Exception;
 
 /**
- * Description of mysql
+ *
  * DRIVER PARA BASES DE DATOS DE MYSQL 
  * @autor ENYREBER FRANCO <enyerverfranco@gmail.com> , <enyerverfranco@outlook.com>
  * @package Cc
@@ -39,7 +39,7 @@ class mysql extends Drivers
     protected $information_schema = 'SELECT * FROM information_schema.columns WHERE table_name=';
     public $Ttipe;
 
-    public function __construct(\Cc\iDataBase $db, $tabla)
+    public function __construct(\Cc\iDataBase $db, $tabla = NULL)
     {
         parent::__construct($db, $tabla);
         $this->_escape_char = '`';
@@ -83,6 +83,7 @@ class mysql extends Drivers
                         'KEY' => $campo['COLUMN_KEY'],
                         'Extra' => $campo['EXTRA'],
                         'Default' => $campo['COLUMN_DEFAULT'],
+                        'Nullable' => $campo['IS_NULLABLE'] == 'YES' ? true : false,
                         'Position' => $campo['ORDINAL_POSITION']
                 ]];
 
@@ -149,10 +150,11 @@ class mysql extends Drivers
     public function ListTablas()
     {//where Tables_in_" . $this->db . "='" . $tabla . "'
         $tablas = [];
-        $result = $this->db->query("show tables");
+        $result = $this->db->query("SELECT * FROM information_schema.tables where TABLE_SCHEMA='" . $this->db->dbName() . "'");
         while ($campo = $this->fecth_result($result))
         {
-            $tablas[] = $campo["Tables_in_" . $this->db->dbName()];
+            if ($campo["TABLE_TYPE"] == 'BASE TABLE')
+                $tablas[] = $campo["TABLE_NAME"];
         }
         return $tablas;
     }
