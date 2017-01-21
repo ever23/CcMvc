@@ -95,6 +95,12 @@ class Campo
     protected $options = [];
 
     /**
+     * Exprecion regular para validacion
+     * @var string 
+     */
+    protected $match = false;
+
+    /**
      * 
      * @param string $name nombre del campo
      * @param string $type tipo del campo
@@ -150,6 +156,12 @@ class Campo
             $exp1 = explode(':', $v);
             $name = $exp1[0];
             unset($exp1[0]);
+
+            if (strtolower($name) == 'pattern')
+            {
+                $options[$name] = implode(':', $exp1);
+                continue;
+            }
             $exp = explode(',', implode(':', $exp1));
             if (count($exp) == 1)
             {
@@ -241,6 +253,10 @@ class Campo
         {
             $valid+=['options' => $this->options];
         }
+        if ($this->match)
+        {
+            $valid['pattern'] = $this->match;
+        }
         return $valid;
     }
 
@@ -251,6 +267,15 @@ class Campo
     public function in_options($options)
     {
         $this->options = $options;
+    }
+
+    /**
+     * Exprecion regular para validacion 
+     * @param string $match Exprecion regular sin delimitadores 
+     */
+    public function pattern($match)
+    {
+        $this->match = $match;
     }
 
     /**

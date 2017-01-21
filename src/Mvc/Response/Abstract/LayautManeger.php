@@ -75,7 +75,7 @@ class LayautManager extends Model
             $__name = ($layaut['Dir'] . $layaut['Layaut']);
             if (!file_exists($__name))
             {
-                $__name.='.php';
+                $__name.='.' . Mvc::App()->Config()->TemplateLoaders['Default']['ext'];
             }
             if ((strpos($layaut['Layaut'], ':') !== false))
             {

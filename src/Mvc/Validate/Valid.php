@@ -102,10 +102,16 @@ class ValidString extends ValidDependence
         {
             return false;
         }
-        if (isset($this->option['pattern']) && !preg_match("/" . $this->option['pattern'] . "/", $value))
+        if (isset($this->option['pattern']))
         {
-            return false;
+
+
+            if (!preg_match("/" . $this->option['pattern'] . "/", $value))
+            {
+                return false;
+            }
         }
+
         if (isset($this->option['alpha']) && !ctype_alpha($value))
         {
             return false;
