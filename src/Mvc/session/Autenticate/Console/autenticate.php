@@ -28,16 +28,16 @@ use Cc\Mvc;
  * @package CcMvc
  * @subpackage Session 
  */
-class autenticate extends \Cc\Mvc\AbstracConsole
+class Autenticate extends \Cc\Mvc\AbstracConsole
 {
 
     /**
      * crea una clase de autenticacion
      * @param string $name -name nombre de la clase
      */
-    public function Create($name)
+    public function Install($name, $sess_name = NULL, $expiretime = NULL, $httponly = NULL)
     {
-        $this->OutLn("\n $name\n");
+        $this->OutLn("\n Instalando autenticacion \n");
 
         $php = "<?php\n\n"
                 . ""
@@ -106,6 +106,66 @@ class autenticate extends \Cc\Mvc\AbstracConsole
         file_put_contents($file, $php);
         $this->OutLn(" Modelo de Autenticacion $name creado en $file\n");
         Mvc::App()->AutoloaderLib->GetLoader('model')->Reiniciar();
+        if (Mvc::App()->Config()->GetConfigFile()->isDir())
+        {
+            $this->OutLn(" Configurando...\n");
+            $this->Configure("\\Cc\\Mvc\\" . $name, is_null($sess_name) ? $name : $sess_name, $expiretime, $httponly);
+        }
+        $this->OutLn(" Autenticacion instalada...\n");
+    }
+
+    public function Configure($class, $sess_name, $expiretime, $httponly)
+    {
+        if (file_exists(Mvc::App()->Config()->GetConfigFile() . "/Autenticate.php"))
+        {
+            $conf = include(Mvc::App()->Config()->GetConfigFile() . "/Autenticate.php");
+            $this->OutLn(" Modificado el archivo " . Mvc::App()->Config()->GetConfigFile() . DIRECTORY_SEPARATOR . "Autenticate.php ...\n");
+        } else
+        {
+            $conf = [
+                'class' => NULL, //'class'=>' tu clase se autenticacion',
+                'param' =>
+                [
+                    ['*/*/*']
+                ],
+                'SessionName' => 'CcMvc_SESS', // nombre de la cookie de session 
+                /**
+                 * PARAMETRO DE LAS COOKIES DE SESSION
+                 */
+                'SessionCookie' =>
+                [
+                    'path' => NULL,
+                    'cahe' => 'nocache,private',
+                    'time' => 21600,
+                    'dominio' => NULL,
+                    'httponly' => false,
+                    'ReadAndClose' => false
+                ]
+            ];
+            $this->OutLn(" creando el archivo " . Mvc::App()->Config()->GetConfigFile() . DIRECTORY_SEPARATOR . "Autenticate.php ...\n");
+        }
+
+
+        $conf['class'] = $class;
+        $conf['SessionName'] = $sess_name; //SessionCookie
+        if (!isset($conf['SessionCookie']))
+        {
+            $conf['SessionCookie'] = [
+                'cahe' => 'nocache,private',
+                'time' => 21600,
+                'httponly' => false,
+            ];
+        }
+        if (!is_null($expiretime))
+            $conf['SessionCookie']['time'] = $expiretime;
+        if (!is_null($httponly))
+            $conf['SessionCookie']['httponly'] = $httponly;
+        $php = "<?php\n"
+                . "return " .
+                var_export($conf, true)
+                . ";";
+
+        file_put_contents(Mvc::App()->Config()->GetConfigFile() . "/Autenticate.php", $php);
     }
 
 }

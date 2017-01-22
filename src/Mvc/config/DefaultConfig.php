@@ -76,7 +76,6 @@ return
                 'Dependencias' =>
                 [
                     '\\Cc\\Mvc\\DBtabla' => ['{DB}', '{name_param}'],
-                    '\\Cc\\Mvc\\DBtablaModel' => ['{DB}', '{name_param}'],
                     '\\Cc\\Mvc\\PostFiles' => ['{name_param}'],
                     '\\Cc\\Mvc\\MapingControllers' => ['{config}']
                 ],

@@ -356,4 +356,15 @@ class Config extends \Cc\Config
         return $config;
     }
 
+    public function GetConfigFile()
+    {
+        if ($this->configFile->isDir())
+        {
+            return new \SplFileInfo($this->configFile . DIRECTORY_SEPARATOR . 'Config');
+        } else
+        {
+            return $this->configFile;
+        }
+    }
+
 }
