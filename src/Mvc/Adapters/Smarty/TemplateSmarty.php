@@ -212,20 +212,20 @@ class TemplateSmarty implements TemplateLoader
             $this->smarty->registerObject("CcMvc", $ag['object'], $ag['allowed'], $ag['format'], $ag['block_methods']);
         }
         $this->smarty->assignGlobal('CcMvc', Mvc::App());
-
-        if (Mvc::App()->SelectorController->GetController())
-        {
-            if (is_object(Mvc::App()->SelectorController->GetController()) && Mvc::App()->SelectorController->GetController() instanceof ParseObjectSmartyTpl)
+        if (Mvc::App()->SelectorController)
+            if (Mvc::App()->SelectorController->GetController())
             {
-                $ag = Mvc::App()->SelectorController->GetController()->ParseSmaryTpl();
-                $ag['allowed'] = isset($ag['allowed']) ? $ag['allowed'] : [];
-                $ag['format'] = isset($ag['format']) ? $ag['format'] : true;
-                $ag['block_methods'] = isset($ag['block_methods']) ? $ag['block_methods'] : [];
-                $ag['object'] = (isset($ag['object']) ? $ag['object'] : Mvc::App()->SelectorController->GetController());
-                $this->smarty->registerObject("Controller", $ag['object'], $ag['allowed'], $ag['format'], $ag['block_methods']);
+                if (is_object(Mvc::App()->SelectorController->GetController()) && Mvc::App()->SelectorController->GetController() instanceof ParseObjectSmartyTpl)
+                {
+                    $ag = Mvc::App()->SelectorController->GetController()->ParseSmaryTpl();
+                    $ag['allowed'] = isset($ag['allowed']) ? $ag['allowed'] : [];
+                    $ag['format'] = isset($ag['format']) ? $ag['format'] : true;
+                    $ag['block_methods'] = isset($ag['block_methods']) ? $ag['block_methods'] : [];
+                    $ag['object'] = (isset($ag['object']) ? $ag['object'] : Mvc::App()->SelectorController->GetController());
+                    $this->smarty->registerObject("Controller", $ag['object'], $ag['allowed'], $ag['format'], $ag['block_methods']);
+                }
+                $this->smarty->assignGlobal('Controller', Mvc::App()->SelectorController->GetController());
             }
-            $this->smarty->assignGlobal('Controller', Mvc::App()->SelectorController->GetController());
-        }
 
         if (is_object(Mvc::App()->Request) && Mvc::App()->Request instanceof ParseObjectSmartyTpl)
         {

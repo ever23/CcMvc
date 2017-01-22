@@ -53,6 +53,7 @@ class date extends \DateTime implements iMetaData
         {
             $time = $time->format(self::W3C);
         }
+
         parent::__construct($time);
     }
 

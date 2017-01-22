@@ -1501,11 +1501,13 @@ class Mvc
         try
         {
             $this->DataBase = new $DBClass(...$p);
-        } catch (Exception $ex)
+        } catch (\Exception $ex)
         {
-            $this->DependenceInyector->AddDependence('errno', $ex->getCode());
-            $this->DependenceInyector->AddDependence('error', $ex->getMessage());
-            MvcHook::TingerAndDependence('FailConetDatabase');
+            $code = $ex->getCode();
+            $mensaje = $ex->getMessage();
+            $this->DependenceInyector->AddDependence('errno', $code);
+            $this->DependenceInyector->AddDependence('error', $mensaje);
+            // MvcHook::TingerAndDependence('FailConetDatabase');
         }
 
 
@@ -1530,7 +1532,11 @@ class Mvc
                 $this->DependenceInyector->AddDependence('error', $error);
                 MvcHook::TingerAndDependence('FailConetDatabase');
             }
+        } else
+        {
+            MvcHook::TingerAndDependence('FailConetDatabase');
         }
+
         return $this->DataBase;
     }
 
@@ -1542,7 +1548,7 @@ class Mvc
         $this->time++;
     }
 
-    protected function IsConsole()
+    public function IsConsole()
     {
         if (isset($_SERVER['SESSIONNAME']) && $_SERVER['SESSIONNAME'] == 'Console' && !defined('__DEBUNG_CONSOLE_'))
         {

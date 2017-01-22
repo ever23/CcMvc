@@ -28,8 +28,8 @@ class PDO extends \PDO implements iDataBase
             parent::__construct($dsn, $username, $password, $options);
         } catch (\PDOException $ex)
         {
-            $this->connect_error = $ex->getMessage();
-            NEW CcException("No ha sido posible la coneccion con la base de datos");
+            //$this->connect_error = $ex->getMessage();
+            throw new \PDOException("No ha sido posible la coneccion con la base de datos " . $ex->getMessage(), $ex->getCode(), $ex);
         }
     }
 

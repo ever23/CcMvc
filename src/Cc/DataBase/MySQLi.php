@@ -61,8 +61,7 @@ class MySQLi extends \MySQLi implements iDataBase
             $this->result = NULL;
         } else
         {
-            $e = new CcException("NO FUE POSIBLE CONECTAR CON LA BASE DE DATOS", $this->connect_errno);
-            $e->AddMsjMysql($this->connect_error, $this->connect_errno);
+            throw new \mysqli_sql_exception("NO FUE POSIBLE CONECTAR CON LA BASE DE DATOS " . $this->connect_error, $this->connect_errno);
         }
     }
 

@@ -38,10 +38,16 @@ class Migracion extends \Cc\Mvc\AbstracConsole
      */
     protected $DataBase;
 
-    public function __construct()
+    public function __construct($db)
     {
-        $this->Out("Conectando con la base de datos...\n");
-        $this->DataBase = Mvc::App()->ConetDataBase();
+        if (is_null($db))
+        {
+            $this->Out("Conectando con la base de datos...\n");
+            $this->DataBase = Mvc::App()->ConetDataBase();
+        } else
+        {
+            $this->DataBase = $db;
+        }
     }
 
     /**

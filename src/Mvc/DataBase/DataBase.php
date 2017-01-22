@@ -41,6 +41,52 @@ class DBRow extends \Cc\DBRow
 class MySQLi extends \Cc\MySQLi
 {
 
+    public function __construct($host = NULL, $username = NULL, $passwd = NULL, $dbname = "", $port = NULL, $socket = NULL)
+    {
+        try
+        {
+            ob_start();
+            parent::__construct($host, $username, $passwd, $dbname, $port, $socket);
+            ob_end_flush();
+        } catch (\mysqli_sql_exception $ex)
+        {
+            if ($this->connect_errno == '1049')
+            {
+                $this->install($host, $username, $passwd, $dbname, $port, $socket);
+            } else
+            {
+                ob_end_flush();
+            }
+        }
+    }
+
+    private function install($host, $username, $passwd, $dbname, $port, $socket)
+    {
+        parent::__construct($host, $username, $passwd, "", $port, $socket);
+        $this->query("Create database " . $dbname);
+
+        $this->select_db($dbname);
+        if (!$this->error)
+        {
+
+            try
+            {
+                $console = new Console\Migracion($this);
+                $console->DatabaseFromModel();
+            } catch (\Exception $ex)
+            {
+                
+            }
+            if (!Mvc::App()->IsConsole())
+            {
+                ob_end_clean();
+            } else
+            {
+                ob_end_flush();
+            }
+        }
+    }
+
     /**
      * 
      * @param string $tabla
@@ -62,6 +108,38 @@ class MySQLi extends \Cc\MySQLi
 class PDO extends \Cc\PDO
 {
 
+    public function __construct($dsn, $username = null, $password = null, $options = NULL)
+    {
+        $installSqlite = false;
+        if (preg_match('/^sqlite(\d{0,2}):(.*)/', $dsn, $m))
+        {
+            if (!file_exists($m[2]))
+            {
+                $installSqlite = true;
+            }
+        }
+        parent::__construct($dsn, $username, $password, $options);
+        if ($installSqlite)
+        {
+            ob_start();
+            try
+            {
+                $console = new Console\Migracion($this);
+                $console->DatabaseFromModel();
+            } catch (\Exception $ex)
+            {
+                
+            }
+            if (!Mvc::App()->IsConsole())
+            {
+                ob_end_clean();
+            } else
+            {
+                ob_end_flush();
+            }
+        }
+    }
+
     /**
      * 
      * @param string $tabla
@@ -81,6 +159,45 @@ class PDO extends \Cc\PDO
  */
 class SQLite3 extends \Cc\SQLite3
 {
+
+    public function __construct($filename, $flags = SQLITE3_OPEN_READWRITE, $encryption_key = null)
+    {
+
+        if (file_exists($filename))
+        {
+            if (is_string($flags))
+            {
+                $flags = SQLITE3_OPEN_READWRITE;
+            }
+            parent::__construct($filename, $flags, $encryption_key);
+        } elseif (file_exists($flags))
+        {
+
+            parent::__construct($filename, SQLITE3_OPEN_READWRITE | SQLITE3_OPEN_CREATE, $encryption_key);
+            $sql = file_get_contents($flags);
+            $this->exec($sql);
+        } else
+        {
+
+            parent::__construct($filename, SQLITE3_OPEN_READWRITE | SQLITE3_OPEN_CREATE, $encryption_key);
+            ob_start();
+            try
+            {
+                $console = new Console\Migracion($this);
+                $console->DatabaseFromModel();
+            } catch (\Exception $ex)
+            {
+                
+            }
+            if (!Mvc::App()->IsConsole())
+            {
+                ob_end_clean();
+            } else
+            {
+                ob_end_flush();
+            }
+        }
+    }
 
     /**
      * 

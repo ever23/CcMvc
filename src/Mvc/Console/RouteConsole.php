@@ -103,7 +103,8 @@ class RouteConsole
             mkdir(Mvc::App()->Config()->App['Console']);
         }
         $this->autoload = new \Cc\Autoload(Mvc::App()->Config()->App['Console'], false);
-        $this->ReadParameters();
+        if ($this->argv)
+            $this->ReadParameters();
     }
 
     /**

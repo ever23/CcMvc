@@ -91,7 +91,7 @@ class CreateModel
      */
     public function CreateFromData($inserts = false, \Cc\iDataBase $db)
     {
-        $this->tabla = $db->Tab($this->tabla);
+        $this->DBtabla = $db->Tab($this->tabla);
         $this->data = $this->DBtabla->GetCol();
         $this->ForeingKey = $this->DBtabla->Driver()->ForeingKey();
         if ($inserts)

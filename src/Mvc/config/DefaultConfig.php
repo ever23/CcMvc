@@ -94,7 +94,7 @@ return
                 /**
                  * INDICA SI EL CONTENIDO DEL RESULTADO SERA COMPRIMIDO CON ZLIB O NO 
                  */
-                'CompresZlib' => true,
+                'CompresZlib' => false,
                 /**
                  * EXTENCIONES DE ARCHIVOS CON SUS RESPECTIVOS MIMES
                  */
@@ -239,7 +239,8 @@ return
             ],
             'Hooks' => [
                 'HttpErrors' => '\\Cc\\Mvc\\HttpErrors',
-                'Autenticate' => '\\Cc\\Mvc\\Session\\HookAutenticate'
+                'Autenticate' => '\\Cc\\Mvc\\Session\\HookAutenticate',
+                'installdb' => '\\Cc\\Mvc\\InstallDatabase'
             ],
             'debung' =>
             [

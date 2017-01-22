@@ -186,9 +186,9 @@ class Json implements \ArrayAccess, JsonSerializable, \IteratorAggregate
         $this->SetJson($stringJson, $is_new);
     }
 
-    public function SaveToFile($file)
+    public function SaveToFile($file, ...$option)
     {
-        return file_put_contents($file, $this);
+        return file_put_contents($file, $this->Encode(...$option));
     }
 
     /**
