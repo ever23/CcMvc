@@ -42,7 +42,10 @@ namespace Cc\Mvc;
  * @method void Error403() Error403(string $mensaje) Se ejecuta al ocurrir un error http 403 cuando al framework niega el acceso a un url 
  * @method void Error404() Error404(string $mensaje) Se ejecuta al ocurrir un error http 404 cuando una url no existe 
  * @method void Error500() Error500(string $mensaje) Se ejecuta al ocurrir un error http 500 cuando ocurre un erro en el framework tambien en caso exception no capturada por el usuario, o en caso de ser php 7 en algun error de sintaxis  
+ * @method void InstanceController() InstanceController(mixes ...$_) se ejecuta una ves instancedo el controlador y antes de ejecutar el constructor del mismo
  * @method void LayautController() LayautController(mixes ...$_) 
+ * 
+ * 
  */
 abstract class AbstractHook
 {

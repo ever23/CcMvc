@@ -94,12 +94,6 @@ class SelectorControllers
     public $ReRouterMethod = false;
 
     /**
-     *
-     * @var SessionSaveController 
-     */
-    public $sessionController;
-
-    /**
      * 
      * @param string $DirControllers
      * @param Config $conf
@@ -465,9 +459,7 @@ class SelectorControllers
         {
 
             $this->ObjControllers = $this->ReflectionClass->newInstanceWithoutConstructor();
-
-            $this->sessionController = new SessionSaveController($this->ObjControllers, $this->ReflectionClass);
-            $this->sessionController->ParseAttrs();
+            MvcHook::TingerAndDependence('InstanceController');
             if ($costruc)
             {
                 $this->ObjControllers->__construct(...$param);

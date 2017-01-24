@@ -22,13 +22,18 @@ namespace Cc\Mvc;
 use Cc\Mvc;
 
 /**
- * Description of CacheHtml
- *
- * @author enyerber
+ * Instala la base de datos desde los modelos de tablas 
+ * cuando se usa PDO
+ * @author ENYREBER FRANCO <enyerverfranco@gmail.com> , <enyerverfranco@outlook.com>  
+ * @package CcMvc  
+ * @subpackage Hook
  */
 class InstallDatabase extends AbstractHook
 {
 
+    /**
+     * 
+     */
     public function FailConetDatabase()
     {
         $class = new \ReflectionClass(Mvc::App()->Config()->DB['class']);

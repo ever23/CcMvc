@@ -180,7 +180,7 @@ interface ProtectedMetodHttp extends iProtected
  * enruta metodos no existentes
  * @package CcMvc  
  * @subpackage Controladores 
- * @deprecated since version 8.8.3.8 
+ * @deprecated since version 8.8.3.8 sustituido por enrutamiento manual 
  */
 interface ReRouterMethod extends iProtected
 {

@@ -25,9 +25,11 @@ use Cc\Mvc\Exception;
 use Cc\Mvc\AbstractHook;
 
 /**
- * Description of HookSession
+ * Hook para agregar la autenticacion de usuarios con \Cc\Mvc\Autenticate
  *
- * @author enyerber
+ * @author Enyerber Franco
+ * @package CcMvc
+ * @subpackage Session 
  */
 class HookAutenticate extends AbstractHook
 {
