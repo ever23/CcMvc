@@ -220,20 +220,14 @@ class CreateModel
             {
                 $class.="->autoincrement()";
             }
-            if (!$v['Nullable'])
+            if (isset($v['Nullable']) && !$v['Nullable'])
             {
                 $class.="->NotNull()";
-            } else
-            {
-                
             }
             if (isset($v['Default']))
             {
 
                 $class.="->DefaultValue('" . $v['Default'] . "')";
-            } elseif ($v['Nullable'])
-            {
-                $class.="->DefaultNull()";
             }
 
 

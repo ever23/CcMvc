@@ -15,6 +15,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *  
  */
 
 namespace Cc\Mvc\Console;
@@ -23,7 +24,7 @@ use Cc\Mvc\Config;
 use Cc\Mvc\AbstracConsole;
 
 /**
- * creaa controladores de comsola para el usuario
+ * creaa controladores de consola para el usuario
  * @author ENYREBER FRANCO <enyerverfranco@gmail.com> , <enyerverfranco@outlook.com>  
  * @package CcMvc  
  * @subpackage Console

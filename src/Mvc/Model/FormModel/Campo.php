@@ -20,6 +20,7 @@
 namespace Cc\Mvc\FormModel;
 
 use Cc\Mvc;
+use Cc\Mvc\Exception;
 
 /**
  * Representacion de un campo de un formulario
@@ -285,9 +286,9 @@ class Campo
      * @throws Exception
      * @internal 
      */
-    public function __call($name, $arguments)
+    public function &__call($name, $arguments)
     {
-        $valid = '\\Cc\\Mvc\\Valid';
+        $valid = 'Cc\\Mvc\\Valid';
 
         if (Mvc::App()->autoloadCore($valid . $name) || Mvc::App()->AutoloaderLib->GetLoader('model')->autoloadCore($valid . $name))
         {
@@ -297,6 +298,7 @@ class Campo
             }
             $class = $valid . $name;
             $this->valid = $class::CreateValid(...$arguments);
+            return $this;
         } else
         {
             throw new Exception("El metodo $name no esta definido");

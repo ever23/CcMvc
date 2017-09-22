@@ -194,8 +194,8 @@ class ResultManager extends SqlFormat implements \Iterator, \Countable
         if (!$smt->execute())
         {
             list($errno, $o, $error) = $smt->errorInfo();
-            $this->error = $errno;
-            $this->errno = $error;
+            $this->error = $error;
+            $this->errno = $errno;
             return false;
         }
         if ($metadata)

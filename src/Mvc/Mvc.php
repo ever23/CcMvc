@@ -300,7 +300,7 @@ class Mvc
 
         $this->Events = MvcHook::Start($this->conf);
         $this->View = new ViewController($this->conf['App']['view']);
-        // MvcHook::$View = &$this->View;
+// MvcHook::$View = &$this->View;
         $this->Debung();
         $this->Log(" Archivo de configuracion :" . $conf . " cargado...");
 
@@ -336,7 +336,7 @@ class Mvc
         $prot = !empty($_SERVER['HTTPS']) && ('on' == $_SERVER['HTTPS']) ? 'https' : 'http';
         if ($prot != $this->conf['Router']['protocol'])
         {
-            // header("Location: " . $this->conf['Router']['protocol'] . '://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI']);
+// header("Location: " . $this->conf['Router']['protocol'] . '://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI']);
         }
 
 
@@ -383,7 +383,7 @@ class Mvc
         $this->Content_type = $this->SelectResponseConten();
 
 
-        //MvcHook::$Layaut = &$this->LayautManager;
+//MvcHook::$Layaut = &$this->LayautManager;
         $this->DependenceInyector = new DependenceInyector();
         $this->DependenceInyector->AddDependenceInstanciable($this->conf['Controllers']['Dependencias']);
         $this->DependenceInyector->AddDependence("{Response}", $this->Response);
@@ -400,7 +400,7 @@ class Mvc
         if (is_bool($confAutoload['UseStandarAutoloader']))
         {
             $confAutoload['UseStandarAutoloader'] = [];
-            //   $confAutoload['UseStandarAutoloader']['libs'] = [$libs, true];
+//   $confAutoload['UseStandarAutoloader']['libs'] = [$libs, true];
             if ($this->conf->AutoloadLibs['UseStandarAutoloader'])
             {
                 $confAutoload['UseStandarAutoloader']['extern'] = $this->conf->App['extern'];
@@ -409,7 +409,7 @@ class Mvc
             $confAutoload['UseStandarAutoloader']['model'] = [$this->conf->App['model'], true];
         } else
         {
-            // $confAutoload['UseStandarAutoloader']['libs'] = [$libs, true];
+// $confAutoload['UseStandarAutoloader']['libs'] = [$libs, true];
             $confAutoload['UseStandarAutoloader']['model'] = [$this->conf->App['model'], true];
         }
 
@@ -767,7 +767,7 @@ class Mvc
         }
 
         $this->InternalSession->SetName($conf['Autenticate']['SessionName']);
-        //$this->Session->SetName($conf['Autenticate']['SessionName']);
+//$this->Session->SetName($conf['Autenticate']['SessionName']);
         if ($session)
         {
             $session['path'] = !is_null($session['path']) ? $session['path'] : $this->conf['Router']['DocumentRoot'];
@@ -794,6 +794,7 @@ class Mvc
     public function Console($argv)
     {
         ErrorHandle::RecoverHandle();
+
         $console = new Mvc\RouteConsole($argv);
         $console->Route();
         $console->CreateReflexion();
@@ -1275,8 +1276,8 @@ class Mvc
         }
 
         $this->DependenceInyector->AddDependence('{cookie}', $this->Request->Cookie);
-        //  $parms = $RouterRegex->GetParams();
-        //  Mvc::App()->DependenceInyector->SetDependenceForParamArray($parms);
+//  $parms = $RouterRegex->GetParams();
+//  Mvc::App()->DependenceInyector->SetDependenceForParamArray($parms);
         $this->DependenceInyector->SetDependenceForParamArray($this->Request->Get);
     }
 
@@ -1507,7 +1508,7 @@ class Mvc
             $mensaje = $ex->getMessage();
             $this->DependenceInyector->AddDependence('errno', $code);
             $this->DependenceInyector->AddDependence('error', $mensaje);
-            // MvcHook::TingerAndDependence('FailConetDatabase');
+// MvcHook::TingerAndDependence('FailConetDatabase');
         }
 
 
@@ -1521,7 +1522,7 @@ class Mvc
                 if (isset($this->page['routeVars']))
                 {
                     $this->page['routeVars'] = SQLi::Filter($this->page['routeVars']);
-                    //  $this->DependenceInyector->SetDependenceForParamArray($this->page['routeVars']); FailConetDatabase
+//  $this->DependenceInyector->SetDependenceForParamArray($this->page['routeVars']); FailConetDatabase
                 }
                 MvcHook::TingerAndDependence('ConetDatabase');
             } else

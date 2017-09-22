@@ -190,6 +190,9 @@ class DependenceInyector
                 $p[$i] = $v;
             }
             return $p;
+        } catch (InyectorException $ex)
+        {
+            throw $ex;
         } catch (\Exception $ex)
         {
             throw new InyectorException($ex->getMessage(), $ex->getCode(), $ex);

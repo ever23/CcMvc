@@ -78,6 +78,8 @@ class RouteConsole
      * @var AbstracConsole 
      */
     protected $consoleController;
+    protected $LineComand = false;
+    protected $params = [];
 
     /**
      * 
@@ -96,6 +98,7 @@ class RouteConsole
     {
         $controller = explode($this->separator, array_shift($this->argv));
 
+
         $this->class = $controller[0];
         $this->method = isset($controller[1]) ? $controller[1] : 'index';
         if (!is_dir(Mvc::App()->Config()->App['Console']))
@@ -107,6 +110,16 @@ class RouteConsole
             $this->ReadParameters();
     }
 
+    public function getMethod()
+    {
+        return $this->method;
+    }
+
+    public function getClass()
+    {
+        return $this->class;
+    }
+
     /**
      * obtiene los parametros de la consola para pasarlos como dependencias 
      */
@@ -114,10 +127,12 @@ class RouteConsole
     {
         $params = [];
         $indices = preg_grep('/^\-{1}([0-9a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*)$/', $this->argv);
-
+        $this->params = $this->argv;
         foreach ($indices as $ind => $i)
         {
+
             $name = substr($i, 1);
+            $this->params[$i] = $this->argv[$ind + 1];
             if (isset($this->argv[$ind + 1]) && !preg_match('/^\-{1}([0-9a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*)$/', $this->argv[$ind + 1]))
             {
                 $params[$name] = $this->argv[$ind + 1];
@@ -126,7 +141,27 @@ class RouteConsole
                 $params[$name] = true;
             }
         }
+
         Mvc::App()->DependenceInyector->SetDependenceForParamArray($params);
+    }
+
+    /**
+     * Carga una clase
+     * @param string $class
+     * @return bool si se cargo con exito true
+     */
+    public function Autoload($class)
+    {
+        return Mvc::App()->autoloadCore($class) || $this->autoload->autoloadCore($class);
+    }
+
+    /**
+     * retorna los parametros 
+     * @return array
+     */
+    public function GetParams()
+    {
+        return $this->params;
     }
 
     /**
@@ -138,7 +173,7 @@ class RouteConsole
         $namespace = __NAMESPACE__;
         $class = $namespace . '\\Console\\' . $this->class;
 
-        if (Mvc::App()->autoloadCore($class) || $this->autoload->autoloadCore($class))
+        if ($this->Autoload($class))
         {
             $this->reflectionClass = new \ReflectionClass($class);
 
@@ -148,7 +183,7 @@ class RouteConsole
             }
         }
         self::Out("\nEl comando no se encontro...\n");
-        exit;
+        $this->End();
     }
 
     /**
@@ -158,14 +193,14 @@ class RouteConsole
      */
     protected function CreateReflexionMethod(\ReflectionClass $class)
     {
-
+        Mvc::App()->DependenceInyector->AddDependence('{console}', $this);
         try
         {
             $this->reflectionMethod = $class->getMethod($this->method);
         } catch (\ReflectionException $ex)
         {
             self::Out("\nEl comando " . $this->method . " no se reconoce...\n");
-            exit;
+            $this->End();
         }
         if ($this->reflectionMethod->isConstructor() ||
                 $this->reflectionMethod->isDestructor() ||
@@ -174,7 +209,7 @@ class RouteConsole
                 $this->reflectionMethod->isProtected())
         {
             self::Out("\nEl comando " . $this->method . " no se reconoce...\n");
-            exit;
+            $this->End();
         }
         return true;
     }
@@ -206,9 +241,9 @@ class RouteConsole
 
 
                     default :
-                        self::Out($ex->getMessage() . "\n");
+                        self::Out($ex->getMessage() . " s\n");
                 }
-                exit;
+                $this->End();
             }
             $this->consoleController->__construct(...$params);
         }
@@ -229,9 +264,10 @@ class RouteConsole
                 default :
                     self::Out($ex->getMessage() . "\n");
             }
-            exit;
+            $this->End();
         }
         $this->consoleController->{$this->method}(...$paramMethod);
+        $this->End();
     }
 
     /**
@@ -250,6 +286,12 @@ class RouteConsole
     public static function In()
     {
         return fgets(STDIN);
+    }
+
+    protected function End()
+    {
+
+        exit;
     }
 
 }

@@ -391,7 +391,15 @@ abstract class AuteticateUserDB extends Autenticate
      */
     protected function Autentica()
     {
-        $this->LoadDBTabla();
+        try
+        {
+            $this->LoadDBTabla();
+        } catch (\Exception $ex)
+        {
+            $this->TingerFailed(self::FailedDataBase, "Ocurrio un error al accesar a la base de datos Error: " . $this->DBtabla->error);
+            return [];
+        }
+
 
         if ($this->offsetExists($this->ColUserName) && $this->offsetExists($this->ColPassword) && $this->offsetExists('CreadorHashClass'))
         {

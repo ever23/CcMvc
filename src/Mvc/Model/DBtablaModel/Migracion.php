@@ -38,7 +38,7 @@ class Migracion extends \Cc\Mvc\AbstracConsole
      */
     protected $DataBase;
 
-    public function __construct($db)
+    public function __construct($db = NULL)
     {
         if (is_null($db))
         {
@@ -68,7 +68,7 @@ class Migracion extends \Cc\Mvc\AbstracConsole
      * @param string $inicializar -inicializar agrega los datos disponibles
      * 
      */
-    public function CreateFromDatabase($tabla = NULL, $all = false, $inicializar = false)
+    public function CreateFromDatabase($tabla = '', $all = false, $inicializar = false)
     {
         if ($all)
         {
@@ -103,6 +103,7 @@ class Migracion extends \Cc\Mvc\AbstracConsole
      * 
      * Crea las tablas y las inicializa 
      * a partir de las clases modelos existentes
+     * @param bool $force opcional si existe este parametro se reescribirar las tablas existentes
      */
     public function DatabaseFromModel($force = false)
     {
@@ -151,9 +152,10 @@ class Migracion extends \Cc\Mvc\AbstracConsole
             {
                 $this->DataBase->Query("Drop table $tabla");
             }
-
+        $this->OutLn("\n\n Creando las Tablas...\n");
         foreach ($otro as $i => $tabla)
         {
+
 
             $this->OutLn("\n\n Creando Tabla $tabla...\n");
             $sql = $sqls[$tabla]->CreateSQL($this->DataBase);
@@ -169,12 +171,12 @@ class Migracion extends \Cc\Mvc\AbstracConsole
             $this->OutLn("\n\n Inicializando tabla $tabla ...");
             $sqls[$tabla]->Initialized();
             $Inserts = $sqls[$tabla]->GetInserts();
-            if ($this->InicializarTablas($tabla, $Inserts))
+            if (!($err = $this->InicializarTablas($tabla, $Inserts)))
             {
                 $this->OutLn("Se inicializo la tabla $tabla con exito!!...");
             } else
             {
-                $this->Out("error a inicializar la tabla  $tabla ...\n");
+                $this->Out("error a inicializar la tabla  $tabla " . $err . " ...\n");
                 return;
             }
         }
@@ -182,20 +184,28 @@ class Migracion extends \Cc\Mvc\AbstracConsole
         $this->OutLn(" Finalizada la operacion ...");
     }
 
+    /**
+     * 
+     * @param string $tabla nombre de la tabla 
+     * @param array $Inserts parametros de insercion 
+     * @return boolean true si la insercion fue exitosa false de lo contrario 
+     */
     private function InicializarTablas($tabla, array $Inserts)
     {
         $DBtabla = $this->DataBase->Tab($tabla);
         $DBtabla->Driver()->FilterSqli = true;
         foreach ($Inserts as $params)
         {
-            //var_dump($params);
+
             if (!$DBtabla->Insert(...$params))
             {
+
+                // echo $DBtabla->sql;
                 //  var_dump($params);
-                return false;
+                return $DBtabla->error;
             }
         }
-        return true;
+        return false;
     }
 
     /**

@@ -807,7 +807,7 @@ class DBtabla extends ResultManager implements \JsonSerializable
 
         if (!$int)
         {
-            if ($this->autoinrement && (!isset($array[$this->autoinrement]) || is_null($array[$this->autoinrement])) || strtolower($array[$this->autoinrement]) == 'null')
+            if ($this->autoinrement && (!isset($array[$this->autoinrement]) || is_null($array[$this->autoinrement])) || (isset($array[$this->autoinrement]) && strtolower($array[$this->autoinrement]) == 'null'))
             {
                 $array[$this->autoinrement] = $this->AutoIncrement($this->autoinrement) + 1;
             }
@@ -815,8 +815,13 @@ class DBtabla extends ResultManager implements \JsonSerializable
 
             foreach ($array as $coll => $v)
             {
-                array_push($attrs, $coll);
-                $col.=$this->Driver->FormatVarInsert($v, $coll) . ',';
+
+                if (isset($this->colum[$coll]))
+                {
+
+                    array_push($attrs, $coll);
+                    $col.=$this->Driver->FormatVarInsert($v, $coll) . ',';
+                }
             }
         } else
         {
@@ -832,9 +837,11 @@ class DBtabla extends ResultManager implements \JsonSerializable
                     $array[$auto - 1] = $this->AutoIncrement($this->autoinrement) + 1;
                 }
             }
+
             for ($i = 1; $i <= $count; $i++)
             {
                 //  if (isset($array[$i - 1]))
+                // echo $attrs[$i] . "=" . $array[$i - 1] . "\n";
                 $col.=$this->Driver->FormatVarInsert($array[$i - 1], $attrs[$i]) . ',';
             }
         }
@@ -1233,6 +1240,7 @@ class DBtabla extends ResultManager implements \JsonSerializable
             $ret = [];
             foreach ($exp as $v)
             {
+
                 $ret[] = str_replace("'", "", $v);
             }
             return $ret;
