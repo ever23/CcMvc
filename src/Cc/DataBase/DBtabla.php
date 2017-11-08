@@ -807,9 +807,10 @@ class DBtabla extends ResultManager implements \JsonSerializable
 
         if (!$int)
         {
-            if ($this->autoinrement && (!isset($array[$this->autoinrement]) || is_null($array[$this->autoinrement])) || (isset($array[$this->autoinrement]) && strtolower($array[$this->autoinrement]) == 'null'))
+            if ($this->typeDB == self::SQLite && $this->autoinrement && (!isset($array[$this->autoinrement]) || is_null($array[$this->autoinrement])) || (isset($array[$this->autoinrement]) && strtolower($array[$this->autoinrement]) == 'null'))
             {
                 $array[$this->autoinrement] = $this->AutoIncrement($this->autoinrement) + 1;
+                $keyPrimaryUnset = $auto - 1;
             }
 
 
@@ -823,6 +824,7 @@ class DBtabla extends ResultManager implements \JsonSerializable
                     $col.=$this->Driver->FormatVarInsert($v, $coll) . ',';
                 }
             }
+            unset($array[$keyPrimaryUnset]);
         } else
         {
             $attrs = $this->OrderColum;
@@ -832,9 +834,10 @@ class DBtabla extends ResultManager implements \JsonSerializable
             if ($this->autoinrement)
             {
                 $auto = $this->GetCol($this->autoinrement)['Position'];
-                if (!key_exists($auto - 1, $array) || is_null($array[$auto - 1]) || strtolower($array[$auto - 1]) == 'null')
+                if ($this->typeDB == self::SQLite && (!key_exists($auto - 1, $array) || is_null($array[$auto - 1]) || strtolower($array[$auto - 1]) == 'null'))
                 {
                     $array[$auto - 1] = $this->AutoIncrement($this->autoinrement) + 1;
+                    $keyPrimaryUnset = $auto - 1;
                 }
             }
 
@@ -844,6 +847,7 @@ class DBtabla extends ResultManager implements \JsonSerializable
                 // echo $attrs[$i] . "=" . $array[$i - 1] . "\n";
                 $col.=$this->Driver->FormatVarInsert($array[$i - 1], $attrs[$i]) . ',';
             }
+            unset($array[$keyPrimaryUnset]);
         }
         $colunas = '';
         if ($attrs)

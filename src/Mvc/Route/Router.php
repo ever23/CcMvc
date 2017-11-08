@@ -578,7 +578,8 @@ class Router extends \Cc\Router
     {
         if (isset($page['orig']) && isset($page['Callable']) && $page['Callable'])
         {
-            return $this->routes[$page['orig']][0];
+
+            return $this->routes[$page['orig']]->controller;
         }
         return false;
     }
