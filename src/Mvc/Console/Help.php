@@ -49,6 +49,7 @@ class Help extends AbstracConsole
      */
     public function index(RouteConsole $r, $list = '')
     {
+
         $parameters = $r->GetParams();
         $c = trim(array_shift($parameters));
 
