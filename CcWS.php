@@ -47,4 +47,4 @@
  * Debería haber recibido una copia de la General Public License de GNU
  * junto con este framework. Si no es así, consulte <http://www.gnu.org/licenses/>
  */
-include_once 'CcWs/Ws.php';
+require_once ("src/CcWs.php");

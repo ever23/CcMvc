@@ -85,7 +85,6 @@ class MvcHook
             $hook = new $class();
             $hook->View = & self::$View;
             $hook->Layaut = & self::$Layaut;
-
             self::$Hooks[] = $hook;
         }
     }

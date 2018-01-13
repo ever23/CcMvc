@@ -401,7 +401,7 @@ abstract class Drivers
         if (is_null($var) || (is_string($var) && strtolower($var) == 'null'))
         {
             return 'NULL';
-        } elseif (is_int($var) || is_float($var) || is_double($var))
+        } elseif (is_int($var) || is_float($var) || is_double($var) || is_numeric($var))
         {
             return $var;
         } elseif (is_bool($var))

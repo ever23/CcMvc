@@ -1,9 +1,6 @@
 # CcMvc framework 
 
 
-![CcMvc](http://ccmvc.com.ve/src/images/CcMvc2.png "CcMvc")
-El resultado
-
 ### Cobertura de Codigo Modelo Vistar Controlador 
 
 
@@ -21,4 +18,4 @@ composer require ccmvc/ccmvc
 ```
 
 en GutHub se puede descargar un [proyecto](https://github.com/ever23/CcMvcBasicProject "proyecto") base CcMvc con el que se puede comenzar un proyecto real 
-Para informacion sobre instalacion visita [CcMvc.com.ve](http://ccmvc.com.ve/documentacion "CcMvc")
+

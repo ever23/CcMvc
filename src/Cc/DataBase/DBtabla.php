@@ -807,6 +807,7 @@ class DBtabla extends ResultManager implements \JsonSerializable
 
         if (!$int)
         {
+            $keyPrimaryUnset=NULL;
             if ($this->typeDB == self::SQLite && $this->autoinrement && (!isset($array[$this->autoinrement]) || is_null($array[$this->autoinrement])) || (isset($array[$this->autoinrement]) && strtolower($array[$this->autoinrement]) == 'null'))
             {
                 $array[$this->autoinrement] = $this->AutoIncrement($this->autoinrement) + 1;
@@ -824,13 +825,14 @@ class DBtabla extends ResultManager implements \JsonSerializable
                     $col.=$this->Driver->FormatVarInsert($v, $coll) . ',';
                 }
             }
+            if(!is_null($keyPrimaryUnset))
             unset($array[$keyPrimaryUnset]);
         } else
         {
             $attrs = $this->OrderColum;
             $count = count($array);
             // var_dump($this->colum);
-
+$keyPrimaryUnset=NULL;
             if ($this->autoinrement)
             {
                 $auto = $this->GetCol($this->autoinrement)['Position'];
@@ -847,6 +849,7 @@ class DBtabla extends ResultManager implements \JsonSerializable
                 // echo $attrs[$i] . "=" . $array[$i - 1] . "\n";
                 $col.=$this->Driver->FormatVarInsert($array[$i - 1], $attrs[$i]) . ',';
             }
+if(!is_null($keyPrimaryUnset))
             unset($array[$keyPrimaryUnset]);
         }
         $colunas = '';

@@ -80,6 +80,7 @@ class RouteConsole
     protected $consoleController;
     protected $LineComand = false;
     protected $params = [];
+    protected $LastClass = NULL;
 
     /**
      * 
@@ -100,6 +101,7 @@ class RouteConsole
 
 
         $this->class = $controller[0];
+        $this->LastClass = $this->class;
         $this->method = isset($controller[1]) ? $controller[1] : 'index';
         if (!is_dir(Mvc::App()->Config()->App['Console']))
         {
@@ -132,7 +134,7 @@ class RouteConsole
         {
 
             $name = substr($i, 1);
-            $this->params[$i] = $this->argv[$ind + 1];
+            $this->params[$i] = isset($this->argv[$ind + 1]) ? $this->argv[$ind + 1] : NULL;
             if (isset($this->argv[$ind + 1]) && !preg_match('/^\-{1}([0-9a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*)$/', $this->argv[$ind + 1]))
             {
                 $params[$name] = $this->argv[$ind + 1];
@@ -173,6 +175,7 @@ class RouteConsole
         $namespace = __NAMESPACE__;
         $class = $namespace . '\\Console\\' . $this->class;
 
+        //  var_dump($this->class);
         if ($this->Autoload($class))
         {
             $this->reflectionClass = new \ReflectionClass($class);
@@ -181,7 +184,13 @@ class RouteConsole
             {
                 return $this->CreateReflexionMethod($this->reflectionClass);
             }
+        } elseif ($this->class == '')
+        {
+
+            $this->class = 'Help';
+            return $this->CreateReflexion();
         }
+
         self::Out("\nEl comando no se encontro...\n");
         $this->End();
     }
@@ -199,6 +208,15 @@ class RouteConsole
             $this->reflectionMethod = $class->getMethod($this->method);
         } catch (\ReflectionException $ex)
         {
+            if ($this->method == 'index')
+            {
+                Mvc::App()->DependenceInyector->AddDependenceForParam('list', $this->LastClass);
+
+                $this->class = 'Help';
+                $this->method = "index";
+                //var_dump($this->params, "d");
+                return $this->CreateReflexion();
+            }
             self::Out("\nEl comando " . $this->method . " no se reconoce...\n");
             $this->End();
         }

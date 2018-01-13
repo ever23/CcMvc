@@ -285,7 +285,7 @@ return
             ],
             /**
              * Configuraciones para los views y layauts en general 
-             * estableciendo la clase que se encargara de evalualos segun la extencion de archivo
+             * estableciendo la clase que se encargara de evaluarlos segun la extencion de archivo
              */
             'TemplateLoaders' => [
                 'Default' =>

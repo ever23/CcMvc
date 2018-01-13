@@ -70,7 +70,7 @@ class Migracion extends \Cc\Mvc\AbstracConsole
      */
     public function CreateFromDatabase($tabla = '', $all = false, $inicializar = false)
     {
-        if ($all)
+        if ($all || $tabla == '')
         {
 
             $drivers = $this->DataBase->GetDriver();
