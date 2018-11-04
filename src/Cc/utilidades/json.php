@@ -16,7 +16,7 @@ use \JsonSerializable;
  * @package Cc
  * @subpackage Utilidades              
  */
-class Json implements \ArrayAccess, JsonSerializable, \IteratorAggregate
+class Json implements \ArrayAccess, JsonSerializable, \IteratorAggregate, \Countable
 {
 
     private $vars = array();
@@ -550,6 +550,11 @@ class Json implements \ArrayAccess, JsonSerializable, \IteratorAggregate
     public function getIterator()
     {
         return new \ArrayIterator($this->vars);
+    }
+
+    public function count()
+    {
+        return count($this->vars);
     }
 
 }

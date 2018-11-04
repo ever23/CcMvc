@@ -19,6 +19,18 @@
 
 namespace Cc;
 
+if(!class_exists('\SQLite3'))
+{
+    class SQLite3
+    {
+        public function __construct()
+        {
+            throw new Exception(" Extencion SQLite es requerida " );
+            
+        }
+    }
+    return;
+}
 /**
  * Description of DB_SQLite3
  *

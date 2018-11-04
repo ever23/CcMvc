@@ -54,12 +54,9 @@ CcMvc.zip
 
 ./docHtml
 ./examples
-./nbproject
 /documentacion/
 /examples/
 /documentorcache/
 /libs/
 /src/Cache.CoreClass.inc
-!/libs/Cache.CoreClass.inc
 /vendor/
-/nbproject/

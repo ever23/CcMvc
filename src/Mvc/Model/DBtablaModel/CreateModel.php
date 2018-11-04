@@ -199,20 +199,14 @@ class CreateModel
                     $class.="->type('" . $tpeName . "',[" . implode(',', $var) . "])";
                 } else
                 {
-                    $class.="->" . strtoupper($tpeName) . "(" . implode(",", $var) . ")";
+                    $class.="->" . strtoupper($tpeName) . "(" . implode(',', $var) . ")";
                 }
             } else
             {
 
                 if (count(explode(" ", trim($v['Type']))) > 1)
                 {
-                    if (is_numeric($v['Type']))
-                    {
-                        $class.="->type(" . trim($v['Type']) . ")";
-                    } else
-                    {
-                        $class.="->type('" . trim($v['Type']) . "')";
-                    }
+                    $class.="->type('" . trim($v['Type']) . "')";
                 } else
                 {
                     $class.="->" . strtoupper(trim($v['Type'])) . "()";
@@ -232,13 +226,8 @@ class CreateModel
             }
             if (isset($v['Default']))
             {
-                if (is_numeric($v['Default']))
-                {
-                    $class.="->DefaultValue(" . $v['Default'] . ")";
-                } else
-                {
-                    $class.="->DefaultValue('" . $v['Default'] . "')";
-                }
+
+                $class.="->DefaultValue('" . $v['Default'] . "')";
             }
 
 
