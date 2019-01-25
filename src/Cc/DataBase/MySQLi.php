@@ -2,6 +2,18 @@
 
 namespace Cc;
 
+if(!class_exists('\MySQLi'))
+{
+    class MySQLi
+    {
+        public function __construct()
+        {
+            throw new Exception("Extencion MySQLi es requerida " );
+            
+        }
+    }
+    return;
+}
 /**
  * SIMPLE EXTENCION DE MYSQLI 
  * @package Cc

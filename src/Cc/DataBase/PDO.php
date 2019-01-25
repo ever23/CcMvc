@@ -2,6 +2,18 @@
 
 namespace Cc;
 
+if(!class_exists('\PDO'))
+{
+    class PDO
+    {
+        public function __construct()
+        {
+            throw new Exception(" Extencion PDO es requerida " );
+            
+        }
+    }
+    return;
+}
 /**
  * SIMPLE EXTENCION DE PDO
  * @package Cc

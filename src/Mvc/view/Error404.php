@@ -19,7 +19,7 @@ p, address { margin-left: 3em; }
 span { font-size: smaller; }
 
 
-</style>
+</style> 
 <div id="error404">
 <h1>Objeto no localizado!</h1>
 <p> El URL solicitado no ha sido localizado en este Sitio.

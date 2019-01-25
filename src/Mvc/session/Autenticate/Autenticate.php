@@ -58,6 +58,9 @@ abstract class Autenticate extends Model
     private $statusClose = false;
     protected $AccessUser = [];
     private $falied = NULL;
+    /*
+     * @var InternalSession
+     */
     protected $InternalSession;
     protected $UserVerifi = NULL;
 
@@ -97,6 +100,7 @@ abstract class Autenticate extends Model
 
     public function Destroy()
     {
+        // $this->InternalSession->Destroy
         $this->InternalSession[static::class] = [];
     }
 
