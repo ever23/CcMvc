@@ -275,6 +275,7 @@ class Mvc
     public function __construct($conf)
     {
 
+
         if (!isset($_SERVER['REQUEST_URI']))
         {
             $_SERVER['REQUEST_URI'] = '';
@@ -301,7 +302,9 @@ class Mvc
         $this->Events = MvcHook::Start($this->conf);
         $this->View = new ViewController($this->conf['App']['view']);
 // MvcHook::$View = &$this->View;
+
         $this->Debung();
+
         $this->Log(" Archivo de configuracion :" . $conf . " cargado...");
 
         $this->procedures = $this->conf['App']['procedimientos'];
@@ -473,6 +476,7 @@ class Mvc
     private function Debung()
     {
         $this->t = microtime(true);
+
         if (is_bool($this->conf['debung']) || isset($this->conf['debung'][0]))
         {
             if (isset($this->conf['debung'][0]))
@@ -488,16 +492,19 @@ class Mvc
                 $this->id = rand(10000, 90000);
                 $this->time = 0;
 
-                register_tick_function([$this, 'tick']);
+                // register_tick_function([$this, 'tick']);
             }
         } else
         {
+
             $this->stdErr = fopen($this->conf['debung']['file'], 'a+');
             $this->id = rand(10000, 90000);
             $this->time = 0;
 
-            register_tick_function([$this, 'tick']);
+            //register_tick_function([$this, 'tick']);
+            //  exit;
         }
+
         CcException::SetMode($this->conf['debung']['ModoExeption']);
         error_reporting($this->conf['debung']['error_reporting']);
 
@@ -683,8 +690,10 @@ class Mvc
         if ($this->IsDebung())
             $this->View->error = $msj;
         $this->Log($msj);
+
         if ($this->conf->debung['UseErrorResponseCode'])
             http_response_code($num);
+
         if ($this->IsDebung())
             error_reporting(E_ALL ^ E_NOTICE ^ E_WARNING);
         MvcHook::Tinger('Error' . $num, $this->View->error);

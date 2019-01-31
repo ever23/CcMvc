@@ -125,7 +125,6 @@ abstract class Drivers
     public $_escape_char = '';
     protected $dbprefix = '';
     protected $_protect_identifiers = TRUE;
-
     /**
      * identificadores reservador por la base de datos
      * @var array
@@ -555,10 +554,11 @@ abstract class Drivers
 
             if ($protect_identifiers === TRUE)
             {
+                 return $alias;
                 $item = $this->_escape_identifiers($item);
             }
 
-            return $item . $alias;
+           
         }
 
         // Is there a table prefix?  If not, no need to insert it

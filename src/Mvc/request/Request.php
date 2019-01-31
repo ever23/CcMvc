@@ -47,7 +47,7 @@ class Request implements \ArrayAccess, \Countable, \IteratorAggregate
         //$this->Cookie = &$_COOKIE;
         $this->uri = !empty($_SERVER['REQUEST_URI']) ? $_SERVER['REQUEST_URI'] : '';
 //$_POST=  $this->Post;
-        if (isset($_SERVER['REQUEST_METHOD']) && strtoupper($_SERVER['REQUEST_METHOD']) == 'POST' && !$_POST && !is_array($_POST))
+        if (isset($_SERVER['REQUEST_METHOD']) && strtoupper($_SERVER['REQUEST_METHOD']) == 'POST')
         {
             $this->ReadPost();
         } else
@@ -76,6 +76,7 @@ class Request implements \ArrayAccess, \Countable, \IteratorAggregate
         {
 
             $ex = explode(";", $_SERVER['CONTENT_TYPE']);
+
             switch (trim($ex[0]))
             {
                 case 'application/x-www-form-urlencoded':
@@ -83,8 +84,11 @@ class Request implements \ArrayAccess, \Countable, \IteratorAggregate
                     $this->Post = FilterXss::FilterXssArray($_POST, FilterXss::FilterXssPost);
                     break;
                 case 'application/json':
-                    $Json = new \Cc\Json(file_get_contents('php://input'));
-                    $Json->CreateJson(FilterXss::FilterXssArray($Json->Get(), FilterXss::FilterXssPost));
+                    $Json = new \Cc\Json();
+                    //var_dump($Json->Get());
+                    // exit;
+
+                    $Json->CreateJson(FilterXss::FilterXssArray(json_decode(file_get_contents('php://input'), true), FilterXss::FilterXssPost));
                     $this->Post = &$Json;
                     break;
 

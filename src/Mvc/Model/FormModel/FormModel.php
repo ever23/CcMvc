@@ -103,7 +103,7 @@ abstract class FormModel extends Model implements Inyectable, \Serializable
      * nombre del formulario
      * @var string 
      */
-    private $NameSubmited;
+    protected $NameSubmited;
 
     /**
      * indica si se recibieron los datos
@@ -310,7 +310,7 @@ abstract class FormModel extends Model implements Inyectable, \Serializable
      * @param bool $serialized indica si se llamo desde el metodod serialized 
      * @param bool $process indica si se procesara la entrada de datos
      */
-    private function Request($serialized = false, $process = true)
+    protected function Request($serialized = false, $process = true)
     {
         $this->inyected = false;
 
@@ -638,14 +638,7 @@ abstract class FormModel extends Model implements Inyectable, \Serializable
 
     private function VerificateReferer($referer)
     {
-
-        $url = parse_url($referer, PHP_URL_PATH);
-        $hostReferer = parse_url($referer, PHP_URL_HOST);
-        if (!(strcasecmp($hostReferer, $this->Request->Host()) == 0))
-        {
-            return false;
-        }
-        if (!(strcasecmp($url, $this->Request->Path()) == 0))
+        if (!(strcasecmp($referer, Mvc::App()->Request->Url()) == 0))
         {
             return false;
         }
@@ -689,7 +682,7 @@ abstract class FormModel extends Model implements Inyectable, \Serializable
      * @param array $values
      * @return boolean
      */
-    protected function ValidateValues(array $values)
+    protected function ValidateValues($values)
     {
         $types = [];
         $val = [];
@@ -1166,10 +1159,12 @@ abstract class FormModel extends Model implements Inyectable, \Serializable
         {
             $name = $otros[$name];
         }
+        // var_dump($arguments);
         if (isset($arguments[1]))
         {
             return $this->Campo($arguments[0], $name)->Validator($arguments[1]);
         }
+
         return $this->Campo($arguments[0], $name);
     }
 
@@ -1196,14 +1191,14 @@ abstract class FormModel extends Model implements Inyectable, \Serializable
      * @param type $attrs
      * @return boolean
      */
-    public function GetError($offset, $options = NULL, $attrs = [])
+    public function GetError($offset = NULL, $options = NULL, $attrs = [])
     {
         if (is_object($options) && $options instanceof \Smarty_Internal_Template)
         {
             $offset = $attrs['name'];
         }
 
-        if ($this->offsetExists($offset))
+        if (!is_null($offset) && $this->offsetExists($offset))
         {
             if ($this->_ValuesModel[$offset] instanceof ValidDependence && !$this->_ValuesModel[$offset]->IsValid())
             {
@@ -1214,7 +1209,16 @@ abstract class FormModel extends Model implements Inyectable, \Serializable
             }
         } else
         {
-            ErrorHandle::Notice("Indice '" . $offset . "' no definido ");
+            $errors = [];
+            foreach ($this->_ValuesModel as $i => $value)
+            {
+                if (!$value->IsValid())
+                {
+                    $errors[$i] = $this->alternativeCampos[$i]->GetError($this->_ValuesModel[$i]);
+                }
+            }
+            return $errors;
+            // ErrorHandle::Notice("Indice '" . $offset . "' no definido ");
         }
     }
 

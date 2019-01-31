@@ -106,7 +106,7 @@ class sqlite extends Drivers
                         $Default = NULL;
                         $NULL = '';
                         $KEY = '';
-                        if (preg_match("/(DEFAULT.*('.*'))/isU", $v, $def))
+                        if (preg_match("/(DEFAULT.*('.*'))/iU", $v, $def))
                         {
                             $Default = substr($def[2], 1, -1);
                         }

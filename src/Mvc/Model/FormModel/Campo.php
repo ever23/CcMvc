@@ -225,6 +225,7 @@ class Campo
      */
     public function GetError($valid)
     {
+        //var_dump($this->MSJerror);
         if (is_callable($this->MSJerror))
         {
             return $this->MSJerror($valid);

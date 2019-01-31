@@ -423,16 +423,17 @@ class Html extends Response
             $head.=self::script($js, ['type' => 'text/javascript']);
         if ($css != "")
             $head.=self::style($css, ['type' => 'text/css']);
-        if (count($this->JsonLD) > 0)
-        {
-            if (count($this->JsonLD) == 1)
+        if (!is_null($this->JsonLD))
+            if (count($this->JsonLD) > 0)
             {
-                $head.=self::script($this->JsonLD[0]->Encode(), ['type' => 'application/ld+json'], false);
-            } else
-            {
-                $head.=self::script(json_encode($this->JsonLD), ['type' => 'application/ld+json'], false);
+                if (count($this->JsonLD) == 1)
+                {
+                    $head.=self::script($this->JsonLD[0]->Encode(), ['type' => 'application/ld+json'], false);
+                } else
+                {
+                    $head.=self::script(json_encode($this->JsonLD), ['type' => 'application/ld+json'], false);
+                }
             }
-        }
         return $head;
     }
 

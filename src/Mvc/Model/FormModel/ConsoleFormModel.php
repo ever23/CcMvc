@@ -33,12 +33,6 @@ class FormModel extends \Cc\Mvc\AbstracConsole
 {
 
     /**
-     *
-     * @var \Cc\iDataBase 
-     */
-    protected $DataBase;
-
-    /**
      * crea una clase de formulario
      * @param string $name -name nombre de la clase
      */
