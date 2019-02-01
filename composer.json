@@ -31,7 +31,7 @@
     "autoload": {
         "classmap": [
             "src/CcMvc.php",
-            "src/CcWs.php"
+            "src/CcWS.php"
         ]
     },
     "suggest": {
@@ -42,7 +42,7 @@
     },
     "extra": {
         "branch-alias": {
-            "master": "0.8.6.5-dev"
+            "master": "0.8.6.6-dev"
         }
     },
     "minimum-stability": "dev"
