@@ -8,7 +8,7 @@
         "Optimizacion de sitios Web"
     ],
     "homepage": "http://ccmvc.com.ve",
-    "license": "GPL-3.0",
+    "license": "GPL-3.0", 
     "authors": [
         {
             "name": "Enyerber Franco",
@@ -31,7 +31,7 @@
     "autoload": {
         "classmap": [
             "src/CcMvc.php",
-            "src/CcWs.php"
+            "src/CcWS.php"
         ]
     },
     "suggest": {
@@ -42,7 +42,7 @@
     },
     "extra": {
         "branch-alias": {
-            "master": "0.8.6.5"
+            "master": "0.8.6.5" 
         }
     },
     "minimum-stability": "dev"
